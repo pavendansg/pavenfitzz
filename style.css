@@ -14,18 +14,18 @@ body {
 
 /* 🔥 HERO SECTION */
 .hero {
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
 
     background: url("mybg.png");
     background-size: cover;
-    background-position: center;
+    background-position: center right; /* 👈 show text properly */
     background-repeat: no-repeat;
 
     position: relative;
 }
 
-/* 🔥 EXACT CENTER UNDER "FITNESS PARTNER" */
+/* 🔥 BUTTON POSITION (DESKTOP PERFECT) */
 .hero-left {
     position: absolute;
     left: 33%;
@@ -145,13 +145,24 @@ h2, h3 {
     }
 }
 
-/* 🔥 MOBILE FIX */
+/* 🔥 MOBILE FIX (REAL FIX) */
 @media (max-width: 600px) {
+
+    .hero {
+        background-size: cover;
+        background-position: 65% center; /* 👈 shows text properly */
+    }
 
     .hero-left {
         left: 50%;
-        top: 75%;
+        top: 78%;
         transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    .join-btn {
+        padding: 14px 28px;
+        font-size: 16px;
     }
 
     .card {
