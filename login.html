@@ -36,6 +36,13 @@ function goNext() {
         window.location.href = "bmi.html";
     }
 }
+
+/* 🔥 ENTER KEY FIX */
+document.getElementById("name").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        goNext();
+    }
+});
 </script>
 
 </body>
