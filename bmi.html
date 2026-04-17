@@ -11,6 +11,7 @@
 <div class="container">
     <div class="card">
 
+        <!-- 🔥 USERNAME -->
         <h2 id="username"></h2>
 
         <h1>💪 BMI Calculator</h1>
@@ -23,6 +24,11 @@
 
         <button class="secondary-btn" onclick="window.location.href='index.html'">
             ⬅ Go Home
+        </button>
+
+        <!-- 🔥 LOGOUT -->
+        <button class="secondary-btn" onclick="logout()">
+            Logout 🚪
         </button>
 
         <hr style="margin:20px 0; border:0.5px solid #333;">
@@ -41,6 +47,30 @@
 </div>
 
 <script src="script.js"></script>
+
+<script>
+
+/* 🔥 PROTECTION */
+let user = localStorage.getItem("username");
+
+if(!user){
+    window.location.href = "login.html";
+}
+
+/* 🔥 SHOW NAME */
+document.getElementById("username").innerText = "Welcome, " + user + " 💪";
+
+/* 🔥 AUTO FILL */
+document.getElementById("weight").value = localStorage.getItem("weight") || "";
+document.getElementById("height").value = localStorage.getItem("height") || "";
+
+/* 🔥 LOGOUT */
+function logout(){
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+</script>
 
 </body>
 </html>
