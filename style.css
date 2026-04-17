@@ -1,0 +1,171 @@
+/* 🔥 RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 🔥 BODY */
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+    background: black; /* fallback */
+}
+
+/* 🔥 HERO SECTION (INDEX PAGE FIX) */
+.hero {
+    height: 100vh;
+    width: 100%;
+
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
+                url("mybg.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+}
+
+/* 🔥 HERO CONTENT */
+.hero-content {
+    margin-left: 80px;
+}
+
+/* 🔥 HERO TEXT */
+.hero-content h1 {
+    font-size: 50px;
+    max-width: 500px;
+}
+
+/* 🔥 YELLOW BUTTON */
+.join-btn {
+    margin-top: 30px;
+    padding: 15px 35px;
+
+    background: linear-gradient(to right, #ffd700, #ffcc00);
+    color: black;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+}
+
+/* 🔥 HOVER */
+.join-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px gold;
+}
+
+/* 🔥 CENTER CONTAINER (FOR BMI, LOGIN ETC) */
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🔥 CARD UI */
+.card {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* 🔥 INPUTS */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+
+    border-radius: 8px;
+    border: none;
+
+    background: #222;
+    color: white;
+}
+
+/* 🔥 BUTTONS (GENERAL) */
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+/* PRIMARY */
+.primary-btn {
+    background: linear-gradient(to right, #ffd700, #ffcc00);
+    color: black;
+}
+
+/* SECONDARY */
+.secondary-btn {
+    background: red;
+    color: white;
+}
+
+/* 🔥 HOVER */
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px gold;
+}
+
+/* 🔥 TEXT */
+h1 {
+    margin-bottom: 20px;
+}
+
+h2, h3 {
+    margin-top: 15px;
+}
+
+/* 🔥 ANIMATION */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🔥 MOBILE */
+@media (max-width: 600px) {
+    .hero-content {
+        margin-left: 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    button {
+        width: 100%;
+    }
+}

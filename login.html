@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - EVOLVEFIT CLUB</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🔥 EvolveFit Club</h1>
+        <h3>Start Your Fitness Journey 💪</h3>
+
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <button class="primary-btn" onclick="goNext()">
+            Enter 🚀
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+function goNext() {
+    let name = document.getElementById("name").value;
+
+    if(name === "") {
+        alert("Enter your name bro ⚠️");
+    } else {
+        localStorage.setItem("username", name);
+        window.location.href = "bmi.html";
+    }
+}
+</script>
+
+</body>
+</html>
