@@ -5,18 +5,39 @@
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- 🔥 GRAPH -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* 🔥 PREMIUM GLOW */
-        .card {
-            animation: glow 2s infinite alternate;
+
+        /* 🔥 CARD GRID */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
         }
 
-        @keyframes glow {
-            from { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
-            to { box-shadow: 0 0 50px rgba(255,215,0,0.8); }
+        .stat-box {
+            background: #111;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(255,215,0,0.3);
+        }
+
+        /* 🔥 PROGRESS BAR */
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right,#ffd700,#ffcc00);
+            width: 0%;
         }
 
         .history {
@@ -28,165 +49,169 @@
             text-align: left;
         }
 
-        canvas {
-            margin-top: 20px;
+        input {
+            margin-top: 10px;
         }
+
     </style>
 </head>
 
 <body>
 
 <div class="container">
-    <div class="card">
+<div class="card">
 
-        <h1>🔥 Dashboard</h1>
-        <h2 id="user"></h2>
+<h1>🔥 Dashboard</h1>
+<h3 id="user"></h3>
 
-        <hr style="margin:15px 0; border:0.5px solid #333;">
+<!-- 🔥 STATS -->
+<div class="stats">
+    <div class="stat-box" id="bmi"></div>
+    <div class="stat-box" id="calories"></div>
+    <div class="stat-box" id="protein"></div>
+    <div class="stat-box" id="carbs"></div>
+    <div class="stat-box" id="fats"></div>
+</div>
 
-        <h3 id="bmi"></h3>
-        <h3 id="calories"></h3>
-        <h3 id="protein"></h3>
-        <h3 id="carbs"></h3>
-        <h3 id="fats"></h3>
+<!-- 🎯 GOAL PROGRESS -->
+<h3 style="margin-top:20px;">🎯 Goal Progress</h3>
+<div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+</div>
+<p id="progressText"></p>
 
-        <!-- 🔥 GRAPH -->
-        <canvas id="chart"></canvas>
+<!-- ➕ ADD WEIGHT -->
+<h3 style="margin-top:20px;">➕ Update Today Weight</h3>
+<input type="number" id="newWeight" placeholder="Enter today weight">
+<button class="primary-btn" onclick="addWeight()">Save Weight</button>
 
-        <!-- 🔥 HISTORY -->
-        <div class="history" id="historyBox"></div>
+<!-- 📊 GRAPH -->
+<canvas id="chart"></canvas>
 
-        <br>
+<!-- 📅 HISTORY -->
+<div class="history" id="historyBox"></div>
 
-        <button class="primary-btn" onclick="goToBMI()">
-            Update Data 🔄
-        </button>
+<br>
 
-        <button class="secondary-btn" onclick="logout()">
-            Logout 🚪
-        </button>
+<button class="primary-btn" onclick="goToBMI()">Update Full Data 🔄</button>
+<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
 
-    </div>
+</div>
 </div>
 
 <script>
 
-// 🔥 GET DATA
+// 🔥 DATA
 let name = localStorage.getItem("username");
 let weight = Number(localStorage.getItem("weight"));
 let height = Number(localStorage.getItem("height"));
 let calories = Number(localStorage.getItem("calories"));
 let goal = localStorage.getItem("goal");
 
-// 🔥 PROTECT
-if(!name){
-    window.location.href = "login.html";
-}
+// PROTECT
+if(!name) window.location.href="login.html";
 
-// USER NAME
-document.getElementById("user").innerText = "Welcome, " + name + " 💪";
+document.getElementById("user").innerText="🔥 "+name;
 
-// 🔥 BMI
-if(weight && height){
-    let bmi = weight / ((height/100)*(height/100));
-    document.getElementById("bmi").innerText = "BMI: " + bmi.toFixed(2);
-}
+// BMI
+let bmi = weight / ((height/100)*(height/100));
+document.getElementById("bmi").innerText="BMI: "+bmi.toFixed(2);
 
-// 🔥 CALORIES
-if(calories){
-    document.getElementById("calories").innerText = "Calories: " + calories + " kcal 🔥";
-}
+// CALORIES
+document.getElementById("calories").innerText="Calories: "+calories;
 
-// 🔥 MACROS
+// MACROS
 let protein=0,fats=0,carbs=0;
 
-if(calories && weight && goal){
+if(goal==="bulk"){ protein=weight*2; fats=weight*0.8; }
+else if(goal==="maintain"){ protein=weight*1.8; fats=weight*0.7; }
+else { protein=weight*2.2; fats=weight*0.6; }
 
-    if(goal==="bulk"){
-        protein=weight*2;
-        fats=weight*0.8;
-    }
-    else if(goal==="maintain"){
-        protein=weight*1.8;
-        fats=weight*0.7;
-    }
-    else{
-        protein=weight*2.2;
-        fats=weight*0.6;
-    }
+let used=(protein*4)+(fats*9);
+carbs=(calories-used)/4;
 
-    let used=(protein*4)+(fats*9);
-    carbs=(calories-used)/4;
+protein=Math.round(protein);
+carbs=Math.round(carbs);
+fats=Math.round(fats);
 
-    protein=Math.round(protein);
-    carbs=Math.round(carbs);
-    fats=Math.round(fats);
+document.getElementById("protein").innerText="Protein: "+protein+"g";
+document.getElementById("carbs").innerText="Carbs: "+carbs+"g";
+document.getElementById("fats").innerText="Fats: "+fats+"g";
 
-    document.getElementById("protein").innerText="Protein: "+protein+"g 🍗";
-    document.getElementById("carbs").innerText="Carbs: "+carbs+"g 🍚";
-    document.getElementById("fats").innerText="Fats: "+fats+"g 🥑";
-}
+// 🎯 GOAL PROGRESS
+let startWeight = Number(localStorage.getItem("startWeight")) || weight;
+localStorage.setItem("startWeight", startWeight);
 
-// 🔥 DATE SYSTEM
+let progress = ((weight - startWeight) / startWeight) * 100;
+progress = Math.max(0, progress);
+
+document.getElementById("progressFill").style.width = progress + "%";
+document.getElementById("progressText").innerText =
+    "Progress: " + progress.toFixed(1) + "%";
+
+// 📅 HISTORY
+let history = JSON.parse(localStorage.getItem("history")) || [];
 let today = new Date().toLocaleDateString();
 
-// 🔥 HISTORY (NO DUPLICATE FIX)
-let history = JSON.parse(localStorage.getItem("history")) || [];
-
-// only save once per day
-let alreadySaved = history.some(h => h.date === today);
-
-if(!alreadySaved && weight && calories){
-    history.push({
-        date: today,
-        weight: weight,
-        calories: calories
-    });
+// ADD IF NOT EXISTS
+if(!history.some(h => h.date === today)){
+    history.push({date: today, weight: weight, calories: calories});
     localStorage.setItem("history", JSON.stringify(history));
 }
 
-// 🔥 GRAPH DATA
-let labels = history.map(h => h.date);
-let weightData = history.map(h => h.weight);
+// ➕ ADD WEIGHT FUNCTION
+function addWeight(){
+    let newW = document.getElementById("newWeight").value;
 
-// 🔥 GRAPH
+    if(!newW){
+        alert("Enter weight bro ⚠️");
+        return;
+    }
+
+    newW = Number(newW);
+
+    localStorage.setItem("weight", newW);
+
+    history.push({
+        date: today + " (updated)",
+        weight: newW,
+        calories: calories
+    });
+
+    localStorage.setItem("history", JSON.stringify(history));
+
+    location.reload();
+}
+
+// 📊 GRAPH
 new Chart(document.getElementById("chart"), {
     type: "line",
     data: {
-        labels: labels,
+        labels: history.map(h=>h.date),
         datasets: [{
-            label: "Weight Progress 💪",
-            data: weightData,
+            label: "Weight 💪",
+            data: history.map(h=>h.weight),
             borderWidth: 3,
             tension: 0.4
         }]
     },
     options: {
         responsive: true,
-        animation: {
-            duration: 1500
-        }
+        animation: { duration: 1500 }
     }
 });
 
-// 🔥 HISTORY UI
+// 📅 HISTORY UI
 let box = document.getElementById("historyBox");
-box.innerHTML = "<b>📅 History:</b><br>";
+box.innerHTML="<b>📅 History:</b><br>";
 
 history.slice().reverse().forEach(h=>{
-    box.innerHTML += `${h.date} → ${h.weight}kg | ${h.calories} kcal<br>`;
+    box.innerHTML += `${h.date} → ${h.weight}kg<br>`;
 });
 
-// 🔥 NAV
-function goToBMI(){
-    window.location.href="bmi.html";
-}
-
-// 🔥 LOGOUT
-function logout(){
-    localStorage.clear();
-    window.location.href="login.html";
-}
+// NAV
+function goToBMI(){ window.location.href="bmi.html"; }
+function logout(){ localStorage.clear(); window.location.href="login.html"; }
 
 </script>
 
