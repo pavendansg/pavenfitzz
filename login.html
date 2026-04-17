@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - EVOLVEFIT CLUB</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="app-bg">
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>🔥 EvolveFit Club</h1>
+        <h3>Start Your Fitness Journey 💪</h3>
+
+        <!-- 🔥 FORM FIX -->
+        <form onsubmit="goNext(); return false;">
+
+            <input type="text" id="name" placeholder="Enter your name">
+
+            <button type="submit" class="primary-btn">
+                Enter 🚀
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
 <script>
 function goNext() {
     let name = document.getElementById("name").value;
@@ -9,13 +41,7 @@ function goNext() {
         window.location.href = "bmi.html";
     }
 }
-
-/* 🔥 FIX (wait until page loads) */
-window.onload = function() {
-    document.getElementById("name").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            goNext();
-        }
-    });
-};
 </script>
+
+</body>
+</html>
