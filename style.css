@@ -17,24 +17,22 @@ body {
     height: 100vh;
     width: 100%;
 
-    background: url("mybg.png"); /* clean image only */
-
+    background: url("mybg.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
-    position: relative;
+    display: flex;
+    align-items: center;   /* vertical center */
 }
 
-/* 🔥 BUTTON POSITION (MAIN FIX) */
-.hero-content {
-    position: absolute;
-    top: 65%;          /* 👈 adjust this if needed */
-    left: 50%;
-    transform: translate(-50%, -50%);
+/* 🔥 LEFT CONTENT (LOCK SYSTEM) */
+.hero-left {
+    margin-left: 80px;     /* controls horizontal position */
+    max-width: 400px;
 }
 
-/* 🔥 YELLOW BUTTON */
+/* 🔥 BUTTON (AUTO POSITION UNDER TEXT AREA) */
 .join-btn {
     padding: 16px 40px;
 
@@ -49,14 +47,16 @@ body {
 
     cursor: pointer;
 
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
-    transition: 0.3s;
+    /* 🔥 smoother blend glow */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+
+    transition: all 0.3s ease;
 }
 
 /* 🔥 HOVER */
 .join-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 50px gold;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
 }
 
 /* 🔥 CENTER CONTAINER */
@@ -149,8 +149,8 @@ h2, h3 {
 /* 🔥 MOBILE FIX */
 @media (max-width: 600px) {
 
-    .hero-content {
-        top: 70%;
+    .hero-left {
+        margin-left: 20px;
     }
 
     .card {
