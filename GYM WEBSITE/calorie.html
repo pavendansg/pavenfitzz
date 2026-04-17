@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calories - EvolveFit Club</title>
+    <link rel="stylesheet" href="style.css"> <!-- 🔥 same css -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>🔥 Calorie Calculator</h1>
+
+        <h2 id="info"></h2>
+
+        <input type="number" id="height" placeholder="Height (cm)">
+        <input type="number" id="age" placeholder="Age">
+
+        <select id="gender">
+            <option value="male">Male 👨</option>
+            <option value="female">Female 👩</option>
+        </select>
+
+        <select id="goal">
+            <option value="bulk">Bulk 💪</option>
+            <option value="maintain">Maintain ⚖️</option>
+            <option value="cut">Cut 🔥</option>
+        </select>
+
+        <button class="primary-btn" onclick="calculateCalories()">Calculate Calories</button>
+
+        <h2 id="result"></h2>
+        <h3 id="extra"></h3>
+
+        <button id="nextBtn" class="primary-btn" onclick="goToMacros()" style="display:none;">
+            Next ➡ View Macros 🍗
+        </button>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

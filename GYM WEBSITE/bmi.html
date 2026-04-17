@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI - EvolveFit Club</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2 id="username"></h2>
+
+        <h1>💪 BMI Calculator</h1>
+        <p style="opacity:0.7;">Enter your details to get started</p>
+
+        <input type="number" id="weight" placeholder="Weight (kg)">
+        <input type="number" id="height" placeholder="Height (cm)">
+
+        <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
+
+        <button class="secondary-btn" onclick="window.location.href='index.html'">
+            ⬅ Go Home
+        </button>
+
+        <hr style="margin:20px 0; border:0.5px solid #333;">
+
+        <h2 id="result"></h2>
+        <h3 id="suggestion"></h3>
+
+        <h3 id="diet"></h3>
+        <h3 id="workout"></h3>
+
+        <button id="calBtn" class="primary-btn" onclick="goToCalories()" style="display:none;">
+            Next ➡ Calories 🔥
+        </button>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

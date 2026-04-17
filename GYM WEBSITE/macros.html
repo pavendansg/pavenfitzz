@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Macros - EvolveFit Club</title>
+    <link rel="stylesheet" href="style.css"> <!-- 🔥 same css -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>🔥 EvolveFit Club</h1>
+        <p>Your Personalized Macros 💪</p>
+
+        <h2 id="calInfo"></h2>
+
+        <h2 id="protein"></h2>
+        <h2 id="carbs"></h2>
+        <h2 id="fats"></h2>
+
+        <!-- 🔥 DIET PLAN -->
+        <h2 style="margin-top:25px;">🥗 Diet Plan</h2>
+        <p id="dietPlan"></p>
+
+        <button class="secondary-btn" onclick="window.location.href='calorie.html'">
+            ⬅ Back
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+// 🔥 GET DATA
+let calories = Number(localStorage.getItem("calories"));
+let weight = Number(localStorage.getItem("weight"));
+let goal = localStorage.getItem("goal");
+
+// SHOW CALORIES
+if(!calories){
+    document.getElementById("calInfo").innerText = "No calorie data ❌ Go back";
+} else {
+    document.getElementById("calInfo").innerText = "Your Calories: " + calories + " kcal 🔥";
+}
+
+// 🔥 AUTO RUN
+calculateMacros();
+
+function calculateMacros(){
+
+    if(!calories || !weight || !goal){
+        alert("Missing data ❌ Go back");
+        return;
+    }
+
+    let protein = 0;
+    let fats = 0;
+    let carbs = 0;
+
+    if(goal === "bulk"){
+        protein = weight * 2;
+        fats = weight * 0.8;
+    }
+    else if(goal === "maintain"){
+        protein = weight * 1.8;
+        fats = weight * 0.7;
+    }
+    else {
+        protein = weight * 2.2;
+        fats = weight * 0.6;
+    }
+
+    let usedCalories = (protein * 4) + (fats * 9);
+    carbs = (calories - usedCalories) / 4;
+
+    protein = Math.round(protein);
+    carbs = Math.round(carbs);
+    fats = Math.round(fats);
+
+    document.getElementById("protein").innerText = "Protein: " + protein + "g 🍗";
+    document.getElementById("carbs").innerText = "Carbs: " + carbs + "g 🍚";
+    document.getElementById("fats").innerText = "Fats: " + fats + "g 🥑";
+
+    // 🔥 DIET PLAN GENERATOR
+    generateDiet(goal);
+}
+
+// 🔥 DIET LOGIC
+function generateDiet(goal){
+
+    let diet = "";
+
+    if(goal === "bulk"){
+        diet =
+        "🍗 Chicken, Eggs, Whey Protein<br>" +
+        "🍚 Rice, Oats, Banana<br>" +
+        "🥑 Nuts, Peanut Butter<br><br>" +
+        "🔥 Plan:<br>" +
+        "Breakfast: Eggs + Oats 🥚<br>" +
+        "Lunch: Rice + Chicken 🍗<br>" +
+        "Snack: Banana + Peanut Butter 🍌<br>" +
+        "Dinner: Rice + Eggs 🍛";
+    }
+    else if(goal === "maintain"){
+        diet =
+        "🥗 Balanced Diet<br>" +
+        "🍗 Chicken / Paneer<br>" +
+        "🍚 Rice + Vegetables<br><br>" +
+        "🔥 Plan:<br>" +
+        "Breakfast: Oats + Fruits 🍎<br>" +
+        "Lunch: Rice + Chicken 🍗<br>" +
+        "Dinner: Light meal + veggies 🥗";
+    }
+    else {
+        diet =
+        "🥗 Low calorie foods<br>" +
+        "🍗 Lean protein<br>" +
+        "🍚 Low carbs<br><br>" +
+        "🔥 Plan:<br>" +
+        "Breakfast: Oats + Egg whites 🥚<br>" +
+        "Lunch: Chicken + Salad 🥗<br>" +
+        "Dinner: Light protein meal 🍗";
+    }
+
+    document.getElementById("dietPlan").innerHTML = diet;
+}
+
+</script>
+
+</body>
+</html>
