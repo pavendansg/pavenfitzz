@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - EvolveFit Club</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>🔥 Dashboard</h1>
+        <h2 id="user"></h2>
+
+        <hr style="margin:15px 0; border:0.5px solid #333;">
+
+        <h3 id="bmi"></h3>
+        <h3 id="calories"></h3>
+        <h3 id="protein"></h3>
+        <h3 id="carbs"></h3>
+        <h3 id="fats"></h3>
+
+        <br>
+
+        <button class="primary-btn" onclick="goToBMI()">
+            Update Data 🔄
+        </button>
+
+        <button class="secondary-btn" onclick="logout()">
+            Logout 🚪
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+// 🔥 GET DATA
+let name = localStorage.getItem("username");
+let weight = localStorage.getItem("weight");
+let calories = localStorage.getItem("calories");
+let goal = localStorage.getItem("goal");
+
+// PROTECT PAGE
+if(!name){
+    window.location.href = "login.html";
+}
+
+// SHOW NAME
+document.getElementById("user").innerText = "Welcome, " + name + " 💪";
+
+// CALCULATE BMI AGAIN
+if(weight){
+    let height = localStorage.getItem("height") / 100;
+    let bmi = weight / (height * height);
+    document.getElementById("bmi").innerText = "BMI: " + bmi.toFixed(2);
+}
+
+// SHOW CALORIES
+if(calories){
+    document.getElementById("calories").innerText = "Calories: " + calories + " kcal 🔥";
+}
+
+// 🔥 MACROS CALCULATION
+if(calories && weight && goal){
+
+    let protein = 0;
+    let fats = 0;
+
+    if(goal === "bulk"){
+        protein = weight * 2;
+        fats = weight * 0.8;
+    }
+    else if(goal === "maintain"){
+        protein = weight * 1.8;
+        fats = weight * 0.7;
+    }
+    else {
+        protein = weight * 2.2;
+        fats = weight * 0.6;
+    }
+
+    let usedCalories = (protein * 4) + (fats * 9);
+    let carbs = (calories - usedCalories) / 4;
+
+    document.getElementById("protein").innerText = "Protein: " + Math.round(protein) + "g 🍗";
+    document.getElementById("carbs").innerText = "Carbs: " + Math.round(carbs) + "g 🍚";
+    document.getElementById("fats").innerText = "Fats: " + Math.round(fats) + "g 🥑";
+}
+
+// 🔥 NAVIGATION
+function goToBMI(){
+    window.location.href = "bmi.html";
+}
+
+// 🔥 LOGOUT
+function logout(){
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>
