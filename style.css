@@ -22,17 +22,18 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 
-    display: flex;
-    align-items: center;   /* vertical center */
+    position: relative; /* important */
 }
 
-/* 🔥 LEFT CONTENT (LOCK SYSTEM) */
+/* 🔥 BUTTON POSITION (LOCKED TO IMAGE TEXT AREA) */
 .hero-left {
-    margin-left: 80px;     /* controls horizontal position */
-    max-width: 400px;
+    position: absolute;
+    left: 38%;
+    top: 62%;
+    transform: translate(-50%, -50%);
 }
 
-/* 🔥 BUTTON (AUTO POSITION UNDER TEXT AREA) */
+/* 🔥 BUTTON */
 .join-btn {
     padding: 16px 40px;
 
@@ -47,9 +48,7 @@ body {
 
     cursor: pointer;
 
-    /* 🔥 smoother blend glow */
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-
     transition: all 0.3s ease;
 }
 
@@ -150,7 +149,9 @@ h2, h3 {
 @media (max-width: 600px) {
 
     .hero-left {
-        margin-left: 20px;
+        left: 50%;
+        top: 70%;
+        transform: translate(-50%, -50%);
     }
 
     .card {
