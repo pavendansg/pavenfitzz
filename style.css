@@ -22,14 +22,14 @@ body {
     background-position: center;
     background-repeat: no-repeat;
 
-    position: relative; /* important */
+    position: relative;
 }
 
-/* 🔥 BUTTON POSITION (LOCKED TO IMAGE TEXT AREA) */
+/* 🔥 EXACT CENTER UNDER "FITNESS PARTNER" */
 .hero-left {
     position: absolute;
-    left: 38%;
-    top: 62%;
+    left: 33%;
+    top: 72%;
     transform: translate(-50%, -50%);
 }
 
@@ -48,14 +48,14 @@ body {
 
     cursor: pointer;
 
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
     transition: all 0.3s ease;
 }
 
 /* 🔥 HOVER */
 .join-btn:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.9);
+    box-shadow: 0 0 45px rgba(255, 215, 0, 1);
 }
 
 /* 🔥 CENTER CONTAINER */
@@ -150,7 +150,7 @@ h2, h3 {
 
     .hero-left {
         left: 50%;
-        top: 70%;
+        top: 75%;
         transform: translate(-50%, -50%);
     }
 
