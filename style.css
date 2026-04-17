@@ -12,20 +12,20 @@ body {
     background: black;
 }
 
-/* 🔥 HERO SECTION */
+/* 🔥 DESKTOP HERO */
 .hero {
     min-height: 100vh;
     width: 100%;
 
     background: url("mybg.png");
     background-size: cover;
-    background-position: center right; /* 👈 show text properly */
+    background-position: center right;
     background-repeat: no-repeat;
 
     position: relative;
 }
 
-/* 🔥 BUTTON POSITION (DESKTOP PERFECT) */
+/* 🔥 BUTTON POSITION (DESKTOP) */
 .hero-left {
     position: absolute;
     left: 33%;
@@ -36,29 +36,28 @@ body {
 /* 🔥 BUTTON */
 .join-btn {
     padding: 16px 40px;
-
     background: linear-gradient(to right, #ffd700, #ffcc00);
     color: black;
-
     font-size: 20px;
     font-weight: bold;
-
     border: none;
     border-radius: 10px;
-
     cursor: pointer;
-
     box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
     transition: all 0.3s ease;
 }
 
-/* 🔥 HOVER */
 .join-btn:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 0 45px rgba(255, 215, 0, 1);
 }
 
-/* 🔥 CENTER CONTAINER */
+/* 🔥 MOBILE HERO (HIDDEN BY DEFAULT) */
+.mobile-hero {
+    display: none;
+}
+
+/* 🔥 CARD UI */
 .container {
     min-height: 100vh;
     display: flex;
@@ -66,103 +65,91 @@ body {
     align-items: center;
 }
 
-/* 🔥 CARD UI */
 .card {
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
-
     padding: 40px;
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
     text-align: center;
-
     box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
     animation: fadeIn 1s ease-in-out;
 }
 
-/* 🔥 INPUTS */
 input, select {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-
     border-radius: 8px;
     border: none;
-
     background: #222;
     color: white;
 }
 
-/* 🔥 BUTTONS */
 button {
     padding: 12px 25px;
     margin: 10px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-
     font-weight: bold;
     transition: 0.3s;
 }
 
-/* PRIMARY */
 .primary-btn {
     background: linear-gradient(to right, #ffd700, #ffcc00);
     color: black;
 }
 
-/* SECONDARY */
 .secondary-btn {
     background: red;
     color: white;
 }
 
-/* 🔥 HOVER */
 button:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px gold;
 }
 
-/* 🔥 TEXT */
-h1 {
-    margin-bottom: 20px;
-}
-
-h2, h3 {
-    margin-top: 15px;
-}
-
-/* 🔥 ANIMATION */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* 🔥 MOBILE FIX (REAL FIX) */
+/* 🔥 MOBILE VERSION (SEPARATE UI) */
 @media (max-width: 600px) {
 
+    /* hide desktop hero */
     .hero {
-        background-size: cover;
-        background-position: 65% center; /* 👈 shows text properly */
+        display: none;
     }
 
-    .hero-left {
-        left: 50%;
-        top: 78%;
-        transform: translate(-50%, -50%);
+    /* show mobile hero */
+    .mobile-hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        height: 100vh;
         text-align: center;
+        padding: 20px;
+
+        background: black;
     }
 
-    .join-btn {
-        padding: 14px 28px;
+    .mobile-hero h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .mobile-hero p {
         font-size: 16px;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+
+    .mobile-hero .join-btn {
+        width: 80%;
+        max-width: 250px;
+        font-size: 16px;
+        padding: 14px;
     }
 
     .card {
