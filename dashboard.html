@@ -4,6 +4,34 @@
     <title>Dashboard - EvolveFit Club</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 🔥 GRAPH -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* 🔥 PREMIUM GLOW */
+        .card {
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+            to { box-shadow: 0 0 50px rgba(255,215,0,0.8); }
+        }
+
+        .history {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 14px;
+            opacity: 0.8;
+            text-align: left;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,6 +50,12 @@
         <h3 id="carbs"></h3>
         <h3 id="fats"></h3>
 
+        <!-- 🔥 GRAPH -->
+        <canvas id="chart"></canvas>
+
+        <!-- 🔥 HISTORY -->
+        <div class="history" id="historyBox"></div>
+
         <br>
 
         <button class="primary-btn" onclick="goToBMI()">
@@ -39,66 +73,119 @@
 
 // 🔥 GET DATA
 let name = localStorage.getItem("username");
-let weight = localStorage.getItem("weight");
-let calories = localStorage.getItem("calories");
+let weight = Number(localStorage.getItem("weight"));
+let height = Number(localStorage.getItem("height"));
+let calories = Number(localStorage.getItem("calories"));
 let goal = localStorage.getItem("goal");
 
-// PROTECT PAGE
+// 🔥 PROTECT
 if(!name){
     window.location.href = "login.html";
 }
 
-// SHOW NAME
+// USER NAME
 document.getElementById("user").innerText = "Welcome, " + name + " 💪";
 
-// CALCULATE BMI AGAIN
-if(weight){
-    let height = localStorage.getItem("height") / 100;
-    let bmi = weight / (height * height);
+// 🔥 BMI
+if(weight && height){
+    let bmi = weight / ((height/100)*(height/100));
     document.getElementById("bmi").innerText = "BMI: " + bmi.toFixed(2);
 }
 
-// SHOW CALORIES
+// 🔥 CALORIES
 if(calories){
     document.getElementById("calories").innerText = "Calories: " + calories + " kcal 🔥";
 }
 
-// 🔥 MACROS CALCULATION
+// 🔥 MACROS
+let protein=0,fats=0,carbs=0;
+
 if(calories && weight && goal){
 
-    let protein = 0;
-    let fats = 0;
-
-    if(goal === "bulk"){
-        protein = weight * 2;
-        fats = weight * 0.8;
+    if(goal==="bulk"){
+        protein=weight*2;
+        fats=weight*0.8;
     }
-    else if(goal === "maintain"){
-        protein = weight * 1.8;
-        fats = weight * 0.7;
+    else if(goal==="maintain"){
+        protein=weight*1.8;
+        fats=weight*0.7;
     }
-    else {
-        protein = weight * 2.2;
-        fats = weight * 0.6;
+    else{
+        protein=weight*2.2;
+        fats=weight*0.6;
     }
 
-    let usedCalories = (protein * 4) + (fats * 9);
-    let carbs = (calories - usedCalories) / 4;
+    let used=(protein*4)+(fats*9);
+    carbs=(calories-used)/4;
 
-    document.getElementById("protein").innerText = "Protein: " + Math.round(protein) + "g 🍗";
-    document.getElementById("carbs").innerText = "Carbs: " + Math.round(carbs) + "g 🍚";
-    document.getElementById("fats").innerText = "Fats: " + Math.round(fats) + "g 🥑";
+    protein=Math.round(protein);
+    carbs=Math.round(carbs);
+    fats=Math.round(fats);
+
+    document.getElementById("protein").innerText="Protein: "+protein+"g 🍗";
+    document.getElementById("carbs").innerText="Carbs: "+carbs+"g 🍚";
+    document.getElementById("fats").innerText="Fats: "+fats+"g 🥑";
 }
 
-// 🔥 NAVIGATION
+// 🔥 DATE SYSTEM
+let today = new Date().toLocaleDateString();
+
+// 🔥 HISTORY (NO DUPLICATE FIX)
+let history = JSON.parse(localStorage.getItem("history")) || [];
+
+// only save once per day
+let alreadySaved = history.some(h => h.date === today);
+
+if(!alreadySaved && weight && calories){
+    history.push({
+        date: today,
+        weight: weight,
+        calories: calories
+    });
+    localStorage.setItem("history", JSON.stringify(history));
+}
+
+// 🔥 GRAPH DATA
+let labels = history.map(h => h.date);
+let weightData = history.map(h => h.weight);
+
+// 🔥 GRAPH
+new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Weight Progress 💪",
+            data: weightData,
+            borderWidth: 3,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        animation: {
+            duration: 1500
+        }
+    }
+});
+
+// 🔥 HISTORY UI
+let box = document.getElementById("historyBox");
+box.innerHTML = "<b>📅 History:</b><br>";
+
+history.slice().reverse().forEach(h=>{
+    box.innerHTML += `${h.date} → ${h.weight}kg | ${h.calories} kcal<br>`;
+});
+
+// 🔥 NAV
 function goToBMI(){
-    window.location.href = "bmi.html";
+    window.location.href="bmi.html";
 }
 
 // 🔥 LOGOUT
 function logout(){
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href="login.html";
 }
 
 </script>
