@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Macros - EvolveFit Club</title>
-    <link rel="stylesheet" href="style.css"> <!-- 🔥 same css -->
+    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -24,8 +24,13 @@
         <h2 style="margin-top:25px;">🥗 Diet Plan</h2>
         <p id="dietPlan"></p>
 
+        <!-- 🔥 BUTTONS -->
         <button class="secondary-btn" onclick="window.location.href='calorie.html'">
             ⬅ Back
+        </button>
+
+        <button class="primary-btn" onclick="window.location.href='dashboard.html'">
+            Go to Dashboard 📊
         </button>
 
     </div>
@@ -83,7 +88,12 @@ function calculateMacros(){
     document.getElementById("carbs").innerText = "Carbs: " + carbs + "g 🍚";
     document.getElementById("fats").innerText = "Fats: " + fats + "g 🥑";
 
-    // 🔥 DIET PLAN GENERATOR
+    // 🔥 SAVE MACROS (for dashboard)
+    localStorage.setItem("protein", protein);
+    localStorage.setItem("carbs", carbs);
+    localStorage.setItem("fats", fats);
+
+    // 🔥 DIET PLAN
     generateDiet(goal);
 }
 
