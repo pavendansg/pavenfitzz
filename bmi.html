@@ -39,33 +39,88 @@
         <h3 id="diet"></h3>
         <h3 id="workout"></h3>
 
-        <button id="calBtn" class="primary-btn" onclick="goToCalories()" style="display:none;">
-            Next ➡ Calories 🔥
-        </button>
-
     </div>
 </div>
 
-<script src="script.js"></script>
+<!-- 🔥 FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-<script>
+// 🔥 YOUR CONFIG (KEEP YOUR ORIGINAL VALUES)
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "evolvefit-07",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
 
-/* 🔥 PROTECTION */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// 🔥 BMI FUNCTION
+window.calculateBMI = async function() {
+
+    let weight = document.getElementById("weight").value;
+    let height = document.getElementById("height").value / 100;
+
+    if(!weight || !height){
+        alert("Enter valid details bro ⚠️");
+        return;
+    }
+
+    let bmi = weight / (height * height);
+    bmi = bmi.toFixed(2);
+
+    document.getElementById("result").innerText = "Your BMI: " + bmi;
+
+    // 🔥 BASIC CALORIES (simple logic)
+    let calories = Math.round(weight * 35);
+
+    // SAVE LOCAL
+    localStorage.setItem("weight", weight);
+    localStorage.setItem("height", height * 100);
+    localStorage.setItem("bmi", bmi);
+    localStorage.setItem("calories", calories);
+
+    // 🔥 SAVE TO FIREBASE
+    const user = auth.currentUser;
+
+    if(user){
+        try {
+            await addDoc(collection(db, "users"), {
+                uid: user.uid,
+                bmi: Number(bmi),
+                calories: calories,
+                date: new Date().toLocaleDateString()
+            });
+
+            console.log("Saved to Firebase ✅");
+        } catch(err){
+            console.error(err);
+        }
+    }
+}
+
+// 🔥 USER CHECK
 let user = localStorage.getItem("username");
 
 if(!user){
     window.location.href = "login.html";
 }
 
-/* 🔥 SHOW NAME */
 document.getElementById("username").innerText = "Welcome, " + user + " 💪";
 
-/* 🔥 AUTO FILL */
+// 🔥 AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
 
-/* 🔥 LOGOUT */
-function logout(){
+// 🔥 LOGOUT
+window.logout = function(){
     localStorage.clear();
     window.location.href = "login.html";
 }
