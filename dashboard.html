@@ -1,219 +1,118 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard - EvolveFit Club</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="module">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-    <style>
+// 🔥 YOUR CONFIG
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "evolvefit-07",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
 
-        /* 🔥 CARD GRID */
-        .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-        .stat-box {
-            background: #111;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(255,215,0,0.3);
-        }
-
-        /* 🔥 PROGRESS BAR */
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: #333;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right,#ffd700,#ffcc00);
-            width: 0%;
-        }
-
-        .history {
-            margin-top: 20px;
-            max-height: 150px;
-            overflow-y: auto;
-            font-size: 14px;
-            opacity: 0.8;
-            text-align: left;
-        }
-
-        input {
-            margin-top: 10px;
-        }
-
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-<div class="card">
-
-<h1>🔥 Dashboard</h1>
-<h3 id="user"></h3>
-
-<!-- 🔥 STATS -->
-<div class="stats">
-    <div class="stat-box" id="bmi"></div>
-    <div class="stat-box" id="calories"></div>
-    <div class="stat-box" id="protein"></div>
-    <div class="stat-box" id="carbs"></div>
-    <div class="stat-box" id="fats"></div>
-</div>
-
-<!-- 🎯 GOAL PROGRESS -->
-<h3 style="margin-top:20px;">🎯 Goal Progress</h3>
-<div class="progress-bar">
-    <div class="progress-fill" id="progressFill"></div>
-</div>
-<p id="progressText"></p>
-
-<!-- ➕ ADD WEIGHT -->
-<h3 style="margin-top:20px;">➕ Update Today Weight</h3>
-<input type="number" id="newWeight" placeholder="Enter today weight">
-<button class="primary-btn" onclick="addWeight()">Save Weight</button>
-
-<!-- 📊 GRAPH -->
-<canvas id="chart"></canvas>
-
-<!-- 📅 HISTORY -->
-<div class="history" id="historyBox"></div>
-
-<br>
-
-<button class="primary-btn" onclick="goToBMI()">Update Full Data 🔄</button>
-<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
-
-</div>
-</div>
-
-<script>
-
-// 🔥 DATA
+// 🔥 USER CHECK
 let name = localStorage.getItem("username");
-let weight = Number(localStorage.getItem("weight"));
-let height = Number(localStorage.getItem("height"));
-let calories = Number(localStorage.getItem("calories"));
-let goal = localStorage.getItem("goal");
-
-// PROTECT
 if(!name) window.location.href="login.html";
 
 document.getElementById("user").innerText="🔥 "+name;
 
-// BMI
-let bmi = weight / ((height/100)*(height/100));
-document.getElementById("bmi").innerText="BMI: "+bmi.toFixed(2);
+// 🔥 LOAD DATA FROM FIREBASE
+async function loadData(){
 
-// CALORIES
-document.getElementById("calories").innerText="Calories: "+calories;
+    const user = auth.currentUser;
 
-// MACROS
-let protein=0,fats=0,carbs=0;
-
-if(goal==="bulk"){ protein=weight*2; fats=weight*0.8; }
-else if(goal==="maintain"){ protein=weight*1.8; fats=weight*0.7; }
-else { protein=weight*2.2; fats=weight*0.6; }
-
-let used=(protein*4)+(fats*9);
-carbs=(calories-used)/4;
-
-protein=Math.round(protein);
-carbs=Math.round(carbs);
-fats=Math.round(fats);
-
-document.getElementById("protein").innerText="Protein: "+protein+"g";
-document.getElementById("carbs").innerText="Carbs: "+carbs+"g";
-document.getElementById("fats").innerText="Fats: "+fats+"g";
-
-// 🎯 GOAL PROGRESS
-let startWeight = Number(localStorage.getItem("startWeight")) || weight;
-localStorage.setItem("startWeight", startWeight);
-
-let progress = ((weight - startWeight) / startWeight) * 100;
-progress = Math.max(0, progress);
-
-document.getElementById("progressFill").style.width = progress + "%";
-document.getElementById("progressText").innerText =
-    "Progress: " + progress.toFixed(1) + "%";
-
-// 📅 HISTORY
-let history = JSON.parse(localStorage.getItem("history")) || [];
-let today = new Date().toLocaleDateString();
-
-// ADD IF NOT EXISTS
-if(!history.some(h => h.date === today)){
-    history.push({date: today, weight: weight, calories: calories});
-    localStorage.setItem("history", JSON.stringify(history));
-}
-
-// ➕ ADD WEIGHT FUNCTION
-function addWeight(){
-    let newW = document.getElementById("newWeight").value;
-
-    if(!newW){
-        alert("Enter weight bro ⚠️");
+    if(!user){
+        setTimeout(loadData,1000); // wait for auth
         return;
     }
 
-    newW = Number(newW);
+    const q = query(
+        collection(db, "users"),
+        where("uid","==",user.uid)
+    );
 
-    localStorage.setItem("weight", newW);
+    const querySnapshot = await getDocs(q);
 
-    history.push({
-        date: today + " (updated)",
-        weight: newW,
-        calories: calories
+    let history = [];
+
+    querySnapshot.forEach(doc=>{
+        history.push(doc.data());
     });
 
-    localStorage.setItem("history", JSON.stringify(history));
+    if(history.length === 0){
+        document.getElementById("bmi").innerText="No data yet ❌";
+        return;
+    }
 
-    location.reload();
+    // 🔥 SORT BY DATE (latest last)
+    history.sort((a,b)=> new Date(a.date) - new Date(b.date));
+
+    let latest = history[history.length - 1];
+
+    let weight = Number(localStorage.getItem("weight")) || 60;
+    let height = Number(localStorage.getItem("height")) || 170;
+    let goal = localStorage.getItem("goal");
+
+    // BMI
+    document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
+
+    // Calories
+    document.getElementById("calories").innerText = "Calories: " + latest.calories;
+
+    // MACROS (same logic)
+    let protein=0,fats=0,carbs=0;
+
+    if(goal==="bulk"){ protein=weight*2; fats=weight*0.8; }
+    else if(goal==="maintain"){ protein=weight*1.8; fats=weight*0.7; }
+    else { protein=weight*2.2; fats=weight*0.6; }
+
+    let used=(protein*4)+(fats*9);
+    carbs=(latest.calories-used)/4;
+
+    protein=Math.round(protein);
+    carbs=Math.round(carbs);
+    fats=Math.round(fats);
+
+    document.getElementById("protein").innerText="Protein: "+protein+"g";
+    document.getElementById("carbs").innerText="Carbs: "+carbs+"g";
+    document.getElementById("fats").innerText="Fats: "+fats+"g";
+
+    // 📊 GRAPH
+    new Chart(document.getElementById("chart"), {
+        type: "line",
+        data: {
+            labels: history.map(h=>h.date),
+            datasets: [{
+                label: "BMI 📊",
+                data: history.map(h=>h.bmi),
+                borderWidth: 3,
+                tension: 0.4
+            }]
+        }
+    });
+
+    // 📅 HISTORY
+    let box = document.getElementById("historyBox");
+    box.innerHTML="<b>📅 History:</b><br>";
+
+    history.slice().reverse().forEach(h=>{
+        box.innerHTML += `${h.date} → BMI ${h.bmi}<br>`;
+    });
 }
 
-// 📊 GRAPH
-new Chart(document.getElementById("chart"), {
-    type: "line",
-    data: {
-        labels: history.map(h=>h.date),
-        datasets: [{
-            label: "Weight 💪",
-            data: history.map(h=>h.weight),
-            borderWidth: 3,
-            tension: 0.4
-        }]
-    },
-    options: {
-        responsive: true,
-        animation: { duration: 1500 }
-    }
-});
-
-// 📅 HISTORY UI
-let box = document.getElementById("historyBox");
-box.innerHTML="<b>📅 History:</b><br>";
-
-history.slice().reverse().forEach(h=>{
-    box.innerHTML += `${h.date} → ${h.weight}kg<br>`;
-});
+// RUN
+loadData();
 
 // NAV
-function goToBMI(){ window.location.href="bmi.html"; }
-function logout(){ localStorage.clear(); window.location.href="login.html"; }
+window.goToBMI = function(){ window.location.href="bmi.html"; }
+window.logout = function(){ localStorage.clear(); window.location.href="login.html"; }
 
 </script>
-
-</body>
-</html>
