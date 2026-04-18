@@ -19,7 +19,8 @@
         <input type="number" id="weight" placeholder="Weight (kg)">
         <input type="number" id="height" placeholder="Height (cm)">
 
-        <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
+        <!-- ✅ FIXED BUTTON -->
+        <button id="bmiBtn" class="primary-btn">Calculate BMI</button>
 
         <button class="secondary-btn" onclick="window.location.href='index.html'">
             ⬅ Go Home
@@ -36,52 +37,59 @@
         <h3 id="diet"></h3>
         <h3 id="workout"></h3>
 
-        <!-- 🔥 NEXT BUTTON -->
-        <button id="nextBtn" class="primary-btn" style="display:none;" onclick="goNext()">
+        <button id="nextBtn" class="primary-btn" style="display:none;">
             Next ➡ Dashboard
         </button>
 
     </div>
 </div>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 YOUR CONFIG (PUT YOUR REAL VALUES)
+// 🔥 YOUR CONFIG
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
   projectId: "evolvefit-07",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 BMI FUNCTION
-window.calculateBMI = async function() {
+// 🔥 USER CHECK
+let userName = localStorage.getItem("username");
 
-    let weight = document.getElementById("weight").value;
-    let heightCm = document.getElementById("height").value;
+if(!userName){
+    window.location.href = "login.html";
+}
+
+document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
+
+// 🔥 AUTO FILL
+document.getElementById("weight").value = localStorage.getItem("weight") || "";
+document.getElementById("height").value = localStorage.getItem("height") || "";
+
+// 🔥 MAIN FUNCTION
+async function calculateBMI() {
+
+    let weight = Number(document.getElementById("weight").value);
+    let heightCm = Number(document.getElementById("height").value);
 
     if(!weight || !heightCm){
-        alert("Enter valid details bro ⚠️");
+        alert("Enter valid details ⚠️");
         return;
     }
 
     let height = heightCm / 100;
-    let bmi = weight / (height * height);
-    bmi = bmi.toFixed(2);
+    let bmi = (weight / (height * height)).toFixed(2);
 
     document.getElementById("result").innerText = "Your BMI: " + bmi;
 
-    // 🔥 LOGIC
     let suggestion="", diet="", workout="", goal="";
 
     if(bmi < 18.5){
@@ -107,7 +115,6 @@ window.calculateBMI = async function() {
     document.getElementById("diet").innerText = "Diet: " + diet;
     document.getElementById("workout").innerText = "Workout: " + workout;
 
-    // 🔥 CALORIES
     let calories = 0;
     if(goal === "bulk") calories = weight * 40;
     else if(goal === "maintain") calories = weight * 30;
@@ -115,21 +122,19 @@ window.calculateBMI = async function() {
 
     calories = Math.round(calories);
 
-    // 🔥 SAVE LOCAL
+    // SAVE LOCAL
     localStorage.setItem("weight", weight);
     localStorage.setItem("height", heightCm);
     localStorage.setItem("bmi", bmi);
     localStorage.setItem("calories", calories);
     localStorage.setItem("goal", goal);
 
-    // 🔥 SHOW BUTTON
+    // SHOW BUTTON
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE TO FIREBASE
-    const user = auth.currentUser;
-
-    if(user){
-        try {
+    // 🔥 SAVE FIREBASE (FIXED)
+    onAuthStateChanged(auth, async (user) => {
+        if(user){
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
                 bmi: Number(bmi),
@@ -137,31 +142,17 @@ window.calculateBMI = async function() {
                 goal: goal,
                 date: new Date().toISOString().split("T")[0]
             });
-
-            console.log("Saved to Firebase ✅");
-        } catch(err){
-            console.error(err);
+            console.log("Saved ✅");
         }
-    }
+    });
 }
 
-// 🔥 NAVIGATION
-window.goNext = function(){
+// 🔥 BUTTON EVENTS (FIXED)
+document.getElementById("bmiBtn").addEventListener("click", calculateBMI);
+
+document.getElementById("nextBtn").addEventListener("click", () => {
     window.location.href = "dashboard.html";
-}
-
-// 🔥 USER CHECK
-let user = localStorage.getItem("username");
-
-if(!user){
-    window.location.href = "login.html";
-}
-
-document.getElementById("username").innerText = "Welcome, " + user + " 💪";
-
-// 🔥 AUTO FILL
-document.getElementById("weight").value = localStorage.getItem("weight") || "";
-document.getElementById("height").value = localStorage.getItem("height") || "";
+});
 
 // 🔥 LOGOUT
 window.logout = function(){
