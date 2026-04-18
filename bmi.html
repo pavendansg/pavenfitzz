@@ -11,7 +11,6 @@
 <div class="container">
     <div class="card">
 
-        <!-- 🔥 USERNAME -->
         <h2 id="username"></h2>
 
         <h1>💪 BMI Calculator</h1>
@@ -26,7 +25,6 @@
             ⬅ Go Home
         </button>
 
-        <!-- 🔥 LOGOUT -->
         <button class="secondary-btn" onclick="logout()">
             Logout 🚪
         </button>
@@ -35,9 +33,13 @@
 
         <h2 id="result"></h2>
         <h3 id="suggestion"></h3>
-
         <h3 id="diet"></h3>
         <h3 id="workout"></h3>
+
+        <!-- 🔥 NEXT BUTTON -->
+        <button id="nextBtn" class="primary-btn" style="display:none;" onclick="goNext()">
+            Next ➡ Dashboard
+        </button>
 
     </div>
 </div>
@@ -48,7 +50,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 YOUR CONFIG (KEEP YOUR ORIGINAL VALUES)
+// 🔥 YOUR CONFIG (PUT YOUR REAL VALUES)
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
@@ -66,26 +68,62 @@ const db = getFirestore(app);
 window.calculateBMI = async function() {
 
     let weight = document.getElementById("weight").value;
-    let height = document.getElementById("height").value / 100;
+    let heightCm = document.getElementById("height").value;
 
-    if(!weight || !height){
+    if(!weight || !heightCm){
         alert("Enter valid details bro ⚠️");
         return;
     }
 
+    let height = heightCm / 100;
     let bmi = weight / (height * height);
     bmi = bmi.toFixed(2);
 
     document.getElementById("result").innerText = "Your BMI: " + bmi;
 
-    // 🔥 BASIC CALORIES (simple logic)
-    let calories = Math.round(weight * 35);
+    // 🔥 LOGIC
+    let suggestion="", diet="", workout="", goal="";
 
-    // SAVE LOCAL
+    if(bmi < 18.5){
+        suggestion="Underweight 🥲";
+        diet="Eat more calories 🍗🥛";
+        workout="Strength training 💪";
+        goal="bulk";
+    }
+    else if(bmi < 25){
+        suggestion="Fit 🔥";
+        diet="Balanced diet 🍚🥗";
+        workout="Maintain training 🏋️";
+        goal="maintain";
+    }
+    else{
+        suggestion="Overweight ⚠️";
+        diet="Calorie deficit 🥗";
+        workout="Cardio + fat loss 🏃";
+        goal="cut";
+    }
+
+    document.getElementById("suggestion").innerText = suggestion;
+    document.getElementById("diet").innerText = "Diet: " + diet;
+    document.getElementById("workout").innerText = "Workout: " + workout;
+
+    // 🔥 CALORIES
+    let calories = 0;
+    if(goal === "bulk") calories = weight * 40;
+    else if(goal === "maintain") calories = weight * 30;
+    else calories = weight * 25;
+
+    calories = Math.round(calories);
+
+    // 🔥 SAVE LOCAL
     localStorage.setItem("weight", weight);
-    localStorage.setItem("height", height * 100);
+    localStorage.setItem("height", heightCm);
     localStorage.setItem("bmi", bmi);
     localStorage.setItem("calories", calories);
+    localStorage.setItem("goal", goal);
+
+    // 🔥 SHOW BUTTON
+    document.getElementById("nextBtn").style.display = "block";
 
     // 🔥 SAVE TO FIREBASE
     const user = auth.currentUser;
@@ -96,7 +134,8 @@ window.calculateBMI = async function() {
                 uid: user.uid,
                 bmi: Number(bmi),
                 calories: calories,
-                date: new Date().toLocaleDateString()
+                goal: goal,
+                date: new Date().toISOString().split("T")[0]
             });
 
             console.log("Saved to Firebase ✅");
@@ -104,6 +143,11 @@ window.calculateBMI = async function() {
             console.error(err);
         }
     }
+}
+
+// 🔥 NAVIGATION
+window.goNext = function(){
+    window.location.href = "dashboard.html";
 }
 
 // 🔥 USER CHECK
