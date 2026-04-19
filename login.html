@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>Login - EvolveFit</title>
@@ -15,8 +16,7 @@
 <input type="email" id="email" placeholder="Email">
 <input type="password" id="password" placeholder="Password">
 
-<button class="primary-btn" onclick="signup()">Sign Up</button>
-<button class="primary-btn" onclick="login()">Login</button>
+<button class="primary-btn" onclick="signup()">Sign Up</button> <button class="primary-btn" onclick="login()">Login</button>
 
 <p id="msg"></p>
 
@@ -26,24 +26,30 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-// 🔥 YOUR CONFIG
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07",
   storageBucket: "evolvefit-07.firebasestorage.app",
   messagingSenderId: "977676324550",
-  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
-  measurementId: "G-G5KYXR7CDH"
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// 🔥 SIGNUP
+// 🔥 AUTO LOGIN (NO NEED LOGIN AGAIN)
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        window.location.href = "bmi.html";
+    }
+});
+
+// SIGNUP
 window.signup = function() {
     let email = document.getElementById("email").value;
     let pass = document.getElementById("password").value;
@@ -51,10 +57,9 @@ window.signup = function() {
     createUserWithEmailAndPassword(auth, email, pass)
     .then((userCredential) => {
 
-        const user = userCredential.user;
-
-        // ✅ STORE USER
-        localStorage.setItem("username", user.email);
+        // 🔥 SAVE NAME (email → username)
+        let name = email.split("@")[0];
+        localStorage.setItem("username", name);
 
         document.getElementById("msg").innerText = "Signup success ✅";
 
@@ -64,20 +69,19 @@ window.signup = function() {
     });
 }
 
-// 🔥 LOGIN (FIXED)
+// LOGIN
 window.login = function() {
+
     let email = document.getElementById("email").value;
     let pass = document.getElementById("password").value;
 
     signInWithEmailAndPassword(auth, email, pass)
     .then((userCredential) => {
 
-        const user = userCredential.user;
+        // 🔥 SAVE NAME (email → username)
+        let name = email.split("@")[0];
+        localStorage.setItem("username", name);
 
-        // ✅ STORE USER (IMPORTANT FIX)
-        localStorage.setItem("username", user.email);
-
-        // ✅ REDIRECT
         window.location.href = "bmi.html";
 
     })
