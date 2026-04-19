@@ -51,9 +51,13 @@ import { getFirestore, collection, addDoc } from "https://www.gstatic.com/fireba
 
 // 🔥 PUT YOUR REAL CONFIG HERE
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
+  apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
+  authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07",
+  storageBucket: "evolvefit-07.firebasestorage.app",
+  messagingSenderId: "977676324550",
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
+  measurementId: "G-G5KYXR7CDH"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -143,25 +147,26 @@ async function calculateBMI() {
     document.getElementById("nextBtn").style.display = "block";
 
     // 🔥 SAVE FIREBASE (FINAL FIX)
-    if(currentUser){
-        try{
-            await addDoc(collection(db, "users"), {
-                uid: currentUser.uid,
-                bmi: Number(bmi),
-                calories: calories,
-                goal: goal,
-                date: new Date().toISOString().split("T")[0]
-            });
+    const user = auth.currentUser;
 
-            console.log("Saved to Firebase ✅");
-        }catch(err){
-            console.error(err);
-        }
-    }else{
-        alert("User not ready ❌ Try again");
-    }
+if(!user){
+    alert("Wait 1 second and try again ⚠️");
+    return;
 }
 
+try{
+    await addDoc(collection(db, "users"), {
+        uid: user.uid,
+        bmi: Number(bmi),
+        calories: calories,
+        goal: goal,
+        date: new Date().toISOString().split("T")[0]
+    });
+
+    console.log("Saved to Firebase ✅");
+}catch(err){
+    console.error(err);
+}
 // 🔥 BUTTON EVENTS
 document.getElementById("bmiBtn").addEventListener("click", calculateBMI);
 
