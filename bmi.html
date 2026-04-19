@@ -50,9 +50,9 @@ Next ➡ Dashboard
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 FIREBASE CONFIG
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
   authDomain: "evolvefit-07.firebaseapp.com",
@@ -63,27 +63,25 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 USER NAME
+// USER NAME
 let userName = localStorage.getItem("username") || "User";
 
-// CLEAN EMAIL → NAME
 if(userName.includes("@")){
     userName = userName.split("@")[0];
     localStorage.setItem("username", userName);
 }
 
-// PROTECT PAGE
 if(!userName){
     window.location.href = "login.html";
 }
 
 document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
 
-// 🔥 AUTO FILL
+// AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
 
-// 🔥 AUTH USER
+// AUTH USER
 let currentUser = null;
 onAuthStateChanged(auth, (user) => {
     if(user){
@@ -91,7 +89,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// 🔥 MAIN FUNCTION
+// MAIN FUNCTION
 window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
@@ -132,7 +130,7 @@ window.calculateBMI = async function(){
     document.getElementById("diet").innerText = "Diet: " + diet;
     document.getElementById("workout").innerText = "Workout: " + workout;
 
-    // 🔥 ADVANCED CALORIES
+    // CALORIES
     let maintain = Math.round(weight * 30);
     let bulk = maintain + 400;
     let cut = maintain - 400;
@@ -146,27 +144,32 @@ window.calculateBMI = async function(){
 
 👉 Recommended: ${calories} kcal`;
 
-    // 🔥 SAVE LOCAL
+    // SAVE LOCAL
     localStorage.setItem("weight", weight);
     localStorage.setItem("height", heightCm);
     localStorage.setItem("bmi", bmi);
     localStorage.setItem("calories", calories);
     localStorage.setItem("goal", goal);
 
-    // 🔥 SHOW NEXT BUTTON
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE FIREBASE
+    // 🔥 SAVE ONLY ONE ENTRY PER DAY
     if(currentUser){
         try{
-            await addDoc(collection(db,"users"),{
-                uid: currentUser.uid,
-                bmi: Number(bmi),
-                calories: calories,
-                goal: goal,
-                date: new Date().toISOString().split("T")[0]
-            });
-            console.log("Saved ✅");
+            let today = new Date().toISOString().split("T")[0];
+
+            await setDoc(
+                doc(db, "users", currentUser.uid, "daily", today),
+                {
+                    bmi: Number(bmi),
+                    calories: calories,
+                    goal: goal,
+                    date: today
+                }
+            );
+
+            console.log("Saved (1 per day) ✅");
+
         }catch(err){
             console.error(err);
         }
@@ -174,12 +177,12 @@ window.calculateBMI = async function(){
 
 }
 
-// 🔥 NEXT PAGE
+// NEXT
 document.getElementById("nextBtn").onclick = ()=>{
     window.location.href="dashboard.html";
 }
 
-// 🔥 LOGOUT
+// LOGOUT
 window.logout = function(){
     localStorage.clear();
     window.location.href="login.html";
