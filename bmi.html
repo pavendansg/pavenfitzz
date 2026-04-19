@@ -37,6 +37,10 @@ Logout 🚪
 <h3 id="diet"></h3>
 <h3 id="workout"></h3>
 
+<!-- 🔥 NEW CALORIE TEXT -->
+
+<h3 id="caloriesText"></h3>
+
 <button id="nextBtn" class="primary-btn" style="display:none;">
 Next ➡ Dashboard
 </button>
@@ -77,7 +81,7 @@ document.getElementById("username").innerText = "Welcome, " + userName + " 💪"
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
 
-// 🔥 STORE USER PROPERLY
+// STORE USER
 let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
@@ -130,6 +134,10 @@ window.calculateBMI = async function() {
     let calories = goal === "bulk" ? weight*40 : goal==="maintain" ? weight*30 : weight*25;
     calories = Math.round(calories);
 
+    // 🔥 NEW CALORIE DISPLAY
+    document.getElementById("caloriesText").innerText =
+        "🔥 You should eat " + calories + " kcal/day to " + goal.toUpperCase();
+
     // SAVE LOCAL
     localStorage.setItem("weight", weight);
     localStorage.setItem("height", heightCm);
@@ -140,7 +148,7 @@ window.calculateBMI = async function() {
     // SHOW NEXT
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE FIREBASE (FIXED)
+    // SAVE FIREBASE
     if(!currentUser){
         alert("Wait 1 second and click again ⚠️");
         return;
