@@ -98,10 +98,11 @@ history = history.map(h => ({
 let last5 = history.slice(-5);
 let latest = last5[last5.length-1];
 
-// SHOW DATA
+// SHOW BMI
 document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
 
-// 🔥 WEIGHT + CHANGE
+// 🔥 WEIGHT + CHANGE (FIXED)
+let prev = last5.length > 1 ? last5[last5.length-2].weight : latest.weight;
 let diff = latest.weight - prev;
 
 let trendText = "";
@@ -123,6 +124,10 @@ else{
 document.getElementById("weight").innerHTML =
 `Weight: ${latest.weight} kg <span style="color:${color}">(${trendText})</span>`;
 
+// ✅ BACK ADDED
+document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
+document.getElementById("goal").innerText = "Goal: " + latest.goal;
+
 // 🔥 STREAK
 let dates = history.map(h=>new Date(h.date)).sort((a,b)=>b-a);
 let streak = 1;
@@ -133,7 +138,7 @@ for(let i=0;i<dates.length-1;i++){
     else break;
 }
 
-// 🔥 STREAK UI FIX
+// 🔥 STREAK UI
 let fire = "🔥".repeat(Math.min(streak,5));
 
 document.getElementById("streak").innerText =
