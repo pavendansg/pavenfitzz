@@ -37,8 +37,6 @@ Logout 🚪
 <h3 id="diet"></h3>
 <h3 id="workout"></h3>
 
-<!-- 🔥 NEW CALORIE TEXT -->
-
 <h3 id="caloriesText"></h3>
 
 <button id="nextBtn" class="primary-btn" style="display:none;">
@@ -71,15 +69,16 @@ const db = getFirestore(app);
 // USER CHECK
 let userName = localStorage.getItem("username");
 
-// 🔥 CLEAN NAME (REMOVE EMAIL PART IF EXISTS)
 if(userName && userName.includes("@")){
-userName = userName.split("@")[0];
-localStorage.setItem("username", userName); // update clean name
+    userName = userName.split("@")[0];
+    localStorage.setItem("username", userName);
 }
 
-// SHOW NAME
-document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
+if(!userName){
+    window.location.href = "login.html";
+}
 
+document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
 
 // AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
@@ -138,22 +137,21 @@ window.calculateBMI = async function() {
     let calories = goal === "bulk" ? weight*40 : goal==="maintain" ? weight*30 : weight*25;
     calories = Math.round(calories);
 
-    // 🔥 NEW CALORIE DISPLAY
+    // ✅ FIXED CALORIE TEXT
+    let goalText = "";
+
+    if(goal === "bulk"){
+        goalText = "GAIN MUSCLE 💪";
+    }
+    else if(goal === "maintain"){
+        goalText = "STAY FIT 🔥";
+    }
+    else{
+        goalText = "LOSE FAT 🏃";
+    }
+
     document.getElementById("caloriesText").innerText =
-        let goalText = "";
-
-if(goal === "bulk"){
-    goalText = "GAIN MUSCLE 💪";
-}
-else if(goal === "maintain"){
-    goalText = "STAY FIT 🔥";
-}
-else{
-    goalText = "LOSE FAT 🏃";
-}
-
-document.getElementById("caloriesText").innerText =
-"🔥 Eat " + calories + " kcal/day to " + goalText;
+    "🔥 Eat " + calories + " kcal/day to " + goalText;
 
     // SAVE LOCAL
     localStorage.setItem("weight", weight);
