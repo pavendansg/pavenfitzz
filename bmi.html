@@ -49,4 +49,143 @@ Next ➡ Dashboard
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { get
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// 🔥 FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// 🔥 USER NAME
+let userName = localStorage.getItem("username") || "User";
+
+// CLEAN EMAIL → NAME
+if(userName.includes("@")){
+    userName = userName.split("@")[0];
+    localStorage.setItem("username", userName);
+}
+
+// PROTECT PAGE
+if(!userName){
+    window.location.href = "login.html";
+}
+
+document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
+
+// 🔥 AUTO FILL
+document.getElementById("weight").value = localStorage.getItem("weight") || "";
+document.getElementById("height").value = localStorage.getItem("height") || "";
+
+// 🔥 AUTH USER
+let currentUser = null;
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        currentUser = user;
+    }
+});
+
+// 🔥 MAIN FUNCTION
+window.calculateBMI = async function(){
+
+    let weight = Number(document.getElementById("weight").value);
+    let heightCm = Number(document.getElementById("height").value);
+
+    if(!weight || !heightCm){
+        alert("Enter valid details ⚠️");
+        return;
+    }
+
+    let height = heightCm / 100;
+    let bmi = (weight / (height * height)).toFixed(2);
+
+    document.getElementById("result").innerText = "Your BMI: " + bmi;
+
+    let goal="", suggestion="", diet="", workout="";
+
+    if(bmi < 18.5){
+        goal="bulk";
+        suggestion="Underweight 🥲";
+        diet="Eat more calories 🍗🥛";
+        workout="Strength training 💪";
+    }
+    else if(bmi < 25){
+        goal="maintain";
+        suggestion="Fit 🔥";
+        diet="Balanced diet 🍚🥗";
+        workout="Maintain training 🏋️";
+    }
+    else{
+        goal="cut";
+        suggestion="Overweight ⚠️";
+        diet="Calorie deficit 🥗";
+        workout="Cardio + fat loss 🏃";
+    }
+
+    document.getElementById("suggestion").innerText = suggestion;
+    document.getElementById("diet").innerText = "Diet: " + diet;
+    document.getElementById("workout").innerText = "Workout: " + workout;
+
+    // 🔥 ADVANCED CALORIES
+    let maintain = Math.round(weight * 30);
+    let bulk = maintain + 400;
+    let cut = maintain - 400;
+
+    let calories = goal==="bulk" ? bulk : goal==="maintain" ? maintain : cut;
+
+    document.getElementById("caloriesText").innerText =
+`🔥 Maintain: ${maintain} kcal
+💪 Bulk: ${bulk} kcal
+🏃 Cut: ${cut} kcal
+
+👉 Recommended: ${calories} kcal`;
+
+    // 🔥 SAVE LOCAL
+    localStorage.setItem("weight", weight);
+    localStorage.setItem("height", heightCm);
+    localStorage.setItem("bmi", bmi);
+    localStorage.setItem("calories", calories);
+    localStorage.setItem("goal", goal);
+
+    // 🔥 SHOW NEXT BUTTON
+    document.getElementById("nextBtn").style.display = "block";
+
+    // 🔥 SAVE FIREBASE
+    if(currentUser){
+        try{
+            await addDoc(collection(db,"users"),{
+                uid: currentUser.uid,
+                bmi: Number(bmi),
+                calories: calories,
+                goal: goal,
+                date: new Date().toISOString().split("T")[0]
+            });
+            console.log("Saved ✅");
+        }catch(err){
+            console.error(err);
+        }
+    }
+
+}
+
+// 🔥 NEXT PAGE
+document.getElementById("nextBtn").onclick = ()=>{
+    window.location.href="dashboard.html";
+}
+
+// 🔥 LOGOUT
+window.logout = function(){
+    localStorage.clear();
+    window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>
