@@ -10,51 +10,47 @@
 <body>
 
 <div class="container">
-    <div class="card">
+<div class="card">
 
-```
-    <h2 id="username"></h2>
+<h2 id="username"></h2>
 
-    <h1>💪 BMI Calculator</h1>
-    <p style="opacity:0.7;">Enter your details to get started</p>
+<h1>💪 BMI Calculator</h1>
+<p style="opacity:0.7;">Enter your details to get started</p>
 
-    <input type="number" id="weight" placeholder="Weight (kg)">
-    <input type="number" id="height" placeholder="Height (cm)">
+<input type="number" id="weight" placeholder="Weight (kg)">
+<input type="number" id="height" placeholder="Height (cm)">
 
-    <!-- ✅ WORKING BUTTON -->
-    <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
+<button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
-    <button class="secondary-btn" onclick="window.location.href='index.html'">
-        ⬅ Go Home
-    </button>
+<button class="secondary-btn" onclick="window.location.href='index.html'">
+⬅ Go Home
+</button>
 
-    <button class="secondary-btn" onclick="logout()">
-        Logout 🚪
-    </button>
+<button class="secondary-btn" onclick="logout()">
+Logout 🚪
+</button>
 
-    <hr style="margin:20px 0; border:0.5px solid #333;">
+<hr style="margin:20px 0; border:0.5px solid #333;">
 
-    <h2 id="result"></h2>
-    <h3 id="suggestion"></h3>
-    <h3 id="diet"></h3>
-    <h3 id="workout"></h3>
+<h2 id="result"></h2>
+<h3 id="suggestion"></h3>
+<h3 id="diet"></h3>
+<h3 id="workout"></h3>
 
-    <button id="nextBtn" class="primary-btn" style="display:none;">
-        Next ➡ Dashboard
-    </button>
+<button id="nextBtn" class="primary-btn" style="display:none;">
+Next ➡ Dashboard
+</button>
 
 </div>
-```
-
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 CONFIG
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
   authDomain: "evolvefit-07.firebaseapp.com",
@@ -68,7 +64,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🔥 USER CHECK
+// USER CHECK
 let userName = localStorage.getItem("username");
 
 if(!userName){
@@ -77,11 +73,20 @@ if(!userName){
 
 document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
 
-// 🔥 AUTO FILL
+// AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
 
-// 🔥 MAIN FUNCTION (GLOBAL FIX)
+// 🔥 STORE USER PROPERLY
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        currentUser = user;
+    }
+});
+
+// MAIN FUNCTION
 window.calculateBMI = async function() {
 
     let weight = Number(document.getElementById("weight").value);
@@ -135,23 +140,24 @@ window.calculateBMI = async function() {
     // SHOW NEXT
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE FIREBASE (SAFE)
-    const user = auth.currentUser;
+    // 🔥 SAVE FIREBASE (FIXED)
+    if(!currentUser){
+        alert("Wait 1 second and click again ⚠️");
+        return;
+    }
 
-    if(user){
-        try{
-            await addDoc(collection(db, "users"), {
-                uid: user.uid,
-                bmi: Number(bmi),
-                calories: calories,
-                goal: goal,
-                date: new Date().toISOString().split("T")[0]
-            });
+    try{
+        await addDoc(collection(db, "users"), {
+            uid: currentUser.uid,
+            bmi: Number(bmi),
+            calories: calories,
+            goal: goal,
+            date: new Date().toISOString().split("T")[0]
+        });
 
-            console.log("Saved ✅");
-        }catch(err){
-            console.error(err);
-        }
+        console.log("Saved ✅");
+    }catch(err){
+        console.error(err);
     }
 }
 
