@@ -86,7 +86,7 @@ snapshot.forEach(doc=>{
 // SORT
 history.sort((a,b)=> new Date(a.date)-new Date(b.date));
 
-// 🔥 ADD FALLBACK WEIGHT
+// FALLBACK WEIGHT
 let currentWeight = localStorage.getItem("weight") || 0;
 
 history = history.map(h => ({
@@ -94,14 +94,24 @@ history = history.map(h => ({
     weight: h.weight || currentWeight
 }));
 
-// 🔥 LAST 5 DAYS ONLY
+// LAST 5 DAYS
 let last5 = history.slice(-5);
-
 let latest = last5[last5.length-1];
 
 // SHOW DATA
 document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
-document.getElementById("weight").innerText = "Weight: " + latest.weight + " kg";
+
+// 🔥 WEIGHT + CHANGE
+let prev = last5.length > 1 ? last5[last5.length-2].weight : latest.weight;
+let diff = latest.weight - prev;
+
+let trend = diff > 0 ? "📈 +" + diff + "kg" :
+            diff < 0 ? "📉 " + diff + "kg" :
+            "➖ no change";
+
+document.getElementById("weight").innerText =
+"Weight: " + latest.weight + " kg (" + trend + ")";
+
 document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
 document.getElementById("goal").innerText = "Goal: " + latest.goal;
 
@@ -115,9 +125,13 @@ for(let i=0;i<dates.length-1;i++){
     else break;
 }
 
-document.getElementById("streak").innerText="🔥 Streak: "+streak+" days";
+// 🔥 STREAK UI FIX
+let fire = "🔥".repeat(Math.min(streak,5));
 
-// 📊 GRAPH (ONLY LAST 5)
+document.getElementById("streak").innerText =
+fire + " Streak: " + streak + (streak===1 ? " day" : " days");
+
+// GRAPH
 new Chart(document.getElementById("chart"),{
     type:"line",
     data:{
@@ -137,7 +151,7 @@ new Chart(document.getElementById("chart"),{
     }
 });
 
-// 📅 HISTORY (ONLY LAST 5)
+// HISTORY
 let box=document.getElementById("historyBox");
 box.innerHTML="<b>📅 Last 5 Days:</b><br>";
 
