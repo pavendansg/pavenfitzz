@@ -67,11 +67,26 @@ const db = getFirestore(app);
 // WAIT FOR PAGE LOAD
 window.addEventListener("DOMContentLoaded", () => {
 
-    let name = localStorage.getItem("username");
-    let userEl = document.getElementById("user");
-    if(userEl){
-        userEl.innerText = "🔥 " + name;
-    }
+    // 🔥 GET NAME
+let name = localStorage.getItem("username");
+
+// CLEAN EMAIL → NAME
+if(name && name.includes("@")){
+name = name.split("@")[0];
+localStorage.setItem("username", name);
+}
+
+// CAPITAL STYLE
+if(name){
+name = name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+// SHOW
+let userEl = document.getElementById("user");
+if(userEl){
+userEl.innerText = "🔥 Welcome, " + name + " 💪";
+}
+
 
     onAuthStateChanged(auth, async (user) => {
 
