@@ -102,18 +102,26 @@ let latest = last5[last5.length-1];
 document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
 
 // 🔥 WEIGHT + CHANGE
-let prev = last5.length > 1 ? last5[last5.length-2].weight : latest.weight;
 let diff = latest.weight - prev;
 
-let trend = diff > 0 ? "📈 +" + diff + "kg" :
-            diff < 0 ? "📉 " + diff + "kg" :
-            "➖ no change";
+let trendText = "";
+let color = "";
 
-document.getElementById("weight").innerText =
-"Weight: " + latest.weight + " kg (" + trend + ")";
+if(diff > 0){
+    trendText = "📈 +" + diff + "kg";
+    color = "lightgreen";
+}
+else if(diff < 0){
+    trendText = "📉 " + diff + "kg";
+    color = "red";
+}
+else{
+    trendText = "➖ no change";
+    color = "gray";
+}
 
-document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
-document.getElementById("goal").innerText = "Goal: " + latest.goal;
+document.getElementById("weight").innerHTML =
+`Weight: ${latest.weight} kg <span style="color:${color}">(${trendText})</span>`;
 
 // 🔥 STREAK
 let dates = history.map(h=>new Date(h.date)).sort((a,b)=>b-a);
