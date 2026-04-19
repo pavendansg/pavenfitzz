@@ -71,11 +71,15 @@ const db = getFirestore(app);
 // USER CHECK
 let userName = localStorage.getItem("username");
 
-if(!userName){
-    window.location.href = "login.html";
+// 🔥 CLEAN NAME (REMOVE EMAIL PART IF EXISTS)
+if(userName && userName.includes("@")){
+userName = userName.split("@")[0];
+localStorage.setItem("username", userName); // update clean name
 }
 
+// SHOW NAME
 document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
+
 
 // AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
