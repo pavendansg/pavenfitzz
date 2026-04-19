@@ -136,7 +136,20 @@ window.calculateBMI = async function() {
 
     // 🔥 NEW CALORIE DISPLAY
     document.getElementById("caloriesText").innerText =
-        "🔥 You should eat " + calories + " kcal/day to " + goal.toUpperCase();
+        let goalText = "";
+
+if(goal === "bulk"){
+    goalText = "GAIN MUSCLE 💪";
+}
+else if(goal === "maintain"){
+    goalText = "STAY FIT 🔥";
+}
+else{
+    goalText = "LOSE FAT 🏃";
+}
+
+document.getElementById("caloriesText").innerText =
+"🔥 Eat " + calories + " kcal/day to " + goalText;
 
     // SAVE LOCAL
     localStorage.setItem("weight", weight);
