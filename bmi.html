@@ -19,7 +19,6 @@
         <input type="number" id="weight" placeholder="Weight (kg)">
         <input type="number" id="height" placeholder="Height (cm)">
 
-        <!-- ✅ FIXED BUTTON -->
         <button id="bmiBtn" class="primary-btn">Calculate BMI</button>
 
         <button class="secondary-btn" onclick="window.location.href='index.html'">
@@ -50,7 +49,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 YOUR CONFIG
+// 🔥 PUT YOUR REAL CONFIG HERE
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
@@ -73,6 +72,17 @@ document.getElementById("username").innerText = "Welcome, " + userName + " 💪"
 // 🔥 AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
+
+// 🔥 STORE CURRENT USER
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        currentUser = user;
+    } else {
+        window.location.href = "login.html";
+    }
+});
 
 // 🔥 MAIN FUNCTION
 async function calculateBMI() {
@@ -132,22 +142,27 @@ async function calculateBMI() {
     // SHOW BUTTON
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE FIREBASE (FIXED)
-    onAuthStateChanged(auth, async (user) => {
-        if(user){
+    // 🔥 SAVE FIREBASE (FINAL FIX)
+    if(currentUser){
+        try{
             await addDoc(collection(db, "users"), {
-                uid: user.uid,
+                uid: currentUser.uid,
                 bmi: Number(bmi),
                 calories: calories,
                 goal: goal,
                 date: new Date().toISOString().split("T")[0]
             });
-            console.log("Saved ✅");
+
+            console.log("Saved to Firebase ✅");
+        }catch(err){
+            console.error(err);
         }
-    });
+    }else{
+        alert("User not ready ❌ Try again");
+    }
 }
 
-// 🔥 BUTTON EVENTS (FIXED)
+// 🔥 BUTTON EVENTS
 document.getElementById("bmiBtn").addEventListener("click", calculateBMI);
 
 document.getElementById("nextBtn").addEventListener("click", () => {
