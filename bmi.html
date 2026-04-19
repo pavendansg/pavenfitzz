@@ -134,8 +134,41 @@ window.calculateBMI = async function() {
     document.getElementById("diet").innerText = "Diet: " + diet;
     document.getElementById("workout").innerText = "Workout: " + workout;
 
-    let calories = goal === "bulk" ? weight*40 : goal==="maintain" ? weight*30 : weight*25;
-    calories = Math.round(calories);
+   // 🔥 CALORIE CALCULATION (ADVANCED)
+
+// maintenance base
+let maintainCalories = Math.round(weight * 30);
+
+// bulk surplus (+300 to +500)
+let bulkCalories = maintainCalories + 400;
+
+// cut deficit (-300 to -500)
+let cutCalories = maintainCalories - 400;
+
+// decide main calories (for saving)
+let calories = goal === "bulk" ? bulkCalories : goal==="maintain" ? maintainCalories : cutCalories;
+
+// 🔥 TEXT DISPLAY
+let goalText = "";
+
+if(goal === "bulk"){
+goalText = "GAIN MUSCLE 💪";
+}
+else if(goal === "maintain"){
+goalText = "STAY FIT 🔥";
+}
+else{
+goalText = "LOSE FAT 🏃";
+}
+
+// 🔥 SHOW ALL OPTIONS
+document.getElementById("caloriesText").innerText =
+`🔥 Maintain: ${maintainCalories} kcal
+💪 Bulk: ${bulkCalories} kcal (+surplus)
+🏃 Cut: ${cutCalories} kcal (-deficit)
+
+👉 Recommended: ${calories} kcal to ${goalText}`;
+
 
     // ✅ FIXED CALORIE TEXT
     let goalText = "";
