@@ -158,15 +158,13 @@ window.calculateBMI = async function(){
         try{
             let today = new Date().toISOString().split("T")[0];
 
-            await setDoc(
-                doc(db, "users", currentUser.uid, "daily", today),
-                {
-                    bmi: Number(bmi),
-                    calories: calories,
-                    goal: goal,
-                    date: today
-                }
-            );
+           await setDoc(... {
+    bmi: Number(bmi),
+    weight: weight, // ✅ ADD THIS
+    calories: calories,
+    goal: goal,
+    date: today
+});
 
             console.log("Saved (1 per day) ✅");
 
