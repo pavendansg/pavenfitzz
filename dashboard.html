@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 ```
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 ```
 
@@ -16,32 +15,29 @@
 <body>
 
 <div class="container">
-    <div class="card">
+<div class="card">
 
-```
-    <h2 id="user"></h2>
-    <h1>🔥 Dashboard</h1>
+<h2 id="user"></h2>
+<h1>🔥 Dashboard</h1>
 
-    <h3 id="streak" style="margin-top:10px;"></h3>
+<h3 id="streak"></h3>
 
-    <hr style="margin:15px 0; border:0.5px solid #333;">
+<hr style="margin:15px 0; border:0.5px solid #333;">
 
-    <h3 id="bmi"></h3>
-    <h3 id="calories"></h3>
-    <h3 id="goal"></h3>
+<h3 id="bmi"></h3>
+<h3 id="weight"></h3>
+<h3 id="calories"></h3>
+<h3 id="goal"></h3>
 
-    <canvas id="chart" style="margin-top:20px;"></canvas>
+<canvas id="chart"></canvas>
 
-    <div id="historyBox" style="margin-top:20px;"></div>
+<div id="historyBox"></div>
 
-    <br>
+<br>
 
-    <button class="primary-btn" onclick="goToBMI()">Update Data 🔄</button>
-    <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+<button class="primary-btn" onclick="goToBMI()">Update Data 🔄</button> <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
 
 </div>
-```
-
 </div>
 
 <script type="module">
@@ -50,7 +46,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
   authDomain: "evolvefit-07.firebaseapp.com",
@@ -61,112 +56,105 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER NAME
+// USER
 let name = localStorage.getItem("username") || "User";
-
-if(name.includes("@")){
-    name = name.split("@")[0];
-}
-
+if(name.includes("@")) name = name.split("@")[0];
 name = name.charAt(0).toUpperCase() + name.slice(1);
-
 document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
 
-// WAIT FOR USER
 onAuthStateChanged(auth, async (user) => {
 
-    if(!user){
-        window.location.href = "login.html";
-        return;
-    }
+if(!user){
+    window.location.href = "login.html";
+    return;
+}
 
-    try{
+const snapshot = await getDocs(collection(db,"users",user.uid,"daily"));
 
-        const snapshot = await getDocs(
-            collection(db, "users", user.uid, "daily")
-        );
+if(snapshot.empty){
+    document.getElementById("bmi").innerText = "No data yet ❌";
+    document.getElementById("streak").innerText = "🔥 Streak: 0 days";
+    return;
+}
 
-        if(snapshot.empty){
-            document.getElementById("bmi").innerText = "No data yet ❌";
-            document.getElementById("streak").innerText = "🔥 Streak: 0 days";
-            return;
+let history = [];
+
+snapshot.forEach(doc=>{
+    history.push(doc.data());
+});
+
+// SORT
+history.sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+// 🔥 ADD FALLBACK WEIGHT
+let currentWeight = localStorage.getItem("weight") || 0;
+
+history = history.map(h => ({
+    ...h,
+    weight: h.weight || currentWeight
+}));
+
+// 🔥 LAST 5 DAYS ONLY
+let last5 = history.slice(-5);
+
+let latest = last5[last5.length-1];
+
+// SHOW DATA
+document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
+document.getElementById("weight").innerText = "Weight: " + latest.weight + " kg";
+document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
+document.getElementById("goal").innerText = "Goal: " + latest.goal;
+
+// 🔥 STREAK
+let dates = history.map(h=>new Date(h.date)).sort((a,b)=>b-a);
+let streak = 1;
+
+for(let i=0;i<dates.length-1;i++){
+    let diff=(dates[i]-dates[i+1])/(1000*60*60*24);
+    if(diff===1) streak++;
+    else break;
+}
+
+document.getElementById("streak").innerText="🔥 Streak: "+streak+" days";
+
+// 📊 GRAPH (ONLY LAST 5)
+new Chart(document.getElementById("chart"),{
+    type:"line",
+    data:{
+        labels:last5.map(h=>h.date),
+        datasets:[
+        {
+            label:"BMI 📊",
+            data:last5.map(h=>h.bmi),
+            borderWidth:3
+        },
+        {
+            label:"Weight ⚖️",
+            data:last5.map(h=>h.weight),
+            borderWidth:3
         }
-
-        let history = [];
-
-        snapshot.forEach(doc => {
-            history.push(doc.data());
-        });
-
-        // SORT ASCENDING
-        history.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-        let latest = history[history.length - 1];
-
-        // SHOW DATA
-        document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
-        document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
-        document.getElementById("goal").innerText = "Goal: " + latest.goal;
-
-        // 🔥 STREAK CALCULATION
-        let dates = history.map(h => new Date(h.date));
-
-        dates.sort((a,b) => b - a); // latest first
-
-        let streak = 1;
-
-        for(let i = 0; i < dates.length - 1; i++){
-
-            let diff = (dates[i] - dates[i+1]) / (1000 * 60 * 60 * 24);
-
-            if(diff === 1){
-                streak++;
-            } else {
-                break;
-            }
-        }
-
-        document.getElementById("streak").innerText =
-            "🔥 Streak: " + streak + " days";
-
-        // 📊 CHART
-        new Chart(document.getElementById("chart"), {
-            type: "line",
-            data: {
-                labels: history.map(h => h.date),
-                datasets: [{
-                    label: "BMI 📊",
-                    data: history.map(h => h.bmi),
-                    borderWidth: 3,
-                    tension: 0.4
-                }]
-            }
-        });
-
-        // 📅 HISTORY
-        let box = document.getElementById("historyBox");
-        box.innerHTML = "<b>📅 History:</b><br>";
-
-        history.slice().reverse().forEach(h => {
-            box.innerHTML += `${h.date} → BMI ${h.bmi}<br>`;
-        });
-
-    }catch(err){
-        console.error(err);
+        ]
     }
+});
+
+// 📅 HISTORY (ONLY LAST 5)
+let box=document.getElementById("historyBox");
+box.innerHTML="<b>📅 Last 5 Days:</b><br>";
+
+last5.slice().reverse().forEach(h=>{
+    box.innerHTML+=`${h.date} → BMI ${h.bmi} | ${h.weight}kg<br>`;
+});
 
 });
 
 // NAV
-window.goToBMI = function(){
-    window.location.href = "bmi.html";
-}
+window.goToBMI=()=>window.location.href="bmi.html";
 
 // LOGOUT
-window.logout = function(){
-    localStorage.clear();
-    window.location.href = "login.html";
-}
+window.logout=()=>{
+localStorage.clear();
+window.location.href="login.html";
+};
 
 </script>
 
