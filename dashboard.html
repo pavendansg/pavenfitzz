@@ -1,73 +1,106 @@
-<script type="module">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - EvolveFit Club</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+    <!-- 🔥 CHART -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-// 🔥 YOUR CONFIG
+<body>
+
+<div class="container">
+<div class="card">
+
+<h1>🔥 Dashboard</h1>
+<h2 id="user"></h2>
+
+<hr style="margin:15px 0; border:0.5px solid #333;">
+
+<h3 id="bmi"></h3>
+<h3 id="calories"></h3>
+<h3 id="protein"></h3>
+<h3 id="carbs"></h3>
+<h3 id="fats"></h3>
+
+<canvas id="chart"></canvas>
+
+<div id="historyBox" style="margin-top:20px;"></div>
+
+<br>
+
+<button class="primary-btn" onclick="goToBMI()">Update Data 🔄</button>
+<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+
+</div>
+</div>
+
+<!-- 🔥 FIREBASE (WORKING VERSION) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+<script>
+
+// 🔥 YOUR CONFIG (PUT YOUR REAL VALUES HERE)
 const firebaseConfig = {
   apiKey: "YOUR_KEY",
   authDomain: "YOUR_DOMAIN",
-  projectId: "evolvefit-07",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  projectId: "evolvefit-07"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
 
-// 🔥 USER CHECK
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// 🔥 USER NAME
 let name = localStorage.getItem("username");
-if(!name) window.location.href="login.html";
 
-document.getElementById("user").innerText="🔥 "+name;
+if(!name){
+    window.location.href="login.html";
+}
 
-// 🔥 LOAD DATA FROM FIREBASE
-async function loadData(){
+document.getElementById("user").innerText = "Welcome, " + name + " 💪";
 
-    const user = auth.currentUser;
+// 🔥 LOAD DATA
+auth.onAuthStateChanged(async (user) => {
 
     if(!user){
-        setTimeout(loadData,1000); // wait for auth
+        window.location.href="login.html";
         return;
     }
 
-    const q = query(
-        collection(db, "users"),
-        where("uid","==",user.uid)
-    );
-
-    const querySnapshot = await getDocs(q);
+    const snapshot = await db.collection("users")
+        .where("uid", "==", user.uid)
+        .get();
 
     let history = [];
 
-    querySnapshot.forEach(doc=>{
+    snapshot.forEach(doc=>{
         history.push(doc.data());
     });
 
     if(history.length === 0){
-        document.getElementById("bmi").innerText="No data yet ❌";
+        document.getElementById("bmi").innerText = "No data yet ❌";
         return;
     }
 
-    // 🔥 SORT BY DATE (latest last)
+    // SORT
     history.sort((a,b)=> new Date(a.date) - new Date(b.date));
 
     let latest = history[history.length - 1];
 
     let weight = Number(localStorage.getItem("weight")) || 60;
-    let height = Number(localStorage.getItem("height")) || 170;
     let goal = localStorage.getItem("goal");
 
-    // BMI
+    // SHOW DATA
     document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
-
-    // Calories
     document.getElementById("calories").innerText = "Calories: " + latest.calories;
 
-    // MACROS (same logic)
+    // MACROS
     let protein=0,fats=0,carbs=0;
 
     if(goal==="bulk"){ protein=weight*2; fats=weight*0.8; }
@@ -77,15 +110,11 @@ async function loadData(){
     let used=(protein*4)+(fats*9);
     carbs=(latest.calories-used)/4;
 
-    protein=Math.round(protein);
-    carbs=Math.round(carbs);
-    fats=Math.round(fats);
+    document.getElementById("protein").innerText="Protein: "+Math.round(protein)+"g";
+    document.getElementById("carbs").innerText="Carbs: "+Math.round(carbs)+"g";
+    document.getElementById("fats").innerText="Fats: "+Math.round(fats)+"g";
 
-    document.getElementById("protein").innerText="Protein: "+protein+"g";
-    document.getElementById("carbs").innerText="Carbs: "+carbs+"g";
-    document.getElementById("fats").innerText="Fats: "+fats+"g";
-
-    // 📊 GRAPH
+    // GRAPH
     new Chart(document.getElementById("chart"), {
         type: "line",
         data: {
@@ -93,26 +122,33 @@ async function loadData(){
             datasets: [{
                 label: "BMI 📊",
                 data: history.map(h=>h.bmi),
-                borderWidth: 3,
-                tension: 0.4
+                borderWidth: 3
             }]
         }
     });
 
-    // 📅 HISTORY
+    // HISTORY
     let box = document.getElementById("historyBox");
-    box.innerHTML="<b>📅 History:</b><br>";
+    box.innerHTML = "<b>📅 History:</b><br>";
 
     history.slice().reverse().forEach(h=>{
         box.innerHTML += `${h.date} → BMI ${h.bmi}<br>`;
     });
-}
 
-// RUN
-loadData();
+});
 
 // NAV
-window.goToBMI = function(){ window.location.href="bmi.html"; }
-window.logout = function(){ localStorage.clear(); window.location.href="login.html"; }
+function goToBMI(){
+    window.location.href="bmi.html";
+}
+
+function logout(){
+    firebase.auth().signOut();
+    localStorage.clear();
+    window.location.href="login.html";
+}
 
 </script>
+
+</body>
+</html>
