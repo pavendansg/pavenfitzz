@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
     <title>BMI - EvolveFit Club</title>
@@ -11,53 +12,56 @@
 <div class="container">
     <div class="card">
 
-        <h2 id="username"></h2>
+```
+    <h2 id="username"></h2>
 
-        <h1>💪 BMI Calculator</h1>
-        <p style="opacity:0.7;">Enter your details to get started</p>
+    <h1>💪 BMI Calculator</h1>
+    <p style="opacity:0.7;">Enter your details to get started</p>
 
-        <input type="number" id="weight" placeholder="Weight (kg)">
-        <input type="number" id="height" placeholder="Height (cm)">
+    <input type="number" id="weight" placeholder="Weight (kg)">
+    <input type="number" id="height" placeholder="Height (cm)">
 
-        <button id="bmiBtn" class="primary-btn">Calculate BMI</button>
+    <!-- ✅ WORKING BUTTON -->
+    <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
-        <button class="secondary-btn" onclick="window.location.href='index.html'">
-            ⬅ Go Home
-        </button>
+    <button class="secondary-btn" onclick="window.location.href='index.html'">
+        ⬅ Go Home
+    </button>
 
-        <button class="secondary-btn" onclick="logout()">
-            Logout 🚪
-        </button>
+    <button class="secondary-btn" onclick="logout()">
+        Logout 🚪
+    </button>
 
-        <hr style="margin:20px 0; border:0.5px solid #333;">
+    <hr style="margin:20px 0; border:0.5px solid #333;">
 
-        <h2 id="result"></h2>
-        <h3 id="suggestion"></h3>
-        <h3 id="diet"></h3>
-        <h3 id="workout"></h3>
+    <h2 id="result"></h2>
+    <h3 id="suggestion"></h3>
+    <h3 id="diet"></h3>
+    <h3 id="workout"></h3>
 
-        <button id="nextBtn" class="primary-btn" style="display:none;">
-            Next ➡ Dashboard
-        </button>
+    <button id="nextBtn" class="primary-btn" style="display:none;">
+        Next ➡ Dashboard
+    </button>
 
-    </div>
+</div>
+```
+
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// 🔥 PUT YOUR REAL CONFIG HERE
+// 🔥 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07",
   storageBucket: "evolvefit-07.firebasestorage.app",
   messagingSenderId: "977676324550",
-  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
-  measurementId: "G-G5KYXR7CDH"
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -77,19 +81,8 @@ document.getElementById("username").innerText = "Welcome, " + userName + " 💪"
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
 
-// 🔥 STORE CURRENT USER
-let currentUser = null;
-
-onAuthStateChanged(auth, (user) => {
-    if(user){
-        currentUser = user;
-    } else {
-        window.location.href = "login.html";
-    }
-});
-
-// 🔥 MAIN FUNCTION
-async function calculateBMI() {
+// 🔥 MAIN FUNCTION (GLOBAL FIX)
+window.calculateBMI = async function() {
 
     let weight = Number(document.getElementById("weight").value);
     let heightCm = Number(document.getElementById("height").value);
@@ -129,11 +122,7 @@ async function calculateBMI() {
     document.getElementById("diet").innerText = "Diet: " + diet;
     document.getElementById("workout").innerText = "Workout: " + workout;
 
-    let calories = 0;
-    if(goal === "bulk") calories = weight * 40;
-    else if(goal === "maintain") calories = weight * 30;
-    else calories = weight * 25;
-
+    let calories = goal === "bulk" ? weight*40 : goal==="maintain" ? weight*30 : weight*25;
     calories = Math.round(calories);
 
     // SAVE LOCAL
@@ -143,38 +132,35 @@ async function calculateBMI() {
     localStorage.setItem("calories", calories);
     localStorage.setItem("goal", goal);
 
-    // SHOW BUTTON
+    // SHOW NEXT
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE FIREBASE (FINAL FIX)
+    // 🔥 SAVE FIREBASE (SAFE)
     const user = auth.currentUser;
 
-if(!user){
-    alert("Wait 1 second and try again ⚠️");
-    return;
+    if(user){
+        try{
+            await addDoc(collection(db, "users"), {
+                uid: user.uid,
+                bmi: Number(bmi),
+                calories: calories,
+                goal: goal,
+                date: new Date().toISOString().split("T")[0]
+            });
+
+            console.log("Saved ✅");
+        }catch(err){
+            console.error(err);
+        }
+    }
 }
 
-try{
-    await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        bmi: Number(bmi),
-        calories: calories,
-        goal: goal,
-        date: new Date().toISOString().split("T")[0]
-    });
-
-    console.log("Saved to Firebase ✅");
-}catch(err){
-    console.error(err);
-}
-// 🔥 BUTTON EVENTS
-document.getElementById("bmiBtn").addEventListener("click", calculateBMI);
-
-document.getElementById("nextBtn").addEventListener("click", () => {
+// NEXT
+document.getElementById("nextBtn").onclick = () => {
     window.location.href = "dashboard.html";
-});
+};
 
-// 🔥 LOGOUT
+// LOGOUT
 window.logout = function(){
     localStorage.clear();
     window.location.href = "login.html";
