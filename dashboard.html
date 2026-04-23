@@ -29,6 +29,13 @@
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
+<!-- 🔥 WEEKLY REPORT -->
+
+<h3 style="margin-top:20px;">📊 Weekly Report</h3>
+<h4 id="weeklyBMI"></h4>
+<h4 id="weeklyWeight"></h4>
+<h4 id="weeklyCalories"></h4>
+
 <canvas id="chart"></canvas>
 
 <div id="historyBox"></div>
@@ -101,7 +108,7 @@ let latest = last5[last5.length-1];
 // SHOW BMI
 document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
 
-// 🔥 WEIGHT + CHANGE (FIXED)
+// WEIGHT CHANGE
 let prev = last5.length > 1 ? last5[last5.length-2].weight : latest.weight;
 let diff = latest.weight - prev;
 
@@ -124,7 +131,6 @@ else{
 document.getElementById("weight").innerHTML =
 `Weight: ${latest.weight} kg <span style="color:${color}">(${trendText})</span>`;
 
-// ✅ BACK ADDED
 document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
 document.getElementById("goal").innerText = "Goal: " + latest.goal;
 
@@ -138,11 +144,40 @@ for(let i=0;i<dates.length-1;i++){
     else break;
 }
 
-// 🔥 STREAK UI
 let fire = "🔥".repeat(Math.min(streak,5));
-
 document.getElementById("streak").innerText =
 fire + " Streak: " + streak + (streak===1 ? " day" : " days");
+
+// 🔥 WEEKLY REPORT (LAST 7 DAYS)
+let last7 = history.slice(-7);
+
+if(last7.length > 0){
+
+    let avgBMI = last7.reduce((sum,h)=> sum + Number(h.bmi),0) / last7.length;
+    avgBMI = avgBMI.toFixed(2);
+
+    let firstWeight = last7[0].weight;
+    let lastWeight = last7[last7.length-1].weight;
+    let weightDiff = (lastWeight - firstWeight).toFixed(2);
+
+    let weightTrend =
+        weightDiff > 0 ? "📈 +" + weightDiff + "kg" :
+        weightDiff < 0 ? "📉 " + weightDiff + "kg" :
+        "➖ no change";
+
+    let avgCalories = Math.round(
+        last7.reduce((sum,h)=> sum + Number(h.calories),0) / last7.length
+    );
+
+    document.getElementById("weeklyBMI").innerText =
+        "Avg BMI (7 days): " + avgBMI;
+
+    document.getElementById("weeklyWeight").innerText =
+        "Weight Change: " + weightTrend;
+
+    document.getElementById("weeklyCalories").innerText =
+        "Avg Calories: " + avgCalories + " kcal";
+}
 
 // GRAPH
 new Chart(document.getElementById("chart"),{
