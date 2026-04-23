@@ -35,6 +35,7 @@
 <h4 id="weeklyBMI"></h4>
 <h4 id="weeklyWeight"></h4>
 <h4 id="weeklyCalories"></h4>
+<h4 id="weeklyRating"></h4>
 
 <canvas id="chart"></canvas>
 
@@ -148,7 +149,7 @@ let fire = "🔥".repeat(Math.min(streak,5));
 document.getElementById("streak").innerText =
 fire + " Streak: " + streak + (streak===1 ? " day" : " days");
 
-// 🔥 WEEKLY REPORT (LAST 7 DAYS)
+// 🔥 WEEKLY REPORT
 let last7 = history.slice(-7);
 
 if(last7.length > 0){
@@ -177,6 +178,39 @@ if(last7.length > 0){
 
     document.getElementById("weeklyCalories").innerText =
         "Avg Calories: " + avgCalories + " kcal";
+
+    // 🔥 WEEKLY RATING
+    let score = 0;
+
+    // consistency
+    if(last7.length >= 5) score += 3;
+    else if(last7.length >= 3) score += 2;
+    else score += 1;
+
+    // goal vs weight
+    if(latest.goal === "cut" && weightDiff < 0) score += 3;
+    else if(latest.goal === "bulk" && weightDiff > 0) score += 3;
+    else if(latest.goal === "maintain" && Math.abs(weightDiff) < 1) score += 3;
+    else score += 1;
+
+    // BMI improvement
+    let firstBMI = Number(last7[0].bmi);
+    let lastBMI = Number(last7[last7.length-1].bmi);
+
+    if((latest.goal === "cut" && lastBMI < firstBMI) ||
+       (latest.goal === "bulk" && lastBMI > firstBMI) ||
+       (latest.goal === "maintain" && Math.abs(lastBMI - firstBMI) < 0.5)){
+        score += 3;
+    } else {
+        score += 1;
+    }
+
+    let rating = score >= 8 ? "🔥 Excellent" :
+                 score >= 5 ? "👍 Good" :
+                 "⚠️ Needs Improvement";
+
+    document.getElementById("weeklyRating").innerText =
+        "Weekly Rating: " + rating;
 }
 
 // GRAPH
