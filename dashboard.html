@@ -29,6 +29,16 @@
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
+<!-- 🎯 TARGET INPUT -->
+
+<div style="margin-top:10px;">
+    <input type="number" id="targetInput" placeholder="Set target weight (kg)" style="padding:8px; width:60%;">
+    <button onclick="saveTarget()" class="secondary-btn">Set 🎯</button>
+</div>
+
+<h4 id="targetText"></h4>
+<h4 id="goalStatus"></h4>
+
 <!-- 🔥 PROGRESS BAR -->
 
 <h4 id="progressText"></h4>
@@ -70,6 +80,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// 🎯 SAVE TARGET
+window.saveTarget = function(){
+
+    let newTarget = Number(document.getElementById("targetInput").value);
+
+    if(!newTarget){
+        alert("Enter valid target ⚠️");
+        return;
+    }
+
+    let current = Number(localStorage.getItem("weight")) || 0;
+    let oldTarget = Number(localStorage.getItem("targetWeight"));
+
+    let achieved = false;
+
+    if(oldTarget){
+        if(Math.abs(current - oldTarget) < 1){
+            achieved = true;
+        }
+    }
+
+    if(oldTarget && !achieved){
+        let confirmChange = confirm("⚠️ Target not reached yet. Change anyway?");
+        if(!confirmChange) return;
+    }
+
+    localStorage.setItem("targetWeight", newTarget);
+
+    alert("Target Updated 🎯");
+    location.reload();
+}
 
 // USER
 let name = localStorage.getItem("username") || "User";
@@ -142,15 +184,23 @@ document.getElementById("weight").innerHTML =
 document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
 document.getElementById("goal").innerText = "Goal: " + latest.goal;
 
-// 🔥 PROGRESS BAR LOGIC
+// 🔥 TARGET + PROGRESS
 let startWeight = history[0].weight;
 let current = latest.weight;
 
-let target;
+let target = Number(localStorage.getItem("targetWeight"));
 
-if(latest.goal === "bulk") target = startWeight + 5;
-else if(latest.goal === "cut") target = startWeight - 5;
-else target = startWeight;
+if(!target){
+    if(latest.goal === "bulk") target = startWeight + 5;
+    else if(latest.goal === "cut") target = startWeight - 5;
+    else target = startWeight;
+}
+
+document.getElementById("targetText").innerText =
+"Target Weight: " + target + " kg 🎯";
+
+let status = Math.abs(current - target) < 1 ? "🎉 Target Achieved!" : "Keep going 💪";
+document.getElementById("goalStatus").innerText = status;
 
 let progress = 0;
 
@@ -161,7 +211,7 @@ else if(latest.goal === "cut"){
     progress = ((startWeight - current) / (startWeight - target)) * 100;
 }
 else{
-    progress = 100;
+    progress = Math.abs(current - target) < 1 ? 100 : 50;
 }
 
 progress = Math.max(0, Math.min(100, progress));
@@ -215,7 +265,6 @@ if(last7.length > 0){
     document.getElementById("weeklyCalories").innerText =
         "Avg Calories: " + avgCalories + " kcal";
 
-    // RATING
     let score = 0;
 
     if(last7.length >= 5) score += 3;
