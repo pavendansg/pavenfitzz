@@ -29,6 +29,13 @@
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
+<!-- 🔥 PROGRESS BAR -->
+
+<h4 id="progressText"></h4>
+<div style="background:#333; border-radius:10px; overflow:hidden; height:20px;">
+    <div id="progressBar" style="height:100%; width:0%; background:limegreen; transition:0.5s;"></div>
+</div>
+
 <!-- 🔥 WEEKLY REPORT -->
 
 <h3 style="margin-top:20px;">📊 Weekly Report</h3>
@@ -135,6 +142,35 @@ document.getElementById("weight").innerHTML =
 document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
 document.getElementById("goal").innerText = "Goal: " + latest.goal;
 
+// 🔥 PROGRESS BAR LOGIC
+let startWeight = history[0].weight;
+let current = latest.weight;
+
+let target;
+
+if(latest.goal === "bulk") target = startWeight + 5;
+else if(latest.goal === "cut") target = startWeight - 5;
+else target = startWeight;
+
+let progress = 0;
+
+if(latest.goal === "bulk"){
+    progress = ((current - startWeight) / (target - startWeight)) * 100;
+}
+else if(latest.goal === "cut"){
+    progress = ((startWeight - current) / (startWeight - target)) * 100;
+}
+else{
+    progress = 100;
+}
+
+progress = Math.max(0, Math.min(100, progress));
+progress = Math.round(progress);
+
+document.getElementById("progressBar").style.width = progress + "%";
+document.getElementById("progressText").innerText =
+"Goal Progress: " + progress + "% 🎯";
+
 // 🔥 STREAK
 let dates = history.map(h=>new Date(h.date)).sort((a,b)=>b-a);
 let streak = 1;
@@ -179,21 +215,18 @@ if(last7.length > 0){
     document.getElementById("weeklyCalories").innerText =
         "Avg Calories: " + avgCalories + " kcal";
 
-    // 🔥 WEEKLY RATING
+    // RATING
     let score = 0;
 
-    // consistency
     if(last7.length >= 5) score += 3;
     else if(last7.length >= 3) score += 2;
     else score += 1;
 
-    // goal vs weight
     if(latest.goal === "cut" && weightDiff < 0) score += 3;
     else if(latest.goal === "bulk" && weightDiff > 0) score += 3;
     else if(latest.goal === "maintain" && Math.abs(weightDiff) < 1) score += 3;
     else score += 1;
 
-    // BMI improvement
     let firstBMI = Number(last7[0].bmi);
     let lastBMI = Number(last7[last7.length-1].bmi);
 
@@ -201,9 +234,7 @@ if(last7.length > 0){
        (latest.goal === "bulk" && lastBMI > firstBMI) ||
        (latest.goal === "maintain" && Math.abs(lastBMI - firstBMI) < 0.5)){
         score += 3;
-    } else {
-        score += 1;
-    }
+    } else score += 1;
 
     let rating = score >= 8 ? "🔥 Excellent" :
                  score >= 5 ? "👍 Good" :
