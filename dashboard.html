@@ -82,19 +82,19 @@ window.saveTarget = function(){
     location.reload();
 };
 
-// 🔥 CLEAN AUTH (NO REDIRECT LOOP)
+// 🔥 AUTH + AUTO REDIRECT TO BMI IF NO DATA
 onAuthStateChanged(auth, async (user) => {
 
     if(!user){
-        console.log("Waiting for login...");
-        return; // ❌ NO redirect here
+        window.location.href = "login.html";
+        return;
     }
 
     const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
+    // 🔥 IF NO BMI DATA → FORCE GO BMI PAGE
     if(snap.empty){
-        document.getElementById("bmi").innerText="No data ❌";
-        document.getElementById("streak").innerText="🔥 Streak: 0 days";
+        window.location.href = "bmi.html";
         return;
     }
 
