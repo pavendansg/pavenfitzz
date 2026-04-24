@@ -8,31 +8,47 @@
 
 <body>
 
-<!-- 💻 DESKTOP HERO -->
 <div class="hero desktop">
-
-    <!-- 🔥 ANIMATION OVERLAY -->
     <div class="bg-overlay"></div>
 
     <div class="hero-left">
-        <button class="join-btn" onclick="window.location.href='login.html'">
+        <button class="join-btn" onclick="goApp()">
             Join Now
         </button>
     </div>
-
 </div>
 
-<!-- 📱 MOBILE HERO -->
 <div class="mobile-hero">
-
     <h1>EvolveFit Club 💪</h1>
     <p>Transform Your Body</p>
 
-    <button class="join-btn" onclick="window.location.href='login.html'">
+    <button class="join-btn" onclick="goApp()">
         Join Now
     </button>
-
 </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// 🔥 SMART NAVIGATION
+window.goApp = function(){
+    if(auth.currentUser){
+        window.location.href = "dashboard.html"; // already logged in
+    } else {
+        window.location.href = "login.html"; // not logged in
+    }
+};
+</script>
 
 </body>
 </html>
