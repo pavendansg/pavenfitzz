@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>Login - EvolveFit</title>
@@ -32,9 +31,9 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-// 🔥 YOUR FIREBASE CONFIG
+// 🔥 FIREBASE CONFIG (FIXED)
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA"
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07",
   storageBucket: "evolvefit-07.firebasestorage.app",
@@ -46,7 +45,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// 🔥 AUTO LOGIN (skip login screen if already signed in)
+// 🔥 AUTO LOGIN
 onAuthStateChanged(auth, (user) => {
     if(user){
         localStorage.setItem("username", user.displayName);
@@ -55,15 +54,14 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// 🔥 GOOGLE LOGIN FUNCTION
+// 🔥 GOOGLE LOGIN
 window.googleLogin = function(){
 
     signInWithPopup(auth, provider)
     .then((result) => {
 
-        let user = result.user;
+        const user = result.user;
 
-        // SAVE USER DATA
         localStorage.setItem("username", user.displayName);
         localStorage.setItem("photo", user.photoURL);
 
@@ -71,6 +69,7 @@ window.googleLogin = function(){
 
     })
     .catch((error) => {
+        console.error(error);
         document.getElementById("msg").innerText = error.message;
     });
 
