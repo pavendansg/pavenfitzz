@@ -31,7 +31,7 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-// 🔥 FIREBASE CONFIG (FIXED)
+// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
   authDomain: "evolvefit-07.firebaseapp.com",
@@ -45,16 +45,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// 🔥 AUTO LOGIN
+// ✅ AUTO LOGIN → GO TO DASHBOARD (FIXED)
 onAuthStateChanged(auth, (user) => {
     if(user){
         localStorage.setItem("username", user.displayName);
         localStorage.setItem("photo", user.photoURL);
-        window.location.href = "bmi.html";
+        window.location.href = "dashboard.html"; // 🔥 FIX
     }
 });
 
-// 🔥 GOOGLE LOGIN
+// GOOGLE LOGIN
 window.googleLogin = function(){
 
     signInWithPopup(auth, provider)
@@ -65,7 +65,7 @@ window.googleLogin = function(){
         localStorage.setItem("username", user.displayName);
         localStorage.setItem("photo", user.photoURL);
 
-        window.location.href = "bmi.html";
+        window.location.href = "dashboard.html"; // 🔥 FIX
 
     })
     .catch((error) => {
