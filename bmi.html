@@ -153,18 +153,21 @@ window.calculateBMI = async function(){
 
     document.getElementById("nextBtn").style.display = "block";
 
-    // 🔥 SAVE ONLY ONE ENTRY PER DAY
+    // 🔥 FIRESTORE SAVE (FIXED)
     if(currentUser){
         try{
             let today = new Date().toISOString().split("T")[0];
 
-           await setDoc(... {
-    bmi: Number(bmi),
-    weight: weight, // ✅ ADD THIS
-    calories: calories,
-    goal: goal,
-    date: today
-});
+            await setDoc(
+                doc(db, "users", currentUser.uid, "daily", today),
+                {
+                    bmi: Number(bmi),
+                    weight: weight,
+                    calories: calories,
+                    goal: goal,
+                    date: today
+                }
+            );
 
             console.log("Saved (1 per day) ✅");
 
