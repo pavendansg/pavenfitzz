@@ -5,11 +5,7 @@
     <title>Dashboard - EvolveFit Club</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-```
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-```
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -17,62 +13,41 @@
 <div class="container">
 <div class="card">
 
-<!-- 🔥 PROFILE + NAME -->
-
 <div style="display:flex; align-items:center; gap:10px;">
     <img id="profilePic" 
-         src="" 
-         style="width:45px; height:45px; border-radius:50%; object-fit:cover; border:2px solid limegreen;">
-
-```
-<h2 id="user"></h2>
-```
-
+         style="width:45px; height:45px; border-radius:50%; border:2px solid limegreen;">
+    <h2 id="user"></h2>
 </div>
 
 <h1>🔥 Dashboard</h1>
-
 <h3 id="streak"></h3>
 
-<hr style="margin:15px 0; border:0.5px solid #333;">
+<hr>
 
 <h3 id="bmi"></h3>
 <h3 id="weight"></h3>
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
-<!-- 🎯 TARGET INPUT -->
-
-<div style="margin-top:10px;">
-    <input type="number" id="targetInput" placeholder="Set target weight (kg)" style="padding:8px; width:60%;">
-    <button onclick="saveTarget()" class="secondary-btn">Set 🎯</button>
-</div>
+<!-- TARGET -->
+<input type="number" id="targetInput" placeholder="Set target weight (kg)">
+<button onclick="saveTarget()">Set 🎯</button>
 
 <h4 id="targetText"></h4>
 <h4 id="goalStatus"></h4>
 
-<!-- 🔥 PROGRESS BAR -->
-
+<!-- PROGRESS -->
 <h4 id="progressText"></h4>
-<div style="background:#333; border-radius:10px; overflow:hidden; height:20px;">
-    <div id="progressBar" style="height:100%; width:0%; background:limegreen; transition:0.5s;"></div>
+<div style="background:#333; height:15px; border-radius:10px;">
+    <div id="progressBar" style="height:100%; width:0%; background:limegreen;"></div>
 </div>
-
-<!-- 🔥 WEEKLY REPORT -->
-
-<h3 style="margin-top:20px;">📊 Weekly Report</h3>
-<h4 id="weeklyBMI"></h4>
-<h4 id="weeklyWeight"></h4>
-<h4 id="weeklyCalories"></h4>
-<h4 id="weeklyRating"></h4>
 
 <canvas id="chart"></canvas>
 
 <div id="historyBox"></div>
 
-<br>
-
-<button class="primary-btn" onclick="goToBMI()">Update Data 🔄</button> <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+<button onclick="goToBMI()">Update 🔄</button>
+<button onclick="logout()">Logout 🚪</button>
 
 </div>
 </div>
@@ -84,7 +59,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  apiKey: "YOUR_KEY",
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07"
 };
@@ -93,147 +68,94 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 🎯 SAVE TARGET
-window.saveTarget = function(){
-
-    let newTarget = Number(document.getElementById("targetInput").value);
-
-    if(!newTarget){
-        alert("Enter valid target ⚠️");
-        return;
-    }
-
-    let current = Number(localStorage.getItem("weight")) || 0;
-    let oldTarget = Number(localStorage.getItem("targetWeight"));
-
-    let achieved = false;
-
-    if(oldTarget){
-        if(Math.abs(current - oldTarget) < 1){
-            achieved = true;
-        }
-    }
-
-    if(oldTarget && !achieved){
-        let confirmChange = confirm("⚠️ Target not reached yet. Change anyway?");
-        if(!confirmChange) return;
-    }
-
-    localStorage.setItem("targetWeight", newTarget);
-
-    alert("Target Updated 🎯");
-    location.reload();
-}
-
-// 🔥 USER + PROFILE PIC
+// USER UI
 let name = localStorage.getItem("username") || "User";
 let photo = localStorage.getItem("photo");
 
-if(name.includes("@")) name = name.split("@")[0];
-name = name.charAt(0).toUpperCase() + name.slice(1);
+document.getElementById("user").innerText = "🔥 " + name;
+document.getElementById("profilePic").src = photo || "";
 
-document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
+// TARGET SAVE
+window.saveTarget = function(){
+    let target = Number(document.getElementById("targetInput").value);
+    if(!target) return alert("Enter target");
 
-// PROFILE IMAGE
-if(photo){
-    document.getElementById("profilePic").src = photo;
-} else {
-    document.getElementById("profilePic").src = "https://via.placeholder.com/45";
-}
+    let progress = document.getElementById("progressText").innerText;
+
+    if(progress && !progress.includes("100")){
+        alert("Finish current goal first 💪");
+        return;
+    }
+
+    localStorage.setItem("targetWeight", target);
+    location.reload();
+};
 
 onAuthStateChanged(auth, async (user) => {
 
 if(!user){
-    window.location.href = "login.html";
+    window.location.href="login.html";
     return;
 }
 
-const snapshot = await getDocs(collection(db,"users",user.uid,"daily"));
+const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
-if(snapshot.empty){
-    document.getElementById("bmi").innerText = "No data yet ❌";
-    document.getElementById("streak").innerText = "🔥 Streak: 0 days";
+if(snap.empty){
+    document.getElementById("bmi").innerText="No data ❌";
     return;
 }
 
-let history = [];
+let history=[];
+snap.forEach(d=>history.push(d.data()));
 
-snapshot.forEach(doc=>{
-    history.push(doc.data());
-});
-
-// (rest remains SAME — no change below)
-
-// SORT
 history.sort((a,b)=> new Date(a.date)-new Date(b.date));
 
-// FALLBACK WEIGHT
-let currentWeight = localStorage.getItem("weight") || 0;
+let latest=history[history.length-1];
 
-history = history.map(h => ({
-    ...h,
-    weight: h.weight || currentWeight
-}));
-
-let last5 = history.slice(-5);
-let latest = last5[last5.length-1];
-
-document.getElementById("bmi").innerText = "BMI: " + latest.bmi;
-
-let prev = last5.length > 1 ? last5[last5.length-2].weight : latest.weight;
-let diff = latest.weight - prev;
-
-let trendText = diff > 0 ? "📈 +" + diff + "kg" :
-                diff < 0 ? "📉 " + diff + "kg" :
-                "➖ no change";
-
-let color = diff > 0 ? "lightgreen" : diff < 0 ? "red" : "gray";
-
-document.getElementById("weight").innerHTML =
-`Weight: ${latest.weight} kg <span style="color:${color}">(${trendText})</span>`;
-
-document.getElementById("calories").innerText = "Calories: " + latest.calories + " kcal";
-document.getElementById("goal").innerText = "Goal: " + latest.goal;
+// SHOW DATA
+document.getElementById("bmi").innerText="BMI: "+latest.bmi;
+document.getElementById("weight").innerText="Weight: "+latest.weight+" kg";
+document.getElementById("calories").innerText="Calories: "+latest.calories;
+document.getElementById("goal").innerText="Goal: "+latest.goal;
 
 // PROGRESS
-let startWeight = history[0].weight;
-let current = latest.weight;
+let start=history[0].weight;
+let current=latest.weight;
+let target=Number(localStorage.getItem("targetWeight"))||start+5;
 
-let target = Number(localStorage.getItem("targetWeight"));
+document.getElementById("targetText").innerText="Target: "+target+" kg";
 
-if(!target){
-    if(latest.goal === "bulk") target = startWeight + 5;
-    else if(latest.goal === "cut") target = startWeight - 5;
-    else target = startWeight;
-}
+let progress=((current-start)/(target-start))*100;
+if(!isFinite(progress)) progress=0;
 
-document.getElementById("targetText").innerText =
-"Target Weight: " + target + " kg 🎯";
+progress=Math.max(0,Math.min(100,Math.round(progress)));
 
-let status = Math.abs(current - target) < 1 ? "🎉 Target Achieved!" : "Keep going 💪";
-document.getElementById("goalStatus").innerText = status;
+document.getElementById("progressBar").style.width=progress+"%";
+document.getElementById("progressText").innerText="Progress: "+progress+"%";
 
-let progress = latest.goal === "bulk"
-    ? ((current - startWeight) / (target - startWeight)) * 100
-    : latest.goal === "cut"
-    ? ((startWeight - current) / (startWeight - target)) * 100
-    : Math.abs(current - target) < 1 ? 100 : 50;
+// STATUS
+document.getElementById("goalStatus").innerText =
+progress>=100 ? "🏆 Achieved!" : "Keep going 💪";
 
-progress = Math.max(0, Math.min(100, Math.round(progress)));
-
-document.getElementById("progressBar").style.width = progress + "%";
-document.getElementById("progressText").innerText =
-"Goal Progress: " + progress + "% 🎯";
-
-// (weekly + graph unchanged)
+// CHART
+new Chart(document.getElementById("chart"),{
+    type:"line",
+    data:{
+        labels:history.map(h=>h.date),
+        datasets:[{
+            label:"Weight",
+            data:history.map(h=>h.weight)
+        }]
+    }
+});
 
 });
 
-window.goToBMI=()=>window.location.href="bmi.html";
-
+// NAV
+window.goToBMI=()=>location.href="bmi.html";
 window.logout=()=>{
 localStorage.clear();
-window.location.href="login.html";
+location.href="login.html";
 };
 
 </script>
