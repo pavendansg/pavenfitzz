@@ -63,7 +63,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER NAME (NO REDIRECT HERE ❌)
+// USER NAME
 let userName = localStorage.getItem("username") || "User";
 
 if(userName.includes("@")){
@@ -83,6 +83,8 @@ let currentUser = null;
 onAuthStateChanged(auth, (user) => {
     if(user){
         currentUser = user;
+    } else {
+        window.location.href = "login.html"; // 🔥 protect page
     }
 });
 
