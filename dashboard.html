@@ -82,16 +82,12 @@ window.saveTarget = function(){
     location.reload();
 };
 
+// 🔥 CLEAN AUTH (NO REDIRECT LOOP)
 onAuthStateChanged(auth, async (user) => {
 
-    // 🔥 FIX: wait for auth instead of instant redirect
     if(!user){
-        setTimeout(()=>{
-            if(!auth.currentUser){
-                window.location.href="login.html";
-            }
-        },1500);
-        return;
+        console.log("Waiting for login...");
+        return; // ❌ NO redirect here
     }
 
     const snap = await getDocs(collection(db,"users",user.uid,"daily"));
