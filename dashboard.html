@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-    <title>Dashboard - EvolveFit Club</title>
+    <title>Dashboard - EvolveFit</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -14,8 +12,7 @@
 <div class="card">
 
 <div style="display:flex; align-items:center; gap:10px;">
-    <img id="profilePic" 
-         style="width:45px; height:45px; border-radius:50%; border:2px solid limegreen;">
+    <img id="profilePic" style="width:45px;height:45px;border-radius:50%;border:2px solid limegreen;">
     <h2 id="user"></h2>
 </div>
 
@@ -29,22 +26,16 @@
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
-<!-- TARGET -->
 <input type="number" id="targetInput" placeholder="Set target weight (kg)">
 <button onclick="saveTarget()">Set 🎯</button>
 
 <h4 id="targetText"></h4>
 <h4 id="goalStatus"></h4>
 
-<!-- PROGRESS -->
 <h4 id="progressText"></h4>
-<div style="background:#333; height:15px; border-radius:10px;">
-    <div id="progressBar" style="height:100%; width:0%; background:limegreen;"></div>
+<div style="background:#333;height:15px;border-radius:10px;">
+    <div id="progressBar" style="height:100%;width:0%;background:limegreen;"></div>
 </div>
-
-<canvas id="chart"></canvas>
-
-<div id="historyBox"></div>
 
 <button onclick="goToBMI()">Update 🔄</button>
 <button onclick="logout()">Logout 🚪</button>
@@ -59,7 +50,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07"
 };
@@ -68,14 +59,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER UI
+// USER
 let name = localStorage.getItem("username") || "User";
 let photo = localStorage.getItem("photo");
 
-document.getElementById("user").innerText = "🔥 " + name;
+document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
 document.getElementById("profilePic").src = photo || "";
 
-// TARGET SAVE
+// SAVE TARGET
 window.saveTarget = function(){
     let target = Number(document.getElementById("targetInput").value);
     if(!target) return alert("Enter target");
@@ -102,6 +93,7 @@ const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
 if(snap.empty){
     document.getElementById("bmi").innerText="No data ❌";
+    document.getElementById("streak").innerText="🔥 Streak: 0 days";
     return;
 }
 
@@ -114,45 +106,72 @@ let latest=history[history.length-1];
 
 // SHOW DATA
 document.getElementById("bmi").innerText="BMI: "+latest.bmi;
-document.getElementById("weight").innerText="Weight: "+latest.weight+" kg";
-document.getElementById("calories").innerText="Calories: "+latest.calories;
+
+// WEIGHT CHANGE
+let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
+let diff = latest.weight - prev;
+
+let changeText = diff === 0 
+  ? "— no change" 
+  : diff > 0 
+    ? `⬆ +${diff} kg` 
+    : `⬇ ${diff} kg`;
+
+document.getElementById("weight").innerText =
+"Weight: " + latest.weight + " kg (" + changeText + ")";
+
+document.getElementById("calories").innerText="Calories: "+latest.calories+" kcal";
 document.getElementById("goal").innerText="Goal: "+latest.goal;
+
+// STREAK
+let streak = 1;
+
+for(let i = history.length - 1; i > 0; i--){
+    let d1 = new Date(history[i].date);
+    let d2 = new Date(history[i-1].date);
+
+    let diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+
+    if(diff === 1){
+        streak++;
+    } else break;
+}
+
+document.getElementById("streak").innerText =
+"🔥 Streak: " + streak + " days";
 
 // PROGRESS
 let start=history[0].weight;
 let current=latest.weight;
+
 let target=Number(localStorage.getItem("targetWeight"))||start+5;
 
-document.getElementById("targetText").innerText="Target: "+target+" kg";
+document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
 
-let progress=((current-start)/(target-start))*100;
+let progress;
+
+if(latest.goal === "cut"){
+    progress = ((start - current) / (start - target)) * 100;
+} else {
+    progress = ((current - start) / (target - start)) * 100;
+}
+
 if(!isFinite(progress)) progress=0;
 
 progress=Math.max(0,Math.min(100,Math.round(progress)));
 
 document.getElementById("progressBar").style.width=progress+"%";
-document.getElementById("progressText").innerText="Progress: "+progress+"%";
+document.getElementById("progressText").innerText="Goal Progress: "+progress+"% 🎯";
 
 // STATUS
 document.getElementById("goalStatus").innerText =
-progress>=100 ? "🏆 Achieved!" : "Keep going 💪";
-
-// CHART
-new Chart(document.getElementById("chart"),{
-    type:"line",
-    data:{
-        labels:history.map(h=>h.date),
-        datasets:[{
-            label:"Weight",
-            data:history.map(h=>h.weight)
-        }]
-    }
-});
+progress>=100 ? "🏆 Target Achieved!" : "Keep going 💪";
 
 });
 
 // NAV
 window.goToBMI=()=>location.href="bmi.html";
+
 window.logout=()=>{
 localStorage.clear();
 location.href="login.html";
