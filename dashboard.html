@@ -84,88 +84,91 @@ window.saveTarget = function(){
 
 onAuthStateChanged(auth, async (user) => {
 
-if(!user){
-    window.location.href="login.html";
-    return;
-}
+    // 🔥 FIX: wait for auth instead of instant redirect
+    if(!user){
+        setTimeout(()=>{
+            if(!auth.currentUser){
+                window.location.href="login.html";
+            }
+        },1500);
+        return;
+    }
 
-const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+    const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
-if(snap.empty){
-    document.getElementById("bmi").innerText="No data ❌";
-    document.getElementById("streak").innerText="🔥 Streak: 0 days";
-    return;
-}
+    if(snap.empty){
+        document.getElementById("bmi").innerText="No data ❌";
+        document.getElementById("streak").innerText="🔥 Streak: 0 days";
+        return;
+    }
 
-let history=[];
-snap.forEach(d=>history.push(d.data()));
+    let history=[];
+    snap.forEach(d=>history.push(d.data()));
 
-history.sort((a,b)=> new Date(a.date)-new Date(b.date));
+    history.sort((a,b)=> new Date(a.date)-new Date(b.date));
 
-let latest=history[history.length-1];
+    let latest=history[history.length-1];
 
-// SHOW DATA
-document.getElementById("bmi").innerText="BMI: "+latest.bmi;
+    // DATA
+    document.getElementById("bmi").innerText="BMI: "+latest.bmi;
 
-// WEIGHT CHANGE
-let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
-let diff = latest.weight - prev;
+    let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
+    let diff = latest.weight - prev;
 
-let changeText = diff === 0 
-  ? "— no change" 
-  : diff > 0 
-    ? `⬆ +${diff} kg` 
-    : `⬇ ${diff} kg`;
+    let changeText = diff === 0 
+      ? "— no change" 
+      : diff > 0 
+        ? `⬆ +${diff} kg` 
+        : `⬇ ${diff} kg`;
 
-document.getElementById("weight").innerText =
-"Weight: " + latest.weight + " kg (" + changeText + ")";
+    document.getElementById("weight").innerText =
+    "Weight: " + latest.weight + " kg (" + changeText + ")";
 
-document.getElementById("calories").innerText="Calories: "+latest.calories+" kcal";
-document.getElementById("goal").innerText="Goal: "+latest.goal;
+    document.getElementById("calories").innerText="Calories: "+latest.calories+" kcal";
+    document.getElementById("goal").innerText="Goal: "+latest.goal;
 
-// STREAK
-let streak = 1;
+    // STREAK
+    let streak = 1;
 
-for(let i = history.length - 1; i > 0; i--){
-    let d1 = new Date(history[i].date);
-    let d2 = new Date(history[i-1].date);
+    for(let i = history.length - 1; i > 0; i--){
+        let d1 = new Date(history[i].date);
+        let d2 = new Date(history[i-1].date);
 
-    let diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        let diff = (d1 - d2) / (1000 * 60 * 60 * 24);
 
-    if(diff === 1){
-        streak++;
-    } else break;
-}
+        if(diff === 1){
+            streak++;
+        } else break;
+    }
 
-document.getElementById("streak").innerText =
-"🔥 Streak: " + streak + " days";
+    document.getElementById("streak").innerText =
+    "🔥 Streak: " + streak + " days";
 
-// PROGRESS
-let start=history[0].weight;
-let current=latest.weight;
+    // PROGRESS
+    let start=history[0].weight;
+    let current=latest.weight;
 
-let target=Number(localStorage.getItem("targetWeight"))||start+5;
+    let target=Number(localStorage.getItem("targetWeight"))||start+5;
 
-document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
+    document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
 
-let progress;
+    let progress;
 
-if(latest.goal === "cut"){
-    progress = ((start - current) / (start - target)) * 100;
-} else {
-    progress = ((current - start) / (target - start)) * 100;
-}
+    if(latest.goal === "cut"){
+        progress = ((start - current) / (start - target)) * 100;
+    } else {
+        progress = ((current - start) / (target - start)) * 100;
+    }
 
-if(!isFinite(progress)) progress=0;
+    if(!isFinite(progress)) progress=0;
 
-progress=Math.max(0,Math.min(100,Math.round(progress)));
+    progress=Math.max(0,Math.min(100,Math.round(progress)));
 
-document.getElementById("progressBar").style.width=progress+"%";
-document.getElementById("progressText").innerText="Goal Progress: "+progress+"% 🎯";
+    document.getElementById("progressBar").style.width=progress+"%";
+    document.getElementById("progressText").innerText="Goal Progress: "+progress+"% 🎯";
 
-// STATUS
-document.getElementById("goalStatus").innerText =
-progress>=100 ? "🏆 Target Achieved!" : "Keep going 💪";
+    document.getElementById("goalStatus").innerText =
+    progress>=100 ? "🏆 Target Achieved!" : "Keep going 💪";
 
 });
 
