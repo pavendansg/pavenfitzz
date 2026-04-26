@@ -9,19 +9,19 @@
 <body>
 
 <div class="container">
-<div class="card" style="padding:24px;">
+<div class="card">
 
 <!-- 👤 HEADER -->
-<div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
-    <img id="profilePic" style="width:52px;height:52px;border-radius:50%;border:2px solid limegreen;">
-    <h2 id="user" style="margin:0;"></h2>
+<div class="top-bar">
+    <img id="profilePic">
+    <h2 id="user"></h2>
 </div>
 
-<h1 style="margin-bottom:6px;">🔥 Dashboard</h1>
-<h3 id="streak" style="margin-bottom:20px; opacity:0.85;"></h3>
+<h1 class="title">🔥 Dashboard</h1>
+<p id="streak" class="streak"></p>
 
 <!-- 📊 STATS -->
-<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:18px; line-height:1.9; font-size:17px;">
+<div class="box">
     <p id="bmi"></p>
     <p id="weight"></p>
     <p id="calories"></p>
@@ -29,26 +29,24 @@
 </div>
 
 <!-- 🎯 TARGET -->
-<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:18px;">
-    <h3 id="targetText" style="margin-bottom:6px;"></h3>
-    <p id="goalStatus" style="opacity:0.75;"></p>
+<div class="box">
+    <h3 id="targetText"></h3>
+    <p id="goalStatus"></p>
 </div>
 
 <!-- 📈 PROGRESS -->
-<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:20px;">
-    <p id="progressText" style="margin-bottom:10px;"></p>
+<div class="box">
+    <p id="progressText"></p>
 
-    <div style="background:#333;height:20px;border-radius:12px;overflow:hidden;">
-        <div id="progressBar" 
-        style="height:100%;width:0%;background:linear-gradient(90deg,limegreen,#00ffcc); transition:0.6s;">
-        </div>
+    <div class="progress">
+        <div id="progressBar"></div>
     </div>
 </div>
 
 <!-- 🔘 BUTTONS -->
-<div style="display:flex; gap:14px;">
-    <button style="flex:1;" onclick="goToBMI()">Update 🔄</button>
-    <button style="flex:1;" onclick="logout()">Logout 🚪</button>
+<div class="btns">
+    <button onclick="goToBMI()">Update 🔄</button>
+    <button onclick="logout()">Logout 🚪</button>
 </div>
 
 </div>
