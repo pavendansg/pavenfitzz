@@ -19,6 +19,7 @@
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
+<input type="number" id="target" placeholder="Target weight (kg)"> <!-- ✅ NEW -->
 
 <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
@@ -76,6 +77,7 @@ document.getElementById("username").innerText = "Welcome, " + userName + " 💪"
 // AUTO FILL
 document.getElementById("weight").value = localStorage.getItem("weight") || "";
 document.getElementById("height").value = localStorage.getItem("height") || "";
+document.getElementById("target").value = localStorage.getItem("targetWeight") || "";
 
 // AUTH USER
 let currentUser = null;
@@ -84,7 +86,7 @@ onAuthStateChanged(auth, (user) => {
     if(user){
         currentUser = user;
     } else {
-        window.location.href = "login.html"; // 🔥 protect page
+        window.location.href = "login.html";
     }
 });
 
@@ -93,11 +95,15 @@ window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
     let heightCm = Number(document.getElementById("height").value);
+    let target = Number(document.getElementById("target").value);
 
-    if(!weight || !heightCm){
-        alert("Enter valid details ⚠️");
+    if(!weight || !heightCm || !target){
+        alert("Enter all details ⚠️");
         return;
     }
+
+    // SAVE TARGET ✅
+    localStorage.setItem("targetWeight", target);
 
     let height = heightCm / 100;
     let bmi = (weight / (height * height)).toFixed(2);
