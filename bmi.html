@@ -14,7 +14,7 @@
 <h2 id="username"></h2>
 
 <h1>💪 BMI Calculator</h1>
-<p style="opacity:0.7;">Enter your details to get started</p>
+<p id="modeText" style="opacity:0.7;"></p>
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
@@ -52,7 +52,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
   authDomain: "evolvefit-07.firebaseapp.com",
@@ -63,7 +62,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER NAME
+// USER
 let userName = localStorage.getItem("username") || "User";
 
 if(userName.includes("@")){
@@ -73,12 +72,28 @@ if(userName.includes("@")){
 
 document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
 
-// AUTO FILL
-document.getElementById("weight").value = localStorage.getItem("weight") || "";
-document.getElementById("height").value = localStorage.getItem("height") || "";
-document.getElementById("target").value = localStorage.getItem("targetWeight") || "";
+// 🔥 CHECK MODE (FIRST TIME OR UPDATE)
+let hasData = localStorage.getItem("height");
 
-// AUTH USER
+if(hasData){
+    // UPDATE MODE
+    document.getElementById("modeText").innerText = "Update your weight only 🔄";
+
+    document.getElementById("height").style.display = "none";
+    document.getElementById("target").style.display = "none";
+
+    document.getElementById("weight").value = localStorage.getItem("weight") || "";
+
+}else{
+    // FIRST TIME
+    document.getElementById("modeText").innerText = "Enter your details to get started";
+
+    document.getElementById("weight").value = "";
+    document.getElementById("height").value = "";
+    document.getElementById("target").value = "";
+}
+
+// AUTH
 let currentUser = null;
 
 onAuthStateChanged(auth, (user) => {
@@ -93,19 +108,25 @@ onAuthStateChanged(auth, (user) => {
 window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
-    let heightCm = Number(document.getElementById("height").value);
-    let target = Number(document.getElementById("target").value);
+
+    // 🔥 IF FIRST TIME
+    let heightCm = localStorage.getItem("height") 
+        ? Number(localStorage.getItem("height")) 
+        : Number(document.getElementById("height").value);
+
+    let target = localStorage.getItem("targetWeight") 
+        ? Number(localStorage.getItem("targetWeight")) 
+        : Number(document.getElementById("target").value);
 
     if(!weight || !heightCm || !target){
-        alert("Enter all details ⚠️");
+        alert("Enter valid details ⚠️");
         return;
     }
 
-    // SAVE TARGET
-    localStorage.setItem("targetWeight", target);
-
-    // 🔥 SAVE START WEIGHT ONLY ONCE
-    if(!localStorage.getItem("startWeight")){
+    // SAVE ON FIRST TIME
+    if(!localStorage.getItem("height")){
+        localStorage.setItem("height", heightCm);
+        localStorage.setItem("targetWeight", target);
         localStorage.setItem("startWeight", weight);
     }
 
@@ -139,7 +160,6 @@ window.calculateBMI = async function(){
     document.getElementById("diet").innerText = "Diet: " + diet;
     document.getElementById("workout").innerText = "Workout: " + workout;
 
-    // CALORIES
     let maintain = Math.round(weight * 30);
     let bulk = maintain + 400;
     let cut = maintain - 400;
@@ -153,16 +173,15 @@ window.calculateBMI = async function(){
 
 👉 Recommended: ${calories} kcal`;
 
-    // SAVE LOCAL
+    // SAVE
     localStorage.setItem("weight", weight);
-    localStorage.setItem("height", heightCm);
     localStorage.setItem("bmi", bmi);
     localStorage.setItem("calories", calories);
     localStorage.setItem("goal", goal);
 
     document.getElementById("nextBtn").style.display = "block";
 
-    // FIRESTORE SAVE
+    // FIRESTORE
     if(currentUser){
         try{
             let today = new Date().toISOString().split("T")[0];
