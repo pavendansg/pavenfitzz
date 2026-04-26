@@ -26,9 +26,6 @@
 <h3 id="calories"></h3>
 <h3 id="goal"></h3>
 
-<input type="number" id="targetInput" placeholder="Set target weight (kg)">
-<button onclick="saveTarget()">Set 🎯</button>
-
 <h4 id="targetText"></h4>
 <h4 id="goalStatus"></h4>
 
@@ -66,23 +63,7 @@ let photo = localStorage.getItem("photo");
 document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
 document.getElementById("profilePic").src = photo || "";
 
-// SAVE TARGET
-window.saveTarget = function(){
-    let target = Number(document.getElementById("targetInput").value);
-    if(!target) return alert("Enter target");
-
-    let progress = document.getElementById("progressText").innerText;
-
-    if(progress && !progress.includes("100")){
-        alert("Finish current goal first 💪");
-        return;
-    }
-
-    localStorage.setItem("targetWeight", target);
-    location.reload();
-};
-
-// 🔥 AUTH + AUTO REDIRECT TO BMI IF NO DATA
+// 🔥 AUTH (NO FORCE REDIRECT)
 onAuthStateChanged(auth, async (user) => {
 
     if(!user){
@@ -92,9 +73,11 @@ onAuthStateChanged(auth, async (user) => {
 
     const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
-    // 🔥 IF NO BMI DATA → FORCE GO BMI PAGE
+    // ✅ IF NO DATA → JUST SHOW MESSAGE (NO REDIRECT LOOP)
     if(snap.empty){
-        window.location.href = "bmi.html";
+        document.getElementById("bmi").innerText="No BMI data yet ❌";
+        document.getElementById("streak").innerText="🔥 Streak: 0 days";
+        document.getElementById("targetText").innerText="Go calculate BMI first 💪";
         return;
     }
 
@@ -111,11 +94,14 @@ onAuthStateChanged(auth, async (user) => {
     let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
     let diff = latest.weight - prev;
 
+    // ✅ FIX NaN BUG
+    if(isNaN(diff)) diff = 0;
+
     let changeText = diff === 0 
       ? "— no change" 
       : diff > 0 
         ? `⬆ +${diff} kg` 
-        : `⬇ ${diff} kg`;
+        : `⬇ ${Math.abs(diff)} kg`;
 
     document.getElementById("weight").innerText =
     "Weight: " + latest.weight + " kg (" + changeText + ")";
@@ -130,9 +116,9 @@ onAuthStateChanged(auth, async (user) => {
         let d1 = new Date(history[i].date);
         let d2 = new Date(history[i-1].date);
 
-        let diff = (d1 - d2) / (1000 * 60 * 60 * 24);
+        let diffDays = (d1 - d2) / (1000 * 60 * 60 * 24);
 
-        if(diff === 1){
+        if(diffDays === 1){
             streak++;
         } else break;
     }
@@ -140,13 +126,19 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("streak").innerText =
     "🔥 Streak: " + streak + " days";
 
+    // TARGET (FROM BMI PAGE)
+    let target = Number(localStorage.getItem("targetWeight"));
+
+    if(!target){
+        document.getElementById("targetText").innerText="No target set 🎯";
+        return;
+    }
+
+    document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
+
     // PROGRESS
     let start=history[0].weight;
     let current=latest.weight;
-
-    let target=Number(localStorage.getItem("targetWeight"))||start+5;
-
-    document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
 
     let progress;
 
