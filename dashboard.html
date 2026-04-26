@@ -63,7 +63,7 @@ let photo = localStorage.getItem("photo");
 document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
 document.getElementById("profilePic").src = photo || "";
 
-// 🔥 AUTH (NO FORCE REDIRECT)
+// AUTH
 onAuthStateChanged(auth, async (user) => {
 
     if(!user){
@@ -73,7 +73,6 @@ onAuthStateChanged(auth, async (user) => {
 
     const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
-    // ✅ IF NO DATA → JUST SHOW MESSAGE (NO REDIRECT LOOP)
     if(snap.empty){
         document.getElementById("bmi").innerText="No BMI data yet ❌";
         document.getElementById("streak").innerText="🔥 Streak: 0 days";
@@ -94,7 +93,6 @@ onAuthStateChanged(auth, async (user) => {
     let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
     let diff = latest.weight - prev;
 
-    // ✅ FIX NaN BUG
     if(isNaN(diff)) diff = 0;
 
     let changeText = diff === 0 
@@ -126,8 +124,15 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("streak").innerText =
     "🔥 Streak: " + streak + " days";
 
-    // TARGET (FROM BMI PAGE)
+    // 🔥 FIXED START WEIGHT SYSTEM
+    let start = Number(localStorage.getItem("startWeight"));
+    let current = latest.weight;
     let target = Number(localStorage.getItem("targetWeight"));
+
+    if(!start){
+        document.getElementById("targetText").innerText="Start weight missing ⚠️";
+        return;
+    }
 
     if(!target){
         document.getElementById("targetText").innerText="No target set 🎯";
@@ -137,9 +142,6 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
 
     // PROGRESS
-    let start=history[0].weight;
-    let current=latest.weight;
-
     let progress;
 
     if(latest.goal === "cut"){
