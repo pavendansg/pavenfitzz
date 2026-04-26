@@ -9,33 +9,47 @@
 <body>
 
 <div class="container">
-<div class="card">
+<div class="card" style="padding:24px;">
 
-<div style="display:flex; align-items:center; gap:10px;">
-    <img id="profilePic" style="width:45px;height:45px;border-radius:50%;border:2px solid limegreen;">
-    <h2 id="user"></h2>
+<!-- 👤 HEADER -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+    <img id="profilePic" style="width:52px;height:52px;border-radius:50%;border:2px solid limegreen;">
+    <h2 id="user" style="margin:0;"></h2>
 </div>
 
-<h1>🔥 Dashboard</h1>
-<h3 id="streak"></h3>
+<h1 style="margin-bottom:6px;">🔥 Dashboard</h1>
+<h3 id="streak" style="margin-bottom:20px; opacity:0.85;"></h3>
 
-<hr>
-
-<h3 id="bmi"></h3>
-<h3 id="weight"></h3>
-<h3 id="calories"></h3>
-<h3 id="goal"></h3>
-
-<h4 id="targetText"></h4>
-<h4 id="goalStatus"></h4>
-
-<h4 id="progressText"></h4>
-<div style="background:#333;height:15px;border-radius:10px;">
-    <div id="progressBar" style="height:100%;width:0%;background:limegreen;"></div>
+<!-- 📊 STATS -->
+<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:18px; line-height:1.9; font-size:17px;">
+    <p id="bmi"></p>
+    <p id="weight"></p>
+    <p id="calories"></p>
+    <p id="goal"></p>
 </div>
 
-<button onclick="goToBMI()">Update 🔄</button>
-<button onclick="logout()">Logout 🚪</button>
+<!-- 🎯 TARGET -->
+<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:18px;">
+    <h3 id="targetText" style="margin-bottom:6px;"></h3>
+    <p id="goalStatus" style="opacity:0.75;"></p>
+</div>
+
+<!-- 📈 PROGRESS -->
+<div style="background:#111; padding:16px; border-radius:14px; margin-bottom:20px;">
+    <p id="progressText" style="margin-bottom:10px;"></p>
+
+    <div style="background:#333;height:20px;border-radius:12px;overflow:hidden;">
+        <div id="progressBar" 
+        style="height:100%;width:0%;background:linear-gradient(90deg,limegreen,#00ffcc); transition:0.6s;">
+        </div>
+    </div>
+</div>
+
+<!-- 🔘 BUTTONS -->
+<div style="display:flex; gap:14px;">
+    <button style="flex:1;" onclick="goToBMI()">Update 🔄</button>
+    <button style="flex:1;" onclick="logout()">Logout 🚪</button>
+</div>
 
 </div>
 </div>
@@ -124,41 +138,32 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("streak").innerText =
     "🔥 Streak: " + streak + " days";
 
-    // 🔥 SAFE START / TARGET
+    // TARGET + PROGRESS
     let start = Number(localStorage.getItem("startWeight"));
     let target = Number(localStorage.getItem("targetWeight"));
     let current = latest.weight;
 
-    // fallback safety
     if(!start) start = current;
     if(!target) target = start + 5;
 
     document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
 
-    // 🔥 PROGRESS FIX (CORE FIX)
     let progress = 0;
 
     if(latest.goal === "cut"){
         let total = start - target;
         let done = start - current;
-
-        if(total > 0){
-            progress = (done / total) * 100;
-        }
+        if(total > 0) progress = (done / total) * 100;
     } else {
         let total = target - start;
         let done = current - start;
-
-        if(total > 0){
-            progress = (done / total) * 100;
-        }
+        if(total > 0) progress = (done / total) * 100;
     }
 
     if(!isFinite(progress)) progress = 0;
 
     progress = Math.max(0, Math.min(100, Math.round(progress)));
 
-    // APPLY UI
     document.getElementById("progressBar").style.width = progress + "%";
     document.getElementById("progressText").innerText = "Goal Progress: " + progress + "% 🎯";
 
