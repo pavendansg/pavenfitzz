@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 <head>
     <title>BMI - EvolveFit Club</title>
@@ -19,7 +18,7 @@
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
-<input type="number" id="target" placeholder="Target weight (kg)"> <!-- ✅ NEW -->
+<input type="number" id="target" placeholder="Target weight (kg)">
 
 <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
@@ -102,8 +101,13 @@ window.calculateBMI = async function(){
         return;
     }
 
-    // SAVE TARGET ✅
+    // SAVE TARGET
     localStorage.setItem("targetWeight", target);
+
+    // 🔥 SAVE START WEIGHT ONLY ONCE
+    if(!localStorage.getItem("startWeight")){
+        localStorage.setItem("startWeight", weight);
+    }
 
     let height = heightCm / 100;
     let bmi = (weight / (height * height)).toFixed(2);
