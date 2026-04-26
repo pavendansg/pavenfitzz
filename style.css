@@ -16,43 +16,37 @@ body {
 .hero {
     min-height: 100vh;
     width: 100%;
-
     background: url("mybg.png");
     background-size: cover;
     background-position: center right;
     background-repeat: no-repeat;
-
     position: relative;
     overflow: hidden;
-
-    animation: fadeIn 1s ease-in-out; /* safe animation */
+    animation: fadeIn 1s ease-in-out;
 }
 
-/* 🔥 SAFE GLOW OVERLAY */
+/* 🔥 GLOW OVERLAY */
 .bg-overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-
     background: radial-gradient(circle at 30% 40%, rgba(255,215,0,0.12), transparent 50%),
                 radial-gradient(circle at 70% 60%, rgba(255,0,0,0.12), transparent 50%);
-
     pointer-events: none;
 }
 
-/* 🔥 SAFE PARTICLES (NO ANIMATION) */
+/* 🔥 PARTICLES */
 .hero::after {
     content: "";
     position: absolute;
     width: 100%;
     height: 100%;
-
     background-image: radial-gradient(white 1px, transparent 1px);
     background-size: 50px 50px;
     opacity: 0.03;
 }
 
-/* 🔥 BUTTON POSITION */
+/* 🔥 JOIN BUTTON */
 .hero-left {
     position: absolute;
     left: 33%;
@@ -61,7 +55,6 @@ body {
     z-index: 2;
 }
 
-/* 🔥 BUTTON */
 .join-btn {
     padding: 16px 40px;
     background: linear-gradient(to right, #ffd700, #ffcc00);
@@ -71,7 +64,6 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-
     box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
     transition: all 0.3s ease;
 }
@@ -93,13 +85,11 @@ body {
 .card {
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
-
-    padding: 40px;
+    padding: 30px;
     border-radius: 20px;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     text-align: center;
-
     box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
     animation: fadeIn 1s ease-in-out;
 }
@@ -109,22 +99,19 @@ input, select {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
-
     border-radius: 8px;
     border: none;
-
     background: #222;
     color: white;
 }
 
 /* 🔥 BUTTONS */
 button {
-    padding: 12px 25px;
-    margin: 10px;
+    padding: 12px 20px;
+    margin: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-
     font-weight: bold;
     transition: 0.3s;
 }
@@ -144,6 +131,71 @@ button:hover {
     box-shadow: 0 0 15px gold;
 }
 
+/* ========================= */
+/* 🔥 DASHBOARD PREMIUM UI */
+/* ========================= */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+#profilePic {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid limegreen;
+}
+
+.title {
+    margin-bottom: 5px;
+}
+
+.streak {
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+/* 🔥 BOX SECTIONS */
+.box {
+    background: #111;
+    padding: 18px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    text-align: left;
+    line-height: 1.9;
+    font-size: 16px;
+}
+
+/* 🔥 PROGRESS BAR */
+.progress {
+    background: #333;
+    height: 18px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, limegreen, #00ffcc);
+    transition: 0.6s;
+}
+
+/* 🔥 BUTTON GROUP */
+.btns {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.btns button {
+    flex: 1;
+}
+
 /* 🔥 ANIMATION */
 @keyframes fadeIn {
     from {
@@ -156,7 +208,7 @@ button:hover {
     }
 }
 
-/* 🔥 MOBILE FIX */
+/* 🔥 MOBILE */
 @media (max-width: 600px) {
 
     .hero {
@@ -180,10 +232,14 @@ button:hover {
     }
 
     .card {
-        padding: 25px;
+        padding: 22px;
     }
 
     button {
         width: 100%;
+    }
+
+    .btns {
+        flex-direction: column;
     }
 }
