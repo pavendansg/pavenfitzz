@@ -11,7 +11,7 @@
 <div class="container">
 <div class="card">
 
-<!-- 👤 HEADER -->
+<!-- HEADER -->
 <div class="top-bar">
     <img id="profilePic">
     <h2 id="user"></h2>
@@ -20,21 +20,22 @@
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
 
-<!-- 📊 STATS -->
+<!-- STATS -->
 <div class="box">
     <p id="bmi"></p>
     <p id="weight"></p>
+    <p id="journey"></p>
     <p id="calories"></p>
     <p id="goal"></p>
 </div>
 
-<!-- 🎯 TARGET -->
+<!-- TARGET -->
 <div class="box">
     <h3 id="targetText"></h3>
     <p id="goalStatus"></p>
 </div>
 
-<!-- 📈 PROGRESS -->
+<!-- PROGRESS -->
 <div class="box">
     <p id="progressText"></p>
 
@@ -43,7 +44,7 @@
     </div>
 </div>
 
-<!-- 🔘 BUTTONS -->
+<!-- BUTTONS -->
 <div class="btns">
     <button onclick="goToBMI()">Update 🔄</button>
     <button onclick="logout()">Logout 🚪</button>
@@ -72,111 +73,150 @@ const db = getFirestore(app);
 let name = localStorage.getItem("username") || "User";
 let photo = localStorage.getItem("photo");
 
-document.getElementById("user").innerText = "🔥 Welcome, " + name + " 💪";
+document.getElementById("user").innerText =
+"🔥 Welcome, " + name + " 💪";
+
 document.getElementById("profilePic").src = photo || "";
 
 // AUTH
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user)=>{
 
-    if(!user){
-        window.location.href = "login.html";
-        return;
-    }
+if(!user){
+location.href="login.html";
+return;
+}
 
-    const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
-    if(snap.empty){
-        document.getElementById("bmi").innerText="No BMI data yet ❌";
-        document.getElementById("streak").innerText="🔥 Streak: 0 days";
-        document.getElementById("targetText").innerText="Go calculate BMI first 💪";
-        return;
-    }
+if(snap.empty){
+document.getElementById("bmi").innerText="No BMI data yet ❌";
+return;
+}
 
-    let history=[];
-    snap.forEach(d=>history.push(d.data()));
+let history=[];
+snap.forEach(doc=>history.push(doc.data()));
 
-    history.sort((a,b)=> new Date(a.date)-new Date(b.date));
+history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
-    let latest=history[history.length-1];
+let latest = history[history.length-1];
+let first = history[0];
 
-    // DATA
-    document.getElementById("bmi").innerText="BMI: "+latest.bmi;
+// BMI
+document.getElementById("bmi").innerText =
+"BMI: " + latest.bmi;
 
-    let prev = history.length > 1 ? history[history.length-2].weight : latest.weight;
-    let diff = latest.weight - prev;
+// RECENT CHANGE
+let prev = history.length>1
+? history[history.length-2].weight
+: latest.weight;
 
-    if(isNaN(diff)) diff = 0;
+let diff = latest.weight - prev;
 
-    let changeText = diff === 0 
-      ? "— no change" 
-      : diff > 0 
-        ? `⬆ +${diff} kg` 
-        : `⬇ ${Math.abs(diff)} kg`;
+let changeText =
+diff==0 ? "— no change" :
+diff>0 ? `⬆ +${diff} kg` :
+`⬇ ${Math.abs(diff)} kg`;
 
-    document.getElementById("weight").innerText =
-    "Weight: " + latest.weight + " kg (" + changeText + ")";
+document.getElementById("weight").innerText =
+"Weight: " + latest.weight + " kg (" + changeText + ")";
 
-    document.getElementById("calories").innerText="Calories: "+latest.calories+" kcal";
-    document.getElementById("goal").innerText="Goal: "+latest.goal;
+// TOTAL JOURNEY
+let total = latest.weight - first.weight;
 
-    // STREAK
-    let streak = 1;
+let totalText =
+total==0 ? "No total change" :
+total>0 ? `⬆ +${total} kg total` :
+`⬇ ${Math.abs(total)} kg total`;
 
-    for(let i = history.length - 1; i > 0; i--){
-        let d1 = new Date(history[i].date);
-        let d2 = new Date(history[i-1].date);
+document.getElementById("journey").innerText =
+"Journey: " + totalText;
 
-        let diffDays = (d1 - d2) / (1000 * 60 * 60 * 24);
+// CALORIES
+document.getElementById("calories").innerText =
+"Calories: " + latest.calories + " kcal";
 
-        if(diffDays === 1){
-            streak++;
-        } else break;
-    }
+// GOAL
+document.getElementById("goal").innerText =
+"Goal: " + latest.goal;
 
-    document.getElementById("streak").innerText =
-    "🔥 Streak: " + streak + " days";
+// STREAK
+let streak = 1;
 
-    // TARGET + PROGRESS
-    let start = Number(localStorage.getItem("startWeight"));
-    let target = Number(localStorage.getItem("targetWeight"));
-    let current = latest.weight;
+for(let i=history.length-1;i>0;i--){
 
-    if(!start) start = current;
-    if(!target) target = start + 5;
+let d1 = new Date(history[i].date);
+let d2 = new Date(history[i-1].date);
 
-    document.getElementById("targetText").innerText="Target: "+target+" kg 🎯";
+let days = (d1-d2)/(1000*60*60*24);
 
-    let progress = 0;
+if(days===1) streak++;
+else break;
 
-    if(latest.goal === "cut"){
-        let total = start - target;
-        let done = start - current;
-        if(total > 0) progress = (done / total) * 100;
-    } else {
-        let total = target - start;
-        let done = current - start;
-        if(total > 0) progress = (done / total) * 100;
-    }
+}
 
-    if(!isFinite(progress)) progress = 0;
+document.getElementById("streak").innerText =
+"🔥 Streak: " + streak + " days";
 
-    progress = Math.max(0, Math.min(100, Math.round(progress)));
+// TARGET
+let start = Number(localStorage.getItem("startWeight"));
+let target = Number(localStorage.getItem("targetWeight"));
+let current = latest.weight;
 
-    document.getElementById("progressBar").style.width = progress + "%";
-    document.getElementById("progressText").innerText = "Goal Progress: " + progress + "% 🎯";
+if(!start) start = first.weight;
+if(!target) target = start + 5;
 
-    document.getElementById("goalStatus").innerText =
-    progress >= 100 ? "🏆 Target Achieved!" : "Keep going 💪";
+document.getElementById("targetText").innerText =
+"Target: " + target + " kg 🎯";
+
+// PROGRESS
+let progress = 0;
+
+if(latest.goal==="cut"){
+
+let totalNeed = start-target;
+let done = start-current;
+
+if(totalNeed>0){
+progress=(done/totalNeed)*100;
+}
+
+}else{
+
+let totalNeed = target-start;
+let done = current-start;
+
+if(totalNeed>0){
+progress=(done/totalNeed)*100;
+}
+
+}
+
+if(!isFinite(progress)) progress=0;
+
+progress=Math.max(0,Math.min(100,Math.round(progress)));
+
+document.getElementById("progressBar").style.width =
+progress + "%";
+
+document.getElementById("progressText").innerText =
+"Goal Progress: " + progress + "% 🎯";
+
+document.getElementById("goalStatus").innerText =
+progress>=100
+? "🏆 Target Achieved!"
+: "Keep going 💪";
 
 });
 
 // NAV
-window.goToBMI = () => location.href = "bmi.html";
+window.goToBMI=()=>{
+location.href="bmi.html";
+}
 
-window.logout = () => {
-    localStorage.clear();
-    location.href = "login.html";
-};
+window.logout=()=>{
+localStorage.clear();
+location.href="login.html";
+}
 
 </script>
 
