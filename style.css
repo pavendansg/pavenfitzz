@@ -154,23 +154,24 @@ button:hover{
     margin-bottom:8px;
 }
 
-/* 🔥 PREMIUM RANK BADGE FIXED */
+/* 🔥 FINAL PREMIUM RANK BADGE */
 #rank{
     display:block;
     width:100%;
     padding:14px 18px;
     border-radius:16px;
-    background:linear-gradient(135deg,#111,#1b1b1b);
-    border:1px solid rgba(255,215,0,.28);
-    color:#ffd700;
+    background:#0f0f0f;
+    border:2px solid #ffd700;
+    color:#ffffff;
     font-weight:900;
     font-size:15px;
     text-align:center;
     letter-spacing:.4px;
     margin-bottom:18px;
+    text-shadow:0 0 8px rgba(255,255,255,.25);
     box-shadow:
-    0 0 20px rgba(255,215,0,.12),
-    inset 0 0 12px rgba(255,215,0,.06);
+    0 0 18px rgba(255,215,0,.20),
+    inset 0 0 10px rgba(255,215,0,.05);
     animation:pulseGlow 2.5s infinite;
 }
 
@@ -252,18 +253,12 @@ hr{
 }
 
 @keyframes pulseGlow{
-    0%{
-        transform:scale(1);
-        box-shadow:0 0 12px rgba(255,215,0,.10);
-    }
+    0%{transform:scale(1);}
     50%{
         transform:scale(1.015);
-        box-shadow:0 0 24px rgba(255,215,0,.28);
+        box-shadow:0 0 28px rgba(255,215,0,.28);
     }
-    100%{
-        transform:scale(1);
-        box-shadow:0 0 12px rgba(255,215,0,.10);
-    }
+    100%{transform:scale(1);}
 }
 
 /* 🔥 MOBILE */
