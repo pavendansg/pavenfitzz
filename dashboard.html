@@ -14,11 +14,19 @@
 <!-- HEADER -->
 <div class="top-bar">
     <img id="profilePic">
-    <h2 id="user"></h2>
+    <div>
+        <p style="opacity:.7;font-size:14px;">Welcome back</p>
+        <h2 id="user"></h2>
+    </div>
 </div>
 
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
+
+<!-- STATUS -->
+<div class="box">
+    <p id="checkinStatus"></p>
+</div>
 
 <!-- STATS -->
 <div class="box">
@@ -44,10 +52,17 @@
     </div>
 </div>
 
+<!-- QUOTE -->
+<div class="box">
+    <p style="color:#ffd700;font-weight:700;">
+        Discipline beats motivation 🔥
+    </p>
+</div>
+
 <!-- BUTTONS -->
 <div class="btns">
-    <button onclick="goToBMI()">Daily Check-In 📝</button>
-    <button onclick="logout()">Logout 🚪</button>
+    <button class="primary-btn" onclick="goToBMI()">Daily Check-In 📝</button>
+    <button class="primary-btn" onclick="logout()">Logout 🚪</button>
 </div>
 
 </div>
@@ -73,9 +88,7 @@ const db = getFirestore(app);
 let name = localStorage.getItem("username") || "User";
 let photo = localStorage.getItem("photo");
 
-document.getElementById("user").innerText =
-"🔥 Welcome, " + name + " 💪";
-
+document.getElementById("user").innerText = name + " 💪";
 document.getElementById("profilePic").src = photo || "";
 
 // AUTH
@@ -102,13 +115,19 @@ new Date(a.date)-new Date(b.date)
 
 let first = history[0];
 let latest = history[history.length-1];
-let prev = history.length > 1
-? history[history.length-2]
-: latest;
+let prev = history.length > 1 ? history[history.length-2] : latest;
+
+// TODAY STATUS
+let today = new Date().toISOString().split("T")[0];
+
+document.getElementById("checkinStatus").innerText =
+latest.date === today
+? "🟢 Checked in today"
+: "🔴 Pending today's check-in";
 
 // BMI
 document.getElementById("bmi").innerText =
-"BMI: " + latest.bmi;
+"🔥 BMI: " + latest.bmi;
 
 // DAILY CHANGE
 let diff = latest.weight - prev.weight;
@@ -119,7 +138,7 @@ diff>0 ? `⬆ +${diff} kg` :
 `⬇ ${Math.abs(diff)} kg`;
 
 document.getElementById("weight").innerText =
-"Weight: " + latest.weight + " kg (" + diffText + ")";
+"⚖️ Weight: " + latest.weight + " kg (" + diffText + ")";
 
 // JOURNEY
 let total = latest.weight - first.weight;
@@ -130,15 +149,15 @@ total>0 ? `⬆ +${total} kg total` :
 `⬇ ${Math.abs(total)} kg total`;
 
 document.getElementById("journey").innerText =
-"Journey: " + totalText;
+"📈 Journey: " + totalText;
 
 // CALORIES
 document.getElementById("calories").innerText =
-"Calories: " + latest.calories + " kcal";
+"🍗 Calories: " + latest.calories + " kcal";
 
 // GOAL
 document.getElementById("goal").innerText =
-"Goal: " + latest.goal;
+"🎯 Goal: " + latest.goal;
 
 // STREAK
 let streak = 1;
