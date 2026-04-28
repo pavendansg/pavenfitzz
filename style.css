@@ -156,6 +156,7 @@ button:hover{
     border-radius:50%;
     object-fit:cover;
     border:2px solid #00ff99;
+    box-shadow:0 0 15px rgba(0,255,153,.35);
 }
 
 .title{
@@ -179,6 +180,12 @@ button:hover{
     box-shadow:0 8px 20px rgba(0,0,0,.28);
 }
 
+/* 🔥 CHECK IN STATUS */
+#checkinStatus{
+    font-weight:700;
+    font-size:15px;
+}
+
 /* 🔥 PROGRESS */
 .progress{
     width:100%;
@@ -194,6 +201,8 @@ button:hover{
     height:100%;
     border-radius:30px;
     background:linear-gradient(90deg,#00ff88,#00d9ff,#ffd700);
+    background-size:200% 100%;
+    animation:shine 3s linear infinite;
     transition:width .7s ease;
     box-shadow:0 0 18px rgba(0,255,136,.35);
 }
@@ -232,6 +241,12 @@ hr{
     font-weight:700;
 }
 
+/* 🔥 SPECIAL QUOTE BOX */
+.box:last-of-type{
+    text-align:center;
+    font-size:17px;
+}
+
 /* 🔥 ANIMATION */
 @keyframes fadeIn{
     from{
@@ -242,6 +257,11 @@ hr{
         opacity:1;
         transform:translateY(0);
     }
+}
+
+@keyframes shine{
+    0%{background-position:0% 0;}
+    100%{background-position:200% 0;}
 }
 
 /* 🔥 MOBILE */
