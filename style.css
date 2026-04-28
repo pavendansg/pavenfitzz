@@ -45,7 +45,6 @@ body{
     opacity:.03;
 }
 
-/* 🔥 JOIN BUTTON AREA */
 .hero-left{
     position:absolute;
     left:33%;
@@ -79,19 +78,9 @@ body{
 }
 
 /* 🔥 HEADINGS */
-h1{
-    font-size:30px;
-    margin-bottom:8px;
-}
-
-h2{
-    font-size:20px;
-    margin-bottom:10px;
-}
-
-h3,p{
-    line-height:1.6;
-}
+h1{font-size:30px;margin-bottom:8px;}
+h2{font-size:20px;margin-bottom:10px;}
+h3,p{line-height:1.6;}
 
 /* 🔥 INPUTS */
 input,select{
@@ -125,8 +114,7 @@ button{
     font-size:15px;
 }
 
-.primary-btn,
-.join-btn{
+.primary-btn,.join-btn{
     background:linear-gradient(90deg,#ffd700,#ffb300);
     color:#000;
 }
@@ -159,13 +147,25 @@ button:hover{
     box-shadow:0 0 15px rgba(0,255,153,.35);
 }
 
-.title{
-    margin-bottom:4px;
-}
+.title{margin-bottom:4px;}
 
 .streak{
     opacity:.8;
+    margin-bottom:8px;
+}
+
+/* 🔥 RANK BADGE */
+#rank{
+    display:inline-block;
+    padding:10px 16px;
+    border-radius:14px;
+    background:linear-gradient(90deg,#ffd700,#ffb300);
+    color:#000;
+    font-weight:800;
+    font-size:14px;
     margin-bottom:18px;
+    box-shadow:0 0 18px rgba(255,215,0,.35);
+    animation:pulseGlow 2s infinite;
 }
 
 /* 🔥 BOXES */
@@ -180,7 +180,6 @@ button:hover{
     box-shadow:0 8px 20px rgba(0,0,0,.28);
 }
 
-/* 🔥 CHECK IN STATUS */
 #checkinStatus{
     font-weight:700;
     font-size:15px;
@@ -219,29 +218,16 @@ button:hover{
     margin:0;
 }
 
-/* 🔥 DIVIDER */
 hr{
     border:none;
     height:1px;
     background:rgba(255,255,255,.08);
 }
 
-/* 🔥 TEXT COLORS */
-#result{
-    color:#ffd700;
-    margin-top:10px;
-}
+#result{color:#ffd700;margin-top:10px;}
+#suggestion{color:#00ff99;}
+#goalStatus{color:#ffd700;font-weight:700;}
 
-#suggestion{
-    color:#00ff99;
-}
-
-#goalStatus{
-    color:#ffd700;
-    font-weight:700;
-}
-
-/* 🔥 SPECIAL QUOTE BOX */
 .box:last-of-type{
     text-align:center;
     font-size:17px;
@@ -249,19 +235,19 @@ hr{
 
 /* 🔥 ANIMATION */
 @keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
 @keyframes shine{
     0%{background-position:0% 0;}
     100%{background-position:200% 0;}
+}
+
+@keyframes pulseGlow{
+    0%{transform:scale(1);box-shadow:0 0 14px rgba(255,215,0,.25);}
+    50%{transform:scale(1.03);box-shadow:0 0 24px rgba(255,215,0,.55);}
+    100%{transform:scale(1);box-shadow:0 0 14px rgba(255,215,0,.25);}
 }
 
 /* 🔥 MOBILE */
@@ -280,18 +266,14 @@ hr{
     width:90%;
 }
 
-.join-btn{
-    font-size:16px;
-}
+.join-btn{font-size:16px;}
 
 .card{
     padding:22px;
     border-radius:20px;
 }
 
-h1{
-    font-size:25px;
-}
+h1{font-size:25px;}
 
 .btns{
     flex-direction:column;
@@ -300,6 +282,11 @@ h1{
 .top-bar{
     align-items:flex-start;
     flex-direction:column;
+}
+
+#rank{
+    width:100%;
+    text-align:center;
 }
 
 }
