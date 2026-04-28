@@ -62,7 +62,11 @@
 <!-- BUTTONS -->
 <div class="btns">
     <button class="primary-btn" onclick="goToBMI()">Daily Check-In 📝</button>
-    <button class="primary-btn" onclick="logout()">Logout 🚪</button>
+    <button class="secondary-btn" onclick="openGraph()">View Progress 📈</button>
+</div>
+
+<div class="btns" style="margin-top:10px;">
+    <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
 </div>
 
 </div>
@@ -226,6 +230,10 @@ progress>=100
 // NAV
 window.goToBMI=()=>{
 location.href="bmi.html";
+}
+
+window.openGraph=()=>{
+location.href="graph.html";
 }
 
 window.logout=()=>{
