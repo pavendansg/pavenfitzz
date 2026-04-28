@@ -61,33 +61,25 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER
+// USER NAME
 let userName = localStorage.getItem("username") || "User";
-
-if(userName.includes("@")){
-    userName = userName.split("@")[0];
-    localStorage.setItem("username", userName);
-}
 
 document.getElementById("username").innerText =
 "Welcome, " + userName + " 💪";
 
-// MODE CHECK
-let hasData = localStorage.getItem("height");
-
-if(hasData){
+// UPDATE MODE
+if(localStorage.getItem("height")){
     document.getElementById("modeText").innerText =
-    "Update your weight only 🔄";
+    "Update weight only 🔄";
 
     document.getElementById("height").style.display = "none";
     document.getElementById("target").style.display = "none";
 
     document.getElementById("weight").value =
     localStorage.getItem("weight") || "";
-
 }else{
     document.getElementById("modeText").innerText =
-    "Enter your details to get started";
+    "Enter your details";
 }
 
 // AUTH
@@ -97,11 +89,11 @@ onAuthStateChanged(auth, (user)=>{
     if(user){
         currentUser = user;
     }else{
-        window.location.href="login.html";
+        location.href = "login.html";
     }
 });
 
-// MAIN
+// MAIN FUNCTION
 window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
@@ -115,130 +107,87 @@ window.calculateBMI = async function(){
     : Number(document.getElementById("target").value);
 
     if(!weight || !heightCm || !target){
-        alert("Enter valid details ⚠️");
+        alert("Enter valid details");
         return;
     }
 
-    // FIRST SAVE
     if(!localStorage.getItem("height")){
         localStorage.setItem("height", heightCm);
         localStorage.setItem("targetWeight", target);
         localStorage.setItem("startWeight", weight);
     }
 
-    let height = heightCm / 100;
-    let bmi = (weight / (height * height)).toFixed(2);
+    let h = heightCm / 100;
+    let bmi = (weight / (h*h)).toFixed(2);
 
-    // ELITE CALCULATIONS
-    let minWeight = (18.5 * height * height).toFixed(1);
-    let maxWeight = (24.9 * height * height).toFixed(1);
-    let aesthetic = (22 * height * height).toFixed(1);
-
-    let goal="", suggestion="", diet="", workout="", type="", advice="";
+    let goal = "";
+    let suggestion = "";
 
     if(bmi < 18.5){
-        goal="bulk";
-        suggestion="Underweight 🥲";
-        diet="Eat more calories 🍗🥛";
-        workout="Strength training 💪";
-        type="Lean Build ⚡";
-
-        let need=(minWeight-weight).toFixed(1);
-        advice="Gain " + need + " kg for healthy zone 💪";
+        goal = "bulk";
+        suggestion = "Underweight 🥲";
     }
     else if(bmi < 25){
-        goal="maintain";
-        suggestion="Fit 🔥";
-        diet="Balanced diet 🍚🥗";
-        workout="Maintain training 🏋️";
-        type="Athletic / Fit 😈";
-        advice="Perfect Fitness Zone 🔥";
+        goal = "maintain";
+        suggestion = "Fit 🔥";
     }
     else{
-        goal="cut";
-        suggestion="Overweight ⚠️";
-        diet="Calorie deficit 🥗";
-        workout="Cardio + fat loss 🏃";
-        type="Heavy Build 🦍";
-
-        let need=(weight-maxWeight).toFixed(1);
-        advice="Lose " + need + " kg for healthy zone 🏃";
+        goal = "cut";
+        suggestion = "Overweight ⚠️";
     }
 
-    // CALORIES
-    let maintain = Math.round(weight * 30);
-    let bulk = maintain + 400;
-    let cut = maintain - 400;
+    let calories = Math.round(weight * 30);
 
-    let calories =
-    goal==="bulk" ? bulk :
-    goal==="maintain" ? maintain :
-    cut;
-
-    // RESULT
     document.getElementById("result").innerText =
-`🔥 BMI: ${bmi}
+    "Your BMI: " + bmi;
 
-💠 Body Type: ${type}
+    document.getElementById("suggestion").innerText =
+    suggestion;
 
-⚖ Ideal Weight:
-${minWeight}kg - ${maxWeight}kg
+    document.getElementById("diet").innerText =
+    "Healthy BMI Range: 18.5 - 24.9";
 
-😈 Aesthetic Weight:
-${aesthetic} kg
-
-${advice}`;
-
-    document.getElementById("suggestion").innerText = suggestion;
-    document.getElementById("diet").innerText = "Diet: " + diet;
-    document.getElementById("workout").innerText = "Workout: " + workout;
+    document.getElementById("workout").innerText =
+    "Ideal Weight: " +
+    (18.5*h*h).toFixed(1) +
+    "kg - " +
+    (24.9*h*h).toFixed(1) + "kg";
 
     document.getElementById("caloriesText").innerText =
-`🍚 Maintain: ${maintain} kcal
-💪 Bulk: ${bulk} kcal
-✂ Cut: ${cut} kcal
+    "Calories: " + calories + " kcal";
 
-👉 Recommended: ${calories} kcal`;
-
-    // SAVE
     localStorage.setItem("weight", weight);
     localStorage.setItem("bmi", bmi);
-    localStorage.setItem("calories", calories);
     localStorage.setItem("goal", goal);
+    localStorage.setItem("calories", calories);
 
-    document.getElementById("nextBtn").style.display="block";
+    document.getElementById("nextBtn").style.display = "block";
 
-    // FIRESTORE
     if(currentUser){
-        try{
-            let today = new Date().toISOString().split("T")[0];
+        let today = new Date().toISOString().split("T")[0];
 
-            await setDoc(
-                doc(db,"users",currentUser.uid,"daily",today),
-                {
-                    bmi:Number(bmi),
-                    weight:weight,
-                    calories:calories,
-                    goal:goal,
-                    date:today
-                }
-            );
-
-        }catch(err){
-            console.error(err);
-        }
+        await setDoc(
+            doc(db,"users",currentUser.uid,"daily",today),
+            {
+                bmi:Number(bmi),
+                weight:weight,
+                calories:calories,
+                goal:goal,
+                date:today
+            }
+        );
     }
 }
 
 // NEXT
-document.getElementById("nextBtn").onclick=()=>{
-    window.location.href="dashboard.html";
+document.getElementById("nextBtn").onclick = ()=>{
+    location.href = "dashboard.html";
 }
 
 // LOGOUT
-window.logout=()=>{
+window.logout = function(){
     localStorage.clear();
-    window.location.href="login.html";
+    location.href = "login.html";
 }
 
 </script>
