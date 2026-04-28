@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BMI - EvolveFit Club</title>
+    <title>EvolveFit Check-In</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -13,14 +13,16 @@
 
 <h2 id="username"></h2>
 
-<h1>💪 BMI Calculator</h1>
-<p id="modeText" style="opacity:0.7;"></p>
+<h1 id="mainTitle">💪 BMI Calculator</h1>
+<p id="modeText" style="opacity:0.8; margin-bottom:18px;"></p>
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
 <input type="number" id="target" placeholder="Target weight (kg)">
 
-<button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
+<button class="primary-btn" onclick="calculateBMI()" id="mainBtn">
+Calculate BMI
+</button>
 
 <button class="secondary-btn" onclick="window.location.href='index.html'">
 ⬅ Go Home
@@ -30,7 +32,7 @@
 Logout 🚪
 </button>
 
-<hr style="margin:20px 0; border:0.5px solid #333;">
+<hr style="margin:22px 0; border:0.5px solid #333;">
 
 <h2 id="result"></h2>
 <h3 id="suggestion"></h3>
@@ -39,7 +41,7 @@ Logout 🚪
 <h3 id="caloriesText"></h3>
 
 <button id="nextBtn" class="primary-btn" style="display:none;">
-Next ➡ Dashboard
+Go Dashboard ➜
 </button>
 
 </div>
@@ -61,25 +63,41 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// USER NAME
+// USER
 let userName = localStorage.getItem("username") || "User";
 
 document.getElementById("username").innerText =
 "Welcome, " + userName + " 💪";
 
-// UPDATE MODE
+// MODE DETECTION
+let updateMode = false;
+
 if(localStorage.getItem("height")){
+
+    updateMode = true;
+
+    document.getElementById("mainTitle").innerText =
+    "📝 Daily Check-In";
+
     document.getElementById("modeText").innerText =
-    "Update weight only 🔄";
+    "Update today's weight & track progress 🔥";
+
+    document.getElementById("mainBtn").innerText =
+    "Save Check-In ✅";
 
     document.getElementById("height").style.display = "none";
     document.getElementById("target").style.display = "none";
 
+    document.getElementById("weight").placeholder =
+    "Enter today's weight (kg)";
+
     document.getElementById("weight").value =
     localStorage.getItem("weight") || "";
+
 }else{
+
     document.getElementById("modeText").innerText =
-    "Enter your details";
+    "Enter your details to begin transformation 🚀";
 }
 
 // AUTH
@@ -93,7 +111,7 @@ onAuthStateChanged(auth, (user)=>{
     }
 });
 
-// MAIN FUNCTION
+// MAIN
 window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
@@ -107,10 +125,11 @@ window.calculateBMI = async function(){
     : Number(document.getElementById("target").value);
 
     if(!weight || !heightCm || !target){
-        alert("Enter valid details");
+        alert("Enter valid details ⚠️");
         return;
     }
 
+    // first setup
     if(!localStorage.getItem("height")){
         localStorage.setItem("height", heightCm);
         localStorage.setItem("targetWeight", target);
@@ -138,8 +157,14 @@ window.calculateBMI = async function(){
 
     let calories = Math.round(weight * 30);
 
-    document.getElementById("result").innerText =
-    "Your BMI: " + bmi;
+    // RESULT UI
+    if(updateMode){
+        document.getElementById("result").innerText =
+        "✔ Check-In Saved | BMI: " + bmi;
+    }else{
+        document.getElementById("result").innerText =
+        "Your BMI: " + bmi;
+    }
 
     document.getElementById("suggestion").innerText =
     suggestion;
@@ -154,8 +179,9 @@ window.calculateBMI = async function(){
     (24.9*h*h).toFixed(1) + "kg";
 
     document.getElementById("caloriesText").innerText =
-    "Calories: " + calories + " kcal";
+    "Recommended Calories: " + calories + " kcal";
 
+    // SAVE LOCAL
     localStorage.setItem("weight", weight);
     localStorage.setItem("bmi", bmi);
     localStorage.setItem("goal", goal);
@@ -163,7 +189,9 @@ window.calculateBMI = async function(){
 
     document.getElementById("nextBtn").style.display = "block";
 
+    // FIREBASE SAVE
     if(currentUser){
+
         let today = new Date().toISOString().split("T")[0];
 
         await setDoc(
@@ -176,6 +204,13 @@ window.calculateBMI = async function(){
                 date:today
             }
         );
+    }
+
+    // auto return in update mode
+    if(updateMode){
+        setTimeout(()=>{
+            location.href = "dashboard.html";
+        },1500);
     }
 }
 
