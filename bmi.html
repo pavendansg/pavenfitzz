@@ -14,7 +14,7 @@
 <h2 id="username"></h2>
 
 <h1>💪 BMI Calculator</h1>
-<p id="modeText" style="opacity:0.75;"></p>
+<p id="modeText" style="opacity:0.7;"></p>
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
@@ -22,8 +22,13 @@
 
 <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
-<button class="secondary-btn" onclick="window.location.href='index.html'">⬅ Go Home</button>
-<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+<button class="secondary-btn" onclick="window.location.href='index.html'">
+⬅ Go Home
+</button>
+
+<button class="secondary-btn" onclick="logout()">
+Logout 🚪
+</button>
 
 <hr style="margin:20px 0; border:0.5px solid #333;">
 
@@ -47,71 +52,10 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
- authDomain: "evolvefit-07.firebaseapp.com",
- projectId: "evolvefit-07"
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// USER
-let userName = localStorage.getItem("username") || "User";
-
-if(userName.includes("@")){
- userName = userName.split("@")[0];
- localStorage.setItem("username", userName);
-}
-
-document.getElementById("username").innerText =
-"Welcome, " + userName + " 💪";
-
-// MODE
-let hasData = localStorage.getItem("height");
-
-if(hasData){
- document.getElementById("modeText").innerText =
- "Update your weight only 🔄";
-
- document.getElementById("height").style.display = "none";
- document.getElementById("target").style.display = "none";
-
- document.getElementById("weight").value =
- localStorage.getItem("weight") || "";
-
-}else{
- document.getElementById("modeText").innerText =
- "Enter your details to get started";
-}
-
-// AUTH
-let currentUser = null;
-
-onAuthStateChanged(auth,(user)=>{
- if(user){
-   currentUser = user;
- }else{
-   window.location.href="login.html";
- }
-});
-
-// MAIN
-window.calculateBMI = async function(){
-
- let weight = Number(document.getElementById("weight").value);
-
- let heightCm = localStorage.getItem("height")
- ? Number(localStorage.getItem("height"))
- : Number(document.getElementById("height").value);
-
- let target = localStorage.getItem("targetWeight")
- ? Number(localStorage.getItem("targetWeight"))
- : Number(document.getElementById("target").value);
-
- if(!weight || !heightCm || !target){
-   alert("Enter valid details ⚠️");
-   return;
- }
-
- //
+const
