@@ -1,245 +1,285 @@
 /* 🔥 RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 /* 🔥 BODY */
-body {
-    font-family: Arial, sans-serif;
-    color: white;
-    background: black;
+body{
+    font-family:Arial, sans-serif;
+    color:#fff;
+    background:
+    radial-gradient(circle at top left,#151515,#000 55%),
+    radial-gradient(circle at bottom right,#111,#000 60%);
+    min-height:100vh;
 }
 
-/* 🔥 HERO (DESKTOP) */
-.hero {
-    min-height: 100vh;
-    width: 100%;
-    background: url("mybg.png");
-    background-size: cover;
-    background-position: center right;
-    background-repeat: no-repeat;
-    position: relative;
-    overflow: hidden;
-    animation: fadeIn 1s ease-in-out;
+/* 🔥 HERO */
+.hero{
+    min-height:100vh;
+    width:100%;
+    background:url("mybg.png");
+    background-size:cover;
+    background-position:center right;
+    background-repeat:no-repeat;
+    position:relative;
+    overflow:hidden;
+    animation:fadeIn 1s ease;
 }
 
-/* 🔥 GLOW OVERLAY */
-.bg-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 30% 40%, rgba(255,215,0,0.12), transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(255,0,0,0.12), transparent 50%);
-    pointer-events: none;
+.bg-overlay{
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at 30% 40%,rgba(255,215,0,.16),transparent 45%),
+    radial-gradient(circle at 75% 60%,rgba(255,0,80,.12),transparent 40%);
 }
 
-/* 🔥 PARTICLES */
-.hero::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(white 1px, transparent 1px);
-    background-size: 50px 50px;
-    opacity: 0.03;
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(white 1px,transparent 1px);
+    background-size:42px 42px;
+    opacity:.03;
 }
 
-/* 🔥 JOIN BUTTON */
-.hero-left {
-    position: absolute;
-    left: 33%;
-    top: 72%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
-
-.join-btn {
-    padding: 16px 40px;
-    background: linear-gradient(to right, #ffd700, #ffcc00);
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
-    transition: all 0.3s ease;
-}
-
-.join-btn:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 0 45px rgba(255, 215, 0, 1);
+/* 🔥 JOIN BUTTON AREA */
+.hero-left{
+    position:absolute;
+    left:33%;
+    top:72%;
+    transform:translate(-50%,-50%);
+    z-index:2;
 }
 
 /* 🔥 CONTAINER */
-.container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px;
 }
 
 /* 🔥 CARD */
-.card {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(12px);
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 420px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
-    animation: fadeIn 1s ease-in-out;
+.card{
+    width:100%;
+    max-width:430px;
+    padding:30px;
+    border-radius:24px;
+    background:rgba(15,15,15,.82);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:
+    0 25px 50px rgba(0,0,0,.55),
+    0 0 30px rgba(255,215,0,.06);
+    animation:fadeIn .8s ease;
 }
 
-/* 🔥 INPUT */
-input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: none;
-    background: #222;
-    color: white;
+/* 🔥 HEADINGS */
+h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+h2{
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+h3,p{
+    line-height:1.6;
+}
+
+/* 🔥 INPUTS */
+input,select{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:none;
+    border-radius:14px;
+    background:#1b1b1b;
+    color:#fff;
+    outline:none;
+    font-size:15px;
+    transition:.25s;
+}
+
+input:focus{
+    background:#232323;
+    box-shadow:0 0 0 2px rgba(255,215,0,.25);
 }
 
 /* 🔥 BUTTONS */
-button {
-    padding: 12px 20px;
-    margin: 8px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+button{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    border:none;
+    border-radius:14px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s;
+    font-size:15px;
 }
 
-.primary-btn {
-    background: linear-gradient(to right, #ffd700, #ffcc00);
-    color: black;
+.primary-btn,
+.join-btn{
+    background:linear-gradient(90deg,#ffd700,#ffb300);
+    color:#000;
 }
 
-.secondary-btn {
-    background: red;
-    color: white;
+.secondary-btn{
+    background:#181818;
+    color:#fff;
+    border:1px solid rgba(255,255,255,.08);
 }
 
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px gold;
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 22px rgba(255,215,0,.15);
 }
 
-/* ========================= */
-/* 🔥 DASHBOARD PREMIUM UI */
-/* ========================= */
-
-.top-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+/* 🔥 DASHBOARD TOP */
+.top-bar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
 }
 
-#profilePic {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: 2px solid limegreen;
+#profilePic{
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #00ff99;
 }
 
-.title {
-    margin-bottom: 5px;
+.title{
+    margin-bottom:4px;
 }
 
-.streak {
-    opacity: 0.8;
-    margin-bottom: 20px;
+.streak{
+    opacity:.8;
+    margin-bottom:18px;
 }
 
-/* 🔥 BOX SECTIONS */
-.box {
-    background: #111;
-    padding: 18px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-    text-align: left;
-    line-height: 1.9;
-    font-size: 16px;
+/* 🔥 BOXES */
+.box{
+    background:linear-gradient(180deg,#121212,#0b0b0b);
+    border:1px solid rgba(255,255,255,.05);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+    text-align:left;
+    line-height:1.9;
+    box-shadow:0 8px 20px rgba(0,0,0,.28);
 }
 
-/* 🔥 PROGRESS BAR */
-.progress {
-    background: #333;
-    height: 18px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 10px;
+/* 🔥 PROGRESS */
+.progress{
+    width:100%;
+    height:18px;
+    border-radius:30px;
+    background:#242424;
+    overflow:hidden;
+    margin-top:10px;
 }
 
-#progressBar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, limegreen, #00ffcc);
-    transition: 0.6s;
+#progressBar{
+    width:0%;
+    height:100%;
+    border-radius:30px;
+    background:linear-gradient(90deg,#00ff88,#00d9ff,#ffd700);
+    transition:width .7s ease;
+    box-shadow:0 0 18px rgba(0,255,136,.35);
 }
 
 /* 🔥 BUTTON GROUP */
-.btns {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
+.btns{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
 }
 
-.btns button {
-    flex: 1;
+.btns button{
+    flex:1;
+    margin:0;
+}
+
+/* 🔥 DIVIDER */
+hr{
+    border:none;
+    height:1px;
+    background:rgba(255,255,255,.08);
+}
+
+/* 🔥 TEXT COLORS */
+#result{
+    color:#ffd700;
+    margin-top:10px;
+}
+
+#suggestion{
+    color:#00ff99;
+}
+
+#goalStatus{
+    color:#ffd700;
+    font-weight:700;
 }
 
 /* 🔥 ANIMATION */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    to{
+        opacity:1;
+        transform:translateY(0);
     }
 }
 
 /* 🔥 MOBILE */
-@media (max-width: 600px) {
+@media(max-width:600px){
 
-    .hero {
-        background: url("mymobilebg.png");
-        background-size: cover;
-        background-position: center;
-    }
+.hero{
+    background:url("mymobilebg.png");
+    background-size:cover;
+    background-position:center;
+}
 
-    .hero-left {
-        left: 50%;
-        top: 85%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
+.hero-left{
+    left:50%;
+    top:84%;
+    transform:translate(-50%,-50%);
+    width:90%;
+}
 
-    .join-btn {
-        width: 80%;
-        max-width: 260px;
-        font-size: 16px;
-        padding: 14px;
-    }
+.join-btn{
+    font-size:16px;
+}
 
-    .card {
-        padding: 22px;
-    }
+.card{
+    padding:22px;
+    border-radius:20px;
+}
 
-    button {
-        width: 100%;
-    }
+h1{
+    font-size:25px;
+}
 
-    .btns {
-        flex-direction: column;
-    }
+.btns{
+    flex-direction:column;
+}
+
+.top-bar{
+    align-items:flex-start;
+    flex-direction:column;
+}
+
 }
