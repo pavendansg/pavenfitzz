@@ -22,6 +22,7 @@
 
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
+<p id="rank" style="color:#ffd700;font-weight:700;margin-top:-8px;margin-bottom:16px;"></p>
 
 <!-- STATUS -->
 <div class="box">
@@ -180,6 +181,36 @@ else break;
 
 document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
+
+// RANK SYSTEM
+let rank = "";
+let next = 0;
+
+if(streak <= 3){
+rank = "🥉 Beginner";
+next = 4 - streak;
+}
+else if(streak <= 7){
+rank = "🛡️ Warrior";
+next = 8 - streak;
+}
+else if(streak <= 14){
+rank = "🐺 Beast";
+next = 15 - streak;
+}
+else if(streak <= 30){
+rank = "👑 Elite";
+next = 31 - streak;
+}
+else{
+rank = "⚡ Legend";
+next = 0;
+}
+
+document.getElementById("rank").innerText =
+next > 0
+? "Rank: " + rank + " | Next rank in " + next + " day(s)"
+: "Rank: " + rank;
 
 // TARGET
 let target = Number(localStorage.getItem("targetWeight"));
