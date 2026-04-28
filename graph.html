@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Progress Graph - EvolveFit</title>
+    <title>Elite Progress Graph - EvolveFit</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,27 +13,38 @@
 <div class="container">
 <div class="card">
 
-<h1>📈 Progress Graph</h1>
-<p style="opacity:.8; margin-bottom:18px;">
-Track your transformation journey
+<h1 style="color:#ffd700;">📈 Elite Progress</h1>
+<p style="opacity:.8;margin-bottom:18px;">
+Your body transformation analytics
 </p>
 
+<!-- STATS -->
 <div class="box">
+    <p id="startWeight"></p>
+    <p id="currentWeight"></p>
+    <p id="goalWeight"></p>
+    <p id="changeText"></p>
+</div>
+
+<!-- WEIGHT -->
+<div class="box">
+    <h3 style="margin-bottom:10px;">⚖️ Weight Trend</h3>
     <canvas id="weightChart"></canvas>
 </div>
 
+<!-- BMI -->
 <div class="box">
+    <h3 style="margin-bottom:10px;">🔥 BMI Trend</h3>
     <canvas id="bmiChart"></canvas>
 </div>
 
+<!-- MOTIVATION -->
 <div class="box">
-    <p id="summary"></p>
+    <p id="summary" style="color:#ffd700;font-weight:700;"></p>
 </div>
 
 <div class="btns">
-    <button class="primary-btn" onclick="goBack()">
-        ⬅ Dashboard
-    </button>
+    <button class="primary-btn" onclick="goBack()">⬅ Dashboard</button>
 </div>
 
 </div>
@@ -46,16 +57,15 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
- authDomain: "evolvefit-07.firebaseapp.com",
- projectId: "evolvefit-07"
+ apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+ authDomain:"evolvefit-07.firebaseapp.com",
+ projectId:"evolvefit-07"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// AUTH
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
@@ -71,15 +81,39 @@ return;
 }
 
 let history = [];
-snap.forEach(doc => history.push(doc.data()));
+snap.forEach(doc=>history.push(doc.data()));
 
 history.sort((a,b)=>
 new Date(a.date)-new Date(b.date)
 );
 
-let labels = history.map(x => x.date);
-let weights = history.map(x => x.weight);
-let bmis = history.map(x => x.bmi);
+let labels = history.map(x=>x.date);
+let weights = history.map(x=>x.weight);
+let bmi = history.map(x=>x.bmi);
+
+let first = history[0];
+let latest = history[history.length-1];
+
+let target = Number(localStorage.getItem("targetWeight")) || first.weight + 5;
+
+let total = latest.weight - first.weight;
+
+// STATS
+document.getElementById("startWeight").innerText =
+"🏁 Start Weight: " + first.weight + " kg";
+
+document.getElementById("currentWeight").innerText =
+"💪 Current Weight: " + latest.weight + " kg";
+
+document.getElementById("goalWeight").innerText =
+"🎯 Goal Weight: " + target + " kg";
+
+document.getElementById("changeText").innerText =
+total>0
+? "📈 Total Gain: +" + total + " kg"
+: total<0
+? "📉 Total Loss: " + Math.abs(total) + " kg"
+: "➖ No Change Yet";
 
 // WEIGHT CHART
 new Chart(document.getElementById("weightChart"),{
@@ -90,9 +124,10 @@ datasets:[{
 label:"Weight (kg)",
 data:weights,
 borderColor:"#ffd700",
-backgroundColor:"rgba(255,215,0,.15)",
+backgroundColor:"rgba(255,215,0,.12)",
 fill:true,
-tension:.35
+pointRadius:5,
+tension:.4
 }]
 },
 options:{
@@ -113,11 +148,12 @@ data:{
 labels:labels,
 datasets:[{
 label:"BMI",
-data:bmis,
+data:bmi,
 borderColor:"#00ff99",
 backgroundColor:"rgba(0,255,153,.12)",
 fill:true,
-tension:.35
+pointRadius:5,
+tension:.4
 }]
 },
 options:{
@@ -131,25 +167,24 @@ y:{ticks:{color:"white"}}
 }
 });
 
-// SUMMARY
-let first = history[0];
-let latest = history[history.length-1];
+// MOTIVATION
+let msg = "";
 
-let total = latest.weight - first.weight;
-
-let msg =
-total > 0
-? "🔥 Total Gain: +" + total + " kg"
-: total < 0
-? "🔥 Total Loss: " + Math.abs(total) + " kg"
-: "🔥 No change yet";
+if(total > 0){
+msg = "🔥 You're building momentum!";
+}
+else if(total < 0){
+msg = "🔥 Fat loss in progress!";
+}
+else{
+msg = "🔥 Start strong. Consistency wins.";
+}
 
 document.getElementById("summary").innerText = msg;
 
 });
 
-// NAV
-window.goBack = ()=>{
+window.goBack=()=>{
 location.href="dashboard.html";
 }
 
