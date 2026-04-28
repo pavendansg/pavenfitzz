@@ -13,7 +13,7 @@
 
 <h2 id="username"></h2>
 
-<h1 id="mainTitle">💪 BMI Calculator</h1>
+<h1 id="mainTitle">💪 BMI Setup</h1>
 <p id="modeText" style="opacity:0.8; margin-bottom:18px;"></p>
 
 <input type="number" id="weight" placeholder="Weight (kg)">
@@ -21,7 +21,7 @@
 <input type="number" id="target" placeholder="Target weight (kg)">
 
 <button class="primary-btn" onclick="calculateBMI()" id="mainBtn">
-Calculate BMI
+Start Journey 🚀
 </button>
 
 <button class="secondary-btn" onclick="window.location.href='index.html'">
@@ -69,10 +69,10 @@ let userName = localStorage.getItem("username") || "User";
 document.getElementById("username").innerText =
 "Welcome, " + userName + " 💪";
 
-// MODE DETECTION
+// MODE
 let updateMode = false;
 
-if(localStorage.getItem("height")){
+if(localStorage.getItem("height") && localStorage.getItem("targetWeight")){
 
     updateMode = true;
 
@@ -103,11 +103,11 @@ if(localStorage.getItem("height")){
 // AUTH
 let currentUser = null;
 
-onAuthStateChanged(auth, (user)=>{
+onAuthStateChanged(auth,(user)=>{
     if(user){
         currentUser = user;
     }else{
-        location.href = "login.html";
+        location.href="login.html";
     }
 });
 
@@ -116,11 +116,11 @@ window.calculateBMI = async function(){
 
     let weight = Number(document.getElementById("weight").value);
 
-    let heightCm = localStorage.getItem("height")
+    let heightCm = updateMode
     ? Number(localStorage.getItem("height"))
     : Number(document.getElementById("height").value);
 
-    let target = localStorage.getItem("targetWeight")
+    let target = updateMode
     ? Number(localStorage.getItem("targetWeight"))
     : Number(document.getElementById("target").value);
 
@@ -129,8 +129,8 @@ window.calculateBMI = async function(){
         return;
     }
 
-    // first setup
-    if(!localStorage.getItem("height")){
+    // first setup save
+    if(!updateMode){
         localStorage.setItem("height", heightCm);
         localStorage.setItem("targetWeight", target);
         localStorage.setItem("startWeight", weight);
@@ -157,14 +157,11 @@ window.calculateBMI = async function(){
 
     let calories = Math.round(weight * 30);
 
-    // RESULT UI
-    if(updateMode){
-        document.getElementById("result").innerText =
-        "✔ Check-In Saved | BMI: " + bmi;
-    }else{
-        document.getElementById("result").innerText =
-        "Your BMI: " + bmi;
-    }
+    // RESULT
+    document.getElementById("result").innerText =
+    updateMode
+    ? "✔ Check-In Saved | BMI: " + bmi
+    : "Your BMI: " + bmi;
 
     document.getElementById("suggestion").innerText =
     suggestion;
@@ -174,8 +171,7 @@ window.calculateBMI = async function(){
 
     document.getElementById("workout").innerText =
     "Ideal Weight: " +
-    (18.5*h*h).toFixed(1) +
-    "kg - " +
+    (18.5*h*h).toFixed(1) + "kg - " +
     (24.9*h*h).toFixed(1) + "kg";
 
     document.getElementById("caloriesText").innerText =
@@ -206,23 +202,23 @@ window.calculateBMI = async function(){
         );
     }
 
-    // auto return in update mode
+    // AUTO RETURN IF CHECK-IN
     if(updateMode){
         setTimeout(()=>{
-            location.href = "dashboard.html";
+            location.href="dashboard.html";
         },1500);
     }
 }
 
 // NEXT
 document.getElementById("nextBtn").onclick = ()=>{
-    location.href = "dashboard.html";
+    location.href="dashboard.html";
 }
 
 // LOGOUT
 window.logout = function(){
     localStorage.clear();
-    location.href = "login.html";
+    location.href="login.html";
 }
 
 </script>
