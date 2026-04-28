@@ -14,7 +14,7 @@
 <h2 id="username"></h2>
 
 <h1>💪 BMI Calculator</h1>
-<p id="modeText" style="opacity:0.7;"></p>
+<p id="modeText" style="opacity:0.75;"></p>
 
 <input type="number" id="weight" placeholder="Weight (kg)">
 <input type="number" id="height" placeholder="Height (cm)">
@@ -22,13 +22,8 @@
 
 <button class="primary-btn" onclick="calculateBMI()">Calculate BMI</button>
 
-<button class="secondary-btn" onclick="window.location.href='index.html'">
-⬅ Go Home
-</button>
-
-<button class="secondary-btn" onclick="logout()">
-Logout 🚪
-</button>
+<button class="secondary-btn" onclick="window.location.href='index.html'">⬅ Go Home</button>
+<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
 
 <hr style="margin:20px 0; border:0.5px solid #333;">
 
@@ -36,7 +31,6 @@ Logout 🚪
 <h3 id="suggestion"></h3>
 <h3 id="diet"></h3>
 <h3 id="workout"></h3>
-
 <h3 id="caloriesText"></h3>
 
 <button id="nextBtn" class="primary-btn" style="display:none;">
@@ -53,9 +47,9 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
-  authDomain: "evolvefit-07.firebaseapp.com",
-  projectId: "evolvefit-07"
+ apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+ authDomain: "evolvefit-07.firebaseapp.com",
+ projectId: "evolvefit-07"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -66,155 +60,58 @@ const db = getFirestore(app);
 let userName = localStorage.getItem("username") || "User";
 
 if(userName.includes("@")){
-    userName = userName.split("@")[0];
-    localStorage.setItem("username", userName);
+ userName = userName.split("@")[0];
+ localStorage.setItem("username", userName);
 }
 
-document.getElementById("username").innerText = "Welcome, " + userName + " 💪";
+document.getElementById("username").innerText =
+"Welcome, " + userName + " 💪";
 
-// 🔥 CHECK MODE (FIRST TIME OR UPDATE)
+// MODE
 let hasData = localStorage.getItem("height");
 
 if(hasData){
-    // UPDATE MODE
-    document.getElementById("modeText").innerText = "Update your weight only 🔄";
+ document.getElementById("modeText").innerText =
+ "Update your weight only 🔄";
 
-    document.getElementById("height").style.display = "none";
-    document.getElementById("target").style.display = "none";
+ document.getElementById("height").style.display = "none";
+ document.getElementById("target").style.display = "none";
 
-    document.getElementById("weight").value = localStorage.getItem("weight") || "";
+ document.getElementById("weight").value =
+ localStorage.getItem("weight") || "";
 
 }else{
-    // FIRST TIME
-    document.getElementById("modeText").innerText = "Enter your details to get started";
-
-    document.getElementById("weight").value = "";
-    document.getElementById("height").value = "";
-    document.getElementById("target").value = "";
+ document.getElementById("modeText").innerText =
+ "Enter your details to get started";
 }
 
 // AUTH
 let currentUser = null;
 
-onAuthStateChanged(auth, (user) => {
-    if(user){
-        currentUser = user;
-    } else {
-        window.location.href = "login.html";
-    }
+onAuthStateChanged(auth,(user)=>{
+ if(user){
+   currentUser = user;
+ }else{
+   window.location.href="login.html";
+ }
 });
 
-// MAIN FUNCTION
+// MAIN
 window.calculateBMI = async function(){
 
-    let weight = Number(document.getElementById("weight").value);
+ let weight = Number(document.getElementById("weight").value);
 
-    // 🔥 IF FIRST TIME
-    let heightCm = localStorage.getItem("height") 
-        ? Number(localStorage.getItem("height")) 
-        : Number(document.getElementById("height").value);
+ let heightCm = localStorage.getItem("height")
+ ? Number(localStorage.getItem("height"))
+ : Number(document.getElementById("height").value);
 
-    let target = localStorage.getItem("targetWeight") 
-        ? Number(localStorage.getItem("targetWeight")) 
-        : Number(document.getElementById("target").value);
+ let target = localStorage.getItem("targetWeight")
+ ? Number(localStorage.getItem("targetWeight"))
+ : Number(document.getElementById("target").value);
 
-    if(!weight || !heightCm || !target){
-        alert("Enter valid details ⚠️");
-        return;
-    }
+ if(!weight || !heightCm || !target){
+   alert("Enter valid details ⚠️");
+   return;
+ }
 
-    // SAVE ON FIRST TIME
-    if(!localStorage.getItem("height")){
-        localStorage.setItem("height", heightCm);
-        localStorage.setItem("targetWeight", target);
-        localStorage.setItem("startWeight", weight);
-    }
-
-    let height = heightCm / 100;
-    let bmi = (weight / (height * height)).toFixed(2);
-
-    document.getElementById("result").innerText = "Your BMI: " + bmi;
-
-    let goal="", suggestion="", diet="", workout="";
-
-    if(bmi < 18.5){
-        goal="bulk";
-        suggestion="Underweight 🥲";
-        diet="Eat more calories 🍗🥛";
-        workout="Strength training 💪";
-    }
-    else if(bmi < 25){
-        goal="maintain";
-        suggestion="Fit 🔥";
-        diet="Balanced diet 🍚🥗";
-        workout="Maintain training 🏋️";
-    }
-    else{
-        goal="cut";
-        suggestion="Overweight ⚠️";
-        diet="Calorie deficit 🥗";
-        workout="Cardio + fat loss 🏃";
-    }
-
-    document.getElementById("suggestion").innerText = suggestion;
-    document.getElementById("diet").innerText = "Diet: " + diet;
-    document.getElementById("workout").innerText = "Workout: " + workout;
-
-    let maintain = Math.round(weight * 30);
-    let bulk = maintain + 400;
-    let cut = maintain - 400;
-
-    let calories = goal==="bulk" ? bulk : goal==="maintain" ? maintain : cut;
-
-    document.getElementById("caloriesText").innerText =
-`🔥 Maintain: ${maintain} kcal
-💪 Bulk: ${bulk} kcal
-🏃 Cut: ${cut} kcal
-
-👉 Recommended: ${calories} kcal`;
-
-    // SAVE
-    localStorage.setItem("weight", weight);
-    localStorage.setItem("bmi", bmi);
-    localStorage.setItem("calories", calories);
-    localStorage.setItem("goal", goal);
-
-    document.getElementById("nextBtn").style.display = "block";
-
-    // FIRESTORE
-    if(currentUser){
-        try{
-            let today = new Date().toISOString().split("T")[0];
-
-            await setDoc(
-                doc(db, "users", currentUser.uid, "daily", today),
-                {
-                    bmi: Number(bmi),
-                    weight: weight,
-                    calories: calories,
-                    goal: goal,
-                    date: today
-                }
-            );
-
-        }catch(err){
-            console.error(err);
-        }
-    }
-}
-
-// NEXT
-document.getElementById("nextBtn").onclick = ()=>{
-    window.location.href="dashboard.html";
-}
-
-// LOGOUT
-window.logout = function(){
-    localStorage.clear();
-    window.location.href="login.html";
-}
-
-</script>
-
-</body>
-</html>
+ //
