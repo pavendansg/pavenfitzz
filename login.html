@@ -13,7 +13,7 @@
 <h1>🔥 EvolveFit</h1>
 
 <button class="primary-btn" onclick="googleLogin()">
-    Continue with Google 🚀
+Continue with Google 🚀
 </button>
 
 <p id="msg"></p>
@@ -24,54 +24,77 @@
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { 
-    getAuth, 
-    signInWithPopup, 
-    GoogleAuthProvider,
-    onAuthStateChanged
+import {
+getAuth,
+signInWithPopup,
+GoogleAuthProvider,
+onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-// CONFIG
+// FIREBASE CONFIG
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
-  authDomain: "evolvefit-07.firebaseapp.com",
-  projectId: "evolvefit-07",
-  storageBucket: "evolvefit-07.firebasestorage.app",
-  messagingSenderId: "977676324550",
-  appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
+ apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+ authDomain: "evolvefit-07.firebaseapp.com",
+ projectId: "evolvefit-07",
+ storageBucket: "evolvefit-07.firebasestorage.app",
+ messagingSenderId: "977676324550",
+ appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// 🔥 AUTO LOGIN → GO TO BMI FIRST
-onAuthStateChanged(auth, (user) => {
-    if(user){
-        localStorage.setItem("username", user.displayName);
-        localStorage.setItem("photo", user.photoURL);
+// REDIRECT LOGIC
+function goNextPage(){
+
+    // If user already setup once
+    if(localStorage.getItem("height") &&
+       localStorage.getItem("targetWeight")){
+
+        window.location.href = "dashboard.html";
+
+    }else{
+
         window.location.href = "bmi.html";
     }
+}
+
+// AUTO LOGIN
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+localStorage.setItem("username", user.displayName || "User");
+localStorage.setItem("photo", user.photoURL || "");
+
+goNextPage();
+
+}
+
 });
 
 // GOOGLE LOGIN
 window.googleLogin = function(){
 
-    signInWithPopup(auth, provider)
-    .then((result) => {
+signInWithPopup(auth, provider)
+.then((result)=>{
 
-        const user = result.user;
+const user = result.user;
 
-        localStorage.setItem("username", user.displayName);
-        localStorage.setItem("photo", user.photoURL);
+localStorage.setItem("username", user.displayName || "User");
+localStorage.setItem("photo", user.photoURL || "");
 
-        window.location.href = "bmi.html";
+goNextPage();
 
-    })
-    .catch((error) => {
-        console.error(error);
-        document.getElementById("msg").innerText = error.message;
-    });
+})
+.catch((error)=>{
+
+console.error(error);
+document.getElementById("msg").innerText =
+error.message;
+
+});
 
 }
 
