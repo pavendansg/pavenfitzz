@@ -8,26 +8,48 @@
 
 <body>
 
+<!-- DESKTOP HERO -->
 <div class="hero desktop">
+
     <div class="bg-overlay"></div>
 
     <div class="hero-left">
+
+        <h1 style="font-size:52px; margin-bottom:12px;">
+            EVOLVEFIT 💪
+        </h1>
+
+        <p style="font-size:18px; opacity:0.9; margin-bottom:25px; max-width:420px;">
+            Build Muscle. Burn Fat. Track Progress. Become Elite.
+        </p>
+
         <button class="join-btn" onclick="goApp()">
-            Join Now
+            Join Now 🚀
         </button>
+
     </div>
+
 </div>
 
-<div class="mobile-hero">
-    <h1>EvolveFit Club 💪</h1>
-    <p>Transform Your Body</p>
+<!-- MOBILE HERO -->
+<div class="mobile-hero" style="padding:40px 25px; text-align:center; display:none;">
+
+    <h1 style="font-size:34px; margin-bottom:10px;">
+        EVOLVEFIT 💪
+    </h1>
+
+    <p style="opacity:0.85; margin-bottom:24px;">
+        Transform Your Body & Mind
+    </p>
 
     <button class="join-btn" onclick="goApp()">
-        Join Now
+        Join Now 🚀
     </button>
+
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
@@ -40,14 +62,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// 🔥 SMART NAVIGATION
+// MOBILE DETECT
+if(window.innerWidth <= 600){
+    document.querySelector(".desktop").style.display = "none";
+    document.querySelector(".mobile-hero").style.display = "block";
+}
+
+// SMART NAVIGATION
 window.goApp = function(){
+
     if(auth.currentUser){
-        window.location.href = "dashboard.html"; // already logged in
-    } else {
-        window.location.href = "login.html"; // not logged in
+        window.location.href = "dashboard.html";
+    }else{
+        window.location.href = "login.html";
     }
+
 };
+
 </script>
 
 </body>
