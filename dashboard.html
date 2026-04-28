@@ -46,7 +46,7 @@
 
 <!-- BUTTONS -->
 <div class="btns">
-    <button onclick="goToBMI()">Update 🔄</button>
+    <button onclick="goToBMI()">Daily Check-In 📝</button>
     <button onclick="logout()">Logout 🚪</button>
 </div>
 
@@ -89,7 +89,7 @@ return;
 const snap = await getDocs(collection(db,"users",user.uid,"daily"));
 
 if(snap.empty){
-document.getElementById("bmi").innerText="No data yet ❌";
+location.href="bmi.html";
 return;
 }
 
@@ -110,7 +110,7 @@ let prev = history.length > 1
 document.getElementById("bmi").innerText =
 "BMI: " + latest.bmi;
 
-// CURRENT CHANGE
+// DAILY CHANGE
 let diff = latest.weight - prev.weight;
 
 let diffText =
@@ -121,7 +121,7 @@ diff>0 ? `⬆ +${diff} kg` :
 document.getElementById("weight").innerText =
 "Weight: " + latest.weight + " kg (" + diffText + ")";
 
-// TOTAL JOURNEY
+// JOURNEY
 let total = latest.weight - first.weight;
 
 let totalText =
@@ -200,7 +200,7 @@ document.getElementById("progressText").innerText =
 document.getElementById("goalStatus").innerText =
 progress>=100
 ? "🏆 Target Achieved!"
-: "Keep going 💪";
+: "Keep going beast mode 💪";
 
 });
 
