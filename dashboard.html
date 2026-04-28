@@ -29,6 +29,18 @@
     <p id="checkinStatus"></p>
 </div>
 
+<!-- ACHIEVEMENTS -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">🏅 Achievements</h3>
+    <p id="badges"></p>
+</div>
+
+<!-- DAILY MISSIONS -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">🎯 Daily Missions</h3>
+    <p id="missions"></p>
+</div>
+
 <!-- STATS -->
 <div class="box">
     <p id="bmi"></p>
@@ -211,6 +223,45 @@ document.getElementById("rank").innerText =
 next > 0
 ? "Rank: " + rank + " | Next rank in " + next + " day(s)"
 : "Rank: " + rank;
+
+// ACHIEVEMENTS
+let badges = [];
+
+badges.push("🎉 First Check-In");
+
+if(streak >= 3) badges.push("🔥 3 Day Streak");
+if(streak >= 7) badges.push("🛡️ 7 Day Warrior");
+if(streak >= 14) badges.push("🐺 14 Day Beast");
+if(streak >= 30) badges.push("👑 30 Day Elite");
+
+if(Math.abs(total) >= 1) badges.push("💪 1kg Progress");
+
+document.getElementById("badges").innerHTML =
+badges.join("<br>");
+
+// DAILY MISSIONS
+let missions = [];
+
+missions.push(latest.date === today ? "✅ Checked in today" : "⬜ Check in weight");
+
+if(latest.goal === "bulk"){
+missions.push("⬜ Hit calorie surplus 🍗");
+missions.push("⬜ Strength workout 💪");
+missions.push("⬜ Protein goal reached 🥚");
+}
+else if(latest.goal === "cut"){
+missions.push("⬜ Stay calorie deficit 🔥");
+missions.push("⬜ Cardio / walk today 🚶");
+missions.push("⬜ Drink 3L water 💧");
+}
+else{
+missions.push("⬜ Maintain calories ⚖️");
+missions.push("⬜ Workout today 💪");
+missions.push("⬜ Sleep 8 hours 😴");
+}
+
+document.getElementById("missions").innerHTML =
+missions.join("<br>");
 
 // TARGET
 let target = Number(localStorage.getItem("targetWeight"));
