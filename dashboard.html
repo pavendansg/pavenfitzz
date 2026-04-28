@@ -22,7 +22,18 @@
 
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
-<p id="rank" style="color:#ffd700;font-weight:700;margin-top:-8px;margin-bottom:16px;"></p>
+<p id="rank" style="color:#ffd700;font-weight:700;margin-top:-8px;margin-bottom:10px;"></p>
+
+<!-- XP SYSTEM -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">⚡ Level System</h3>
+    <p id="levelText"></p>
+    <p id="xpText"></p>
+
+    <div class="progress">
+        <div id="xpBar"></div>
+    </div>
+</div>
 
 <!-- STATUS -->
 <div class="box">
@@ -59,7 +70,6 @@
 <!-- PROGRESS -->
 <div class="box">
     <p id="progressText"></p>
-
     <div class="progress">
         <div id="progressBar"></div>
     </div>
@@ -92,9 +102,9 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
- authDomain: "evolvefit-07.firebaseapp.com",
- projectId: "evolvefit-07"
+ apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+ authDomain:"evolvefit-07.firebaseapp.com",
+ projectId:"evolvefit-07"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -126,9 +136,7 @@ return;
 let history = [];
 snap.forEach(doc => history.push(doc.data()));
 
-history.sort((a,b)=>
-new Date(a.date)-new Date(b.date)
-);
+history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
 let first = history[0];
 let latest = history[history.length-1];
@@ -146,7 +154,7 @@ latest.date === today
 document.getElementById("bmi").innerText =
 "🔥 BMI: " + latest.bmi;
 
-// DAILY CHANGE
+// WEIGHT CHANGE
 let diff = latest.weight - prev.weight;
 
 let diffText =
@@ -180,53 +188,68 @@ document.getElementById("goal").innerText =
 let streak = 1;
 
 for(let i=history.length-1;i>0;i--){
-
 let d1 = new Date(history[i].date);
 let d2 = new Date(history[i-1].date);
-
 let days = (d1-d2)/(1000*60*60*24);
 
 if(days===1) streak++;
 else break;
-
 }
 
 document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
 
-// RANK SYSTEM
+// RANK
 let rank = "";
 let next = 0;
 
 if(streak <= 3){
-rank = "🥉 Beginner";
-next = 4 - streak;
+rank="🥉 Beginner";
+next=4-streak;
 }
 else if(streak <= 7){
-rank = "🛡️ Warrior";
-next = 8 - streak;
+rank="🛡️ Warrior";
+next=8-streak;
 }
 else if(streak <= 14){
-rank = "🐺 Beast";
-next = 15 - streak;
+rank="🐺 Beast";
+next=15-streak;
 }
 else if(streak <= 30){
-rank = "👑 Elite";
-next = 31 - streak;
+rank="👑 Elite";
+next=31-streak;
 }
 else{
-rank = "⚡ Legend";
-next = 0;
+rank="⚡ Legend";
+next=0;
 }
 
 document.getElementById("rank").innerText =
-next > 0
+next>0
 ? "Rank: " + rank + " | Next rank in " + next + " day(s)"
 : "Rank: " + rank;
 
+// XP SYSTEM
+let xp = history.length * 10;
+
+if(streak >= 3) xp += 20;
+if(streak >= 7) xp += 50;
+if(streak >= 14) xp += 100;
+
+let level = Math.floor(xp / 100) + 1;
+let currentXP = xp % 100;
+
+document.getElementById("levelText").innerText =
+"⚡ Level " + level;
+
+document.getElementById("xpText").innerText =
+"XP: " + currentXP + " / 100";
+
+document.getElementById("xpBar").style.width =
+currentXP + "%";
+
 // ACHIEVEMENTS
 let badges = [];
-
 badges.push("🎉 First Check-In");
 
 if(streak >= 3) badges.push("🔥 3 Day Streak");
@@ -239,7 +262,7 @@ if(Math.abs(total) >= 1) badges.push("💪 1kg Progress");
 document.getElementById("badges").innerHTML =
 badges.join("<br>");
 
-// DAILY MISSIONS
+// MISSIONS
 let missions = [];
 
 missions.push(latest.date === today ? "✅ Checked in today" : "⬜ Check in weight");
@@ -277,19 +300,14 @@ let current = latest.weight;
 let progress = 0;
 
 if(latest.goal==="cut"){
-
 let need = start - target;
 let done = start - current;
-
 if(need>0) progress = (done/need)*100;
-
-}else{
-
+}
+else{
 let need = target - start;
 let done = current - start;
-
 if(need>0) progress = (done/need)*100;
-
 }
 
 if(!isFinite(progress)) progress = 0;
@@ -310,14 +328,8 @@ progress>=100
 });
 
 // NAV
-window.goToBMI=()=>{
-location.href="bmi.html";
-}
-
-window.openGraph=()=>{
-location.href="graph.html";
-}
-
+window.goToBMI=()=>{ location.href="bmi.html"; }
+window.openGraph=()=>{ location.href="graph.html"; }
 window.logout=()=>{
 localStorage.clear();
 location.href="login.html";
