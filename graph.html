@@ -1,194 +1,265 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Elite Progress Graph - EvolveFit</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Progress - EvolveFit</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-
 <div class="container">
 <div class="card">
 
-<h1 style="color:#ffd700;">📈 Elite Progress</h1>
-<p style="opacity:.8;margin-bottom:18px;">
-Your body transformation analytics
-</p>
+  <div style="text-align:center;margin-bottom:20px;">
+    <h1 style="color:#ffd700;">📈 Elite Progress</h1>
+    <p style="opacity:.7;font-size:14px;">Your body transformation analytics</p>
+  </div>
 
-<!-- STATS -->
-<div class="box">
-    <p id="startWeight"></p>
-    <p id="currentWeight"></p>
-    <p id="goalWeight"></p>
-    <p id="changeText"></p>
-</div>
+  <!-- STAT CARDS -->
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="stat-card-label">Start</div>
+      <div class="stat-card-val" id="startWeight">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Current</div>
+      <div class="stat-card-val gold" id="currentWeight">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Target</div>
+      <div class="stat-card-val" id="goalWeight">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-label">Change</div>
+      <div class="stat-card-val" id="changeText">—</div>
+    </div>
+  </div>
 
-<!-- WEIGHT -->
-<div class="box">
-    <h3 style="margin-bottom:10px;">⚖️ Weight Trend</h3>
-    <canvas id="weightChart"></canvas>
-</div>
+  <!-- GOAL PROGRESS -->
+  <div class="box" style="margin-top:4px;">
+    <h3>🎯 Goal Progress</h3>
+    <div style="display:flex;justify-content:space-between;font-size:12px;opacity:.6;margin-bottom:6px;">
+      <span id="progressLabel">0%</span>
+      <span id="progressDetail"></span>
+    </div>
+    <div class="progress">
+      <div id="goalBar" style="width:0%;height:100%;border-radius:99px;
+        background:linear-gradient(90deg,#00ff88,#ffd700);
+        transition:width 1.2s ease;"></div>
+    </div>
+  </div>
 
-<!-- BMI -->
-<div class="box">
-    <h3 style="margin-bottom:10px;">🔥 BMI Trend</h3>
-    <canvas id="bmiChart"></canvas>
-</div>
+  <!-- WEIGHT CHART -->
+  <div class="box">
+    <h3>⚖️ Weight Trend</h3>
+    <canvas id="weightChart" style="max-height:200px;"></canvas>
+  </div>
 
-<!-- MOTIVATION -->
-<div class="box">
-    <p id="summary" style="color:#ffd700;font-weight:700;"></p>
-</div>
+  <!-- BMI CHART -->
+  <div class="box">
+    <h3>🔥 BMI Trend</h3>
+    <canvas id="bmiChart" style="max-height:200px;"></canvas>
+  </div>
 
-<div class="btns">
-    <button class="primary-btn" onclick="goBack()">⬅ Dashboard</button>
-</div>
+  <!-- STREAK + MOTIVATION -->
+  <div class="box" style="text-align:center;">
+    <div style="font-size:32px;margin-bottom:8px;">🏆</div>
+    <p id="summary" style="color:#ffd700;font-weight:800;font-size:16px;"></p>
+    <p id="checkins" style="opacity:.5;font-size:13px;margin-top:6px;"></p>
+  </div>
+
+  <div class="btns">
+    <button class="secondary-btn" onclick="location.href='dashboard.html'">← Dashboard</button>
+    <button class="primary-btn" onclick="location.href='bmi.html'">Check In Today ✅</button>
+  </div>
 
 </div>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
- apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
- authDomain:"evolvefit-07.firebaseapp.com",
- projectId:"evolvefit-07"
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
-onAuthStateChanged(auth, async(user)=>{
+// Chart.js global defaults for dark theme
+Chart.defaults.color = "#888";
+Chart.defaults.borderColor = "rgba(255,255,255,0.05)";
 
-if(!user){
-location.href="login.html";
-return;
-}
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { location.href = "login.html"; return; }
 
-const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+  const snap = await getDocs(collection(db, "users", user.uid, "daily"));
+  if (snap.empty) { location.href = "dashboard.html"; return; }
 
-if(snap.empty){
-location.href="dashboard.html";
-return;
-}
+  let history = [];
+  snap.forEach(d => history.push(d.data()));
+  history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-let history = [];
-snap.forEach(doc=>history.push(doc.data()));
+  const labels  = history.map(x => x.date.slice(5)); // show MM-DD only
+  const weights = history.map(x => x.weight);
+  const bmis    = history.map(x => x.bmi);
+  const first   = history[0];
+  const latest  = history[history.length - 1];
+  const target  = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
+  const total   = +(latest.weight - first.weight).toFixed(1);
 
-history.sort((a,b)=>
-new Date(a.date)-new Date(b.date)
-);
+  // STAT CARDS
+  document.getElementById("startWeight").innerText   = first.weight + " kg";
+  document.getElementById("currentWeight").innerText = latest.weight + " kg";
+  document.getElementById("goalWeight").innerText    = target + " kg";
 
-let labels = history.map(x=>x.date);
-let weights = history.map(x=>x.weight);
-let bmi = history.map(x=>x.bmi);
+  const changeEl = document.getElementById("changeText");
+  if (total > 0) {
+    changeEl.innerText = "+" + total + " kg";
+    changeEl.style.color = "#00ff99";
+  } else if (total < 0) {
+    changeEl.innerText = total + " kg";
+    changeEl.style.color = "#ff6b6b";
+  } else {
+    changeEl.innerText = "0 kg";
+  }
 
-let first = history[0];
-let latest = history[history.length-1];
+  // GOAL PROGRESS BAR
+  const startW  = first.weight;
+  const range   = Math.abs(target - startW);
+  const moved   = Math.abs(latest.weight - startW);
+  const pct     = range > 0 ? Math.min(100, Math.round((moved / range) * 100)) : 0;
 
-let target = Number(localStorage.getItem("targetWeight")) || first.weight + 5;
+  document.getElementById("goalBar").style.width    = pct + "%";
+  document.getElementById("progressLabel").innerText = pct + "% complete";
+  document.getElementById("progressDetail").innerText =
+    Math.abs(target - latest.weight).toFixed(1) + " kg to go";
 
-let total = latest.weight - first.weight;
+  // MOTIVATION
+  const msgs = {
+    gain: ["🔥 Building that mass!", "💪 Gains incoming!", "🏋️ Keep lifting heavy!"],
+    loss: ["🔥 Fat loss in progress!", "✂️ Shredding up!", "🏃 Keep the deficit!"],
+    same: ["🔥 Consistency wins.", "📅 Show up every day.", "💯 Stay the course!"]
+  };
+  const pool = total > 0 ? msgs.gain : total < 0 ? msgs.loss : msgs.same;
+  document.getElementById("summary").innerText =
+    pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById("checkins").innerText =
+    history.length + " total check-ins 🗓️";
 
-// STATS
-document.getElementById("startWeight").innerText =
-"🏁 Start Weight: " + first.weight + " kg";
+  // CHART OPTIONS FACTORY
+  function chartOptions(label) {
+    return {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: "#aaa", font: { size: 12 } } },
+        tooltip: {
+          backgroundColor: "#1a1a1a",
+          borderColor: "rgba(255,215,0,0.2)",
+          borderWidth: 1,
+          titleColor: "#ffd700",
+          bodyColor: "#fff"
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: "#666", font: { size: 11 } },
+          grid:  { color: "rgba(255,255,255,0.04)" }
+        },
+        y: {
+          ticks: { color: "#666", font: { size: 11 } },
+          grid:  { color: "rgba(255,255,255,0.04)" }
+        }
+      }
+    };
+  }
 
-document.getElementById("currentWeight").innerText =
-"💪 Current Weight: " + latest.weight + " kg";
+  // WEIGHT CHART
+  new Chart(document.getElementById("weightChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "Weight (kg)",
+        data: weights,
+        borderColor: "#ffd700",
+        backgroundColor: "rgba(255,215,0,0.08)",
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: "#ffd700",
+        pointBorderColor: "#000",
+        pointBorderWidth: 2,
+        tension: 0.4
+      }]
+    },
+    options: chartOptions("Weight (kg)")
+  });
 
-document.getElementById("goalWeight").innerText =
-"🎯 Goal Weight: " + target + " kg";
-
-document.getElementById("changeText").innerText =
-total>0
-? "📈 Total Gain: +" + total + " kg"
-: total<0
-? "📉 Total Loss: " + Math.abs(total) + " kg"
-: "➖ No Change Yet";
-
-// WEIGHT CHART
-new Chart(document.getElementById("weightChart"),{
-type:"line",
-data:{
-labels:labels,
-datasets:[{
-label:"Weight (kg)",
-data:weights,
-borderColor:"#ffd700",
-backgroundColor:"rgba(255,215,0,.12)",
-fill:true,
-pointRadius:5,
-tension:.4
-}]
-},
-options:{
-plugins:{
-legend:{labels:{color:"white"}}
-},
-scales:{
-x:{ticks:{color:"white"}},
-y:{ticks:{color:"white"}}
-}
-}
+  // BMI CHART
+  new Chart(document.getElementById("bmiChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        label: "BMI",
+        data: bmis,
+        borderColor: "#00ff99",
+        backgroundColor: "rgba(0,255,153,0.08)",
+        fill: true,
+        pointRadius: 5,
+        pointBackgroundColor: "#00ff99",
+        pointBorderColor: "#000",
+        pointBorderWidth: 2,
+        tension: 0.4
+      },
+      // healthy range reference line
+      {
+        label: "Healthy Max (24.9)",
+        data: Array(labels.length).fill(24.9),
+        borderColor: "rgba(255,100,100,0.4)",
+        borderDash: [6, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: false
+      }]
+    },
+    options: chartOptions("BMI")
+  });
 });
-
-// BMI CHART
-new Chart(document.getElementById("bmiChart"),{
-type:"line",
-data:{
-labels:labels,
-datasets:[{
-label:"BMI",
-data:bmi,
-borderColor:"#00ff99",
-backgroundColor:"rgba(0,255,153,.12)",
-fill:true,
-pointRadius:5,
-tension:.4
-}]
-},
-options:{
-plugins:{
-legend:{labels:{color:"white"}}
-},
-scales:{
-x:{ticks:{color:"white"}},
-y:{ticks:{color:"white"}}
-}
-}
-});
-
-// MOTIVATION
-let msg = "";
-
-if(total > 0){
-msg = "🔥 You're building momentum!";
-}
-else if(total < 0){
-msg = "🔥 Fat loss in progress!";
-}
-else{
-msg = "🔥 Start strong. Consistency wins.";
-}
-
-document.getElementById("summary").innerText = msg;
-
-});
-
-window.goBack=()=>{
-location.href="dashboard.html";
-}
-
 </script>
+
+<!-- stat card styles -->
+<style>
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  margin-bottom: 6px;
+}
+.stat-card-val {
+  font-size: 20px;
+  font-weight: 900;
+}
+</style>
 
 </body>
 </html>
