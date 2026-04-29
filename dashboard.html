@@ -22,7 +22,11 @@
 
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
-<p id="rank"></p>
+
+<div id="rank" class="rank-box">
+    <div id="rankTitle">🥉 BEGINNER</div>
+    <div id="rankSub">Next Rank In 3 Day(s)</div>
+</div>
 
 <!-- PERSONAL LEADERBOARD -->
 <div class="box">
@@ -233,130 +237,47 @@ else break;
 document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
 
-// RANK
-let rank="🥉 Beginner";
+// ELITE RANK
+let rank = "";
+let next = 0;
+let glow = "#ffd700";
 
-if(streak>=4) rank="🛡️ Warrior";
-if(streak>=8) rank="🐺 Beast";
-if(streak>=15) rank="👑 Elite";
-if(streak>=31) rank="⚡ Legend";
-
-document.getElementById("rank").innerText =
-"Rank: " + rank;
-
-// REWARD
-let rewardXP = streak>=30 ? 50 :
-streak>=14 ? 35 :
-streak>=7 ? 25 :
-streak>=3 ? 15 : 10;
-
-document.getElementById("rewardText").innerText =
-"Reward Claimed +" + rewardXP + " XP";
-
-document.getElementById("rewardBar").style.width =
-(rewardXP*2)+"%";
-
-// XP
-totalXP = history.length*10 + rewardXP;
-
-let spinBonus = Number(localStorage.getItem("spinXP")) || 0;
-totalXP += spinBonus;
-
-let level = Math.floor(totalXP/100)+1;
-let currentXP = totalXP%100;
-
-document.getElementById("levelText").innerText =
-"⚡ Level " + level;
-
-document.getElementById("xpText").innerText =
-"XP: " + currentXP + " / 100";
-
-document.getElementById("xpBar").style.width =
-currentXP + "%";
-
-// PERSONAL RECORDS
-document.getElementById("records").innerHTML =
-"🔥 Best Streak: " + streak + " days<br>" +
-"⚡ Highest Level: " + level + "<br>" +
-"📅 Total Check-ins: " + history.length + "<br>" +
-"🎯 Current Progress: " + currentXP + "%";
-
-// BADGES
-let badges=["🎉 First Check-In"];
-
-if(streak>=3) badges.push("🔥 3 Day Streak");
-if(streak>=7) badges.push("🛡️ 7 Day Warrior");
-if(streak>=14) badges.push("🐺 14 Day Beast");
-if(streak>=30) badges.push("👑 30 Day Elite");
-
-document.getElementById("badges").innerHTML =
-badges.join("<br>");
-
-// MISSIONS
-let missions=[
-"⬜ Workout today 💪",
-"⬜ Drink water 💧",
-"⬜ Stay consistent 🔥"
-];
-
-document.getElementById("missions").innerHTML =
-missions.join("<br>");
-
-// TARGET
-let target = Number(localStorage.getItem("targetWeight")) || first.weight+5;
-
-document.getElementById("targetText").innerText =
-"Target: " + target + " kg 🎯";
-
-// PROGRESS
-let start = first.weight;
-let current = latest.weight;
-
-let progress = ((current-start)/(target-start))*100;
-
-if(latest.goal==="cut"){
-progress=((start-current)/(start-target))*100;
+if(streak <= 3){
+rank = "🥉 BEGINNER";
+next = 4 - streak;
+glow = "#cd7f32";
+}
+else if(streak <= 7){
+rank = "🛡️ WARRIOR";
+next = 8 - streak;
+glow = "#00d9ff";
+}
+else if(streak <= 14){
+rank = "🐺 BEAST";
+next = 15 - streak;
+glow = "#ff4444";
+}
+else if(streak <= 30){
+rank = "👑 ELITE";
+next = 31 - streak;
+glow = "#ffd700";
+}
+else{
+rank = "⚡ LEGEND";
+next = 0;
+glow = "#c000ff";
 }
 
-if(!isFinite(progress)) progress=0;
+document.getElementById("rankTitle").innerText = rank;
 
-progress=Math.max(0,Math.min(100,Math.round(progress)));
+document.getElementById("rankSub").innerText =
+next > 0
+? "Next Rank In " + next + " Day(s)"
+: "Maximum Rank Achieved";
 
-document.getElementById("progressBar").style.width =
-progress + "%";
-
-document.getElementById("progressText").innerText =
-"Goal Progress: " + progress + "% 🎯";
-
-document.getElementById("goalStatus").innerText =
-progress>=100 ? "🏆 Target Achieved!" : "Keep going beast mode 💪";
-
-});
-
-// SPIN
-window.spinWheel = function(){
-
-let today = new Date().toISOString().split("T")[0];
-
-if(localStorage.getItem("spinDate") === today) return;
-
-let rewards = [10,15,25,50];
-let randomXP = rewards[Math.floor(Math.random()*rewards.length)];
-
-localStorage.setItem("spinXP", randomXP);
-localStorage.setItem("spinDate", today);
-localStorage.setItem("spinReward", "🎉 Won +" + randomXP + " XP");
-
-location.reload();
-}
-
-// NAV
-window.goToBMI=()=>location.href="bmi.html";
-window.openGraph=()=>location.href="graph.html";
-window.logout=()=>{
-localStorage.clear();
-location.href="login.html";
-}
+document.getElementById("rank").style.borderColor = glow;
+document.getElementById("rank").style.boxShadow =
+"0 0 25px " + glow + "55";
 
 </script>
 
