@@ -161,7 +161,7 @@ else break;
 document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
 
-/* rank FIXED */
+/* rank */
 let rankText="🥉 BEGINNER";
 let next=4-streak;
 let glow="#cd7f32";
@@ -172,18 +172,20 @@ if(streak>=15){rankText="👑 ELITE";next=31-streak;glow="#ffd700";}
 if(streak>=31){rankText="⚡ LEGEND";next=0;glow="#c000ff";}
 
 document.getElementById("rankTitle").innerText = rankText;
-
 document.getElementById("rankSub").innerText =
 next>0 ? "Next Rank In " + next + " Day(s)" : "Maximum Rank Achieved";
 
 document.getElementById("rank").style.borderColor = glow;
-document.getElementById("rank").style.boxShadow = "0 0 25px " + glow + "55";
+document.getElementById("rank").style.boxShadow =
+"0 0 25px " + glow + "55";
 
 /* stats */
 document.getElementById("bmi").innerText = "🔥 BMI: " + latest.bmi;
 
 let diff = latest.weight - prev.weight;
-let diffText = diff==0 ? "— no change" : diff>0 ? "⬆ +" + diff + " kg" : "⬇ " + Math.abs(diff) + " kg";
+let diffText = diff==0 ? "— no change" :
+diff>0 ? "⬆ +" + diff + " kg" :
+"⬇ " + Math.abs(diff) + " kg";
 
 document.getElementById("weight").innerText =
 "⚖️ Weight: " + latest.weight + " kg (" + diffText + ")";
@@ -191,7 +193,10 @@ document.getElementById("weight").innerText =
 let total = latest.weight - first.weight;
 
 document.getElementById("journey").innerText =
-"📈 Journey: " + (total==0 ? "No total change" : total>0 ? "+"+total+" kg total" : "-"+Math.abs(total)+" kg total");
+"📈 Journey: " +
+(total==0 ? "No total change" :
+total>0 ? "+"+total+" kg total" :
+"-"+Math.abs(total)+" kg total");
 
 document.getElementById("calories").innerText =
 "🍗 Calories: " + latest.calories + " kcal";
@@ -238,7 +243,8 @@ let target = Number(localStorage.getItem("targetWeight")) || first.weight+5;
 document.getElementById("targetText").innerText =
 "Target: " + target + " kg 🎯";
 
-let progress = ((latest.weight-first.weight)/(target-first.weight))*100;
+let progress =
+((latest.weight-first.weight)/(target-first.weight))*100;
 
 if(latest.goal==="cut"){
 progress=((first.weight-latest.weight)/(first.weight-target))*100;
@@ -254,7 +260,8 @@ document.getElementById("progressBar").style.width =
 progress + "%";
 
 document.getElementById("goalStatus").innerText =
-progress>=100 ? "🏆 Target Achieved!" : "Keep going beast mode 💪";
+progress>=100 ? "🏆 Target Achieved!" :
+"Keep going beast mode 💪";
 
 });
 
