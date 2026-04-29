@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calories - EvolveFit Club</title>
-    <link rel="stylesheet" href="style.css"> <!-- 🔥 same css -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calories - EvolveFit</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
-
 <div class="container">
-    <div class="card">
+<div class="card">
 
-        <h1>🔥 Calorie Calculator</h1>
+  <div style="text-align:center;margin-bottom:20px;">
+    <h1>🔥 Calorie Calculator</h1>
+    <p style="opacity:.7;font-size:14px;">Find your perfect daily calorie target</p>
+  </div>
 
-        <h2 id="info"></h2>
+  <div class="info-pill" id="info"></div>
 
-        <input type="number" id="height" placeholder="Height (cm)">
-        <input type="number" id="age" placeholder="Age">
+  <label class="input-label">Height (cm)</label>
+  <input type="number" id="height" placeholder="e.g. 175">
 
-        <select id="gender">
-            <option value="male">Male 👨</option>
-            <option value="female">Female 👩</option>
-        </select>
+  <label class="input-label">Age</label>
+  <input type="number" id="age" placeholder="e.g. 22">
 
-        <select id="goal">
-            <option value="bulk">Bulk 💪</option>
-            <option value="maintain">Maintain ⚖️</option>
-            <option value="cut">Cut 🔥</option>
-        </select>
+  <label class="input-label">Gender</label>
+  <select id="gender">
+    <option value="male">Male 👨</option>
+    <option value="female">Female 👩</option>
+  </select>
 
-        <button class="primary-btn" onclick="calculateCalories()">Calculate Calories</button>
+  <label class="input-label">Your Goal</label>
+  <select id="goal">
+    <option value="bulk">Bulk 💪 — Build Muscle</option>
+    <option value="maintain">Maintain ⚖️ — Stay Lean</option>
+    <option value="cut">Cut 🔥 — Lose Fat</option>
+  </select>
 
-        <h2 id="result"></h2>
-        <h3 id="extra"></h3>
+  <button class="primary-btn" onclick="calculateCalories()" style="margin-top:20px;">
+    Calculate My Calories ⚡
+  </button>
 
-        <button id="nextBtn" class="primary-btn" onclick="goToMacros()" style="display:none;">
-            Next ➡ View Macros 🍗
-        </button>
+  <div class="result-box" id="resultBox" style="display:none;">
+    <p style="opacity:.6;font-size:13px;margin-bottom:4px;">Your Daily Target</p>
+    <h2 id="result"></h2>
+    <p id="extra" style="margin-top:8px;"></p>
+  </div>
 
-    </div>
+  <button id="nextBtn" class="primary-btn" onclick="goToMacros()" style="display:none;margin-top:10px;">
+    Next → View My Macros 🍗
+  </button>
+
+  <button class="secondary-btn" onclick="location.href='dashboard.html'" style="margin-top:8px;">
+    ← Back to Dashboard
+  </button>
+
 </div>
-
+</div>
 <script src="script.js"></script>
-
+<script>
+// show result box when result is filled
+const origCalc = calculateCalories;
+calculateCalories = function() {
+  origCalc();
+  const rb = document.getElementById("resultBox");
+  if (localStorage.getItem("calories")) rb.style.display = "block";
+};
+</script>
 </body>
 </html>
