@@ -19,47 +19,49 @@
 </div>
 </div>
 
-<h1 class="title">🔥 Dashboard</h1>
+<h1 class="title">Dashboard</h1>
 <p id="streak" class="streak"></p>
 
 <div id="rank" class="rank-box">
-<div id="rankTitle">🥉 BEGINNER</div>
-<div id="rankSub">Next Rank In 3 Day(s)</div>
+<div id="rankTitle">BEGINNER</div>
+<div id="rankSub">Next Rank In 3 Days</div>
 </div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">🏆 Your Records</h3>
+<h3>Records</h3>
 <p id="records"></p>
 </div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">🎁 Daily Reward</h3>
+<h3>Daily Reward</h3>
 <p id="rewardText"></p>
 <div class="progress"><div id="rewardBar"></div></div>
 </div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">🎡 Lucky Spin</h3>
-<p id="spinResult">Spin once daily for bonus reward</p>
-<button class="primary-btn" onclick="spinWheel()" id="spinBtn">🎡 Spin Now</button>
+<h3>Lucky Spin</h3>
+<p id="spinResult">Spin once daily for reward</p>
+<button class="primary-btn" onclick="spinWheel()">Spin Now</button>
 </div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">⚡ Level System</h3>
+<h3>Level System</h3>
 <p id="levelText"></p>
 <p id="xpText"></p>
 <div class="progress"><div id="xpBar"></div></div>
 </div>
 
-<div class="box"><p id="checkinStatus"></p></div>
+<div class="box">
+<p id="checkinStatus"></p>
+</div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">🏅 Achievements</h3>
+<h3>Achievements</h3>
 <p id="badges"></p>
 </div>
 
 <div class="box">
-<h3 style="color:#ffd700;margin-bottom:10px;">🎯 Daily Missions</h3>
+<h3>Daily Missions</h3>
 <p id="missions"></p>
 </div>
 
@@ -81,17 +83,13 @@
 <div class="progress"><div id="progressBar"></div></div>
 </div>
 
-<div class="box">
-<p style="color:#ffd700;font-weight:700;">Discipline beats motivation 🔥</p>
-</div>
-
 <div class="btns">
-<button class="primary-btn" onclick="goToBMI()">Daily Check-In 📝</button>
-<button class="secondary-btn" onclick="openGraph()">View Progress 📈</button>
+<button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
+<button class="secondary-btn" onclick="openGraph()">View Progress</button>
 </div>
 
 <div class="btns" style="margin-top:10px;">
-<button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+<button class="secondary-btn" onclick="logout()">Logout</button>
 </div>
 
 </div>
@@ -114,12 +112,12 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 document.getElementById("user").innerText =
-(localStorage.getItem("username") || "User") + " 💪";
+(localStorage.getItem("username") || "User");
 
 document.getElementById("profilePic").src =
 localStorage.getItem("photo") || "";
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
 
 if(!user){
 location.href="login.html";
@@ -134,154 +132,122 @@ return;
 }
 
 let history = [];
-snap.forEach(doc=>history.push(doc.data()));
+snap.forEach(doc => history.push(doc.data()));
 
 history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
 let first = history[0];
 let latest = history[history.length-1];
-let prev = history.length>1 ? history[history.length-2] : latest;
-
-let today = new Date().toISOString().split("T")[0];
+let prev = history.length > 1 ? history[history.length-2] : latest;
 
 /* status */
 document.getElementById("checkinStatus").innerText =
-latest.date===today ? "🟢 Checked in today" : "🔴 Pending today's check-in";
+"Checked in";
 
 /* streak */
-let streak = 1;
-for(let i=history.length-1;i>0;i--){
-let d1=new Date(history[i].date);
-let d2=new Date(history[i-1].date);
-let days=(d1-d2)/(1000*60*60*24);
-if(days===1) streak++;
-else break;
-}
+let streak = history.length;
 
 document.getElementById("streak").innerText =
-"🔥 Streak: " + streak + " days";
+"Streak: " + streak + " days";
 
 /* rank */
-let rankText="🥉 BEGINNER";
-let next=4-streak;
-let glow="#cd7f32";
+document.getElementById("rankTitle").innerText =
+streak >= 15 ? "ELITE" :
+streak >= 8 ? "BEAST" :
+streak >= 4 ? "WARRIOR" :
+"BEGINNER";
 
-if(streak>=4){rankText="🛡️ WARRIOR";next=8-streak;glow="#00d9ff";}
-if(streak>=8){rankText="🐺 BEAST";next=15-streak;glow="#ff4444";}
-if(streak>=15){rankText="👑 ELITE";next=31-streak;glow="#ffd700";}
-if(streak>=31){rankText="⚡ LEGEND";next=0;glow="#c000ff";}
-
-document.getElementById("rankTitle").innerText = rankText;
 document.getElementById("rankSub").innerText =
-next>0 ? "Next Rank In " + next + " Day(s)" : "Maximum Rank Achieved";
-
-document.getElementById("rank").style.borderColor = glow;
-document.getElementById("rank").style.boxShadow =
-"0 0 25px " + glow + "55";
+"Keep Going";
 
 /* stats */
-document.getElementById("bmi").innerText = "🔥 BMI: " + latest.bmi;
-
-let diff = latest.weight - prev.weight;
-let diffText = diff==0 ? "— no change" :
-diff>0 ? "⬆ +" + diff + " kg" :
-"⬇ " + Math.abs(diff) + " kg";
+document.getElementById("bmi").innerText =
+"BMI: " + (latest.bmi || 0);
 
 document.getElementById("weight").innerText =
-"⚖️ Weight: " + latest.weight + " kg (" + diffText + ")";
-
-let total = latest.weight - first.weight;
+"Weight: " + (latest.weight || 0) + " kg";
 
 document.getElementById("journey").innerText =
-"📈 Journey: " +
-(total==0 ? "No total change" :
-total>0 ? "+"+total+" kg total" :
-"-"+Math.abs(total)+" kg total");
+"Journey Started";
 
 document.getElementById("calories").innerText =
-"🍗 Calories: " + latest.calories + " kcal";
+"Calories: " + (latest.calories || 0);
 
 document.getElementById("goal").innerText =
-"🎯 Goal: " + latest.goal";
+"Goal: " + (latest.goal || "bulk");
 
 /* xp */
 let xp = history.length * 10;
 let level = Math.floor(xp/100)+1;
-let currentXP = xp%100;
+let currentXP = xp % 100;
 
-document.getElementById("levelText").innerText = "⚡ Level " + level;
-document.getElementById("xpText").innerText = "XP: " + currentXP + " / 100";
-document.getElementById("xpBar").style.width = currentXP + "%";
+document.getElementById("levelText").innerText =
+"Level " + level;
+
+document.getElementById("xpText").innerText =
+"XP: " + currentXP + " / 100";
+
+document.getElementById("xpBar").style.width =
+currentXP + "%";
 
 /* reward */
 document.getElementById("rewardText").innerText =
-"Claimed +" + (10 + streak) + " XP";
+"+10 XP Claimed";
 
 document.getElementById("rewardBar").style.width =
-(10 + streak) + "%";
+"20%";
 
 /* records */
 document.getElementById("records").innerHTML =
-"🔥 Best Streak: " + streak + " days<br>" +
-"⚡ Highest Level: " + level + "<br>" +
-"📅 Total Check-ins: " + history.length + "<br>" +
-"🎯 XP: " + xp;
+"Best Streak: " + streak + "<br>" +
+"Check-ins: " + history.length;
 
 /* badges */
 document.getElementById("badges").innerHTML =
-"🎉 First Check-In<br>" +
-(streak>=3 ? "🔥 3 Day Streak<br>" : "") +
-(streak>=7 ? "🛡️ Warrior Badge<br>" : "");
+"First Check-In";
 
 /* missions */
 document.getElementById("missions").innerHTML =
-"⬜ Check in weight<br>⬜ Workout today 💪<br>⬜ Sleep 8 hours 😴";
+"Workout today<br>Sleep 8 hours";
 
 /* target */
-let target = Number(localStorage.getItem("targetWeight")) || first.weight+5;
+let target =
+Number(localStorage.getItem("targetWeight")) || first.weight + 5;
 
 document.getElementById("targetText").innerText =
-"Target: " + target + " kg 🎯";
-
-let progress =
-((latest.weight-first.weight)/(target-first.weight))*100;
-
-if(latest.goal==="cut"){
-progress=((first.weight-latest.weight)/(first.weight-target))*100;
-}
-
-if(!isFinite(progress)) progress=0;
-progress=Math.max(0,Math.min(100,Math.round(progress)));
+"Target: " + target + " kg";
 
 document.getElementById("progressText").innerText =
-"Goal Progress: " + progress + "% 🎯";
+"Goal Progress";
 
 document.getElementById("progressBar").style.width =
-progress + "%";
+"25%";
 
 document.getElementById("goalStatus").innerText =
-progress>=100 ? "🏆 Target Achieved!" :
-"Keep going beast mode 💪";
+"Keep going";
 
 });
 
-/* spin */
+/* buttons */
 window.spinWheel = function(){
-alert("🎉 Spin reward claimed!");
+document.getElementById("spinResult").innerText =
+"Reward Won!";
 };
 
-/* nav */
-window.goToBMI = () => {
-location.href = "bmi.html";
+window.goToBMI = function(){
+location.href="bmi.html";
 };
 
-window.openGraph = () => {
-location.href = "graph.html";
+window.openGraph = function(){
+location.href="graph.html";
 };
 
-window.logout = () => {
+window.logout = function(){
 localStorage.clear();
-location.href = "login.html";
+location.href="login.html";
 };
 
 </script>
+
+</body>
+</html>
