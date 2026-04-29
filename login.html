@@ -1,104 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login - EvolveFit</title>
-    <link rel="stylesheet" href="style.css">
+<title>Login - EvolveFit</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
 <div class="container">
-<div class="card">
+<div class="card" style="text-align:center;">
 
-<h1>🔥 EvolveFit</h1>
+  <div class="logo-wrap">
+    <span class="logo-icon">⚡</span>
+  </div>
 
-<button class="primary-btn" onclick="googleLogin()">
-Continue with Google 🚀
-</button>
+  <h1 style="font-size:32px;margin-bottom:6px;">EvolveFit</h1>
+  <p style="opacity:.6;font-size:14px;margin-bottom:28px;">
+    Your elite fitness journey starts here
+  </p>
 
-<p id="msg"></p>
+  <button class="primary-btn google-btn" onclick="googleLogin()">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+         width="20" height="20" style="vertical-align:middle;margin-right:10px;">
+    Continue with Google
+  </button>
+
+  <p id="msg" style="color:#ff4444;margin-top:12px;font-size:13px;"></p>
+
+  <p style="opacity:.4;font-size:12px;margin-top:24px;">
+    By continuing you agree to our Terms & Privacy Policy
+  </p>
 
 </div>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
-getAuth,
-signInWithPopup,
-GoogleAuthProvider,
-onAuthStateChanged
+  getAuth, signInWithPopup,
+  GoogleAuthProvider, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
-// FIREBASE CONFIG
 const firebaseConfig = {
- apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
- authDomain: "evolvefit-07.firebaseapp.com",
- projectId: "evolvefit-07",
- storageBucket: "evolvefit-07.firebasestorage.app",
- messagingSenderId: "977676324550",
- appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07",
+  storageBucket: "evolvefit-07.firebasestorage.app",
+  messagingSenderId: "977676324550",
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// REDIRECT LOGIC
-function goNextPage(){
-
-    // If user already setup once
-    if(localStorage.getItem("height") &&
-       localStorage.getItem("targetWeight")){
-
-        window.location.href = "dashboard.html";
-
-    }else{
-
-        window.location.href = "bmi.html";
-    }
+function goNext() {
+  if (localStorage.getItem("height") && localStorage.getItem("targetWeight")) {
+    location.href = "dashboard.html";
+  } else {
+    location.href = "bmi.html";
+  }
 }
 
-// AUTO LOGIN
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-localStorage.setItem("username", user.displayName || "User");
-localStorage.setItem("photo", user.photoURL || "");
-
-goNextPage();
-
-}
-
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    localStorage.setItem("username", user.displayName || "User");
+    localStorage.setItem("photo", user.photoURL || "");
+    goNext();
+  }
 });
 
-// GOOGLE LOGIN
-window.googleLogin = function(){
+window.googleLogin = function() {
+  const btn = document.querySelector(".google-btn");
+  btn.innerText = "Signing in...";
+  btn.disabled = true;
 
-signInWithPopup(auth, provider)
-.then((result)=>{
-
-const user = result.user;
-
-localStorage.setItem("username", user.displayName || "User");
-localStorage.setItem("photo", user.photoURL || "");
-
-goNextPage();
-
-})
-.catch((error)=>{
-
-console.error(error);
-document.getElementById("msg").innerText =
-error.message;
-
-});
-
-}
-
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      localStorage.setItem("username", user.displayName || "User");
+      localStorage.setItem("photo", user.photoURL || "");
+      goNext();
+    })
+    .catch((err) => {
+      document.getElementById("msg").innerText = "Login failed. Try again.";
+      btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" style="vertical-align:middle;margin-right:10px;"> Continue with Google`;
+      btn.disabled = false;
+    });
+};
 </script>
-
 </body>
 </html>
