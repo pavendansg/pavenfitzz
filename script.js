@@ -1,145 +1,97 @@
-// 🔥 USERNAME
-let name = localStorage.getItem("username");
-if(name){
-    let el = document.getElementById("username");
-    if(el){
-        el.innerText = "Welcome, " + name + " 💪";
-    }
-}
+// ============================================
+// 🔥 EVOLVEFIT — script.js
+// ============================================
 
-// 🔥 AUTO-FILL (SAFE FOR ALL PAGES)
+// USERNAME DISPLAY
+const name = localStorage.getItem("username");
+const el = document.getElementById("username");
+if (name && el) el.innerText = "Welcome, " + name + " 💪";
+
+// AUTO-FILL ON LOAD
 window.onload = function () {
+  const heightField = document.getElementById("height");
+  if (heightField && localStorage.getItem("height")) {
+    heightField.value = localStorage.getItem("height");
+  }
 
-    // height auto fill
-    let heightField = document.getElementById("height");
-    if(heightField){
-        let savedHeight = localStorage.getItem("height");
-        if(savedHeight){
-            heightField.value = savedHeight;
-        }
-    }
-
-    // weight display (calorie page)
-    let weight = localStorage.getItem("weight");
-    let info = document.getElementById("info");
-
-    if(info && weight){
-        info.innerText = "Your weight: " + weight + " kg";
-    }
+  const weight = localStorage.getItem("weight");
+  const info = document.getElementById("info");
+  if (info && weight) {
+    info.innerText = "Current Weight: " + weight + " kg 💪";
+  }
 };
 
-// 🔥 BMI FUNCTION
-function calculateBMI() {
-
-    let weight = document.getElementById("weight").value;
-    let heightInput = document.getElementById("height").value;
-
-    if(!weight || !heightInput){
-        alert("Enter weight & height ⚠️");
-        return;
-    }
-
-    let height = heightInput / 100;
-
-    // save data
-    localStorage.setItem("weight", weight);
-    localStorage.setItem("height", heightInput);
-
-    let bmi = weight / (height * height);
-
-    let resultText = document.getElementById("result");
-    let suggestion = document.getElementById("suggestion");
-    let diet = document.getElementById("diet");
-    let workout = document.getElementById("workout");
-
-    resultText.innerText = "Your BMI: " + bmi.toFixed(2);
-
-    if(bmi < 18.5) {
-        resultText.style.color = "orange";
-        suggestion.innerText = "You should BULK 💪";
-        diet.innerText = "Diet: High calorie + protein 🍗🥚";
-        workout.innerText = "Workout: Heavy lifting 💪";
-    } 
-    else if(bmi < 25) {
-        resultText.style.color = "green";
-        suggestion.innerText = "You should MAINTAIN ⚖️";
-        diet.innerText = "Diet: Balanced ⚖️";
-        workout.innerText = "Workout: Balanced training 🏋️";
-    } 
-    else {
-        resultText.style.color = "red";
-        suggestion.innerText = "You should CUT 🔥";
-        diet.innerText = "Diet: Calorie deficit 🥗";
-        workout.innerText = "Workout: Cardio + HIIT 🔥";
-    }
-
-    let btn = document.getElementById("calBtn");
-    if(btn){
-        btn.style.display = "inline-block";
-    }
-}
-
-// 🔥 CALORIE FUNCTION
+// ============================================
+// 🔥 CALORIE CALCULATOR
+// ============================================
 function calculateCalories() {
+  const weight = Number(localStorage.getItem("weight"));
+  const height = Number(document.getElementById("height").value);
+  const age    = Number(document.getElementById("age").value);
+  const gender = document.getElementById("gender").value;
+  const goal   = document.getElementById("goal").value;
 
-    let weight = localStorage.getItem("weight");
-    let height = document.getElementById("height").value;
-    let age = document.getElementById("age").value;
-    let gender = document.getElementById("gender").value;
-    let goal = document.getElementById("goal").value;
+  if (!weight || !height || !age) {
+    showToast("Fill all details ⚠️");
+    return;
+  }
 
-    if(!weight || !height || !age){
-        alert("Fill all details ⚠️");
-        return;
-    }
+  localStorage.setItem("goal", goal);
+  localStorage.setItem("height", height);
 
-    // save goal
-    localStorage.setItem("goal", goal);
+  const bmr = gender === "male"
+    ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+    : (10 * weight) + (6.25 * height) - (5 * age) - 161;
 
-    let bmr = (gender === "male")
-        ? (10 * weight) + (6.25 * height) - (5 * age) + 5
-        : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+  const maintenance = bmr * 1.55;
 
-    let maintenance = bmr * 1.55;
+  let finalCalories, message, badge;
 
-    let finalCalories = 0;
-    let message = "";
+  if (goal === "bulk") {
+    finalCalories = Math.round(maintenance + 300);
+    message = "Calorie Surplus for muscle gain";
+    badge = "+300 kcal 💪";
+  } else if (goal === "maintain") {
+    finalCalories = Math.round(maintenance);
+    message = "Perfect balance to maintain your physique";
+    badge = "Maintenance ⚖️";
+  } else {
+    finalCalories = Math.round(maintenance - 300);
+    message = "Calorie Deficit for fat loss";
+    badge = "-300 kcal 🔥";
+  }
 
-    if(goal === "bulk") {
-        finalCalories = maintenance + 300;
-        message = "Calorie Surplus: +300 kcal 💪";
-    }
-    else if(goal === "maintain") {
-        finalCalories = maintenance;
-        message = "Maintain Calories ⚖️";
-    }
-    else {
-        finalCalories = maintenance - 300;
-        message = "Calorie Deficit: -300 kcal 🔥";
-    }
+  localStorage.setItem("calories", finalCalories);
 
-    finalCalories = Math.round(finalCalories);
+  document.getElementById("result").innerHTML =
+    `<span class="gold" style="font-size:28px;font-weight:900;">${finalCalories} kcal</span>`;
 
-    document.getElementById("result").innerText =
-        "Daily Calories: " + finalCalories + " kcal 🔥";
+  document.getElementById("extra").innerHTML =
+    `<span class="pill">${badge}</span><br>
+     <span style="opacity:.7;font-size:13px;">${message}</span>`;
 
-    document.getElementById("extra").innerText = message;
-
-    // save calories
-    localStorage.setItem("calories", finalCalories);
-
-    // show next button
-    let nextBtn = document.getElementById("nextBtn");
-    if(nextBtn){
-        nextBtn.style.display = "inline-block";
-    }
+  const nextBtn = document.getElementById("nextBtn");
+  if (nextBtn) nextBtn.style.display = "block";
 }
 
+// ============================================
 // 🔥 NAVIGATION
-function goToCalories() {
-    window.location.href = "calorie.html";
-}
+// ============================================
+function goToCalories() { location.href = "calorie.html"; }
+function goToMacros()   { location.href = "macros.html"; }
+function goBack()       { history.back(); }
 
-function goToMacros() {
-    window.location.href = "macros.html";
+// ============================================
+// 🔥 TOAST NOTIFICATION
+// ============================================
+function showToast(msg) {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    document.body.appendChild(toast);
+  }
+  toast.innerText = msg;
+  toast.className = "toast show";
+  setTimeout(() => toast.className = "toast", 2500);
 }
