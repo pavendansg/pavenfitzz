@@ -161,19 +161,23 @@ else break;
 document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
 
-/* rank */
-let rank="🥉 BEGINNER";
+/* rank FIXED */
+let rankText="🥉 BEGINNER";
 let next=4-streak;
 let glow="#cd7f32";
 
-if(streak>=4){rank="🛡️ WARRIOR";next=8-streak;glow="#00d9ff";}
-if(streak>=8){rank="🐺 BEAST";next=15-streak;glow="#ff4444";}
-if(streak>=15){rank="👑 ELITE";next=31-streak;glow="#ffd700";}
-if(streak>=31){rank="⚡ LEGEND";next=0;glow="#c000ff";}
+if(streak>=4){rankText="🛡️ WARRIOR";next=8-streak;glow="#00d9ff";}
+if(streak>=8){rankText="🐺 BEAST";next=15-streak;glow="#ff4444";}
+if(streak>=15){rankText="👑 ELITE";next=31-streak;glow="#ffd700";}
+if(streak>=31){rankText="⚡ LEGEND";next=0;glow="#c000ff";}
 
-rankTitle.innerText = rank;
-rankSub.innerText = next>0 ? "Next Rank In " + next + " Day(s)" : "Maximum Rank Achieved";
-rank.style.borderColor = glow;
+document.getElementById("rankTitle").innerText = rankText;
+
+document.getElementById("rankSub").innerText =
+next>0 ? "Next Rank In " + next + " Day(s)" : "Maximum Rank Achieved";
+
+document.getElementById("rank").style.borderColor = glow;
+document.getElementById("rank").style.boxShadow = "0 0 25px " + glow + "55";
 
 /* stats */
 document.getElementById("bmi").innerText = "🔥 BMI: " + latest.bmi;
@@ -185,6 +189,7 @@ document.getElementById("weight").innerText =
 "⚖️ Weight: " + latest.weight + " kg (" + diffText + ")";
 
 let total = latest.weight - first.weight;
+
 document.getElementById("journey").innerText =
 "📈 Journey: " + (total==0 ? "No total change" : total>0 ? "+"+total+" kg total" : "-"+Math.abs(total)+" kg total");
 
@@ -192,7 +197,7 @@ document.getElementById("calories").innerText =
 "🍗 Calories: " + latest.calories + " kcal";
 
 document.getElementById("goal").innerText =
-"🎯 Goal: " + latest.goal;
+"🎯 Goal: " + latest.goal";
 
 /* xp */
 let xp = history.length * 10;
@@ -234,6 +239,7 @@ document.getElementById("targetText").innerText =
 "Target: " + target + " kg 🎯";
 
 let progress = ((latest.weight-first.weight)/(target-first.weight))*100;
+
 if(latest.goal==="cut"){
 progress=((first.weight-latest.weight)/(first.weight-target))*100;
 }
