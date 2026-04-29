@@ -1,143 +1,111 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Macros - EvolveFit Club</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macros - EvolveFit</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
-
 <div class="container">
-    <div class="card">
+<div class="card">
 
-        <h1>🔥 EvolveFit Club</h1>
-        <p>Your Personalized Macros 💪</p>
+  <div style="text-align:center;margin-bottom:20px;">
+    <h1>🍗 Your Macros</h1>
+    <p style="opacity:.7;font-size:14px;">Personalized nutrition for your goal</p>
+  </div>
 
-        <h2 id="calInfo"></h2>
+  <div class="info-pill" id="calInfo"></div>
 
-        <h2 id="protein"></h2>
-        <h2 id="carbs"></h2>
-        <h2 id="fats"></h2>
-
-        <!-- 🔥 DIET PLAN -->
-        <h2 style="margin-top:25px;">🥗 Diet Plan</h2>
-        <p id="dietPlan"></p>
-
-        <!-- 🔥 BUTTONS -->
-        <button class="secondary-btn" onclick="window.location.href='calorie.html'">
-            ⬅ Back
-        </button>
-
-        <button class="primary-btn" onclick="window.location.href='dashboard.html'">
-            Go to Dashboard 📊
-        </button>
-
+  <!-- MACRO CARDS -->
+  <div class="macro-grid">
+    <div class="macro-card protein-card">
+      <div class="macro-icon">🍗</div>
+      <div class="macro-val" id="protein">—</div>
+      <div class="macro-label">Protein</div>
     </div>
+    <div class="macro-card carbs-card">
+      <div class="macro-icon">🍚</div>
+      <div class="macro-val" id="carbs">—</div>
+      <div class="macro-label">Carbs</div>
+    </div>
+    <div class="macro-card fats-card">
+      <div class="macro-icon">🥑</div>
+      <div class="macro-val" id="fats">—</div>
+      <div class="macro-label">Fats</div>
+    </div>
+  </div>
+
+  <!-- DIET PLAN -->
+  <div class="box" style="margin-top:20px;">
+    <h3>🥗 Your Diet Plan</h3>
+    <p id="dietPlan" style="font-size:14px;line-height:2;color:#ccc;"></p>
+  </div>
+
+  <div class="btns" style="margin-top:16px;">
+    <button class="secondary-btn" onclick="location.href='calorie.html'">← Back</button>
+    <button class="primary-btn" onclick="location.href='dashboard.html'">Dashboard 📊</button>
+  </div>
+
+</div>
 </div>
 
 <script>
+const calories = Number(localStorage.getItem("calories"));
+const weight   = Number(localStorage.getItem("weight"));
+const goal     = localStorage.getItem("goal") || "maintain";
 
-// 🔥 GET DATA
-let calories = Number(localStorage.getItem("calories"));
-let weight = Number(localStorage.getItem("weight"));
-let goal = localStorage.getItem("goal");
+document.getElementById("calInfo").innerText =
+  calories ? "Daily Calories: " + calories + " kcal 🔥" : "No calorie data — go back";
 
-// SHOW CALORIES
-if(!calories){
-    document.getElementById("calInfo").innerText = "No calorie data ❌ Go back";
-} else {
-    document.getElementById("calInfo").innerText = "Your Calories: " + calories + " kcal 🔥";
+if (calories && weight) {
+  let protein, fats, carbs;
+
+  if (goal === "bulk") {
+    protein = weight * 2;
+    fats    = weight * 0.8;
+  } else if (goal === "maintain") {
+    protein = weight * 1.8;
+    fats    = weight * 0.7;
+  } else {
+    protein = weight * 2.2;
+    fats    = weight * 0.6;
+  }
+
+  carbs = (calories - (protein * 4) - (fats * 9)) / 4;
+
+  protein = Math.round(protein);
+  carbs   = Math.max(0, Math.round(carbs));
+  fats    = Math.round(fats);
+
+  document.getElementById("protein").innerText = protein + "g";
+  document.getElementById("carbs").innerText   = carbs + "g";
+  document.getElementById("fats").innerText    = fats + "g";
+
+  localStorage.setItem("protein", protein);
+  localStorage.setItem("carbs", carbs);
+  localStorage.setItem("fats", fats);
+
+  const plans = {
+    bulk:
+      "🌅 Breakfast: Eggs + Oats + Milk<br>" +
+      "🍱 Lunch: Rice + Chicken + Dal<br>" +
+      "🍌 Snack: Banana + Peanut Butter<br>" +
+      "🌙 Dinner: Rice + Paneer / Eggs<br>" +
+      "💊 + Whey protein post-workout",
+    maintain:
+      "🌅 Breakfast: Oats + Fruits + Eggs<br>" +
+      "🍱 Lunch: Rice + Chicken + Veggies<br>" +
+      "🍎 Snack: Fruits + Nuts<br>" +
+      "🌙 Dinner: Light meal + Salad",
+    cut:
+      "🌅 Breakfast: Egg whites + Oats<br>" +
+      "🍱 Lunch: Chicken + Salad (no rice)<br>" +
+      "🥗 Snack: Cucumber + Greek Yogurt<br>" +
+      "🌙 Dinner: Lean protein + Veggies"
+  };
+
+  document.getElementById("dietPlan").innerHTML = plans[goal];
 }
-
-// 🔥 AUTO RUN
-calculateMacros();
-
-function calculateMacros(){
-
-    if(!calories || !weight || !goal){
-        alert("Missing data ❌ Go back");
-        return;
-    }
-
-    let protein = 0;
-    let fats = 0;
-    let carbs = 0;
-
-    if(goal === "bulk"){
-        protein = weight * 2;
-        fats = weight * 0.8;
-    }
-    else if(goal === "maintain"){
-        protein = weight * 1.8;
-        fats = weight * 0.7;
-    }
-    else {
-        protein = weight * 2.2;
-        fats = weight * 0.6;
-    }
-
-    let usedCalories = (protein * 4) + (fats * 9);
-    carbs = (calories - usedCalories) / 4;
-
-    protein = Math.round(protein);
-    carbs = Math.round(carbs);
-    fats = Math.round(fats);
-
-    document.getElementById("protein").innerText = "Protein: " + protein + "g 🍗";
-    document.getElementById("carbs").innerText = "Carbs: " + carbs + "g 🍚";
-    document.getElementById("fats").innerText = "Fats: " + fats + "g 🥑";
-
-    // 🔥 SAVE MACROS (for dashboard)
-    localStorage.setItem("protein", protein);
-    localStorage.setItem("carbs", carbs);
-    localStorage.setItem("fats", fats);
-
-    // 🔥 DIET PLAN
-    generateDiet(goal);
-}
-
-// 🔥 DIET LOGIC
-function generateDiet(goal){
-
-    let diet = "";
-
-    if(goal === "bulk"){
-        diet =
-        "🍗 Chicken, Eggs, Whey Protein<br>" +
-        "🍚 Rice, Oats, Banana<br>" +
-        "🥑 Nuts, Peanut Butter<br><br>" +
-        "🔥 Plan:<br>" +
-        "Breakfast: Eggs + Oats 🥚<br>" +
-        "Lunch: Rice + Chicken 🍗<br>" +
-        "Snack: Banana + Peanut Butter 🍌<br>" +
-        "Dinner: Rice + Eggs 🍛";
-    }
-    else if(goal === "maintain"){
-        diet =
-        "🥗 Balanced Diet<br>" +
-        "🍗 Chicken / Paneer<br>" +
-        "🍚 Rice + Vegetables<br><br>" +
-        "🔥 Plan:<br>" +
-        "Breakfast: Oats + Fruits 🍎<br>" +
-        "Lunch: Rice + Chicken 🍗<br>" +
-        "Dinner: Light meal + veggies 🥗";
-    }
-    else {
-        diet =
-        "🥗 Low calorie foods<br>" +
-        "🍗 Lean protein<br>" +
-        "🍚 Low carbs<br><br>" +
-        "🔥 Plan:<br>" +
-        "Breakfast: Oats + Egg whites 🥚<br>" +
-        "Lunch: Chicken + Salad 🥗<br>" +
-        "Dinner: Light protein meal 🍗";
-    }
-
-    document.getElementById("dietPlan").innerHTML = diet;
-}
-
 </script>
-
 </body>
 </html>
