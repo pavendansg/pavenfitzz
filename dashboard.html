@@ -24,6 +24,12 @@
 <p id="streak" class="streak"></p>
 <p id="rank"></p>
 
+<!-- PERSONAL LEADERBOARD -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">🏆 Your Records</h3>
+    <p id="records"></p>
+</div>
+
 <!-- DAILY REWARD -->
 <div class="box">
     <h3 style="color:#ffd700;margin-bottom:10px;">🎁 Daily Reward</h3>
@@ -32,6 +38,16 @@
     <div class="progress">
         <div id="rewardBar"></div>
     </div>
+</div>
+
+<!-- SPIN WHEEL -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">🎡 Lucky Spin</h3>
+    <p id="spinResult">Spin once daily for bonus reward</p>
+
+    <button class="primary-btn" onclick="spinWheel()" id="spinBtn">
+        🎡 Spin Now
+    </button>
 </div>
 
 <!-- XP SYSTEM -->
@@ -121,6 +137,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+let totalXP = 0;
+
 // USER
 let name = localStorage.getItem("username") || "User";
 let photo = localStorage.getItem("photo");
@@ -152,19 +170,26 @@ let first = history[0];
 let latest = history[history.length-1];
 let prev = history.length > 1 ? history[history.length-2] : latest;
 
-// TODAY STATUS
+// TODAY
 let today = new Date().toISOString().split("T")[0];
 
+// CHECK SPIN USED
+if(localStorage.getItem("spinDate") === today){
+document.getElementById("spinBtn").disabled = true;
+document.getElementById("spinBtn").innerText = "✅ Used Today";
+document.getElementById("spinResult").innerText = localStorage.getItem("spinReward");
+}
+
+// STATUS
 document.getElementById("checkinStatus").innerText =
 latest.date === today
 ? "🟢 Checked in today"
 : "🔴 Pending today's check-in";
 
 // BMI
-document.getElementById("bmi").innerText =
-"🔥 BMI: " + latest.bmi;
+document.getElementById("bmi").innerText = "🔥 BMI: " + latest.bmi;
 
-// WEIGHT CHANGE
+// WEIGHT
 let diff = latest.weight - prev.weight;
 
 let diffText =
@@ -186,11 +211,10 @@ total>0 ? `⬆ +${total} kg total` :
 document.getElementById("journey").innerText =
 "📈 Journey: " + totalText;
 
-// CALORIES
+// CALORIES / GOAL
 document.getElementById("calories").innerText =
 "🍗 Calories: " + latest.calories + " kcal";
 
-// GOAL
 document.getElementById("goal").innerText =
 "🎯 Goal: " + latest.goal;
 
@@ -210,75 +234,36 @@ document.getElementById("streak").innerText =
 "🔥 Streak: " + streak + " days";
 
 // RANK
-let rank = "";
-let next = 0;
+let rank="🥉 Beginner";
 
-if(streak <= 3){
-rank="🥉 Beginner";
-next=4-streak;
-}
-else if(streak <= 7){
-rank="🛡️ Warrior";
-next=8-streak;
-}
-else if(streak <= 14){
-rank="🐺 Beast";
-next=15-streak;
-}
-else if(streak <= 30){
-rank="👑 Elite";
-next=31-streak;
-}
-else{
-rank="⚡ Legend";
-next=0;
-}
+if(streak>=4) rank="🛡️ Warrior";
+if(streak>=8) rank="🐺 Beast";
+if(streak>=15) rank="👑 Elite";
+if(streak>=31) rank="⚡ Legend";
 
 document.getElementById("rank").innerText =
-next>0
-? "Rank: " + rank + " | Next rank in " + next + " day(s)"
-: "Rank: " + rank;
+"Rank: " + rank;
 
-// DAILY REWARD
-let rewardXP = 10;
-let rewardMsg = "";
-
-if(streak >= 30){
-rewardXP = 50;
-rewardMsg = "⚡ Legend Reward Claimed!";
-}
-else if(streak >= 14){
-rewardXP = 35;
-rewardMsg = "👑 Elite Reward Claimed!";
-}
-else if(streak >= 7){
-rewardXP = 25;
-rewardMsg = "🐺 Beast Reward Claimed!";
-}
-else if(streak >= 3){
-rewardXP = 15;
-rewardMsg = "🛡️ Warrior Reward Claimed!";
-}
-else{
-rewardXP = 10;
-rewardMsg = "🥉 Beginner Reward Claimed!";
-}
+// REWARD
+let rewardXP = streak>=30 ? 50 :
+streak>=14 ? 35 :
+streak>=7 ? 25 :
+streak>=3 ? 15 : 10;
 
 document.getElementById("rewardText").innerText =
-rewardMsg + " +" + rewardXP + " XP";
+"Reward Claimed +" + rewardXP + " XP";
 
 document.getElementById("rewardBar").style.width =
-(rewardXP * 2) + "%";
+(rewardXP*2)+"%";
 
-// XP SYSTEM
-let xp = history.length * 10 + rewardXP;
+// XP
+totalXP = history.length*10 + rewardXP;
 
-if(streak >= 3) xp += 20;
-if(streak >= 7) xp += 50;
-if(streak >= 14) xp += 100;
+let spinBonus = Number(localStorage.getItem("spinXP")) || 0;
+totalXP += spinBonus;
 
-let level = Math.floor(xp / 100) + 1;
-let currentXP = xp % 100;
+let level = Math.floor(totalXP/100)+1;
+let currentXP = totalXP%100;
 
 document.getElementById("levelText").innerText =
 "⚡ Level " + level;
@@ -289,47 +274,36 @@ document.getElementById("xpText").innerText =
 document.getElementById("xpBar").style.width =
 currentXP + "%";
 
-// ACHIEVEMENTS
-let badges = [];
-badges.push("🎉 First Check-In");
+// PERSONAL RECORDS
+document.getElementById("records").innerHTML =
+"🔥 Best Streak: " + streak + " days<br>" +
+"⚡ Highest Level: " + level + "<br>" +
+"📅 Total Check-ins: " + history.length + "<br>" +
+"🎯 Current Progress: " + currentXP + "%";
 
-if(streak >= 3) badges.push("🔥 3 Day Streak");
-if(streak >= 7) badges.push("🛡️ 7 Day Warrior");
-if(streak >= 14) badges.push("🐺 14 Day Beast");
-if(streak >= 30) badges.push("👑 30 Day Elite");
+// BADGES
+let badges=["🎉 First Check-In"];
 
-if(Math.abs(total) >= 1) badges.push("💪 1kg Progress");
+if(streak>=3) badges.push("🔥 3 Day Streak");
+if(streak>=7) badges.push("🛡️ 7 Day Warrior");
+if(streak>=14) badges.push("🐺 14 Day Beast");
+if(streak>=30) badges.push("👑 30 Day Elite");
 
 document.getElementById("badges").innerHTML =
 badges.join("<br>");
 
 // MISSIONS
-let missions = [];
-
-missions.push(latest.date === today ? "✅ Checked in today" : "⬜ Check in weight");
-
-if(latest.goal === "bulk"){
-missions.push("⬜ Hit calorie surplus 🍗");
-missions.push("⬜ Strength workout 💪");
-missions.push("⬜ Protein goal reached 🥚");
-}
-else if(latest.goal === "cut"){
-missions.push("⬜ Stay calorie deficit 🔥");
-missions.push("⬜ Cardio / walk today 🚶");
-missions.push("⬜ Drink 3L water 💧");
-}
-else{
-missions.push("⬜ Maintain calories ⚖️");
-missions.push("⬜ Workout today 💪");
-missions.push("⬜ Sleep 8 hours 😴");
-}
+let missions=[
+"⬜ Workout today 💪",
+"⬜ Drink water 💧",
+"⬜ Stay consistent 🔥"
+];
 
 document.getElementById("missions").innerHTML =
 missions.join("<br>");
 
 // TARGET
-let target = Number(localStorage.getItem("targetWeight"));
-if(!target) target = first.weight + 5;
+let target = Number(localStorage.getItem("targetWeight")) || first.weight+5;
 
 document.getElementById("targetText").innerText =
 "Target: " + target + " kg 🎯";
@@ -338,22 +312,15 @@ document.getElementById("targetText").innerText =
 let start = first.weight;
 let current = latest.weight;
 
-let progress = 0;
+let progress = ((current-start)/(target-start))*100;
 
 if(latest.goal==="cut"){
-let need = start - target;
-let done = start - current;
-if(need>0) progress = (done/need)*100;
-}
-else{
-let need = target - start;
-let done = current - start;
-if(need>0) progress = (done/need)*100;
+progress=((start-current)/(start-target))*100;
 }
 
-if(!isFinite(progress)) progress = 0;
+if(!isFinite(progress)) progress=0;
 
-progress = Math.max(0,Math.min(100,Math.round(progress)));
+progress=Math.max(0,Math.min(100,Math.round(progress)));
 
 document.getElementById("progressBar").style.width =
 progress + "%";
@@ -362,15 +329,30 @@ document.getElementById("progressText").innerText =
 "Goal Progress: " + progress + "% 🎯";
 
 document.getElementById("goalStatus").innerText =
-progress>=100
-? "🏆 Target Achieved!"
-: "Keep going beast mode 💪";
+progress>=100 ? "🏆 Target Achieved!" : "Keep going beast mode 💪";
 
 });
 
+// SPIN
+window.spinWheel = function(){
+
+let today = new Date().toISOString().split("T")[0];
+
+if(localStorage.getItem("spinDate") === today) return;
+
+let rewards = [10,15,25,50];
+let randomXP = rewards[Math.floor(Math.random()*rewards.length)];
+
+localStorage.setItem("spinXP", randomXP);
+localStorage.setItem("spinDate", today);
+localStorage.setItem("spinReward", "🎉 Won +" + randomXP + " XP");
+
+location.reload();
+}
+
 // NAV
-window.goToBMI=()=>{ location.href="bmi.html"; }
-window.openGraph=()=>{ location.href="graph.html"; }
+window.goToBMI=()=>location.href="bmi.html";
+window.openGraph=()=>location.href="graph.html";
 window.logout=()=>{
 localStorage.clear();
 location.href="login.html";
