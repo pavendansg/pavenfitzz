@@ -266,18 +266,22 @@ progress>=100 ? "🏆 Target Achieved!" :
 });
 
 /* spin */
-window.spinWheel=function(){
+window.spinWheel = function(){
 alert("🎉 Spin reward claimed!");
-}
+};
 
 /* nav */
-window.goToBMI=()=>location.href="bmi.html";
-window.openGraph=()=>location.href="graph.html";
-window.logout=()=>{
+window.goToBMI = () => {
+location.href = "bmi.html";
+};
+
+window.openGraph = () => {
+location.href = "graph.html";
+};
+
+window.logout = () => {
 localStorage.clear();
-location.href="login.html";
-}
+location.href = "login.html";
+};
 
 </script>
-</body>
-</html>
