@@ -5,249 +5,201 @@
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
-
 <div class="container">
 <div class="card">
 
-<div class="top-bar">
-<img id="profilePic">
-<div>
-<p style="opacity:.7;font-size:14px;">Welcome back</p>
-<h2 id="user"></h2>
-</div>
-</div>
+  <div class="top-bar">
+    <div class="avatar-wrap">
+      <img id="profilePic" alt="Profile" />
+      <span id="avatarFallback">👤</span>
+    </div>
+    <div>
+      <p style="opacity:.7;font-size:14px;">Welcome back</p>
+      <h2 id="user"></h2>
+    </div>
+  </div>
 
-<h1 class="title">Dashboard</h1>
-<p id="streak" class="streak"></p>
+  <h1 class="title">🔥 Dashboard</h1>
+  <p id="streak" class="streak"></p>
 
-<div id="rank" class="rank-box">
-<div id="rankTitle">BEGINNER</div>
-<div id="rankSub">Next Rank In 3 Days</div>
-</div>
+  <div id="rank" class="rank-box">
+    <div id="rankTitle">BEGINNER</div>
+    <div id="rankSub">Next Rank In 3 Days</div>
+  </div>
 
-<div class="box">
-<h3>Records</h3>
-<p id="records"></p>
-</div>
+  <div class="box">
+    <h3>🏆 Your Records</h3>
+    <p id="records"></p>
+  </div>
 
-<div class="box">
-<h3>Daily Reward</h3>
-<p id="rewardText"></p>
-<div class="progress"><div id="rewardBar"></div></div>
-</div>
+  <div class="box">
+    <h3>🎁 Daily Reward</h3>
+    <p id="rewardText"></p>
+    <div class="progress"><div id="rewardBar"></div></div>
+  </div>
 
-<div class="box">
-<h3>Lucky Spin</h3>
-<p id="spinResult">Spin once daily for reward</p>
-<button class="primary-btn" onclick="spinWheel()">Spin Now</button>
-</div>
+  <div class="box">
+    <h3>🎰 Lucky Spin</h3>
+    <p id="spinResult">Spin once daily for bonus reward</p>
+    <button class="primary-btn" onclick="spinWheel()">⚙️ Spin Now</button>
+  </div>
 
-<div class="box">
-<h3>Level System</h3>
-<p id="levelText"></p>
-<p id="xpText"></p>
-<div class="progress"><div id="xpBar"></div></div>
-</div>
+  <div class="box">
+    <h3>⚡ Level System</h3>
+    <p id="levelText"></p>
+    <p id="xpText"></p>
+    <div class="progress"><div id="xpBar"></div></div>
+  </div>
 
-<div class="box">
-<p id="checkinStatus"></p>
-</div>
+  <div class="box">
+    <h3>📊 Your Stats</h3>
+    <p id="bmi"></p>
+    <p id="weight"></p>
+    <p id="calories"></p>
+    <p id="goal"></p>
+  </div>
 
-<div class="box">
-<h3>Achievements</h3>
-<p id="badges"></p>
-</div>
+  <div class="box">
+    <h3 id="targetText"></h3>
+    <p id="goalStatus"></p>
+    <p id="progressText"></p>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
 
-<div class="box">
-<h3>Daily Missions</h3>
-<p id="missions"></p>
-</div>
+  <div class="box">
+    <h3>🏅 Achievements</h3>
+    <p id="badges"></p>
+  </div>
 
-<div class="box">
-<p id="bmi"></p>
-<p id="weight"></p>
-<p id="journey"></p>
-<p id="calories"></p>
-<p id="goal"></p>
-</div>
+  <div class="box">
+    <h3>🎯 Daily Missions</h3>
+    <p id="missions"></p>
+  </div>
 
-<div class="box">
-<h3 id="targetText"></h3>
-<p id="goalStatus"></p>
-</div>
-
-<div class="box">
-<p id="progressText"></p>
-<div class="progress"><div id="progressBar"></div></div>
-</div>
-
-<div class="btns">
-<button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
-<button class="secondary-btn" onclick="openGraph()">View Progress</button>
-</div>
-
-<div class="btns" style="margin-top:10px;">
-<button class="secondary-btn" onclick="logout()">Logout</button>
-</div>
+  <div class="btns">
+    <button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
+    <button class="secondary-btn" onclick="openGraph()">View Progress</button>
+  </div>
+  <div class="btns" style="margin-top:10px;">
+    <button class="secondary-btn" onclick="logout()">Logout</button>
+  </div>
 
 </div>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
-authDomain:"evolvefit-07.firebaseapp.com",
-projectId:"evolvefit-07"
+  apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain:"evolvefit-07.firebaseapp.com",
+  projectId:"evolvefit-07"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.getElementById("user").innerText =
-(localStorage.getItem("username") || "User");
+// ✅ FIXED: Profile pic with fallback
+const pic = document.getElementById("profilePic");
+const fallback = document.getElementById("avatarFallback");
+const photo = localStorage.getItem("photo");
 
-document.getElementById("profilePic").src =
-localStorage.getItem("photo") || "";
+if (photo) {
+  pic.src = photo;
+  pic.onload = () => {
+    pic.style.display = "block";
+    fallback.style.display = "none";
+  };
+  pic.onerror = () => {
+    pic.style.display = "none";
+    fallback.style.display = "flex";
+  };
+} else {
+  pic.style.display = "none";
+  fallback.style.display = "flex";
+}
+
+document.getElementById("user").innerText = localStorage.getItem("username") || "User";
 
 onAuthStateChanged(auth, async (user) => {
+  if (!user) { location.href = "login.html"; return; }
 
-if(!user){
-location.href="login.html";
-return;
-}
+  const snap = await getDocs(collection(db, "users", user.uid, "daily"));
+  if (snap.empty) { location.href = "bmi.html"; return; }
 
-const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+  let history = [];
+  snap.forEach(doc => history.push(doc.data()));
+  history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-if(snap.empty){
-location.href="bmi.html";
-return;
-}
+  let first = history[0];
+  let latest = history[history.length - 1];
 
-let history = [];
-snap.forEach(doc => history.push(doc.data()));
+  let streak = history.length;
+  document.getElementById("streak").innerText = "🔥 Streak: " + streak + " days";
 
-history.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  // Rank
+  const rankTitle =
+    streak >= 15 ? "👑 ELITE" :
+    streak >= 8  ? "💪 BEAST" :
+    streak >= 4  ? "⚔️ WARRIOR" : "🥉 BEGINNER";
+  document.getElementById("rankTitle").innerText = rankTitle;
+  document.getElementById("rankSub").innerText = "Next Rank In " + (
+    streak >= 15 ? "—" :
+    streak >= 8  ? (15 - streak) + " Day(s)" :
+    streak >= 4  ? (8 - streak)  + " Day(s)" :
+                   (4 - streak)  + " Day(s)"
+  );
 
-let first = history[0];
-let latest = history[history.length-1];
-let prev = history.length > 1 ? history[history.length-2] : latest;
+  // Stats
+  document.getElementById("bmi").innerText = "BMI: " + (latest.bmi || 0);
+  document.getElementById("weight").innerText = "Weight: " + (latest.weight || 0) + " kg";
+  document.getElementById("calories").innerText = "Calories: " + (latest.calories || 0);
+  document.getElementById("goal").innerText = "Goal: " + (latest.goal || "bulk");
 
-/* status */
-document.getElementById("checkinStatus").innerText =
-"Checked in";
+  // XP & Level
+  let xp = history.length * 10;
+  let level = Math.floor(xp / 100) + 1;
+  let currentXP = xp % 100;
+  document.getElementById("levelText").innerText = "Level " + level;
+  document.getElementById("xpText").innerText = "XP: " + currentXP + " / 100";
+  document.getElementById("xpBar").style.width = currentXP + "%";
 
-/* streak */
-let streak = history.length;
+  // Reward
+  document.getElementById("rewardText").innerText = "+10 XP Claimed";
+  document.getElementById("rewardBar").style.width = "20%";
 
-document.getElementById("streak").innerText =
-"Streak: " + streak + " days";
+  // Records
+  document.getElementById("records").innerHTML =
+    "Best Streak: " + streak + " days<br>Check-ins: " + history.length;
 
-/* rank */
-document.getElementById("rankTitle").innerText =
-streak >= 15 ? "ELITE" :
-streak >= 8 ? "BEAST" :
-streak >= 4 ? "WARRIOR" :
-"BEGINNER";
+  // Badges
+  let badges = ["🌟 First Check-In"];
+  if (streak >= 7) badges.push("🔥 7-Day Streak");
+  if (streak >= 15) badges.push("💪 Warrior");
+  document.getElementById("badges").innerHTML = badges.join("<br>");
 
-document.getElementById("rankSub").innerText =
-"Keep Going";
+  // Missions
+  document.getElementById("missions").innerHTML =
+    "✅ Workout today<br>⬜ Sleep 8 hours<br>⬜ Drink 8 glasses of water";
 
-/* stats */
-document.getElementById("bmi").innerText =
-"BMI: " + (latest.bmi || 0);
-
-document.getElementById("weight").innerText =
-"Weight: " + (latest.weight || 0) + " kg";
-
-document.getElementById("journey").innerText =
-"Journey Started";
-
-document.getElementById("calories").innerText =
-"Calories: " + (latest.calories || 0);
-
-document.getElementById("goal").innerText =
-"Goal: " + (latest.goal || "bulk");
-
-/* xp */
-let xp = history.length * 10;
-let level = Math.floor(xp/100)+1;
-let currentXP = xp % 100;
-
-document.getElementById("levelText").innerText =
-"Level " + level;
-
-document.getElementById("xpText").innerText =
-"XP: " + currentXP + " / 100";
-
-document.getElementById("xpBar").style.width =
-currentXP + "%";
-
-/* reward */
-document.getElementById("rewardText").innerText =
-"+10 XP Claimed";
-
-document.getElementById("rewardBar").style.width =
-"20%";
-
-/* records */
-document.getElementById("records").innerHTML =
-"Best Streak: " + streak + "<br>" +
-"Check-ins: " + history.length;
-
-/* badges */
-document.getElementById("badges").innerHTML =
-"First Check-In";
-
-/* missions */
-document.getElementById("missions").innerHTML =
-"Workout today<br>Sleep 8 hours";
-
-/* target */
-let target =
-Number(localStorage.getItem("targetWeight")) || first.weight + 5;
-
-document.getElementById("targetText").innerText =
-"Target: " + target + " kg";
-
-document.getElementById("progressText").innerText =
-"Goal Progress";
-
-document.getElementById("progressBar").style.width =
-"25%";
-
-document.getElementById("goalStatus").innerText =
-"Keep going";
-
+  // Target
+  let target = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
+  document.getElementById("targetText").innerText = "Target: " + target + " kg";
+  document.getElementById("goalStatus").innerText = "Keep going!";
+  document.getElementById("progressText").innerText = "Goal Progress";
+  document.getElementById("progressBar").style.width = "25%";
 });
 
-/* buttons */
-window.spinWheel = function(){
-document.getElementById("spinResult").innerText =
-"Reward Won!";
+window.spinWheel = function() {
+  document.getElementById("spinResult").innerText = "🎉 Reward Won! Come back tomorrow.";
 };
-
-window.goToBMI = function(){
-location.href="bmi.html";
-};
-
-window.openGraph = function(){
-location.href="graph.html";
-};
-
-window.logout = function(){
-localStorage.clear();
-location.href="login.html";
-};
-
+window.goToBMI = function() { location.href = "bmi.html"; };
+window.openGraph = function() { location.href = "graph.html"; };
+window.logout = function() { localStorage.clear(); location.href = "login.html"; };
 </script>
-
 </body>
 </html>
