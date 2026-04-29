@@ -48,7 +48,7 @@ body {
 }
 
 /* ============================================
-   HERO
+   HERO — FIXED OVERLAY
    ============================================ */
 .hero {
   min-height: 100vh;
@@ -65,8 +65,12 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, rgba(0,0,0,0.85) 40%, transparent 100%),
-    radial-gradient(circle at 30% 40%, rgba(255,215,0,0.08), transparent 50%);
+    linear-gradient(to right,
+      rgba(0,0,0,0.97) 0%,
+      rgba(0,0,0,0.92) 38%,
+      rgba(0,0,0,0.55) 60%,
+      rgba(0,0,0,0.15) 100%
+    );
 }
 
 .hero-content {
@@ -244,7 +248,7 @@ body {
   opacity: 0.3;
 }
 
-.step h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.step h3 { font-size: 16px; font-weight: 800; margin-bottom: 8px; color: #fff; }
 .step p  { font-size: 13px; opacity: 0.6; line-height: 1.7; }
 
 .step-arrow {
@@ -599,6 +603,36 @@ button:disabled {
   max-height: 200px;
 }
 
+/* stat cards (graph page) */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  margin-bottom: 6px;
+}
+
+.stat-card-val {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+}
+
 /* ============================================
    TOAST NOTIFICATION
    ============================================ */
@@ -644,10 +678,17 @@ button:disabled {
 }
 
 /* ============================================
+   CLEANUP — nuke old leftover styles
+   ============================================ */
+.hero-left    { display: none !important; }
+.mobile-hero  { display: none !important; }
+
+/* ============================================
    MOBILE
    ============================================ */
 @media (max-width: 600px) {
-  .hero-title  { font-size: 40px; }
+  .hero { background: url("mymobilebg.png") center / cover no-repeat; }
+  .hero-title  { font-size: 38px; }
   .hero-btn    { padding: 14px 28px !important; }
   .navbar      { padding: 14px 20px; }
   .stats-strip { flex-wrap: wrap; }
@@ -661,4 +702,5 @@ button:disabled {
   .macro-val   { font-size: 18px; }
   .btns        { flex-direction: column; }
   #rankTitle   { font-size: 18px; }
+  .stat-cards  { grid-template-columns: repeat(2,1fr); }
 }
