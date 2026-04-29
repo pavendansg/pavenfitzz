@@ -22,7 +22,17 @@
 
 <h1 class="title">🔥 Dashboard</h1>
 <p id="streak" class="streak"></p>
-<p id="rank" style="color:#ffd700;font-weight:700;margin-top:-8px;margin-bottom:10px;"></p>
+<p id="rank"></p>
+
+<!-- DAILY REWARD -->
+<div class="box">
+    <h3 style="color:#ffd700;margin-bottom:10px;">🎁 Daily Reward</h3>
+    <p id="rewardText"></p>
+
+    <div class="progress">
+        <div id="rewardBar"></div>
+    </div>
+</div>
 
 <!-- XP SYSTEM -->
 <div class="box">
@@ -229,8 +239,39 @@ next>0
 ? "Rank: " + rank + " | Next rank in " + next + " day(s)"
 : "Rank: " + rank;
 
+// DAILY REWARD
+let rewardXP = 10;
+let rewardMsg = "";
+
+if(streak >= 30){
+rewardXP = 50;
+rewardMsg = "⚡ Legend Reward Claimed!";
+}
+else if(streak >= 14){
+rewardXP = 35;
+rewardMsg = "👑 Elite Reward Claimed!";
+}
+else if(streak >= 7){
+rewardXP = 25;
+rewardMsg = "🐺 Beast Reward Claimed!";
+}
+else if(streak >= 3){
+rewardXP = 15;
+rewardMsg = "🛡️ Warrior Reward Claimed!";
+}
+else{
+rewardXP = 10;
+rewardMsg = "🥉 Beginner Reward Claimed!";
+}
+
+document.getElementById("rewardText").innerText =
+rewardMsg + " +" + rewardXP + " XP";
+
+document.getElementById("rewardBar").style.width =
+(rewardXP * 2) + "%";
+
 // XP SYSTEM
-let xp = history.length * 10;
+let xp = history.length * 10 + rewardXP;
 
 if(streak >= 3) xp += 20;
 if(streak >= 7) xp += 50;
