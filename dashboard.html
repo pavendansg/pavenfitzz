@@ -1,401 +1,200 @@
+Got it, Pavendan — you’re inside your Firebase console looking at your **EvolveFit Firestore database**, and everything’s connected perfectly. Since you’ve confirmed your Firebase config, here’s your **full cleaned and corrected `dashboard.html`** ready to paste into your project. It includes all the fixes we discussed: avatar handling, XP and streak logic, goal progress, randomized missions and rewards, and your real Firebase config.
+
+---
+
+## 📄 `dashboard.html`
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - EvolveFit</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:#0a0a0a;
-color:white;
-padding:20px;
-}
-
-.container{
-max-width:500px;
-margin:auto;
-}
-
-.card{
-background:#111;
-padding:20px;
-border-radius:20px;
-box-shadow:0 0 20px rgba(0,255,100,.15);
-}
-
-.top-bar{
-display:flex;
-align-items:center;
-gap:15px;
-margin-bottom:20px;
-}
-
-.avatar-wrap{
-width:55px;
-height:55px;
-border-radius:50%;
-overflow:hidden;
-background:#222;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-}
-
-.avatar-wrap img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:none;
-}
-
-.streak-pill{
-background:#00ff88;
-color:black;
-padding:6px 12px;
-border-radius:30px;
-font-size:12px;
-font-weight:bold;
-}
-
-.title{
-margin-bottom:15px;
-font-size:28px;
-}
-
-.rank-box,.box{
-background:#1a1a1a;
-padding:15px;
-border-radius:15px;
-margin-bottom:15px;
-}
-
-.box-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
-
-.box-badge{
-background:#00ff88;
-color:black;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.progress{
-width:100%;
-height:10px;
-background:#333;
-border-radius:20px;
-overflow:hidden;
-}
-
-.progress div{
-height:100%;
-width:0%;
-background:linear-gradient(90deg,#00ff88,#00c3ff);
-}
-
-.stats-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:15px;
-}
-
-.stat-tile{
-background:#1a1a1a;
-padding:15px;
-border-radius:12px;
-text-align:center;
-}
-
-.stat-tile-label{
-font-size:12px;
-color:#888;
-margin-bottom:6px;
-}
-
-.stat-tile-val{
-font-size:20px;
-font-weight:bold;
-}
-
-button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-margin-top:10px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.primary-btn{
-background:#00ff88;
-color:black;
-}
-
-.secondary-btn{
-background:#222;
-color:white;
-}
-
-.badge-wrap{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-}
-
-.badge-item{
-background:#00ff88;
-color:black;
-padding:6px 10px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.mission-item{
-background:#1a1a1a;
-padding:10px;
-border-radius:10px;
-margin-bottom:8px;
-cursor:pointer;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - EvolveFit</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="container">
-<div class="card">
+  <div class="card">
 
-<div class="top-bar">
-<div class="avatar-wrap">
-<img id="profilePic">
-<span id="avatarFallback">👤</span>
-</div>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="avatar-wrap">
+        <img id="profilePic" alt="User Avatar">
+        <span id="avatarFallback">👤</span>
+      </div>
+      <div style="flex:1">
+        <p style="font-size:12px;color:#888">Welcome back</p>
+        <h2 id="user">User</h2>
+      </div>
+      <div class="streak-pill" id="streak">🔥 0</div>
+    </div>
 
-<div style="flex:1">
-<p style="font-size:12px;color:#888">Welcome back</p>
-<h2 id="user">User</h2>
-</div>
+    <h1 class="title">🔥 Dashboard</h1>
 
-<div class="streak-pill" id="streak">🔥 0</div>
-</div>
+    <!-- RANK BOX -->
+    <div class="rank-box">
+      <div id="rankTitle">🥉 BEGINNER</div>
+      <div id="rankSub">Next Rank In 3 Days</div>
+    </div>
 
-<h1 class="title">🔥 Dashboard</h1>
+    <!-- LEVEL SYSTEM -->
+    <div class="box">
+      <div class="box-header">
+        <h3>⚡ Level System</h3>
+        <span class="box-badge" id="levelText">Lvl 1</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px">
+        <span id="xpText">0 / 100 XP</span>
+        <span id="xpPct">0%</span>
+      </div>
+      <div class="progress"><div id="xpBar"></div></div>
+    </div>
 
-<div class="rank-box">
-<div id="rankTitle">🥉 BEGINNER</div>
-<div id="rankSub">Next Rank In 3 Days</div>
-</div>
+    <!-- STATS GRID -->
+    <div class="stats-grid">
+      <div class="stat-tile"><div class="stat-tile-label">BMI</div><div class="stat-tile-val" id="bmi">—</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">Weight</div><div class="stat-tile-val" id="weight">—</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">Calories</div><div class="stat-tile-val" id="calories">—</div></div>
+      <div class="stat-tile"><div class="stat-tile-label">Goal</div><div class="stat-tile-val" id="goal">—</div></div>
+    </div>
 
-<div class="box">
-<div class="box-header">
-<h3>⚡ Level System</h3>
-<span class="box-badge" id="levelText">Lvl 1</span>
-</div>
+    <!-- RECORDS -->
+    <div class="box">
+      <div class="box-header"><h3>🏆 Records</h3></div>
+      <p id="records"></p>
+    </div>
 
-<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px">
-<span id="xpText">0 / 100 XP</span>
-<span id="xpPct">0%</span>
-</div>
+    <!-- GOAL PROGRESS -->
+    <div class="box">
+      <div class="box-header">
+        <h3>🎯 Target</h3>
+        <span class="box-badge" id="goalStatus">In Progress</span>
+      </div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
 
-<div class="progress">
-<div id="xpBar"></div>
-</div>
-</div>
+    <!-- DAILY REWARD -->
+    <div class="box">
+      <div class="box-header">
+        <h3>🎁 Daily Reward</h3>
+        <span class="box-badge" id="rewardText">+10 XP</span>
+      </div>
+      <div class="progress"><div id="rewardBar"></div></div>
+    </div>
 
-<div class="stats-grid">
-<div class="stat-tile">
-<div class="stat-tile-label">BMI</div>
-<div class="stat-tile-val" id="bmi">—</div>
-</div>
+    <!-- LUCKY SPIN -->
+    <div class="box">
+      <div class="box-header"><h3>🎰 Lucky Spin</h3></div>
+      <p id="spinResult">Spin once daily for reward</p>
+      <button class="primary-btn" onclick="spinWheel()">Spin Now</button>
+    </div>
 
-<div class="stat-tile">
-<div class="stat-tile-label">Weight</div>
-<div class="stat-tile-val" id="weight">—</div>
-</div>
+    <!-- ACHIEVEMENTS -->
+    <div class="box">
+      <div class="box-header"><h3>🏅 Achievements</h3></div>
+      <div class="badge-wrap" id="badges"></div>
+    </div>
 
-<div class="stat-tile">
-<div class="stat-tile-label">Calories</div>
-<div class="stat-tile-val" id="calories">—</div>
-</div>
+    <!-- DAILY MISSIONS -->
+    <div class="box">
+      <div class="box-header"><h3>📋 Daily Missions</h3></div>
+      <div id="missions"></div>
+    </div>
 
-<div class="stat-tile">
-<div class="stat-tile-label">Goal</div>
-<div class="stat-tile-val" id="goal">—</div>
-</div>
-</div>
+    <!-- ACTION BUTTONS -->
+    <button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
+    <button class="secondary-btn" onclick="openGraph()">View Progress</button>
+    <button class="secondary-btn" onclick="logout()">Logout</button>
 
-<div class="box">
-<div class="box-header">
-<h3>🏆 Records</h3>
-</div>
-<p id="records"></p>
-</div>
-
-<div class="box">
-<div class="box-header">
-<h3 id="targetText">🎯 Target</h3>
-<span class="box-badge" id="goalStatus">In Progress</span>
-</div>
-
-<div class="progress">
-<div id="progressBar"></div>
-</div>
-</div>
-
-<div class="box">
-<div class="box-header">
-<h3>🎁 Daily Reward</h3>
-<span class="box-badge" id="rewardText">+10 XP</span>
-</div>
-
-<div class="progress">
-<div id="rewardBar"></div>
-</div>
-</div>
-
-<div class="box">
-<div class="box-header">
-<h3>🎰 Lucky Spin</h3>
-</div>
-
-<p id="spinResult">Spin once daily for reward</p>
-<button class="primary-btn" onclick="spinWheel()">Spin Now</button>
-</div>
-
-<div class="box">
-<div class="box-header">
-<h3>🏅 Achievements</h3>
-</div>
-
-<div class="badge-wrap" id="badges"></div>
-</div>
-
-<div class="box">
-<div class="box-header">
-<h3>📋 Daily Missions</h3>
-</div>
-
-<div id="missions"></div>
-</div>
-
-<button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
-<button class="secondary-btn" onclick="openGraph()">View Progress</button>
-<button class="secondary-btn" onclick="logout()">Logout</button>
-
-</div>
+  </div>
 </div>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore,collection,getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_DOMAIN",
-projectId:"YOUR_PROJECT_ID"
+  apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07",
+  storageBucket: "evolvefit-07.firebasestorage.app",
+  messagingSenderId: "977676324550",
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
+  measurementId: "G-G5KYXR7CDH"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-window.spinWheel=function(){
-document.getElementById("spinResult").innerText="🎉 Reward Won! Come back tomorrow.";
-}
+// NAVIGATION
+window.goToBMI = () => location.href = "bmi.html";
+window.openGraph = () => location.href = "graph.html";
+window.logout = () => { localStorage.clear(); location.href = "login.html"; };
 
-window.goToBMI=function(){
-location.href="bmi.html";
-}
+// SPIN WHEEL
+window.spinWheel = () => {
+  const rewards = ["+10 XP", "+20 XP", "🎁 Bonus Badge"];
+  const prize = rewards[Math.floor(Math.random() * rewards.length)];
+  document.getElementById("spinResult").innerText = "You won " + prize;
+};
 
-window.openGraph=function(){
-location.href="graph.html";
-}
+// AUTH STATE
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
 
-window.logout=function(){
-localStorage.clear();
-location.href="login.html";
-}
+  document.getElementById("user").innerText = localStorage.getItem("username") || "User";
+  const photo = localStorage.getItem("photo");
+  if (photo) {
+    document.getElementById("profilePic").src = photo;
+    document.getElementById("profilePic").style.display = "block";
+    document.getElementById("avatarFallback").style.display = "none";
+  }
 
-onAuthStateChanged(auth,async(user)=>{
+  const snap = await getDocs(collection(db, "users", user.uid, "daily"));
+  let history = [];
+  snap.forEach(doc => history.push(doc.data()));
 
-if(!user){
-location.href="login.html";
-return;
-}
+  if (history.length === 0) {
+    location.href = "bmi.html";
+    return;
+  }
 
-document.getElementById("user").innerText=localStorage.getItem("username")||"User";
+  history.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const latest = history[history.length - 1];
+  const streak = history.length;
 
-const snap=await getDocs(collection(db,"users",user.uid,"daily"));
+  document.getElementById("streak").innerText = "🔥 " + streak;
+  document.getElementById("bmi").innerText = latest.bmi;
+  document.getElementById("weight").innerText = latest.weight + " kg";
+  document.getElementById("calories").innerText = latest.calories + " kcal";
+  document.getElementById("goal").innerText = latest.goal;
 
-let history=[];
+  // XP & LEVEL
+  const xp = streak * 10;
+  const level = Math.floor(xp / 100) + 1;
+  const currentXP = xp % 100;
+  const pct = Math.floor((currentXP / 100) * 100);
 
-snap.forEach(doc=>{
-history.push(doc.data());
-});
+  document.getElementById("levelText").innerText = "Lvl " + level;
+  document.getElementById("xpText").innerText = currentXP + " / 100 XP";
+  document.getElementById("xpPct").innerText = pct + "%";
+  document.getElementById("xpBar").style.width = pct + "%";
 
-if(history.length==0){
-location.href="bmi.html";
-return;
-}
+  // GOAL PROGRESS
+  const start = Number(localStorage.getItem("startWeight"));
+  const target = Number(localStorage.getItem("targetWeight"));
+  const progress = ((start - latest.weight) / (start - target)) * 100;
+  document.getElementById("progressBar").style.width = Math.min(100, Math.max(0, progress)) + "%";
 
-history.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  // REWARD BAR
+  document.getElementById("rewardBar").style.width = "20%";
 
-const first=history[0];
-const latest=history[history.length-1];
-const streak=history.length;
-
-document.getElementById("streak").innerText="🔥 "+streak;
-document.getElementById("bmi").innerText=latest.bmi;
-document.getElementById("weight").innerText=latest.weight+" kg";
-document.getElementById("calories").innerText=latest.calories+" kcal";
-document.getElementById("goal").innerText=latest.goal;
-
-const xp=streak*10;
-const level=Math.floor(xp/100)+1;
-const currentXP=xp%100;
-
-document.getElementById("levelText").innerText="Lvl "+level;
-document.getElementById("xpText").innerText=currentXP+" / 100 XP";
-document.getElementById("xpPct").innerText=currentXP+"%";
-document.getElementById("xpBar").style.width=currentXP+"%";
-
-document.getElementById("records").innerHTML=
-"Best Streak: "+streak+" days<br>Total Check-ins: "+history.length;
-
-document.getElementById("progressBar").style.width="25%";
-document.getElementById("rewardBar").style.width="20%";
-
-document.getElementById("badges").innerHTML=
-'<div class="badge-item">🌟 First Check-In</div>';
-
-document.getElementById("missions").innerHTML=
-'<div class="mission-item">✅ Workout Today</div>'+
-'<div class="mission-item">💧 Drink Water</div>'+
-'<div class="mission-item">😴 Sleep 8 Hours</div>';
-
-});
-
-</script>
-
-</body>
-</html>
+  // RECORDS
+  document.getElementById("records").innerHTML =
+    "Best Streak: " + streak + " days<br>Total
