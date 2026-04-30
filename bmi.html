@@ -1,110 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <title>EvolveFit Check-In</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EvolveFit Check-In</title>
+<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <div class="container">
-  <div class="card">
+<div class="card">
 
-    <!-- HEADER -->
-    <div style="text-align:center;margin-bottom:24px;">
-      <div class="bmi-icon-wrap">💪</div>
-      <h2 id="username" style="font-size:14px;color:#555;font-weight:600;margin-bottom:6px;"></h2>
-      <h1 id="mainTitle" style="font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;"></h1>
-      <p id="modeText" style="font-size:13px;color:#555;"></p>
+  <!-- HEADER -->
+  <div style="text-align:center;margin-bottom:24px;">
+    <div class="bmi-icon-wrap">💪</div>
+    <h2 id="username" style="font-size:14px;color:#555;font-weight:600;margin-bottom:6px;"></h2>
+    <h1 id="mainTitle" style="font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;"></h1>
+    <p id="modeText" style="font-size:13px;color:#555;"></p>
+  </div>
+
+  <!-- INPUTS -->
+  <div id="inputSection">
+    <label class="input-label">Today's Weight (kg)</label>
+    <input type="number" id="weight" placeholder="e.g. 72">
+
+    <div id="firstSetupFields">
+      <label class="input-label">Height (cm)</label>
+      <input type="number" id="height" placeholder="e.g. 175">
+
+      <label class="input-label">Target Weight (kg)</label>
+      <input type="number" id="target" placeholder="e.g. 80">
+    </div>
+  </div>
+
+  <button class="primary-btn" onclick="calculateBMI()" id="mainBtn" style="margin-top:20px;">
+    Start Journey 🚀
+  </button>
+
+  <div class="btns" style="margin-top:10px;">
+    <button class="secondary-btn" onclick="location.href='index.html'">⬅ Home</button>
+    <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
+  </div>
+
+  <!-- DIVIDER -->
+  <hr style="margin:24px 0;border:none;border-top:1px solid #1a1a1a;">
+
+  <!-- RESULT BOX -->
+  <div id="resultBox" style="display:none;">
+
+    <div class="bmi-result-card">
+      <div class="bmi-result-label">Your BMI</div>
+      <div class="bmi-result-val" id="result">—</div>
+      <div class="bmi-result-tag" id="suggestion"></div>
     </div>
 
-    <!-- INPUTS -->
-    <div id="inputSection">
-      <label class="input-label">Today's Weight (kg)</label>
-      <input type="number" id="weight" placeholder="e.g. 72">
-
-      <div id="firstSetupFields">
-        <label class="input-label">Height (cm)</label>
-        <input type="number" id="height" placeholder="e.g. 175">
-
-        <label class="input-label">Target Weight (kg)</label>
-        <input type="number" id="target" placeholder="e.g. 80">
+    <div class="bmi-info-grid">
+      <div class="bmi-info-item">
+        <div class="bmi-info-label">Healthy Range</div>
+        <div class="bmi-info-val">18.5 — 24.9</div>
+      </div>
+      <div class="bmi-info-item">
+        <div class="bmi-info-label">Ideal Weight</div>
+        <div class="bmi-info-val" id="idealWeight">—</div>
+      </div>
+      <div class="bmi-info-item">
+        <div class="bmi-info-label">Daily Calories</div>
+        <div class="bmi-info-val" id="caloriesText">—</div>
+      </div>
+      <div class="bmi-info-item">
+        <div class="bmi-info-label">Goal</div>
+        <div class="bmi-info-val" id="goalText">—</div>
       </div>
     </div>
 
-    <button class="primary-btn" onclick="calculateBMI()" id="mainBtn" style="margin-top:20px;">
-      Start Journey 🚀
+    <div class="bmi-tip-box" id="diet"></div>
+
+    <button id="nextBtn" class="primary-btn" style="margin-top:14px;">
+      Go to Dashboard ➜
     </button>
 
-    <div class="btns" style="margin-top:10px;">
-      <button class="secondary-btn" onclick="location.href='index.html'">⬅ Home</button>
-      <button class="secondary-btn" onclick="logout()">Logout 🚪</button>
-    </div>
-
-    <!-- DIVIDER -->
-    <hr style="margin:24px 0;border:none;border-top:1px solid #1a1a1a;">
-
-    <!-- RESULT BOX -->
-    <div id="resultBox" style="display:none;">
-      <div class="bmi-result-card">
-        <div class="bmi-result-label">Your BMI</div>
-        <div class="bmi-result-val" id="result">—</div>
-        <div class="bmi-result-tag" id="suggestion"></div>
-      </div>
-
-      <div class="bmi-info-grid">
-        <div class="bmi-info-item">
-          <div class="bmi-info-label">Healthy Range</div>
-          <div class="bmi-info-val">18.5 — 24.9</div>
-        </div>
-        <div class="bmi-info-item">
-          <div class="bmi-info-label">Ideal Weight</div>
-          <div class="bmi-info-val" id="idealWeight">—</div>
-        </div>
-        <div class="bmi-info-item">
-          <div class="bmi-info-label">Daily Calories</div>
-          <div class="bmi-info-val" id="caloriesText">—</div>
-        </div>
-        <div class="bmi-info-item">
-          <div class="bmi-info-label">Goal</div>
-          <div class="bmi-info-val" id="goalText">—</div>
-        </div>
-      </div>
-
-      <div class="bmi-tip-box" id="diet"></div>
-
-      <button id="nextBtn" class="primary-btn" style="margin-top:14px;">
-        Go to Dashboard ➜
-      </button>
-    </div>
-
   </div>
+
+</div>
 </div>
 
 <style>
-/* BMI-specific styles */
 .bmi-icon-wrap {
-  width: 64px; height: 64px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: rgba(0,255,136,0.08);
   border: 2px solid rgba(0,255,136,0.2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px; margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 14px;
 }
-.bmi-result-card { background:#0a0f0a; border:2px solid rgba(0,255,136,0.2); border-radius:18px; padding:20px; text-align:center; margin-bottom:14px; }
-.bmi-result-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#444; margin-bottom:8px; }
-.bmi-result-val { font-size:48px; font-weight:900; color:#00ff88; line-height:1; margin-bottom:10px; }
-.bmi-result-tag { display:inline-block; font-size:13px; font-weight:700; padding:5px 16px; border-radius:99px; }
-.bmi-info-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
-.bmi-info-item { background:#0d0d0d; border:1px solid rgba(255,255,255,0.05); border-radius:14px; padding:14px; text-align:center; }
-.bmi-info-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#444; margin-bottom:6px; }
-.bmi-info-val { font-size:15px; font-weight:800; color:#fff; }
-.bmi-tip-box { background:rgba(255,215,0,0.05); border:1px solid rgba(255,215,0,0.15); border-radius:14px; padding:14px 16px; font-size:13px; color:#aaa; line-height:1.8; }
-.checkin-success { text-align:center; padding:20px; background:rgba(0,255,136,0.05); border:1px solid rgba(0,255,136,0.15); border-radius:16px; margin-bottom:14px; }
-.checkin-success-icon { font-size:40px; margin-bottom:8px; }
-.checkin-success-text { font-size:16px; font-weight:800; color:#00ff88; }
-.checkin-success-sub { font-size:12px; color:#555; margin-top:4px; }
-.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#222; color:#fff; padding:10px 20px; border-radius:20px; opacity:0; transition:opacity 0.3s ease; }
-.toast.show { opacity:1; }
+
+.bmi-result-card {
+  background: #0a0f0a;
+  border: 2px solid rgba(0,255,136,0.2);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.bmi-result-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.bmi-result-val {
+  font-size: 48px;
+  font-weight: 900;
+  color: #00ff88;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.bmi-result-tag {
+  display: inline-block;
+  background: rgba(0,255,136,0.1);
+  border: 1px solid rgba(0,255,136,0.25);
+  color: #00ff88;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+}
+
+.bmi-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.bmi-info-item {
+  background: #0d0d0d;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.bmi-info-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.bmi-info-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.bmi-tip-box {
+  background: rgba(255,215,0,0.05);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.8;
+}
+
+.checkin-success {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0,255,136,0.05);
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+.checkin-success-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.checkin-success-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: #00ff88;
+}
+
+.checkin-success-sub {
+  font-size: 12px;
+  color: #555;
+  margin-top: 4px;
+}
 </style>
 
 <script type="module">
@@ -113,13 +204,9 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
   authDomain: "evolvefit-07.firebaseapp.com",
-  projectId: "evolvefit-07",
-  storageBucket: "evolvefit-07.firebasestorage.app",
-  messagingSenderId: "977676324550",
-  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
-  measurementId: "G-G5KYXR7CDH"
+  projectId: "evolvefit-07"
 };
 
 const app  = initializeApp(firebaseConfig);
@@ -136,12 +223,15 @@ document.getElementById("username").innerText =
 // MODE DETECT
 if (localStorage.getItem("height") && localStorage.getItem("targetWeight")) {
   updateMode = true;
+
   document.getElementById("mainTitle").innerText  = "📝 Daily Check-In";
   document.getElementById("modeText").innerText   = "Log today's weight and track your progress";
   document.getElementById("mainBtn").innerText    = "Save Check-In ✅";
   document.getElementById("firstSetupFields").style.display = "none";
+
   document.getElementById("weight").placeholder  = "Enter today's weight (kg)";
   document.getElementById("weight").value        = localStorage.getItem("weight") || "";
+
 } else {
   document.getElementById("mainTitle").innerText = "💪 BMI Setup";
   document.getElementById("modeText").innerText  = "Enter your details to begin your transformation";
@@ -149,4 +239,114 @@ if (localStorage.getItem("height") && localStorage.getItem("targetWeight")) {
 
 // AUTH
 onAuthStateChanged(auth, (user) => {
-  if (user)
+  if (user) { currentUser = user; }
+  else { location.href = "login.html"; }
+});
+
+// CALCULATE
+window.calculateBMI = async function() {
+  const weight   = Number(document.getElementById("weight").value);
+  const heightCm = updateMode
+    ? Number(localStorage.getItem("height"))
+    : Number(document.getElementById("height").value);
+  const target   = updateMode
+    ? Number(localStorage.getItem("targetWeight"))
+    : Number(document.getElementById("target").value);
+
+  if (!weight || !heightCm || !target) {
+    showToast("Please fill all fields ⚠️");
+    return;
+  }
+
+  if (!updateMode) {
+    localStorage.setItem("height",       heightCm);
+    localStorage.setItem("targetWeight", target);
+    localStorage.setItem("startWeight",  weight);
+  }
+
+  const h        = heightCm / 100;
+  const bmi      = (weight / (h * h)).toFixed(1);
+  const calories = Math.round(weight * 30);
+
+  let goal, suggestion, tip, tagColor;
+
+  if (bmi < 18.5) {
+    goal       = "bulk";
+    suggestion = "Underweight";
+    tip        = "🍗 Focus on calorie surplus\n🏋️ Heavy compound lifts\n🥚 High protein diet";
+    tagColor   = "#ff9900";
+  } else if (bmi < 25) {
+    goal       = "maintain";
+    suggestion = "Healthy ✅";
+    tip        = "⚖️ Balanced diet\n🏃 Mixed cardio & weights\n💧 Stay hydrated";
+    tagColor   = "#00ff88";
+  } else {
+    goal       = "cut";
+    suggestion = "Overweight";
+    tip        = "🥗 Calorie deficit diet\n🔥 HIIT cardio\n🚫 Limit processed food";
+    tagColor   = "#ff4444";
+  }
+
+  const idealMin = (18.5 * h * h).toFixed(1);
+  const idealMax = (24.9 * h * h).toFixed(1);
+
+  // SAVE
+  localStorage.setItem("weight",   weight);
+  localStorage.setItem("bmi",      bmi);
+  localStorage.setItem("goal",     goal);
+  localStorage.setItem("calories", calories);
+
+  // FIREBASE
+  if (currentUser) {
+    const today = new Date().toISOString().split("T")[0];
+    await setDoc(doc(db, "users", currentUser.uid, "daily", today), {
+      bmi: Number(bmi), weight, calories, goal, date: today
+    });
+  }
+
+  // SHOW RESULT
+  if (updateMode) {
+    document.getElementById("inputSection").innerHTML = `
+      <div class="checkin-success">
+        <div class="checkin-success-icon">✅</div>
+        <div class="checkin-success-text">Check-In Saved!</div>
+        <div class="checkin-success-sub">BMI: ${bmi} · Weight: ${weight}kg</div>
+      </div>
+    `;
+    document.getElementById("mainBtn").style.display = "none";
+    setTimeout(() => location.href = "dashboard.html", 1800);
+  }
+
+  document.getElementById("result").innerText      = bmi;
+  document.getElementById("suggestion").innerText  = suggestion;
+  document.getElementById("suggestion").style.background = tagColor + "18";
+  document.getElementById("suggestion").style.color      = tagColor;
+  document.getElementById("suggestion").style.borderColor = tagColor + "40";
+  document.getElementById("idealWeight").innerText = idealMin + " – " + idealMax + " kg";
+  document.getElementById("caloriesText").innerText = calories + " kcal";
+  document.getElementById("goalText").innerText    = goal.toUpperCase();
+  document.getElementById("diet").innerText        = tip;
+  document.getElementById("resultBox").style.display = "block";
+};
+
+// NEXT BTN
+document.getElementById("nextBtn").onclick = () => location.href = "dashboard.html";
+
+// LOGOUT
+window.logout = function() { localStorage.clear(); location.href = "login.html"; };
+
+// TOAST
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "toast";
+    document.body.appendChild(t);
+  }
+  t.innerText = msg;
+  t.className = "toast show";
+  setTimeout(() => t.className = "toast", 2500);
+}
+</script>
+</body>
+</html>
