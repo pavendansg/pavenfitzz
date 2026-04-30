@@ -9,9 +9,10 @@
 <div class="container">
 <div class="card">
 
-  <div style="text-align:center;margin-bottom:20px;">
-    <h1>🔥 Calorie Calculator</h1>
-    <p style="opacity:.7;font-size:14px;">Find your perfect daily calorie target</p>
+  <div style="text-align:center;margin-bottom:24px;">
+    <div class="page-icon-wrap">🔥</div>
+    <h1 style="font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;">Calorie Calculator</h1>
+    <p style="font-size:13px;color:#555;">Find your perfect daily calorie target</p>
   </div>
 
   <div class="info-pill" id="info"></div>
@@ -35,35 +36,144 @@
     <option value="cut">Cut 🔥 — Lose Fat</option>
   </select>
 
-  <button class="primary-btn" onclick="calculateCalories()" style="margin-top:20px;">
+  <button class="primary-btn" onclick="runCalc()" style="margin-top:20px;">
     Calculate My Calories ⚡
   </button>
 
-  <div class="result-box" id="resultBox" style="display:none;">
-    <p style="opacity:.6;font-size:13px;margin-bottom:4px;">Your Daily Target</p>
-    <h2 id="result"></h2>
-    <p id="extra" style="margin-top:8px;"></p>
+  <!-- RESULT -->
+  <div id="resultBox" style="display:none;margin-top:16px;">
+    <div class="cal-result-card">
+      <div class="cal-result-label">Your Daily Target</div>
+      <div class="cal-result-val" id="result">—</div>
+      <div id="extra" style="margin-top:8px;"></div>
+    </div>
+
+    <div class="cal-breakdown" id="breakdown"></div>
+
+    <button class="primary-btn" onclick="goToMacros()" style="margin-top:4px;">
+      Next → View My Macros 🍗
+    </button>
   </div>
 
-  <button id="nextBtn" class="primary-btn" onclick="goToMacros()" style="display:none;margin-top:10px;">
-    Next → View My Macros 🍗
-  </button>
-
-  <button class="secondary-btn" onclick="location.href='dashboard.html'" style="margin-top:8px;">
+  <button class="secondary-btn" onclick="location.href='dashboard.html'" style="margin-top:10px;">
     ← Back to Dashboard
   </button>
 
 </div>
 </div>
+
+<style>
+.page-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.08);
+  border: 2px solid rgba(255,215,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 14px;
+}
+
+.cal-result-card {
+  background: #0a0f0a;
+  border: 2px solid rgba(0,255,136,0.2);
+  border-radius: 18px;
+  padding: 22px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.cal-result-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.cal-result-val {
+  font-size: 44px;
+  font-weight: 900;
+  color: #00ff88;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.cal-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cal-breakdown-item {
+  background: #0d0d0d;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.cal-breakdown-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.cal-breakdown-val {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+}
+</style>
+
 <script src="script.js"></script>
 <script>
-// show result box when result is filled
-const origCalc = calculateCalories;
-calculateCalories = function() {
-  origCalc();
+function runCalc() {
+  calculateCalories();
   const rb = document.getElementById("resultBox");
-  if (localStorage.getItem("calories")) rb.style.display = "block";
-};
+  const calories = localStorage.getItem("calories");
+  const goal     = document.getElementById("goal").value;
+  if (calories) {
+    rb.style.display = "block";
+
+    // result val already set by script.js
+    // build badge
+    const badges = {
+      bulk:     { label: "+300 kcal surplus 💪", color: "#00ff88" },
+      maintain: { label: "Maintenance ⚖️",       color: "#ffd700" },
+      cut:      { label: "-300 kcal deficit 🔥", color: "#ff6b6b" }
+    };
+    const b = badges[goal] || badges.maintain;
+    document.getElementById("extra").innerHTML =
+      `<span style="display:inline-block;background:${b.color}18;color:${b.color};
+       border:1px solid ${b.color}40;font-size:12px;font-weight:700;
+       padding:4px 14px;border-radius:99px;">${b.label}</span>`;
+
+    // breakdown
+    const cal = Number(calories);
+    document.getElementById("breakdown").innerHTML = `
+      <div class="cal-breakdown-item">
+        <div class="cal-breakdown-label">Protein</div>
+        <div class="cal-breakdown-val" style="color:#ff6b6b;">${Math.round(cal*0.3/4)}g</div>
+      </div>
+      <div class="cal-breakdown-item">
+        <div class="cal-breakdown-label">Carbs</div>
+        <div class="cal-breakdown-val" style="color:#ffd700;">${Math.round(cal*0.45/4)}g</div>
+      </div>
+      <div class="cal-breakdown-item">
+        <div class="cal-breakdown-label">Fats</div>
+        <div class="cal-breakdown-val" style="color:#00ff88;">${Math.round(cal*0.25/9)}g</div>
+      </div>
+    `;
+  }
+}
+
+function goToMacros() { location.href = "macros.html"; }
 </script>
 </body>
 </html>
