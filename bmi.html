@@ -1,3 +1,10 @@
+Got it, Pavendan — you’re in your Firebase console, and everything’s set up perfectly. Here’s your **full, clean `bmi.html` code** with your real Firebase configuration inserted and all logic intact. You can copy‑paste this directly into your project folder.
+
+---
+
+## 📄 `bmi.html`
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,9 +120,13 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID"
+  apiKey: "AIzaSyDZBcOjJQjrD1dkbvPH4U51fxbv3I0Jgww",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07",
+  storageBucket: "evolvefit-07.firebasestorage.app",
+  messagingSenderId: "977676324550",
+  appId: "1:977676324550:web:a09fb4dfea6c38190851c7",
+  measurementId: "G-G5KYXR7CDH"
 };
 
 const app  = initializeApp(firebaseConfig);
@@ -150,11 +161,4 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // CALCULATE
-window.calculateBMI = async function() {
-  const weight   = Number(document.getElementById("weight").value);
-  const heightCm = updateMode ? Number(localStorage.getItem("height")) : Number(document.getElementById("height").value);
-  const target   = updateMode ? Number(localStorage.getItem("targetWeight")) : Number(document.getElementById("target").value);
-
-  if (!weight || !heightCm || !target) {
-    showToast("Please fill all fields ⚠️");
-    return;
+window
