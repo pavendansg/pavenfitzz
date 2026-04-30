@@ -1,82 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>EvolveFit — Become Elite</title>
-<link rel="stylesheet" href="style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EvolveFit — Become Elite</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EvolveFit helps you track BMI, calories, macros, and progress with elite analytics.">
 </head>
 <body>
 
 <!-- NAV -->
 <nav class="navbar">
   <div class="nav-logo">⚡ EvolveFit</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#cta">Join</a></li>
+  </ul>
   <button class="join-btn nav-btn" onclick="goApp()">Get Started 🚀</button>
 </nav>
 
 <!-- HERO -->
-<div class="hero">
+<header class="hero">
   <div class="bg-overlay"></div>
   <div class="hero-content">
-    <div class="hero-badge">🏆 #1 Fitness Tracker</div>
     <h1 class="hero-title">EVOLVE.<br>BECOME<br>ELITE.</h1>
     <p class="hero-sub">
       Build Muscle. Burn Fat. Track Progress.<br>
       Your transformation starts today.
     </p>
-    <button class="join-btn hero-btn" onclick="goApp()">
-      Start For Free 🚀
-    </button>
-    <p class="hero-note">No credit card · Free forever</p>
+    <button class="join-btn hero-btn" onclick="goApp()">Start Free Today 🚀</button>
+    <small class="hero-note">No credit card · Free forever</small>
   </div>
-</div>
+</header>
 
 <!-- STATS STRIP -->
-<div class="stats-strip">
+<section class="stats-strip">
   <div class="stat-item"><span class="stat-num">10K+</span><span class="stat-label">Members</span></div>
   <div class="stat-item"><span class="stat-num">500K+</span><span class="stat-label">Check-ins</span></div>
   <div class="stat-item"><span class="stat-num">98%</span><span class="stat-label">Success Rate</span></div>
   <div class="stat-item"><span class="stat-num">4.9⭐</span><span class="stat-label">Rating</span></div>
-</div>
+</section>
 
 <!-- FEATURES -->
-<div class="section">
+<section class="section" id="features">
   <h2 class="section-title">Everything You Need to <span class="gold">Evolve</span></h2>
   <div class="features-grid">
     <div class="feature-card">
-      <div class="feature-icon">📊</div>
+      <div class="feature-icon" aria-hidden="true">📊</div>
       <h3>BMI Tracking</h3>
-      <p>Log your weight daily and watch your BMI trend in real time with beautiful charts.</p>
+      <p>Log your weight daily and watch your BMI trend in real time with charts.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🔥</div>
+      <div class="feature-icon" aria-hidden="true">🔥</div>
       <h3>Calorie Counter</h3>
       <p>Know exactly how many calories you need based on your goal — bulk, cut or maintain.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">💪</div>
+      <div class="feature-icon" aria-hidden="true">💪</div>
       <h3>Macro Planner</h3>
       <p>Get your perfect protein, carb and fat targets to fuel your performance.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🏆</div>
+      <div class="feature-icon" aria-hidden="true">🏆</div>
       <h3>Rank System</h3>
       <p>Earn ranks from Beginner to Elite as you stay consistent and hit your goals.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">📈</div>
+      <div class="feature-icon" aria-hidden="true">📈</div>
       <h3>Progress Charts</h3>
       <p>Visualize your weight and BMI journey with elite analytics over time.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🎯</div>
+      <div class="feature-icon" aria-hidden="true">🎯</div>
       <h3>Daily Missions</h3>
       <p>Complete daily challenges, spin for rewards and unlock achievements every day.</p>
     </div>
   </div>
-</div>
+</section>
 
 <!-- HOW IT WORKS -->
-<div class="section section-dark">
+<section class="section section-dark" id="how">
   <h2 class="section-title">How It <span class="gold">Works</span></h2>
   <div class="steps-wrap">
     <div class="step">
@@ -97,18 +100,16 @@
       <p>Log your weight every day and watch your transformation happen.</p>
     </div>
   </div>
-</div>
+</section>
 
 <!-- CTA -->
-<div class="section cta-section">
+<section class="section cta-section" id="cta">
   <h2 class="section-title">Ready to <span class="gold">Evolve?</span></h2>
   <p style="opacity:.7;margin-bottom:28px;font-size:16px;">
     Join thousands already on their elite fitness journey.
   </p>
-  <button class="join-btn cta-btn" onclick="goApp()">
-    Start Free Today 🚀
-  </button>
-</div>
+  <button class="join-btn cta-btn" onclick="goApp()">Start Free Today 🚀</button>
+</section>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -129,9 +130,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 onAuthStateChanged(auth, (user) => {
+  const btn = document.querySelector(".join-btn.nav-btn");
   if (user) {
     localStorage.setItem("username", user.displayName || "User");
     localStorage.setItem("photo", user.photoURL || "");
+    btn.innerText = "Dashboard";
+  } else {
+    btn.innerText = "Get Started 🚀";
   }
 });
 
