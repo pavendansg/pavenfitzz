@@ -1,6 +1,3 @@
-Here’s your **full `style.css` code** with the hamburger menu integrated. I’ve merged everything you had with the new nav link and mobile menu styles so you can replace your existing file directly:
-
-```css
 /* ============================================
    🔥 EVOLVEFIT — style.css — PREMIUM
    ============================================ */
@@ -50,42 +47,13 @@ body {
   font-size: 14px !important;
 }
 
-/* NAV LINKS */
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 24px;
-}
-
-.nav-links li a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  opacity: 0.7;
-  transition: opacity 0.2s, color 0.2s;
-}
-
-.nav-links li a:hover {
-  opacity: 1;
-  color: #ffd700;
-}
-
-/* Hamburger icon */
-.hamburger {
-  display: none;
-  font-size: 22px;
-  cursor: pointer;
-  color: #ffd700;
-}
-
 /* ============================================
    HERO — FIXED
    ============================================ */
 .hero {
   min-height: 100vh;
   width: 100%;
-  background: url("mybg.png") right center / cover no-repeat;
+  background: url("mybg.png") right top / cover no-repeat;
   background-color: #000;
   position: relative;
   display: flex;
@@ -111,6 +79,19 @@ body {
   z-index: 2;
   max-width: 520px;
   padding-top: 80px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,215,0,0.12);
+  border: 1px solid rgba(255,215,0,0.3);
+  color: #ffd700;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 99px;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
 }
 
 .hero-title {
@@ -291,24 +272,439 @@ body {
   text-align: center;
   padding: 28px;
   font-size: 13px;
-  opacity: 0.5;
+  opacity: 0.35;
   border-top: 1px solid rgba(255,255,255,0.05);
 }
+
+/* ============================================
+   CONTAINER + CARD (inner pages)
+   ============================================ */
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 430px;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(15,15,15,0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.07);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.6),
+    0 0 40px rgba(255,215,0,0.04);
+  animation: fadeIn 0.5s ease;
+}
+
+/* ============================================
+   LOGO WRAP (login page)
+   ============================================ */
+.logo-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.1);
+  border: 2px solid rgba(255,215,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.logo-icon { font-size: 32px; }
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+h1 { font-size: 28px; margin-bottom: 8px; }
+h2 { font-size: 18px; margin-bottom: 10px; }
+h3 { font-size: 15px; font-weight: 700; color: #ffd700; margin-bottom: 8px; line-height: 1.6; }
+p  { line-height: 1.6; color: #ccc; }
+
+/* ============================================
+   INPUTS
+   ============================================ */
+.input-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,0.45);
+  margin: 16px 0 6px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  background: #1a1a1a;
+  color: #fff;
+  outline: none;
+  font-size: 15px;
+  transition: 0.2s;
+  margin-bottom: 4px;
+}
+
+input:focus, select:focus {
+  border-color: rgba(255,215,0,0.4);
+  background: #1e1e1e;
+  box-shadow: 0 0 0 3px rgba(255,215,0,0.08);
+}
+
+select option { background: #1a1a1a; }
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+button {
+  width: 100%;
+  padding: 14px;
+  margin: 6px 0;
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 15px;
+  letter-spacing: 0.3px;
+}
+
+.primary-btn, .join-btn {
+  background: linear-gradient(90deg, #ffd700, #ffb300);
+  color: #000;
+}
+
+.secondary-btn {
+  background: #181818;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255,215,0,0.2);
+}
+
+button:active { transform: scale(0.98); }
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Google login button */
+.google-btn {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.google-btn:hover {
+  border-color: rgba(255,215,0,0.3) !important;
+}
+
+/* ============================================
+   DASHBOARD SPECIFIC
+   ============================================ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.avatar-wrap {
+  width: 54px; height: 54px;
+  min-width: 54px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2.5px solid #00ff99;
+  box-shadow: 0 0 16px rgba(0,255,153,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: none;
+}
+
+.avatar-wrap img.loaded { display: block; }
+#avatarFallback { font-size: 24px; }
+
+.title { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+.streak { opacity: 0.7; font-size: 14px; margin-bottom: 12px; }
+
+/* RANK BOX */
+.rank-box {
+  padding: 20px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+  border: 2px solid #ffd700;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow:
+    0 0 24px rgba(255,215,0,0.15),
+    inset 0 0 16px rgba(255,215,0,0.04);
+  animation: rankPulse 2.5s ease-in-out infinite;
+}
+
+#rankTitle {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+#rankSub {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffd700;
+}
+
+/* BOXES */
+.box {
+  background: linear-gradient(180deg, #131313, #0d0d0d);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.box p {
+  font-size: 14px;
+  color: #bbb;
+  margin: 3px 0;
+  line-height: 1.9;
+}
+
+/* PROGRESS */
+.progress {
+  width: 100%;
+  height: 14px;
+  border-radius: 99px;
+  background: #202020;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+#progressBar, #xpBar, #rewardBar {
+  width: 0%;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #00ff88, #00d9ff, #ffd700);
+  background-size: 200% 100%;
+  animation: shine 3s linear infinite;
+  transition: width 1s ease;
+}
+
+/* BTNS ROW */
+.btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btns button { flex: 1; margin: 0; }
+
+/* ============================================
+   CALORIE PAGE
+   ============================================ */
+.info-pill {
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.result-box {
+  background: #111;
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.pill {
+  display: inline-block;
+  background: rgba(255,215,0,0.12);
+  color: #ffd700;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 4px;
+}
+
+/* ============================================
+   MACROS PAGE
+   ============================================ */
+.macro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.macro-card {
+  background: #111;
+  border-radius: 16px;
+  padding: 18px 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.protein-card { border-color: rgba(255,107,107,0.25); }
+.carbs-card   { border-color: rgba(255,215,0,0.25); }
+.fats-card    { border-color: rgba(0,255,153,0.25); }
+
+.macro-icon { font-size: 24px; margin-bottom: 8px; }
+
+.macro-val {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.macro-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.5;
+}
+
+/* ============================================
+   GRAPH PAGE
+   ============================================ */
+#weightChart, #bmiChart {
+  max-height: 200px;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-card-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.45;
+  margin-bottom: 6px;
+}
+
+.stat-card-val {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1a1a1a;
+  border: 1px solid rgba(255,215,0,0.2);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shine {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rankPulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.015); }
+}
+
+/* ============================================
+   CLEANUP
+   ============================================ */
+.hero-left   { display: none !important; }
+.mobile-hero { display: none !important; }
 
 /* ============================================
    MOBILE
    ============================================ */
 @media (max-width: 600px) {
   .hero {
-    background: url("mybg.png") 70% top / cover no-repeat;
+    background: url("mybg.png") center top / cover no-repeat;
     background-color: #000;
+    align-items: flex-end;
+    padding-bottom: 48px;
+    padding-top: 0;
   }
   .bg-overlay {
     background: linear-gradient(to bottom,
-      rgba(0,0,0,0.7) 0%,
-      rgba(0,0,0,0.85) 50%,
-      rgba(0,0,0,0.95) 100%
+      rgba(0,0,0,0.2) 0%,
+      rgba(0,0,0,0.5) 40%,
+      rgba(0,0,0,0.92) 70%,
+      rgba(0,0,0,0.98) 100%
     );
+  }
+  .hero-content {
+    padding-top: 0;
+    max-width: 100%;
   }
   .hero-title  { font-size: 38px; }
   .hero-btn    { padding: 14px 28px !important; }
@@ -318,12 +714,28 @@ body {
   .features-grid { grid-template-columns: 1fr; }
   .steps-wrap  { flex-direction: column; align-items: center; }
   .step-arrow  { transform: rotate(90deg); margin: 0; }
-
-  /* Hamburger menu styles */
-  .hamburger { display: block; }
-  .nav-links {
-    display: none;
-    flex-direction: column;
-    background: #111;
-    position: absolute;
-    top:
+  .card        { padding: 24px 20px; border-radius: 20px; }
+  h1           { font-size: 24px; }
+  .macro-grid  { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .macro-val   { font-size: 18px; }
+  .btns        { flex-direction: column; }
+  #rankTitle   { font-size: 18px; }
+  .stat-cards  { grid-template-columns: repeat(2,1fr); }
+}
+  }
+  .hero-title  { font-size: 38px; }
+  .hero-btn    { padding: 14px 28px !important; }
+  .navbar      { padding: 14px 20px; }
+  .stats-strip { flex-wrap: wrap; }
+  .stat-item   { min-width: 50%; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .features-grid { grid-template-columns: 1fr; }
+  .steps-wrap  { flex-direction: column; align-items: center; }
+  .step-arrow  { transform: rotate(90deg); margin: 0; }
+  .card        { padding: 24px 20px; border-radius: 20px; }
+  h1           { font-size: 24px; }
+  .macro-grid  { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .macro-val   { font-size: 18px; }
+  .btns        { flex-direction: column; }
+  #rankTitle   { font-size: 18px; }
+  .stat-cards  { grid-template-columns: repeat(2,1fr); }
+}
