@@ -120,7 +120,11 @@
     <div class="box-header">
       <span class="box-icon">📋</span>
       <h3>Daily Missions</h3>
+      <span id="missionCount" class="box-badge"></span>
     </div>
+    <p style="font-size:11px;color:#444;margin-bottom:10px;">
+      Tap to mark complete · Resets daily
+    </p>
     <div id="missions" class="mission-list"></div>
   </div>
 
@@ -137,7 +141,6 @@
 </div>
 
 <style>
-/* MIXED THEME EXTRAS */
 .streak-pill {
   background: rgba(0,255,136,0.1);
   border: 1px solid rgba(0,255,136,0.25);
@@ -182,7 +185,6 @@
   border-color: rgba(0,255,136,0.2);
 }
 
-/* STATS GRID */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2,1fr);
@@ -212,7 +214,6 @@
   color: #fff;
 }
 
-/* BADGE WRAP */
 .badge-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -229,7 +230,6 @@
   border-radius: 99px;
 }
 
-/* MISSION LIST */
 .mission-list {
   display: flex;
   flex-direction: column;
@@ -241,28 +241,36 @@
   align-items: center;
   gap: 10px;
   font-size: 13px;
-  color: #bbb;
-  padding: 8px 10px;
+  color: #555;
+  padding: 10px 12px;
   background: #0d0d0d;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: 0.2s;
+  user-select: none;
 }
+
+.mission-item:active { transform: scale(0.98); }
 
 .mission-item.done {
   color: #00ff88;
-  border-color: rgba(0,255,136,0.12);
+  border-color: rgba(0,255,136,0.15);
+  background: rgba(0,255,136,0.04);
 }
 
 .mission-dot {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 2px solid #333;
+  border: 2px solid #2a2a2a;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  transition: 0.2s;
 }
 
 .mission-dot.done {
@@ -271,23 +279,14 @@
   color: #000;
 }
 
-/* PROGRESS BARS — override for green */
-#xpBar {
-  background: linear-gradient(90deg, #00ff88, #00d9ff) !important;
-}
-
-#rewardBar {
-  background: linear-gradient(90deg, #ffd700, #ffb300) !important;
-}
-
-#progressBar {
-  background: linear-gradient(90deg, #00ff88, #ffd700) !important;
-}
+#xpBar { background: linear-gradient(90deg,#00ff88,#00d9ff) !important; }
+#rewardBar { background: linear-gradient(90deg,#ffd700,#ffb300) !important; }
+#progressBar { background: linear-gradient(90deg,#00ff88,#ffd700) !important; }
 
 .logout-btn {
   width: 100%;
-  border-color: rgba(255,255,255,0.05) !important;
-  color: #444 !important;
+  border-color: rgba(255,255,255,0.04) !important;
+  color: #333 !important;
   font-size: 13px !important;
 }
 </style>
@@ -314,8 +313,8 @@ const photo    = localStorage.getItem("photo");
 
 if (photo) {
   pic.src = photo;
-  pic.onload  = () => { pic.style.display = "block"; fallback.style.display = "none"; };
-  pic.onerror = () => { pic.style.display = "none";  fallback.style.display = "flex"; };
+  pic.onload  = () => { pic.style.display="block"; fallback.style.display="none"; };
+  pic.onerror = () => { pic.style.display="none";  fallback.style.display="flex"; };
 } else {
   pic.style.display = "none";
   fallback.style.display = "flex";
@@ -323,21 +322,68 @@ if (photo) {
 
 document.getElementById("user").innerText = localStorage.getItem("username") || "User";
 
+// MISSIONS SETUP
+const today = new Date().toISOString().split("T")[0];
+if (localStorage.getItem("missionDay") !== today) {
+  ["workout","sleep","water","checkin"].forEach(id =>
+    localStorage.removeItem("mission_" + id)
+  );
+  localStorage.setItem("missionDay", today);
+}
+localStorage.setItem("mission_checkin", "true");
+
+const missionDefs = [
+  { id: "workout", text: "Workout today" },
+  { id: "sleep",   text: "Sleep 8 hours" },
+  { id: "water",   text: "Drink 8 glasses of water" },
+  { id: "checkin", text: "Log daily check-in" },
+];
+
+function renderMissions() {
+  const doneCount = missionDefs.filter(
+    m => localStorage.getItem("mission_" + m.id) === "true"
+  ).length;
+
+  document.getElementById("missionCount").innerText =
+    doneCount + " / " + missionDefs.length + " done";
+
+  document.getElementById("missions").innerHTML =
+    missionDefs.map(m => {
+      const done = localStorage.getItem("mission_" + m.id) === "true";
+      return `
+        <div class="mission-item ${done ? 'done' : ''}"
+             onclick="toggleMission('${m.id}')">
+          <div class="mission-dot ${done ? 'done' : ''}">${done ? '✓' : ''}</div>
+          <span>${m.text}</span>
+        </div>
+      `;
+    }).join("");
+}
+
+window.toggleMission = function(id) {
+  if (id === "checkin") return;
+  const current = localStorage.getItem("mission_" + id) === "true";
+  localStorage.setItem("mission_" + id, String(!current));
+  renderMissions();
+};
+
+renderMissions();
+
+// FIREBASE DATA
 onAuthStateChanged(auth, async (user) => {
   if (!user) { location.href = "login.html"; return; }
 
-  const snap = await getDocs(collection(db, "users", user.uid, "daily"));
+  const snap = await getDocs(collection(db,"users",user.uid,"daily"));
   if (snap.empty) { location.href = "bmi.html"; return; }
 
   let history = [];
   snap.forEach(d => history.push(d.data()));
-  history.sort((a, b) => new Date(a.date) - new Date(b.date));
+  history.sort((a,b) => new Date(a.date) - new Date(b.date));
 
   const first  = history[0];
-  const latest = history[history.length - 1];
+  const latest = history[history.length-1];
   const streak = history.length;
 
-  // STREAK PILL
   document.getElementById("streak").innerText = "🔥 " + streak + " day streak";
 
   // RANK
@@ -346,76 +392,66 @@ onAuthStateChanged(auth, async (user) => {
     streak >= 8  ? "💪 BEAST"   :
     streak >= 4  ? "⚔️ WARRIOR" : "🥉 BEGINNER";
   const daysLeft =
-    streak >= 15 ? "—" :
-    streak >= 8  ? (15 - streak) + " Day(s)" :
-    streak >= 4  ? (8  - streak) + " Day(s)" :
-                   (4  - streak) + " Day(s)";
+    streak >= 15 ? "MAX RANK 🏆" :
+    streak >= 8  ? (15-streak) + " Day(s) to Elite"   :
+    streak >= 4  ? (8 -streak) + " Day(s) to Beast"   :
+                   (4 -streak) + " Day(s) to Warrior";
   document.getElementById("rankTitle").innerText = rankTitle;
-  document.getElementById("rankSub").innerText   = "Next Rank In " + daysLeft;
+  document.getElementById("rankSub").innerText   = daysLeft;
 
-  // STATS GRID
-  document.getElementById("bmi").innerText      = latest.bmi     || "—";
-  document.getElementById("weight").innerText   = (latest.weight || "—") + " kg";
-  document.getElementById("calories").innerText = (latest.calories || "—") + " kcal";
-  document.getElementById("goal").innerText     = (latest.goal   || "—").toUpperCase();
+  // STATS
+  document.getElementById("bmi").innerText      = latest.bmi      || "—";
+  document.getElementById("weight").innerText   = (latest.weight  || "—") + " kg";
+  document.getElementById("calories").innerText = (latest.calories|| "—") + " kcal";
+  document.getElementById("goal").innerText     = (latest.goal    || "—").toUpperCase();
 
-  // XP & LEVEL
-  const xp        = history.length * 10;
-  const level     = Math.floor(xp / 100) + 1;
+  // XP
+  const xp        = streak * 10;
+  const level     = Math.floor(xp/100) + 1;
   const currentXP = xp % 100;
-  document.getElementById("levelText").innerText    = "Lvl " + level;
-  document.getElementById("xpText").innerText       = currentXP + " / 100 XP";
-  document.getElementById("xpPct").innerText        = currentXP + "%";
-  document.getElementById("xpBar").style.width      = currentXP + "%";
+  document.getElementById("levelText").innerText = "Lvl " + level;
+  document.getElementById("xpText").innerText    = currentXP + " / 100 XP";
+  document.getElementById("xpPct").innerText     = currentXP + "%";
+  document.getElementById("xpBar").style.width   = currentXP + "%";
 
   // REWARD
-  document.getElementById("rewardText").innerText   = "+10 XP";
-  document.getElementById("rewardBar").style.width  = "20%";
+  document.getElementById("rewardText").innerText  = "+10 XP";
+  document.getElementById("rewardBar").style.width = "20%";
 
   // RECORDS
   document.getElementById("records").innerHTML =
-    "<span style='color:#aaa;font-size:14px;'>Best Streak: <b style='color:#fff'>" + streak + " days</b></span><br>" +
-    "<span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>" + history.length + "</b></span>";
+    `<span style='color:#aaa;font-size:14px;'>Best Streak: <b style='color:#fff'>${streak} days</b></span><br>` +
+    `<span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>${history.length}</b></span>`;
 
   // TARGET
-  const target = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
-  document.getElementById("targetText").innerText  = "🎯 Target: " + target + " kg";
-  document.getElementById("goalStatus").innerText  = "In Progress";
+  const target = Number(localStorage.getItem("targetWeight")) || (first.weight+5);
+  const progress = Math.min(100, Math.round(
+    Math.abs(latest.weight - first.weight) /
+    Math.abs(target - first.weight) * 100
+  ));
+  document.getElementById("targetText").innerText   = "🎯 Target: " + target + " kg";
+  document.getElementById("goalStatus").innerText   = progress + "% done";
   document.getElementById("progressText").innerText = "Goal Progress";
-  document.getElementById("progressBar").style.width = "25%";
+  document.getElementById("progressBar").style.width = progress + "%";
 
   // BADGES
   const badgeData = [
-    { label: "🌟 First Check-In", always: true },
-    { label: "🔥 7-Day Streak",   show: streak >= 7  },
-    { label: "⚔️ Warrior",       show: streak >= 4  },
-    { label: "💪 Beast",          show: streak >= 8  },
-    { label: "👑 Elite",          show: streak >= 15 },
+    { label:"🌟 First Check-In", show: true },
+    { label:"🔥 7-Day Streak",   show: streak >= 7  },
+    { label:"⚔️ Warrior",       show: streak >= 4  },
+    { label:"💪 Beast",          show: streak >= 8  },
+    { label:"👑 Elite",          show: streak >= 15 },
   ];
   document.getElementById("badges").innerHTML =
-    badgeData.filter(b => b.always || b.show)
+    badgeData.filter(b => b.show)
              .map(b => `<div class="badge-item">${b.label}</div>`)
              .join("");
-
-  // MISSIONS
-  const missionData = [
-    { text: "Workout today",           done: true  },
-    { text: "Sleep 8 hours",           done: false },
-    { text: "Drink 8 glasses of water",done: false },
-    { text: "Log daily check-in",      done: true  },
-  ];
-  document.getElementById("missions").innerHTML =
-    missionData.map(m => `
-      <div class="mission-item ${m.done ? 'done' : ''}">
-        <div class="mission-dot ${m.done ? 'done' : ''}">${m.done ? '✓' : ''}</div>
-        <span>${m.text}</span>
-      </div>
-    `).join("");
 });
 
 window.spinWheel = function() {
-  document.getElementById("spinResult").innerText = "🎉 Reward Won! Come back tomorrow.";
-  document.getElementById("spinResult").style.color = "#00ff88";
+  const el = document.getElementById("spinResult");
+  el.innerText = "🎉 Reward Won! Come back tomorrow.";
+  el.style.color = "#00ff88";
 };
 window.goToBMI   = () => location.href = "bmi.html";
 window.openGraph = () => location.href = "graph.html";
