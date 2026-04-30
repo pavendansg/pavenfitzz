@@ -48,12 +48,13 @@ body {
 }
 
 /* ============================================
-   HERO — FIXED OVERLAY
+   HERO — FIXED
    ============================================ */
 .hero {
   min-height: 100vh;
   width: 100%;
-  background: url("mybg.png") center right / cover no-repeat;
+  background: url("mybg.png") right top / cover no-repeat;
+  background-color: #000;
   position: relative;
   display: flex;
   align-items: center;
@@ -66,10 +67,10 @@ body {
   inset: 0;
   background:
     linear-gradient(to right,
-      rgba(0,0,0,0.97) 0%,
-      rgba(0,0,0,0.92) 38%,
-      rgba(0,0,0,0.55) 60%,
-      rgba(0,0,0,0.15) 100%
+      rgba(0,0,0,0.88) 0%,
+      rgba(0,0,0,0.75) 35%,
+      rgba(0,0,0,0.30) 60%,
+      rgba(0,0,0,0.05) 100%
     );
 }
 
@@ -603,7 +604,6 @@ button:disabled {
   max-height: 200px;
 }
 
-/* stat cards (graph page) */
 .stat-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -678,16 +678,26 @@ button:disabled {
 }
 
 /* ============================================
-   CLEANUP — nuke old leftover styles
+   CLEANUP
    ============================================ */
-.hero-left    { display: none !important; }
-.mobile-hero  { display: none !important; }
+.hero-left   { display: none !important; }
+.mobile-hero { display: none !important; }
 
 /* ============================================
    MOBILE
    ============================================ */
 @media (max-width: 600px) {
-  .hero { background: url("mymobilebg.png") center / cover no-repeat; }
+  .hero {
+    background: url("mybg.png") 70% top / cover no-repeat;
+    background-color: #000;
+  }
+  .bg-overlay {
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0.7) 0%,
+      rgba(0,0,0,0.85) 50%,
+      rgba(0,0,0,0.95) 100%
+    );
+  }
   .hero-title  { font-size: 38px; }
   .hero-btn    { padding: 14px 28px !important; }
   .navbar      { padding: 14px 20px; }
