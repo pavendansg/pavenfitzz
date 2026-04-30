@@ -11,11 +11,17 @@
 <!-- NAV -->
 <nav class="navbar">
   <div class="nav-logo">⚡ EvolveFit</div>
-  <ul class="nav-links">
+  
+  <!-- Hamburger icon (mobile only) -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  
+  <!-- Navigation links -->
+  <ul class="nav-links" id="navLinks">
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#cta">Join</a></li>
   </ul>
+  
   <button class="join-btn nav-btn" onclick="goApp()">Get Started 🚀</button>
 </nav>
 
@@ -45,36 +51,12 @@
 <section class="section" id="features">
   <h2 class="section-title">Everything You Need to <span class="gold">Evolve</span></h2>
   <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">📊</div>
-      <h3>BMI Tracking</h3>
-      <p>Log your weight daily and watch your BMI trend in real time with charts.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">🔥</div>
-      <h3>Calorie Counter</h3>
-      <p>Know exactly how many calories you need based on your goal — bulk, cut or maintain.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">💪</div>
-      <h3>Macro Planner</h3>
-      <p>Get your perfect protein, carb and fat targets to fuel your performance.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">🏆</div>
-      <h3>Rank System</h3>
-      <p>Earn ranks from Beginner to Elite as you stay consistent and hit your goals.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">📈</div>
-      <h3>Progress Charts</h3>
-      <p>Visualize your weight and BMI journey with elite analytics over time.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon" aria-hidden="true">🎯</div>
-      <h3>Daily Missions</h3>
-      <p>Complete daily challenges, spin for rewards and unlock achievements every day.</p>
-    </div>
+    <div class="feature-card"><div class="feature-icon">📊</div><h3>BMI Tracking</h3><p>Log your weight daily and watch your BMI trend in real time.</p></div>
+    <div class="feature-card"><div class="feature-icon">🔥</div><h3>Calorie Counter</h3><p>Know exactly how many calories you need based on your goal.</p></div>
+    <div class="feature-card"><div class="feature-icon">💪</div><h3>Macro Planner</h3><p>Get your perfect protein, carb and fat targets.</p></div>
+    <div class="feature-card"><div class="feature-icon">🏆</div><h3>Rank System</h3><p>Earn ranks from Beginner to Elite as you stay consistent.</p></div>
+    <div class="feature-card"><div class="feature-icon">📈</div><h3>Progress Charts</h3><p>Visualize your weight and BMI journey with analytics.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><h3>Daily Missions</h3><p>Complete daily challenges and unlock achievements.</p></div>
   </div>
 </section>
 
@@ -82,32 +64,18 @@
 <section class="section section-dark" id="how">
   <h2 class="section-title">How It <span class="gold">Works</span></h2>
   <div class="steps-wrap">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Sign Up Free</h3>
-      <p>Login with Google in one tap — no forms, no hassle.</p>
-    </div>
+    <div class="step"><div class="step-num">01</div><h3>Sign Up Free</h3><p>Login with Google in one tap.</p></div>
     <div class="step-arrow">→</div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Set Your Goal</h3>
-      <p>Enter your weight, height and target. We handle the rest.</p>
-    </div>
+    <div class="step"><div class="step-num">02</div><h3>Set Your Goal</h3><p>Enter your weight, height and target.</p></div>
     <div class="step-arrow">→</div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Check In Daily</h3>
-      <p>Log your weight every day and watch your transformation happen.</p>
-    </div>
+    <div class="step"><div class="step-num">03</div><h3>Check In Daily</h3><p>Log your weight every day and watch progress.</p></div>
   </div>
 </section>
 
 <!-- CTA -->
 <section class="section cta-section" id="cta">
   <h2 class="section-title">Ready to <span class="gold">Evolve?</span></h2>
-  <p style="opacity:.7;margin-bottom:28px;font-size:16px;">
-    Join thousands already on their elite fitness journey.
-  </p>
+  <p style="opacity:.7;margin-bottom:28px;font-size:16px;">Join thousands already on their elite fitness journey.</p>
   <button class="join-btn cta-btn" onclick="goApp()">Start Free Today 🚀</button>
 </section>
 
@@ -148,6 +116,10 @@ window.goApp = function() {
     location.href = "login.html";
   }
 };
+
+function toggleMenu() {
+  document.getElementById("navLinks").classList.toggle("show");
+}
 </script>
 </body>
 </html>
