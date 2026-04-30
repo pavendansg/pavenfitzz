@@ -398,20 +398,51 @@ onAuthStateChanged(auth, async (user) => {
              .join("");
 
   // MISSIONS
-  const missionData = [
-    { text: "Workout today",           done: true  },
-    { text: "Sleep 8 hours",           done: false },
-    { text: "Drink 8 glasses of water",done: false },
-    { text: "Log daily check-in",      done: true  },
-  ];
+// MISSIONS — replace the missions section in onAuthStateChanged
+const missionDefs = [
+  { id: "workout",  text: "Workout today" },
+  { id: "sleep",    text: "Sleep 8 hours" },
+  { id: "water",    text: "Drink 8 glasses of water" },
+  { id: "checkin",  text: "Log daily check-in" },
+];
+
+// Auto-complete check-in since they're on dashboard
+const today = new Date().toISOString().split("T")[0];
+const savedDay = localStorage.getItem("missionDay");
+
+// Reset missions if it's a new day
+if (savedDay !== today) {
+  missionDefs.forEach(m => localStorage.removeItem("mission_" + m.id));
+  localStorage.setItem("missionDay", today);
+}
+
+// Auto mark check-in as done
+localStorage.setItem("mission_checkin", "true");
+
+function renderMissions() {
   document.getElementById("missions").innerHTML =
-    missionData.map(m => `
-      <div class="mission-item ${m.done ? 'done' : ''}">
-        <div class="mission-dot ${m.done ? 'done' : ''}">${m.done ? '✓' : ''}</div>
-        <span>${m.text}</span>
-      </div>
-    `).join("");
-});
+    missionDefs.map(m => {
+      const done = localStorage.getItem("mission_" + m.id) === "true";
+      return `
+        <div class="mission-item ${done ? 'done' : ''}"
+             onclick="toggleMission('${m.id}')"
+             style="cursor:pointer;">
+          <div class="mission-dot ${done ? 'done' : ''}">${done ? '✓' : ''}</div>
+          <span>${m.text}</span>
+        </div>
+      `;
+    }).join("");
+}
+
+window.toggleMission = function(id) {
+  // Can't untick check-in
+  if (id === "checkin") return;
+  const current = localStorage.getItem("mission_" + id) === "true";
+  localStorage.setItem("mission_" + id, (!current).toString());
+  renderMissions();
+};
+
+renderMissions();
 
 window.spinWheel = function() {
   document.getElementById("spinResult").innerText = "🎉 Reward Won! Come back tomorrow.";
