@@ -9,84 +9,288 @@
 <div class="container">
 <div class="card">
 
+  <!-- TOP BAR -->
   <div class="top-bar">
     <div class="avatar-wrap">
-      <img id="profilePic" alt="Profile" />
+      <img id="profilePic" alt="Profile"/>
       <span id="avatarFallback">👤</span>
     </div>
-    <div>
-      <p style="opacity:.7;font-size:14px;">Welcome back</p>
-      <h2 id="user"></h2>
+    <div style="flex:1;">
+      <p style="font-size:12px;color:#555;margin-bottom:2px;">Welcome back</p>
+      <h2 id="user" style="font-size:17px;font-weight:800;color:#fff;"></h2>
     </div>
+    <div class="streak-pill" id="streak"></div>
   </div>
 
   <h1 class="title">🔥 Dashboard</h1>
-  <p id="streak" class="streak"></p>
 
-  <div id="rank" class="rank-box">
-    <div id="rankTitle">BEGINNER</div>
+  <!-- RANK -->
+  <div class="rank-box">
+    <div id="rankTitle">🥉 BEGINNER</div>
     <div id="rankSub">Next Rank In 3 Days</div>
   </div>
 
+  <!-- XP LEVEL -->
   <div class="box">
-    <h3>🏆 Your Records</h3>
-    <p id="records"></p>
-  </div>
-
-  <div class="box">
-    <h3>🎁 Daily Reward</h3>
-    <p id="rewardText"></p>
-    <div class="progress"><div id="rewardBar"></div></div>
-  </div>
-
-  <div class="box">
-    <h3>🎰 Lucky Spin</h3>
-    <p id="spinResult">Spin once daily for bonus reward</p>
-    <button class="primary-btn" onclick="spinWheel()">⚙️ Spin Now</button>
-  </div>
-
-  <div class="box">
-    <h3>⚡ Level System</h3>
-    <p id="levelText"></p>
-    <p id="xpText"></p>
+    <div class="box-header">
+      <span class="box-icon">⚡</span>
+      <h3>Level System</h3>
+      <span id="levelText" class="box-badge"></span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#555;margin-bottom:6px;">
+      <span id="xpText"></span>
+      <span id="xpPct"></span>
+    </div>
     <div class="progress"><div id="xpBar"></div></div>
   </div>
 
-  <div class="box">
-    <h3>📊 Your Stats</h3>
-    <p id="bmi"></p>
-    <p id="weight"></p>
-    <p id="calories"></p>
-    <p id="goal"></p>
+  <!-- STATS GRID -->
+  <div class="stats-grid">
+    <div class="stat-tile">
+      <div class="stat-tile-label">BMI</div>
+      <div class="stat-tile-val" id="bmi">—</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile-label">Weight</div>
+      <div class="stat-tile-val" id="weight">—</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile-label">Calories</div>
+      <div class="stat-tile-val" id="calories">—</div>
+    </div>
+    <div class="stat-tile">
+      <div class="stat-tile-label">Goal</div>
+      <div class="stat-tile-val" id="goal">—</div>
+    </div>
   </div>
 
+  <!-- RECORDS -->
   <div class="box">
-    <h3 id="targetText"></h3>
-    <p id="goalStatus"></p>
-    <p id="progressText"></p>
+    <div class="box-header">
+      <span class="box-icon">🏆</span>
+      <h3>Your Records</h3>
+    </div>
+    <p id="records"></p>
+  </div>
+
+  <!-- GOAL PROGRESS -->
+  <div class="box">
+    <div class="box-header">
+      <span class="box-icon">🎯</span>
+      <h3 id="targetText">Target</h3>
+      <span id="goalStatus" class="box-badge green"></span>
+    </div>
+    <p id="progressText" style="font-size:12px;color:#555;margin-bottom:6px;"></p>
     <div class="progress"><div id="progressBar"></div></div>
   </div>
 
+  <!-- DAILY REWARD -->
   <div class="box">
-    <h3>🏅 Achievements</h3>
-    <p id="badges"></p>
+    <div class="box-header">
+      <span class="box-icon">🎁</span>
+      <h3>Daily Reward</h3>
+      <span id="rewardText" class="box-badge green"></span>
+    </div>
+    <div class="progress"><div id="rewardBar"></div></div>
   </div>
 
+  <!-- LUCKY SPIN -->
   <div class="box">
-    <h3>🎯 Daily Missions</h3>
-    <p id="missions"></p>
+    <div class="box-header">
+      <span class="box-icon">🎰</span>
+      <h3>Lucky Spin</h3>
+    </div>
+    <p id="spinResult" style="font-size:13px;color:#555;margin-bottom:10px;">
+      Spin once daily for bonus reward
+    </p>
+    <button class="primary-btn" onclick="spinWheel()">⚙️ Spin Now</button>
   </div>
 
-  <div class="btns">
-    <button class="primary-btn" onclick="goToBMI()">Daily Check-In</button>
-    <button class="secondary-btn" onclick="openGraph()">View Progress</button>
+  <!-- ACHIEVEMENTS -->
+  <div class="box">
+    <div class="box-header">
+      <span class="box-icon">🏅</span>
+      <h3>Achievements</h3>
+    </div>
+    <div id="badges" class="badge-wrap"></div>
   </div>
-  <div class="btns" style="margin-top:10px;">
-    <button class="secondary-btn" onclick="logout()">Logout</button>
+
+  <!-- DAILY MISSIONS -->
+  <div class="box">
+    <div class="box-header">
+      <span class="box-icon">📋</span>
+      <h3>Daily Missions</h3>
+    </div>
+    <div id="missions" class="mission-list"></div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="btns" style="margin-top:4px;">
+    <button class="primary-btn" onclick="goToBMI()">Daily Check-In ✅</button>
+    <button class="secondary-btn" onclick="openGraph()">View Progress 📈</button>
+  </div>
+  <div style="margin-top:10px;">
+    <button class="secondary-btn logout-btn" onclick="logout()">Logout</button>
   </div>
 
 </div>
 </div>
+
+<style>
+/* MIXED THEME EXTRAS */
+.streak-pill {
+  background: rgba(0,255,136,0.1);
+  border: 1px solid rgba(0,255,136,0.25);
+  color: #00ff88;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.box-icon { font-size: 16px; }
+
+.box-header h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #00ff88;
+}
+
+.box-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(255,215,0,0.1);
+  color: #ffd700;
+  border: 1px solid rgba(255,215,0,0.2);
+}
+
+.box-badge.green {
+  background: rgba(0,255,136,0.08);
+  color: #00ff88;
+  border-color: rgba(0,255,136,0.2);
+}
+
+/* STATS GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-tile {
+  background: #0d0d0d;
+  border: 1px solid rgba(0,255,136,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-tile-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.stat-tile-val {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* BADGE WRAP */
+.badge-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-item {
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.15);
+  color: #00ff88;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+
+/* MISSION LIST */
+.mission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mission-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #bbb;
+  padding: 8px 10px;
+  background: #0d0d0d;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.mission-item.done {
+  color: #00ff88;
+  border-color: rgba(0,255,136,0.12);
+}
+
+.mission-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.mission-dot.done {
+  background: #00ff88;
+  border-color: #00ff88;
+  color: #000;
+}
+
+/* PROGRESS BARS — override for green */
+#xpBar {
+  background: linear-gradient(90deg, #00ff88, #00d9ff) !important;
+}
+
+#rewardBar {
+  background: linear-gradient(90deg, #ffd700, #ffb300) !important;
+}
+
+#progressBar {
+  background: linear-gradient(90deg, #00ff88, #ffd700) !important;
+}
+
+.logout-btn {
+  width: 100%;
+  border-color: rgba(255,255,255,0.05) !important;
+  color: #444 !important;
+  font-size: 13px !important;
+}
+</style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
@@ -101,23 +305,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 
-// ✅ FIXED: Profile pic with fallback
-const pic = document.getElementById("profilePic");
+// PROFILE PIC
+const pic      = document.getElementById("profilePic");
 const fallback = document.getElementById("avatarFallback");
-const photo = localStorage.getItem("photo");
+const photo    = localStorage.getItem("photo");
 
 if (photo) {
   pic.src = photo;
-  pic.onload = () => {
-    pic.style.display = "block";
-    fallback.style.display = "none";
-  };
-  pic.onerror = () => {
-    pic.style.display = "none";
-    fallback.style.display = "flex";
-  };
+  pic.onload  = () => { pic.style.display = "block"; fallback.style.display = "none"; };
+  pic.onerror = () => { pic.style.display = "none";  fallback.style.display = "flex"; };
 } else {
   pic.style.display = "none";
   fallback.style.display = "flex";
@@ -132,74 +330,96 @@ onAuthStateChanged(auth, async (user) => {
   if (snap.empty) { location.href = "bmi.html"; return; }
 
   let history = [];
-  snap.forEach(doc => history.push(doc.data()));
+  snap.forEach(d => history.push(d.data()));
   history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  let first = history[0];
-  let latest = history[history.length - 1];
+  const first  = history[0];
+  const latest = history[history.length - 1];
+  const streak = history.length;
 
-  let streak = history.length;
-  document.getElementById("streak").innerText = "🔥 Streak: " + streak + " days";
+  // STREAK PILL
+  document.getElementById("streak").innerText = "🔥 " + streak + " day streak";
 
-  // Rank
+  // RANK
   const rankTitle =
-    streak >= 15 ? "👑 ELITE" :
-    streak >= 8  ? "💪 BEAST" :
+    streak >= 15 ? "👑 ELITE"    :
+    streak >= 8  ? "💪 BEAST"   :
     streak >= 4  ? "⚔️ WARRIOR" : "🥉 BEGINNER";
-  document.getElementById("rankTitle").innerText = rankTitle;
-  document.getElementById("rankSub").innerText = "Next Rank In " + (
+  const daysLeft =
     streak >= 15 ? "—" :
     streak >= 8  ? (15 - streak) + " Day(s)" :
-    streak >= 4  ? (8 - streak)  + " Day(s)" :
-                   (4 - streak)  + " Day(s)"
-  );
+    streak >= 4  ? (8  - streak) + " Day(s)" :
+                   (4  - streak) + " Day(s)";
+  document.getElementById("rankTitle").innerText = rankTitle;
+  document.getElementById("rankSub").innerText   = "Next Rank In " + daysLeft;
 
-  // Stats
-  document.getElementById("bmi").innerText = "BMI: " + (latest.bmi || 0);
-  document.getElementById("weight").innerText = "Weight: " + (latest.weight || 0) + " kg";
-  document.getElementById("calories").innerText = "Calories: " + (latest.calories || 0);
-  document.getElementById("goal").innerText = "Goal: " + (latest.goal || "bulk");
+  // STATS GRID
+  document.getElementById("bmi").innerText      = latest.bmi     || "—";
+  document.getElementById("weight").innerText   = (latest.weight || "—") + " kg";
+  document.getElementById("calories").innerText = (latest.calories || "—") + " kcal";
+  document.getElementById("goal").innerText     = (latest.goal   || "—").toUpperCase();
 
-  // XP & Level
-  let xp = history.length * 10;
-  let level = Math.floor(xp / 100) + 1;
-  let currentXP = xp % 100;
-  document.getElementById("levelText").innerText = "Level " + level;
-  document.getElementById("xpText").innerText = "XP: " + currentXP + " / 100";
-  document.getElementById("xpBar").style.width = currentXP + "%";
+  // XP & LEVEL
+  const xp        = history.length * 10;
+  const level     = Math.floor(xp / 100) + 1;
+  const currentXP = xp % 100;
+  document.getElementById("levelText").innerText    = "Lvl " + level;
+  document.getElementById("xpText").innerText       = currentXP + " / 100 XP";
+  document.getElementById("xpPct").innerText        = currentXP + "%";
+  document.getElementById("xpBar").style.width      = currentXP + "%";
 
-  // Reward
-  document.getElementById("rewardText").innerText = "+10 XP Claimed";
-  document.getElementById("rewardBar").style.width = "20%";
+  // REWARD
+  document.getElementById("rewardText").innerText   = "+10 XP";
+  document.getElementById("rewardBar").style.width  = "20%";
 
-  // Records
+  // RECORDS
   document.getElementById("records").innerHTML =
-    "Best Streak: " + streak + " days<br>Check-ins: " + history.length;
+    "<span style='color:#aaa;font-size:14px;'>Best Streak: <b style='color:#fff'>" + streak + " days</b></span><br>" +
+    "<span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>" + history.length + "</b></span>";
 
-  // Badges
-  let badges = ["🌟 First Check-In"];
-  if (streak >= 7) badges.push("🔥 7-Day Streak");
-  if (streak >= 15) badges.push("💪 Warrior");
-  document.getElementById("badges").innerHTML = badges.join("<br>");
-
-  // Missions
-  document.getElementById("missions").innerHTML =
-    "✅ Workout today<br>⬜ Sleep 8 hours<br>⬜ Drink 8 glasses of water";
-
-  // Target
-  let target = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
-  document.getElementById("targetText").innerText = "Target: " + target + " kg";
-  document.getElementById("goalStatus").innerText = "Keep going!";
+  // TARGET
+  const target = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
+  document.getElementById("targetText").innerText  = "🎯 Target: " + target + " kg";
+  document.getElementById("goalStatus").innerText  = "In Progress";
   document.getElementById("progressText").innerText = "Goal Progress";
   document.getElementById("progressBar").style.width = "25%";
+
+  // BADGES
+  const badgeData = [
+    { label: "🌟 First Check-In", always: true },
+    { label: "🔥 7-Day Streak",   show: streak >= 7  },
+    { label: "⚔️ Warrior",       show: streak >= 4  },
+    { label: "💪 Beast",          show: streak >= 8  },
+    { label: "👑 Elite",          show: streak >= 15 },
+  ];
+  document.getElementById("badges").innerHTML =
+    badgeData.filter(b => b.always || b.show)
+             .map(b => `<div class="badge-item">${b.label}</div>`)
+             .join("");
+
+  // MISSIONS
+  const missionData = [
+    { text: "Workout today",           done: true  },
+    { text: "Sleep 8 hours",           done: false },
+    { text: "Drink 8 glasses of water",done: false },
+    { text: "Log daily check-in",      done: true  },
+  ];
+  document.getElementById("missions").innerHTML =
+    missionData.map(m => `
+      <div class="mission-item ${m.done ? 'done' : ''}">
+        <div class="mission-dot ${m.done ? 'done' : ''}">${m.done ? '✓' : ''}</div>
+        <span>${m.text}</span>
+      </div>
+    `).join("");
 });
 
 window.spinWheel = function() {
   document.getElementById("spinResult").innerText = "🎉 Reward Won! Come back tomorrow.";
+  document.getElementById("spinResult").style.color = "#00ff88";
 };
-window.goToBMI = function() { location.href = "bmi.html"; };
-window.openGraph = function() { location.href = "graph.html"; };
-window.logout = function() { localStorage.clear(); location.href = "login.html"; };
+window.goToBMI   = () => location.href = "bmi.html";
+window.openGraph = () => location.href = "graph.html";
+window.logout    = () => { localStorage.clear(); location.href = "login.html"; };
 </script>
 </body>
 </html>
