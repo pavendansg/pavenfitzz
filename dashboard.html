@@ -1,10 +1,3 @@
-Got it, Pavendan — you’re inside your Firebase console looking at your **EvolveFit Firestore database**, and everything’s connected perfectly. Since you’ve confirmed your Firebase config, here’s your **full cleaned and corrected `dashboard.html`** ready to paste into your project. It includes all the fixes we discussed: avatar handling, XP and streak logic, goal progress, randomized missions and rewards, and your real Firebase config.
-
----
-
-## 📄 `dashboard.html`
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -197,4 +190,8 @@ onAuthStateChanged(auth, async (user) => {
 
   // RECORDS
   document.getElementById("records").innerHTML =
-    "Best Streak: " + streak + " days<br>Total
+    "Best Streak: " + streak + " days<br>Total Check-ins: " + history.length;
+});
+</script>
+</body>
+</html>
