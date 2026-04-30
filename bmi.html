@@ -1,10 +1,3 @@
-Got it, Pavendan — you’re in your Firebase console, and everything’s set up perfectly. Here’s your **full, clean `bmi.html` code** with your real Firebase configuration inserted and all logic intact. You can copy‑paste this directly into your project folder.
-
----
-
-## 📄 `bmi.html`
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -156,9 +149,4 @@ if (localStorage.getItem("height") && localStorage.getItem("targetWeight")) {
 
 // AUTH
 onAuthStateChanged(auth, (user) => {
-  if (user) { currentUser = user; }
-  else { location.href = "login.html"; }
-});
-
-// CALCULATE
-window
+  if (user)
