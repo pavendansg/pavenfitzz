@@ -6,31 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-
 <div class="container">
 <div class="card" style="text-align:center;">
-
   <div class="logo-wrap">
     <span class="logo-icon">⚡</span>
   </div>
-
   <h1 style="font-size:32px;margin-bottom:6px;">EvolveFit</h1>
   <p style="opacity:.6;font-size:14px;margin-bottom:28px;">
     Your elite fitness journey starts here
   </p>
-
   <button class="primary-btn google-btn" onclick="googleLogin()">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
          width="20" height="20" style="vertical-align:middle;margin-right:10px;">
     Continue with Google
   </button>
-
   <p id="msg" style="color:#ff4444;margin-top:12px;font-size:13px;"></p>
-
   <p style="opacity:.4;font-size:12px;margin-top:24px;">
     By continuing you agree to our Terms & Privacy Policy
   </p>
-
 </div>
 </div>
 
@@ -50,11 +43,23 @@ const firebaseConfig = {
   appId: "1:977676324550:web:a09fb4dfea6c38190851c7"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// ✅ FIXED goNext — detects if came from AI Coach
 function goNext() {
+  // Check if user came from AI Coach payment page
+  const ref = document.referrer;
+  const aiPaymentURL = "https://pavendansg.github.io/pavenfitzz-ai/payment.html";
+
+  if (ref.includes("pavenfitzz-ai")) {
+    // Came from AI Coach — send back to payment
+    location.href = aiPaymentURL;
+    return;
+  }
+
+  // Normal EvolveFit flow
   if (localStorage.getItem("height") && localStorage.getItem("targetWeight")) {
     location.href = "dashboard.html";
   } else {
@@ -65,26 +70,28 @@ function goNext() {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     localStorage.setItem("username", user.displayName || "User");
-    localStorage.setItem("photo", user.photoURL || "");
+    localStorage.setItem("photo",    user.photoURL    || "");
     goNext();
   }
 });
 
 window.googleLogin = function() {
   const btn = document.querySelector(".google-btn");
-  btn.innerText = "Signing in...";
-  btn.disabled = true;
+  btn.innerHTML = "Signing in...";
+  btn.disabled  = true;
 
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
       localStorage.setItem("username", user.displayName || "User");
-      localStorage.setItem("photo", user.photoURL || "");
+      localStorage.setItem("photo",    user.photoURL    || "");
       goNext();
     })
     .catch((err) => {
       document.getElementById("msg").innerText = "Login failed. Try again.";
-      btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" style="vertical-align:middle;margin-right:10px;"> Continue with Google`;
+      btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        width="20" height="20" style="vertical-align:middle;margin-right:10px;">
+        Continue with Google`;
       btn.disabled = false;
     });
 };
