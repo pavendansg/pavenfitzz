@@ -48,7 +48,7 @@ body {
 }
 
 /* ============================================
-   HERO — FIXED
+   HERO
    ============================================ */
 .hero {
   min-height: 100vh;
@@ -65,13 +65,12 @@ body {
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to right,
-      rgba(0,0,0,0.88) 0%,
-      rgba(0,0,0,0.75) 35%,
-      rgba(0,0,0,0.30) 60%,
-      rgba(0,0,0,0.05) 100%
-    );
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.88) 0%,
+    rgba(0,0,0,0.75) 35%,
+    rgba(0,0,0,0.30) 60%,
+    rgba(0,0,0,0.05) 100%
+  );
 }
 
 .hero-content {
@@ -203,23 +202,9 @@ body {
   border-color: rgba(255,215,0,0.2);
 }
 
-.feature-icon {
-  font-size: 32px;
-  margin-bottom: 14px;
-}
-
-.feature-card h3 {
-  font-size: 17px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: #fff;
-}
-
-.feature-card p {
-  font-size: 14px;
-  opacity: 0.6;
-  line-height: 1.7;
-}
+.feature-icon { font-size: 32px; margin-bottom: 14px; }
+.feature-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; color: #fff; }
+.feature-card p  { font-size: 14px; opacity: 0.6; line-height: 1.7; }
 
 /* HOW IT WORKS */
 .steps-wrap {
@@ -295,18 +280,15 @@ body {
   background: rgba(15,15,15,0.95);
   backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.07);
-  box-shadow:
-    0 25px 60px rgba(0,0,0,0.6),
-    0 0 40px rgba(255,215,0,0.04);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 40px rgba(255,215,0,0.04);
   animation: fadeIn 0.5s ease;
 }
 
 /* ============================================
-   LOGO WRAP (login page)
+   LOGO WRAP
    ============================================ */
 .logo-wrap {
-  width: 72px;
-  height: 72px;
+  width: 72px; height: 72px;
   border-radius: 50%;
   background: rgba(255,215,0,0.1);
   border: 2px solid rgba(255,215,0,0.25);
@@ -387,20 +369,10 @@ button {
   border: 1px solid rgba(255,255,255,0.08);
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(255,215,0,0.2);
-}
-
+button:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255,215,0,0.2); }
 button:active { transform: scale(0.98); }
+button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Google login button */
 .google-btn {
   background: #1a1a1a !important;
   color: #fff !important;
@@ -411,8 +383,20 @@ button:disabled {
   gap: 10px;
 }
 
-.google-btn:hover {
-  border-color: rgba(255,215,0,0.3) !important;
+.google-btn:hover { border-color: rgba(255,215,0,0.3) !important; }
+
+/* ============================================
+   AI COACH BUTTON (links EvolveFit → PavenFitzz)
+   ============================================ */
+.ai-coach-btn {
+  background: linear-gradient(90deg, #00ff88, #00c3ff) !important;
+  color: #000 !important;
+  font-weight: 900 !important;
+  margin-top: 10px;
+}
+
+.ai-coach-btn:hover {
+  box-shadow: 0 10px 24px rgba(0,255,136,0.25) !important;
 }
 
 /* ============================================
@@ -449,7 +433,7 @@ button:disabled {
 .avatar-wrap img.loaded { display: block; }
 #avatarFallback { font-size: 24px; }
 
-.title { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+.title  { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
 .streak { opacity: 0.7; font-size: 14px; margin-bottom: 12px; }
 
 /* RANK BOX */
@@ -460,24 +444,12 @@ button:disabled {
   border: 2px solid #ffd700;
   text-align: center;
   margin-bottom: 16px;
-  box-shadow:
-    0 0 24px rgba(255,215,0,0.15),
-    inset 0 0 16px rgba(255,215,0,0.04);
+  box-shadow: 0 0 24px rgba(255,215,0,0.15), inset 0 0 16px rgba(255,215,0,0.04);
   animation: rankPulse 2.5s ease-in-out infinite;
 }
 
-#rankTitle {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-}
-
-#rankSub {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffd700;
-}
+#rankTitle { font-size: 22px; font-weight: 900; letter-spacing: 2px; margin-bottom: 6px; }
+#rankSub   { font-size: 13px; font-weight: 700; color: #ffd700; }
 
 /* BOXES */
 .box {
@@ -488,12 +460,7 @@ button:disabled {
   margin-bottom: 14px;
 }
 
-.box p {
-  font-size: 14px;
-  color: #bbb;
-  margin: 3px 0;
-  line-height: 1.9;
-}
+.box p { font-size: 14px; color: #bbb; margin: 3px 0; line-height: 1.9; }
 
 /* PROGRESS */
 .progress {
@@ -516,12 +483,7 @@ button:disabled {
 }
 
 /* BTNS ROW */
-.btns {
-  display: flex;
-  gap: 10px;
-  margin-top: 8px;
-}
-
+.btns { display: flex; gap: 10px; margin-top: 8px; }
 .btns button { flex: 1; margin: 0; }
 
 /* ============================================
@@ -581,28 +543,14 @@ button:disabled {
 .carbs-card   { border-color: rgba(255,215,0,0.25); }
 .fats-card    { border-color: rgba(0,255,153,0.25); }
 
-.macro-icon { font-size: 24px; margin-bottom: 8px; }
-
-.macro-val {
-  font-size: 22px;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 4px;
-}
-
-.macro-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.5;
-}
+.macro-icon  { font-size: 24px; margin-bottom: 8px; }
+.macro-val   { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+.macro-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; }
 
 /* ============================================
    GRAPH PAGE
    ============================================ */
-#weightChart, #bmiChart {
-  max-height: 200px;
-}
+#weightChart, #bmiChart { max-height: 200px; }
 
 .stat-cards {
   display: grid;
@@ -619,19 +567,8 @@ button:disabled {
   text-align: center;
 }
 
-.stat-card-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.45;
-  margin-bottom: 6px;
-}
-
-.stat-card-val {
-  font-size: 20px;
-  font-weight: 900;
-  color: #fff;
-}
+.stat-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.45; margin-bottom: 6px; }
+.stat-card-val   { font-size: 20px; font-weight: 900; color: #fff; }
 
 /* ============================================
    TOAST NOTIFICATION
@@ -654,10 +591,7 @@ button:disabled {
   white-space: nowrap;
 }
 
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 /* ============================================
    ANIMATIONS
@@ -684,7 +618,7 @@ button:disabled {
 .mobile-hero { display: none !important; }
 
 /* ============================================
-   MOBILE
+   MOBILE — only once, clean
    ============================================ */
 @media (max-width: 600px) {
   .hero {
@@ -702,40 +636,20 @@ button:disabled {
       rgba(0,0,0,0.98) 100%
     );
   }
-  .hero-content {
-    padding-top: 0;
-    max-width: 100%;
-  }
-  .hero-title  { font-size: 38px; }
-  .hero-btn    { padding: 14px 28px !important; }
-  .navbar      { padding: 14px 20px; }
-  .stats-strip { flex-wrap: wrap; }
-  .stat-item   { min-width: 50%; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .features-grid { grid-template-columns: 1fr; }
-  .steps-wrap  { flex-direction: column; align-items: center; }
-  .step-arrow  { transform: rotate(90deg); margin: 0; }
-  .card        { padding: 24px 20px; border-radius: 20px; }
-  h1           { font-size: 24px; }
-  .macro-grid  { grid-template-columns: repeat(3,1fr); gap: 8px; }
-  .macro-val   { font-size: 18px; }
-  .btns        { flex-direction: column; }
-  #rankTitle   { font-size: 18px; }
-  .stat-cards  { grid-template-columns: repeat(2,1fr); }
-}
-  }
-  .hero-title  { font-size: 38px; }
-  .hero-btn    { padding: 14px 28px !important; }
-  .navbar      { padding: 14px 20px; }
-  .stats-strip { flex-wrap: wrap; }
-  .stat-item   { min-width: 50%; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .features-grid { grid-template-columns: 1fr; }
-  .steps-wrap  { flex-direction: column; align-items: center; }
-  .step-arrow  { transform: rotate(90deg); margin: 0; }
-  .card        { padding: 24px 20px; border-radius: 20px; }
-  h1           { font-size: 24px; }
-  .macro-grid  { grid-template-columns: repeat(3,1fr); gap: 8px; }
-  .macro-val   { font-size: 18px; }
-  .btns        { flex-direction: column; }
-  #rankTitle   { font-size: 18px; }
-  .stat-cards  { grid-template-columns: repeat(2,1fr); }
+  .hero-content    { padding-top: 0; max-width: 100%; }
+  .hero-title      { font-size: 38px; }
+  .hero-btn        { padding: 14px 28px !important; }
+  .navbar          { padding: 14px 20px; }
+  .stats-strip     { flex-wrap: wrap; }
+  .stat-item       { min-width: 50%; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .features-grid   { grid-template-columns: 1fr; }
+  .steps-wrap      { flex-direction: column; align-items: center; }
+  .step-arrow      { transform: rotate(90deg); margin: 0; }
+  .card            { padding: 24px 20px; border-radius: 20px; }
+  h1               { font-size: 24px; }
+  .macro-grid      { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .macro-val       { font-size: 18px; }
+  .btns            { flex-direction: column; }
+  #rankTitle       { font-size: 18px; }
+  .stat-cards      { grid-template-columns: repeat(2,1fr); }
 }
