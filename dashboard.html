@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dashboard - EvolveFit</title>
+<title>Dashboard - EvolveFit AI</title>
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -84,6 +84,55 @@
     <div class="progress"><div id="progressBar"></div></div>
   </div>
 
+  <!-- ============================================
+       🤖 AI TOOLS SECTION — NEW
+       ============================================ -->
+  <div class="ai-section-header">
+    <span class="ai-section-icon">🤖</span>
+    <span>AI Fitness Tools</span>
+    <span class="ai-section-badge">Powered by AI</span>
+  </div>
+
+  <div class="ai-tools-grid">
+    <div class="ai-tool-card" onclick="location.href='workout.html'">
+      <div class="ai-tool-icon">💪</div>
+      <div class="ai-tool-name">Workout</div>
+      <div class="ai-tool-desc">Generate your weekly program</div>
+      <div class="ai-tool-arrow">→</div>
+    </div>
+    <div class="ai-tool-card" onclick="location.href='budget.html'">
+      <div class="ai-tool-icon">🧬</div>
+      <div class="ai-tool-name">Body Type Diet</div>
+      <div class="ai-tool-desc">Diet plan for your body type</div>
+      <div class="ai-tool-arrow">→</div>
+    </div>
+    <div class="ai-tool-card" onclick="location.href='meal.html'">
+      <div class="ai-tool-icon">🍗</div>
+      <div class="ai-tool-name">Meal Planner</div>
+      <div class="ai-tool-desc">Turn groceries into meals</div>
+      <div class="ai-tool-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- AI STATUS STRIP -->
+  <div class="ai-status-strip">
+    <div class="ai-status-item" id="workoutStatus">
+      <span class="ai-dot inactive"></span>
+      <span>Workout</span>
+      <span class="ai-status-val" id="workoutStatusVal">Not generated</span>
+    </div>
+    <div class="ai-status-item" id="dietStatus">
+      <span class="ai-dot inactive"></span>
+      <span>Diet</span>
+      <span class="ai-status-val" id="dietStatusVal">Not generated</span>
+    </div>
+    <div class="ai-status-item" id="mealStatus">
+      <span class="ai-dot inactive"></span>
+      <span>Meal</span>
+      <span class="ai-status-val" id="mealStatusVal">Not generated</span>
+    </div>
+  </div>
+
   <!-- DAILY REWARD -->
   <div class="box">
     <div class="box-header">
@@ -94,17 +143,6 @@
     <div class="progress"><div id="rewardBar"></div></div>
   </div>
 
-  <!-- LUCKY SPIN -->
-  <div class="box">
-    <div class="box-header">
-      <span class="box-icon">🎰</span>
-      <h3>Lucky Spin</h3>
-    </div>
-    <p id="spinResult" style="font-size:13px;color:#555;margin-bottom:10px;">
-      Spin once daily for bonus reward
-    </p>
-    <button class="primary-btn" onclick="spinWheel()">⚙️ Spin Now</button>
-  </div>
 
   <!-- ACHIEVEMENTS -->
   <div class="box">
@@ -135,9 +173,6 @@
   </div>
   <div style="margin-top:10px;">
     <button class="secondary-btn logout-btn" onclick="logout()">Logout</button>
-    <button class="ai-coach-btn" onclick="window.location.href='https://pavendansg.github.io/pavenfitzz-ai/home.html'">
-  🤖 Open AI Coach
-</button>
   </div>
 
 </div>
@@ -154,144 +189,130 @@
   border-radius: 99px;
   white-space: nowrap;
 }
+.box-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.box-icon { font-size:16px; }
+.box-header h3 { flex:1; margin:0; font-size:14px; font-weight:800; color:#00ff88; }
+.box-badge {
+  font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px;
+  background:rgba(255,215,0,0.1); color:#ffd700; border:1px solid rgba(255,215,0,0.2);
+}
+.box-badge.green {
+  background:rgba(0,255,136,0.08); color:#00ff88; border-color:rgba(0,255,136,0.2);
+}
+.stats-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+.stat-tile { background:#0d0d0d; border:1px solid rgba(0,255,136,0.08); border-radius:14px; padding:14px; text-align:center; }
+.stat-tile-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#444; margin-bottom:6px; }
+.stat-tile-val { font-size:18px; font-weight:900; color:#fff; }
+.badge-wrap { display:flex; flex-wrap:wrap; gap:8px; }
+.badge-item { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.15); color:#00ff88; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; }
+.mission-list { display:flex; flex-direction:column; gap:8px; }
+.mission-item { display:flex; align-items:center; gap:10px; font-size:13px; color:#555; padding:10px 12px; background:#0d0d0d; border-radius:12px; border:1px solid rgba(255,255,255,0.04); cursor:pointer; transition:0.2s; user-select:none; }
+.mission-item:active { transform:scale(0.98); }
+.mission-item.done { color:#00ff88; border-color:rgba(0,255,136,0.15); background:rgba(0,255,136,0.04); }
+.mission-dot { width:20px; height:20px; border-radius:50%; border:2px solid #2a2a2a; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; transition:0.2s; }
+.mission-dot.done { background:#00ff88; border-color:#00ff88; color:#000; }
+#xpBar { background:linear-gradient(90deg,#00ff88,#00d9ff) !important; }
+#rewardBar { background:linear-gradient(90deg,#ffd700,#ffb300) !important; }
+#progressBar { background:linear-gradient(90deg,#00ff88,#ffd700) !important; }
+.logout-btn { width:100%; border-color:rgba(255,255,255,0.04) !important; color:#333 !important; font-size:13px !important; }
 
-.box-header {
+/* AI SECTION */
+.ai-section-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
-}
-
-.box-icon { font-size: 16px; }
-
-.box-header h3 {
-  flex: 1;
-  margin: 0;
   font-size: 14px;
   font-weight: 800;
   color: #00ff88;
+  margin: 20px 0 12px;
+  letter-spacing: 0.5px;
 }
-
-.box-badge {
-  font-size: 11px;
+.ai-section-icon { font-size: 18px; }
+.ai-section-badge {
+  margin-left: auto;
+  font-size: 10px;
   font-weight: 700;
   padding: 3px 10px;
   border-radius: 99px;
-  background: rgba(255,215,0,0.1);
-  color: #ffd700;
-  border: 1px solid rgba(255,215,0,0.2);
-}
-
-.box-badge.green {
   background: rgba(0,255,136,0.08);
   color: #00ff88;
-  border-color: rgba(0,255,136,0.2);
+  border: 1px solid rgba(0,255,136,0.2);
+  letter-spacing: 0.5px;
 }
 
-.stats-grid {
+.ai-tools-grid {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(3,1fr);
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
-.stat-tile {
-  background: #0d0d0d;
-  border: 1px solid rgba(0,255,136,0.08);
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-}
-
-.stat-tile-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #444;
-  margin-bottom: 6px;
-}
-
-.stat-tile-val {
-  font-size: 18px;
-  font-weight: 900;
-  color: #fff;
-}
-
-.badge-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.badge-item {
-  background: rgba(0,255,136,0.08);
+.ai-tool-card {
+  background: linear-gradient(135deg, #0d150d, #0a0f0a);
   border: 1px solid rgba(0,255,136,0.15);
-  color: #00ff88;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 5px 12px;
-  border-radius: 99px;
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 
-.mission-list {
+.ai-tool-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0,255,136,0.4);
+  box-shadow: 0 8px 24px rgba(0,255,136,0.1);
+}
+
+.ai-tool-card:active { transform: scale(0.97); }
+
+.ai-tool-icon { font-size: 26px; margin-bottom: 8px; }
+.ai-tool-name { font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.ai-tool-desc { font-size: 10px; color: #555; line-height: 1.4; margin-bottom: 8px; }
+.ai-tool-arrow {
+  font-size: 14px;
+  color: #00ff88;
+  opacity: 0.6;
+}
+
+/* AI STATUS STRIP */
+.ai-status-strip {
+  background: #0d0d0d;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.mission-item {
+.ai-status-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
+  gap: 8px;
+  font-size: 12px;
   color: #555;
-  padding: 10px 12px;
-  background: #0d0d0d;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-  cursor: pointer;
-  transition: 0.2s;
-  user-select: none;
+  font-family: monospace;
 }
 
-.mission-item:active { transform: scale(0.98); }
-
-.mission-item.done {
-  color: #00ff88;
-  border-color: rgba(0,255,136,0.15);
-  background: rgba(0,255,136,0.04);
-}
-
-.mission-dot {
-  width: 20px;
-  height: 20px;
+.ai-dot {
+  width: 8px; height: 8px;
   border-radius: 50%;
-  border: 2px solid #2a2a2a;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.ai-dot.active { background: #00ff88; box-shadow: 0 0 6px rgba(0,255,136,0.5); }
+.ai-dot.inactive { background: #2a2a2a; }
+
+.ai-status-val {
+  margin-left: auto;
   font-size: 11px;
-  font-weight: 800;
-  transition: 0.2s;
+  color: #444;
 }
 
-.mission-dot.done {
-  background: #00ff88;
-  border-color: #00ff88;
-  color: #000;
-}
-
-#xpBar { background: linear-gradient(90deg,#00ff88,#00d9ff) !important; }
-#rewardBar { background: linear-gradient(90deg,#ffd700,#ffb300) !important; }
-#progressBar { background: linear-gradient(90deg,#00ff88,#ffd700) !important; }
-
-.logout-btn {
-  width: 100%;
-  border-color: rgba(255,255,255,0.04) !important;
-  color: #333 !important;
-  font-size: 13px !important;
-}
+.ai-status-val.done { color: #00ff88; }
 </style>
 
 <script type="module">
@@ -305,7 +326,7 @@ const firebaseConfig = {
   projectId:"evolvefit-07"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
@@ -325,6 +346,38 @@ if (photo) {
 
 document.getElementById("user").innerText = localStorage.getItem("username") || "User";
 
+// AI STATUS CHECK
+function checkAIStatus() {
+  const workout = localStorage.getItem("generatedWorkout");
+  const diet    = localStorage.getItem("budgetData");
+  const meal    = localStorage.getItem("budgetFoods");
+
+  const wDot = document.querySelector("#workoutStatus .ai-dot");
+  const dDot = document.querySelector("#dietStatus .ai-dot");
+  const mDot = document.querySelector("#mealStatus .ai-dot");
+  const wVal = document.getElementById("workoutStatusVal");
+  const dVal = document.getElementById("dietStatusVal");
+  const mVal = document.getElementById("mealStatusVal");
+
+  if (workout) {
+    wDot.className = "ai-dot active";
+    wVal.innerText = "✓ Ready";
+    wVal.className = "ai-status-val done";
+  }
+  if (diet) {
+    dDot.className = "ai-dot active";
+    dVal.innerText = "✓ Ready";
+    dVal.className = "ai-status-val done";
+  }
+  if (meal) {
+    mDot.className = "ai-dot active";
+    mVal.innerText = "✓ Ready";
+    mVal.className = "ai-status-val done";
+  }
+}
+
+checkAIStatus();
+
 // MISSIONS SETUP
 const today = new Date().toISOString().split("T")[0];
 if (localStorage.getItem("missionDay") !== today) {
@@ -336,10 +389,10 @@ if (localStorage.getItem("missionDay") !== today) {
 localStorage.setItem("mission_checkin", "true");
 
 const missionDefs = [
-  { id: "workout", text: "Workout today" },
-  { id: "sleep",   text: "Sleep 8 hours" },
-  { id: "water",   text: "Drink 8 glasses of water" },
-  { id: "checkin", text: "Log daily check-in" },
+  { id:"workout", text:"Workout today 💪" },
+  { id:"sleep",   text:"Sleep 8 hours 😴" },
+  { id:"water",   text:"Drink 8 glasses of water 💧" },
+  { id:"checkin", text:"Log daily check-in ✅" },
 ];
 
 function renderMissions() {
@@ -347,19 +400,16 @@ function renderMissions() {
     m => localStorage.getItem("mission_" + m.id) === "true"
   ).length;
 
-  document.getElementById("missionCount").innerText =
-    doneCount + " / " + missionDefs.length + " done";
+  document.getElementById("missionCount").innerText = doneCount + " / " + missionDefs.length + " done";
 
   document.getElementById("missions").innerHTML =
     missionDefs.map(m => {
       const done = localStorage.getItem("mission_" + m.id) === "true";
       return `
-        <div class="mission-item ${done ? 'done' : ''}"
-             onclick="toggleMission('${m.id}')">
+        <div class="mission-item ${done ? 'done' : ''}" onclick="toggleMission('${m.id}')">
           <div class="mission-dot ${done ? 'done' : ''}">${done ? '✓' : ''}</div>
           <span>${m.text}</span>
-        </div>
-      `;
+        </div>`;
     }).join("");
 }
 
@@ -376,7 +426,7 @@ renderMissions();
 onAuthStateChanged(auth, async (user) => {
   if (!user) { location.href = "login.html"; return; }
 
-  const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+  const snap = await getDocs(collection(db, "users", user.uid, "daily"));
   if (snap.empty) { location.href = "bmi.html"; return; }
 
   let history = [];
@@ -397,8 +447,8 @@ onAuthStateChanged(auth, async (user) => {
   const daysLeft =
     streak >= 15 ? "MAX RANK 🏆" :
     streak >= 8  ? (15-streak) + " Day(s) to Elite"   :
-    streak >= 4  ? (8 -streak) + " Day(s) to Beast"   :
-                   (4 -streak) + " Day(s) to Warrior";
+    streak >= 4  ? (8-streak)  + " Day(s) to Beast"   :
+                   (4-streak)  + " Day(s) to Warrior";
   document.getElementById("rankTitle").innerText = rankTitle;
   document.getElementById("rankSub").innerText   = daysLeft;
 
@@ -407,6 +457,9 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("weight").innerText   = (latest.weight  || "—") + " kg";
   document.getElementById("calories").innerText = (latest.calories|| "—") + " kcal";
   document.getElementById("goal").innerText     = (latest.goal    || "—").toUpperCase();
+
+  // Save goal to localStorage for AI pages to use
+  if (latest.goal) localStorage.setItem("goal", latest.goal);
 
   // XP
   const xp        = streak * 10;
@@ -427,14 +480,14 @@ onAuthStateChanged(auth, async (user) => {
     `<span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>${history.length}</b></span>`;
 
   // TARGET
-  const target = Number(localStorage.getItem("targetWeight")) || (first.weight+5);
+  const target   = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
   const progress = Math.min(100, Math.round(
     Math.abs(latest.weight - first.weight) /
     Math.abs(target - first.weight) * 100
   ));
-  document.getElementById("targetText").innerText   = "🎯 Target: " + target + " kg";
-  document.getElementById("goalStatus").innerText   = progress + "% done";
-  document.getElementById("progressText").innerText = "Goal Progress";
+  document.getElementById("targetText").innerText    = "🎯 Target: " + target + " kg";
+  document.getElementById("goalStatus").innerText    = progress + "% done";
+  document.getElementById("progressText").innerText  = "Goal Progress";
   document.getElementById("progressBar").style.width = progress + "%";
 
   // BADGES
@@ -456,6 +509,7 @@ window.spinWheel = function() {
   el.innerText = "🎉 Reward Won! Come back tomorrow.";
   el.style.color = "#00ff88";
 };
+
 window.goToBMI   = () => location.href = "bmi.html";
 window.openGraph = () => location.href = "graph.html";
 window.logout    = () => { localStorage.clear(); location.href = "login.html"; };
