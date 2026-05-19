@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Progress - EvolveFit</title>
+<title>Progress - EvolveFit AI</title>
 <link rel="stylesheet" href="style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,14 +11,15 @@
 <div class="card">
 
   <div style="text-align:center;margin-bottom:20px;">
-    <h1 style="color:#ffd700;">📈 Elite Progress</h1>
-    <p style="opacity:.7;font-size:14px;">Your body transformation analytics</p>
+    <div style="font-size:40px;margin-bottom:8px;">📈</div>
+    <h1 style="color:#ffd700;font-size:24px;font-weight:900;">Elite Progress</h1>
+    <p style="opacity:.6;font-size:13px;">Your body transformation analytics</p>
   </div>
 
   <!-- STAT CARDS -->
   <div class="stat-cards">
     <div class="stat-card">
-      <div class="stat-card-label">Start</div>
+      <div class="stat-card-label">Start Weight</div>
       <div class="stat-card-val" id="startWeight">—</div>
     </div>
     <div class="stat-card">
@@ -32,6 +33,22 @@
     <div class="stat-card">
       <div class="stat-card-label">Change</div>
       <div class="stat-card-val" id="changeText">—</div>
+    </div>
+  </div>
+
+  <!-- BMI STATUS -->
+  <div class="bmi-status-bar" id="bmiStatusBar">
+    <div class="bmi-status-label">Current BMI</div>
+    <div class="bmi-status-val" id="bmiStatusVal">—</div>
+    <div class="bmi-status-tag" id="bmiStatusTag">—</div>
+    <div class="bmi-range-bar">
+      <div class="bmi-range-fill" id="bmiRangeFill"></div>
+    </div>
+    <div class="bmi-range-labels">
+      <span>Under</span>
+      <span>Normal</span>
+      <span>Over</span>
+      <span>Obese</span>
     </div>
   </div>
 
@@ -49,6 +66,15 @@
     </div>
   </div>
 
+  <!-- STREAK MILESTONES -->
+  <div class="box">
+    <div class="box-header" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <span style="font-size:16px;">🏆</span>
+      <h3 style="margin:0;font-size:14px;font-weight:800;color:#ffd700;">Streak Milestones</h3>
+    </div>
+    <div class="milestones" id="milestones"></div>
+  </div>
+
   <!-- WEIGHT CHART -->
   <div class="box">
     <h3>⚖️ Weight Trend</h3>
@@ -61,20 +87,111 @@
     <canvas id="bmiChart" style="max-height:200px;"></canvas>
   </div>
 
-  <!-- STREAK + MOTIVATION -->
-  <div class="box" style="text-align:center;">
-    <div style="font-size:32px;margin-bottom:8px;">🏆</div>
-    <p id="summary" style="color:#ffd700;font-weight:800;font-size:16px;"></p>
-    <p id="checkins" style="opacity:.5;font-size:13px;margin-top:6px;"></p>
+  <!-- MOTIVATION -->
+  <div class="motivation-box">
+    <div style="font-size:32px;margin-bottom:8px;">💪</div>
+    <p id="summary" style="color:#ffd700;font-weight:800;font-size:15px;margin-bottom:6px;"></p>
+    <p id="checkins" style="opacity:.5;font-size:12px;"></p>
   </div>
 
-  <div class="btns">
+  <div class="btns" style="margin-top:16px;">
     <button class="secondary-btn" onclick="location.href='dashboard.html'">← Dashboard</button>
     <button class="primary-btn" onclick="location.href='bmi.html'">Check In Today ✅</button>
   </div>
 
 </div>
 </div>
+
+<style>
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.stat-card {
+  background: #111;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-card-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; opacity:.45; margin-bottom:6px; }
+.stat-card-val   { font-size:20px; font-weight:900; color:#fff; }
+
+/* BMI STATUS */
+.bmi-status-bar {
+  background: linear-gradient(135deg, #0d0d0d, #111);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.bmi-status-label { font-size:10px; text-transform:uppercase; letter-spacing:2px; color:#555; margin-bottom:6px; }
+.bmi-status-val   { font-size:36px; font-weight:900; color:#ffd700; line-height:1; margin-bottom:6px; }
+.bmi-status-tag   {
+  display: inline-block;
+  font-size: 12px; font-weight: 700;
+  padding: 4px 14px; border-radius: 99px;
+  margin-bottom: 12px;
+}
+.bmi-range-bar {
+  height: 8px; border-radius: 99px;
+  background: linear-gradient(90deg, #00c3ff 0%, #00ff88 25%, #ffd700 60%, #ff4455 100%);
+  position: relative; margin-bottom: 6px; overflow: visible;
+}
+.bmi-range-fill {
+  position: absolute; top: -3px;
+  width: 14px; height: 14px;
+  background: #fff; border-radius: 50%;
+  border: 2px solid #000;
+  box-shadow: 0 0 8px rgba(255,255,255,0.4);
+  transform: translateX(-50%);
+  transition: left 1s ease;
+}
+.bmi-range-labels {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: #444;
+  font-family: monospace; letter-spacing: 0.5px;
+}
+
+/* MILESTONES */
+.milestones { display:flex; flex-direction:column; gap:8px; }
+.milestone-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: #0d0d0d;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+.milestone-item.achieved {
+  border-color: rgba(255,215,0,0.2);
+  background: rgba(255,215,0,0.04);
+}
+.milestone-icon { font-size:18px; flex-shrink:0; }
+.milestone-text { flex:1; color:#aaa; }
+.milestone-text.achieved { color:#ffd700; font-weight:700; }
+.milestone-check {
+  font-size:12px; font-weight:700;
+  color:#333;
+}
+.milestone-check.achieved { color:#ffd700; }
+
+/* MOTIVATION */
+.motivation-box {
+  background: linear-gradient(135deg, #0f0f0f, #1a1400);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* BOX HEADER */
+.box-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+</style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
@@ -91,9 +208,15 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// Chart.js global defaults for dark theme
-Chart.defaults.color = "#888";
+Chart.defaults.color       = "#888";
 Chart.defaults.borderColor = "rgba(255,255,255,0.05)";
+
+function getBMIInfo(bmi) {
+  if (bmi < 18.5) return { label:"Underweight", color:"#00c3ff", pct: 8 };
+  if (bmi < 25)   return { label:"Normal ✅",   color:"#00ff88", pct: 35 };
+  if (bmi < 30)   return { label:"Overweight",  color:"#ffd700", pct: 65 };
+  return              { label:"Obese",           color:"#ff4455", pct: 88 };
+}
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) { location.href = "login.html"; return; }
@@ -105,13 +228,14 @@ onAuthStateChanged(auth, async (user) => {
   snap.forEach(d => history.push(d.data()));
   history.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const labels  = history.map(x => x.date.slice(5)); // show MM-DD only
+  const labels  = history.map(x => x.date.slice(5));
   const weights = history.map(x => x.weight);
   const bmis    = history.map(x => x.bmi);
   const first   = history[0];
   const latest  = history[history.length - 1];
   const target  = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
   const total   = +(latest.weight - first.weight).toFixed(1);
+  const streak  = history.length;
 
   // STAT CARDS
   document.getElementById("startWeight").innerText   = first.weight + " kg";
@@ -119,26 +243,46 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("goalWeight").innerText    = target + " kg";
 
   const changeEl = document.getElementById("changeText");
-  if (total > 0) {
-    changeEl.innerText = "+" + total + " kg";
-    changeEl.style.color = "#00ff99";
-  } else if (total < 0) {
-    changeEl.innerText = total + " kg";
-    changeEl.style.color = "#ff6b6b";
-  } else {
-    changeEl.innerText = "0 kg";
-  }
+  if (total > 0)      { changeEl.innerText = "+" + total + " kg"; changeEl.style.color = "#00ff99"; }
+  else if (total < 0) { changeEl.innerText = total + " kg";       changeEl.style.color = "#ff6b6b"; }
+  else                { changeEl.innerText = "0 kg";              changeEl.style.color = "#aaa"; }
 
-  // GOAL PROGRESS BAR
-  const startW  = first.weight;
-  const range   = Math.abs(target - startW);
-  const moved   = Math.abs(latest.weight - startW);
-  const pct     = range > 0 ? Math.min(100, Math.round((moved / range) * 100)) : 0;
+  // BMI STATUS
+  const bmiInfo = getBMIInfo(latest.bmi);
+  document.getElementById("bmiStatusVal").innerText      = latest.bmi;
+  document.getElementById("bmiStatusTag").innerText      = bmiInfo.label;
+  document.getElementById("bmiStatusTag").style.background = bmiInfo.color + "18";
+  document.getElementById("bmiStatusTag").style.color      = bmiInfo.color;
+  document.getElementById("bmiStatusTag").style.border     = "1px solid " + bmiInfo.color + "40";
+  document.getElementById("bmiRangeFill").style.left       = bmiInfo.pct + "%";
 
-  document.getElementById("goalBar").style.width    = pct + "%";
+  // GOAL PROGRESS
+  const range = Math.abs(target - first.weight);
+  const moved = Math.abs(latest.weight - first.weight);
+  const pct   = range > 0 ? Math.min(100, Math.round((moved / range) * 100)) : 0;
+  document.getElementById("goalBar").style.width     = pct + "%";
   document.getElementById("progressLabel").innerText = pct + "% complete";
   document.getElementById("progressDetail").innerText =
     Math.abs(target - latest.weight).toFixed(1) + " kg to go";
+
+  // MILESTONES
+  const milestoneData = [
+    { days:1,  icon:"🌟", label:"First Check-In" },
+    { days:3,  icon:"🥉", label:"3-Day Streak" },
+    { days:7,  icon:"🔥", label:"7-Day Streak" },
+    { days:4,  icon:"⚔️", label:"Warrior Rank (4 days)" },
+    { days:8,  icon:"💪", label:"Beast Rank (8 days)" },
+    { days:15, icon:"👑", label:"Elite Rank (15 days)" },
+    { days:30, icon:"🏆", label:"30-Day Legend" },
+  ];
+  document.getElementById("milestones").innerHTML = milestoneData.map(m => {
+    const done = streak >= m.days;
+    return `<div class="milestone-item ${done ? 'achieved' : ''}">
+      <span class="milestone-icon">${m.icon}</span>
+      <span class="milestone-text ${done ? 'achieved' : ''}">${m.label}</span>
+      <span class="milestone-check ${done ? 'achieved' : ''}">${done ? '✓ Done' : streak + '/' + m.days}</span>
+    </div>`;
+  }).join("");
 
   // MOTIVATION
   const msgs = {
@@ -147,17 +291,15 @@ onAuthStateChanged(auth, async (user) => {
     same: ["🔥 Consistency wins.", "📅 Show up every day.", "💯 Stay the course!"]
   };
   const pool = total > 0 ? msgs.gain : total < 0 ? msgs.loss : msgs.same;
-  document.getElementById("summary").innerText =
-    pool[Math.floor(Math.random() * pool.length)];
-  document.getElementById("checkins").innerText =
-    history.length + " total check-ins 🗓️";
+  document.getElementById("summary").innerText  = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById("checkins").innerText = streak + " total check-ins 🗓️";
 
-  // CHART OPTIONS FACTORY
-  function chartOptions(label) {
+  // CHART OPTIONS
+  function chartOptions() {
     return {
       responsive: true,
       plugins: {
-        legend: { labels: { color: "#aaa", font: { size: 12 } } },
+        legend: { labels: { color:"#aaa", font:{ size:12 } } },
         tooltip: {
           backgroundColor: "#1a1a1a",
           borderColor: "rgba(255,215,0,0.2)",
@@ -167,14 +309,8 @@ onAuthStateChanged(auth, async (user) => {
         }
       },
       scales: {
-        x: {
-          ticks: { color: "#666", font: { size: 11 } },
-          grid:  { color: "rgba(255,255,255,0.04)" }
-        },
-        y: {
-          ticks: { color: "#666", font: { size: 11 } },
-          grid:  { color: "rgba(255,255,255,0.04)" }
-        }
+        x: { ticks:{ color:"#666", font:{ size:11 } }, grid:{ color:"rgba(255,255,255,0.04)" } },
+        y: { ticks:{ color:"#666", font:{ size:11 } }, grid:{ color:"rgba(255,255,255,0.04)" } }
       }
     };
   }
@@ -197,7 +333,7 @@ onAuthStateChanged(auth, async (user) => {
         tension: 0.4
       }]
     },
-    options: chartOptions("Weight (kg)")
+    options: chartOptions()
   });
 
   // BMI CHART
@@ -205,61 +341,33 @@ onAuthStateChanged(auth, async (user) => {
     type: "line",
     data: {
       labels,
-      datasets: [{
-        label: "BMI",
-        data: bmis,
-        borderColor: "#00ff99",
-        backgroundColor: "rgba(0,255,153,0.08)",
-        fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: "#00ff99",
-        pointBorderColor: "#000",
-        pointBorderWidth: 2,
-        tension: 0.4
-      },
-      // healthy range reference line
-      {
-        label: "Healthy Max (24.9)",
-        data: Array(labels.length).fill(24.9),
-        borderColor: "rgba(255,100,100,0.4)",
-        borderDash: [6, 4],
-        borderWidth: 1.5,
-        pointRadius: 0,
-        fill: false
-      }]
+      datasets: [
+        {
+          label: "BMI",
+          data: bmis,
+          borderColor: "#00ff99",
+          backgroundColor: "rgba(0,255,153,0.08)",
+          fill: true,
+          pointRadius: 5,
+          pointBackgroundColor: "#00ff99",
+          pointBorderColor: "#000",
+          pointBorderWidth: 2,
+          tension: 0.4
+        },
+        {
+          label: "Healthy Max (24.9)",
+          data: Array(labels.length).fill(24.9),
+          borderColor: "rgba(255,100,100,0.4)",
+          borderDash: [6,4],
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false
+        }
+      ]
     },
-    options: chartOptions("BMI")
+    options: chartOptions()
   });
 });
 </script>
-
-<!-- stat card styles -->
-<style>
-.stat-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.stat-card {
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-}
-.stat-card-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.45;
-  margin-bottom: 6px;
-}
-.stat-card-val {
-  font-size: 20px;
-  font-weight: 900;
-}
-</style>
-
 </body>
 </html>
