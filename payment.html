@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unlock Premium - PavenFitzz</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+    authDomain: "evolvefit-07.firebaseapp.com",
+    projectId: "evolvefit-07"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  let currentUser = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      // ✅ FIXED URL
+     location.href = "https://pavendansg.github.io/pavenfitzz/login.html";
+      return;
+    }
+
+    currentUser = user;
+    document.getElementById("userEmail").innerText = user.email;
+
+    // Check if already premium
+    const snap = await getDoc(doc(db, "premium", user.uid));
+    if (snap.exists() && snap.data().active === true) {
+      location.href = "ai-dashboard.html";
+    }
+  });
+
+  window.startPayment = function() {
+    if (!currentUser) {
+      alert("Please login first ⚠️");
+      return;
+    }
+
+    const btn = document.getElementById("payBtn");
+    btn.disabled = true;
+    btn.innerText = "Opening payment...";
+
+    const options = {
+      key: "rzp_live_Sk2vCTkvCbTlpv", // 
+      amount: 8900,
+      currency: "INR",
+      name: "PavenFitzz AI Coach",
+      description: "Lifetime Premium Access",
+      prefill: {
+        email: currentUser.email,
+        name:  currentUser.displayName || "User",
+      },
+      theme: { color: "#ffd700" },
+
+      handler: async function(response) {
+        try {
+          await setDoc(doc(db, "premium", currentUser.uid), {
+            active:    true,
+            paymentId: response.razorpay_payment_id,
+            email:     currentUser.email,
+            name:      currentUser.displayName || "User",
+            paidAt:    new Date().toISOString(),
+            amount:    89
+          });
+
+          localStorage.setItem("premium",   "true");
+          localStorage.setItem("paymentId", response.razorpay_payment_id);
+
+          document.getElementById("paymentBox").style.display = "none";
+          document.getElementById("successBox").style.display = "block";
+          document.getElementById("paymentId").innerText = response.razorpay_payment_id;
+
+          setTimeout(() => { location.href = "ai-dashboard.html"; }, 2000);
+
+        } catch(err) {
+          alert("Payment done but save failed. Contact support with ID: "
+            + response.razorpay_payment_id);
+        }
+      },
+
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false;
+          btn.innerText = "🔓 Unlock Premium Now — ₹89";
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on("payment.failed", function(response) {
+      alert("Payment failed ❌ " + response.error.description);
+      btn.disabled = false;
+      btn.innerText = "🔓 Unlock Premium Now — ₹89";
+    });
+    rzp.open();
+  };
+</script>
+
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: #0a0a0a; color: #fff;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex; justify-content: center; align-items: center;
+  padding: 24px;
+}
+.box {
+  width: 100%; max-width: 420px;
+  background: linear-gradient(180deg,#111,#0d0d0d);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px; padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,215,0,0.08);
+}
+.logo-wrap {
+  width:64px; height:64px; border-radius:50%;
+  background:rgba(255,215,0,0.08);
+  border:2px solid rgba(255,215,0,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:28px; margin:0 auto 16px;
+}
+.title { font-size:24px; font-weight:900; color:#ffd700; margin-bottom:4px; }
+.price-box {
+  background:#0a0f0a;
+  border:2px solid rgba(0,255,136,0.2);
+  border-radius:16px; padding:20px; margin:20px 0;
+}
+.price-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#444; margin-bottom:6px; }
+.price-val { font-size:40px; font-weight:900; color:#00ff88; line-height:1; margin-bottom:6px; }
+.price-sub { font-size:12px; color:#555; }
+.features { display:flex; flex-direction:column; gap:10px; margin:20px 0; text-align:left; }
+.feature-item {
+  display:flex; align-items:center; gap:12px;
+  background:#0d0d0d;
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:12px; padding:12px 14px;
+  font-size:14px; color:#ccc;
+}
+.feature-icon { font-size:18px; flex-shrink:0; }
+.feature-item strong { display:block; font-size:13px; font-weight:800; color:#fff; margin-bottom:2px; }
+.feature-item span { font-size:12px; color:#555; }
+.user-pill {
+  background:rgba(255,215,0,0.06);
+  border:1px solid rgba(255,215,0,0.15);
+  color:#ffd700; font-size:12px; font-weight:700;
+  padding:6px 14px; border-radius:99px;
+  margin-bottom:16px; display:inline-block;
+}
+.pay-btn {
+  width:100%; padding:16px; border:none; border-radius:14px;
+  background:linear-gradient(90deg,#ffd700,#ffb300);
+  color:#000; font-weight:900; font-size:17px;
+  cursor:pointer; transition:0.2s;
+}
+.pay-btn:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(255,215,0,0.25); }
+.pay-btn:active { transform:scale(0.98); }
+.pay-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.secure-note { font-size:12px; color:#444; margin-top:12px; }
+#successBox { display:none; }
+.success-icon { font-size:56px; margin-bottom:16px; }
+.success-title { font-size:24px; font-weight:900; color:#00ff88; margin-bottom:8px; }
+.success-sub { font-size:14px; color:#555; margin-bottom:20px; }
+.payment-id-box {
+  background:#0d0d0d;
+  border:1px solid rgba(0,255,136,0.15);
+  border-radius:12px; padding:12px;
+  font-size:12px; color:#00ff88;
+  word-break:break-all; margin-bottom:16px;
+}
+.redirect-note { font-size:13px; color:#555; }
+.dots { display:inline-flex; gap:4px; margin-left:6px; }
+.dots span {
+  width:6px; height:6px; border-radius:50%;
+  background:#00ff88;
+  animation:blink 0.8s infinite alternate;
+}
+.dots span:nth-child(2) { animation-delay:0.2s; }
+.dots span:nth-child(3) { animation-delay:0.4s; }
+@keyframes blink { from{opacity:0.2;} to{opacity:1;} }
+</style>
+</head>
+<body>
+<div class="box">
+
+  <div id="paymentBox">
+    <div class="logo-wrap">🔥</div>
+    <div class="title">PavenFitzz AI Coach</div>
+    <p style="font-size:13px;color:#555;margin-top:4px;">Your Personal Workout + Diet AI</p>
+
+    <div class="price-box">
+      <div class="price-label">One Time Payment</div>
+      <div class="price-val">₹89</div>
+      <div class="price-sub">Lifetime Access · Unlimited Use</div>
+    </div>
+
+    <div class="features">
+      <div class="feature-item">
+        <span class="feature-icon">💪</span>
+        <div><strong>AI Workout Planner</strong><span>PPL, Bro Split, Upper Lower, Full Body</span></div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🍽️</span>
+        <div><strong>AI Meal Generator</strong><span>Based on foods you have at home</span></div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">💰</span>
+        <div><strong>Budget Diet Planner</strong><span>Best nutrition within your budget</span></div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🎯</span>
+        <div><strong>Goal Specific Plans</strong><span>Bulk, Cut, Maintain, Athletic</span></div>
+      </div>
+    </div>
+
+    <div class="user-pill">👤 <span id="userEmail">Loading...</span></div>
+
+    <button class="pay-btn" id="payBtn" onclick="startPayment()">
+      🔓 Unlock Premium Now — ₹89
+    </button>
+    <div class="secure-note">🔒 Secured by Razorpay · UPI · Cards · NetBanking</div>
+  </div>
+
+  <div id="successBox">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">Payment Successful!</div>
+    <div class="success-sub">Welcome to PavenFitzz Premium 🔥</div>
+    <div class="payment-id-box">Payment ID: <span id="paymentId"></span></div>
+    <div class="redirect-note">
+      Redirecting to your dashboard
+      <div class="dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

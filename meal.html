@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PavenFitzz — Meal Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#101010;--green:#00ff88;--blue:#00c3ff;--gold:#ffd000;--orange:#ff7700;--red:#ff4455;--border:rgba(255,255,255,0.07);--muted:#666;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height:100vh;}
+.wrap{max-width:860px;margin:auto;padding:24px 16px 60px;}
+.header{text-align:center;margin-bottom:28px;}
+.logo{font-size:44px;}
+.brand{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;background:linear-gradient(90deg,var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tagline{color:var(--muted);font-size:12px;letter-spacing:2px;margin-top:2px;}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;}
+.nav a{text-decoration:none;padding:8px 18px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:1px;border:1px solid var(--border);color:var(--muted);transition:all .2s;}
+.nav a:hover{border-color:var(--orange);color:var(--orange);}
+.nav a.active{background:var(--orange);color:#000;border-color:var(--orange);}
+.hint-box{background:#0d0d0d;border:1px solid rgba(0,255,136,0.12);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:#888;line-height:1.7;}
+.hint-box strong{color:var(--green);}
+.box{background:var(--card);border-radius:20px;padding:24px;border:1px solid var(--border);}
+.input-label{display:block;margin-top:18px;margin-bottom:6px;font-weight:700;color:var(--muted);letter-spacing:2px;font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase;}
+textarea{width:100%;padding:14px;border:1px solid #222;border-radius:12px;background:#0d0d0d;color:white;font-size:14px;font-family:'Syne',sans-serif;outline:none;resize:vertical;min-height:90px;transition:border-color .2s;line-height:1.6;}
+textarea:focus{border-color:var(--orange);}
+textarea::placeholder{color:#333;}
+select{width:100%;padding:13px 16px;border:1px solid #222;border-radius:12px;background:#0d0d0d;color:white;font-size:15px;font-family:'Syne',sans-serif;outline:none;transition:border-color .2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
+select:focus{border-color:var(--orange);}
+.gen-btn{width:100%;padding:16px;border:none;border-radius:14px;margin-top:22px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--orange),var(--gold));color:#000;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;transition:all .2s;}
+.gen-btn:hover{transform:translateY(-2px);}
+.gen-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.loading{text-align:center;padding:40px;color:var(--orange);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:14px;}
+.dots span{width:9px;height:9px;background:var(--orange);border-radius:50%;animation:bop 1s ease infinite;}
+.dots span:nth-child(2){animation-delay:.15s;}
+.dots span:nth-child(3){animation-delay:.3s;}
+@keyframes bop{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-8px);opacity:1}}
+.result{margin-top:24px;}
+.macro-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.macro-card{background:#0d0d0d;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.macro-val{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
+.macro-val.orange{color:var(--orange);}
+.macro-val.green{color:var(--green);}
+.macro-val.blue{color:var(--blue);}
+.macro-val.gold{color:var(--gold);}
+.macro-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.meal-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:14px;padding:18px;margin-bottom:10px;}
+.meal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.meal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--orange);}
+.meal-cal{background:rgba(255,119,0,0.1);border:1px solid rgba(255,119,0,0.25);color:var(--orange);padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;}
+.food-item{padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px;color:#ccc;display:flex;gap:8px;align-items:flex-start;}
+.food-item:last-child{border-bottom:none;}
+.f-dot{width:5px;height:5px;background:var(--orange);border-radius:50%;margin-top:8px;flex-shrink:0;}
+.day-note{background:#0d0d0d;border-radius:10px;padding:11px 14px;margin-top:12px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;}
+.day-note span{color:var(--green);font-weight:700;}
+.locked-note{background:#0d0d0d;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:13px;color:var(--muted);line-height:1.7;}
+.locked-note strong{color:var(--orange);}
+.btn-home{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;background:linear-gradient(90deg,var(--green),var(--blue));color:#000;margin-top:14px;transition:all .2s;}
+.btn-home:hover{transform:translateY(-2px);}
+.error-box{background:#1a0a0a;color:#ff7777;padding:16px;border-radius:12px;margin-top:14px;border:1px solid rgba(255,68,85,0.3);font-size:14px;}
+.locked-banner{background:linear-gradient(135deg,#1a0d00,#120900);border:1px solid rgba(255,119,0,0.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.locked-banner strong{color:var(--orange);}
+.locked-banner p{font-size:13px;color:#aaa;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">🍗</div>
+    <div class="brand">Meal Planner</div>
+    <div class="tagline">DAILY MEAL PLAN FROM YOUR FOODS</div>
+  </div>
+  <div class="nav">
+    <a href="workout.html">💪 Workout</a>
+    <a href="budget.html">💰 Budget</a>
+    <a href="meal.html" class="active">🍗 Meal</a>
+    <a href="home.html">🏠 Home</a>
+  </div>
+
+  <div id="mainContent">
+    <div class="hint-box">
+      💡 <strong>Tip:</strong> Enter the foods from your budget grocery list. AI generates a full day plan with calories and protein using only those foods.
+    </div>
+    <div class="box">
+      <label class="input-label">Foods You Have</label>
+      <textarea id="foods" placeholder="e.g. eggs, rice, dal, oats, banana, chicken, curd..."></textarea>
+      <label class="input-label">Number of Meals</label>
+      <select id="meals">
+        <option value="4">4 Meals (Breakfast · Lunch · Snack · Dinner)</option>
+        <option value="5">5 Meals (+ Pre-Workout)</option>
+        <option value="6">6 Meals (+ Pre + Post Workout)</option>
+      </select>
+      <button class="gen-btn" id="genBtn" onclick="generateMeal()">Generate Meal Plan 🍗</button>
+    </div>
+    <div id="mealResult" class="result"></div>
+  </div>
+</div>
+
+<script>
+const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
+const goal = localStorage.getItem("goal") || "Bulk";
+
+const CALORIE_TARGETS = {Bulk:3000, Cut:1800, Maintain:2400, Athletic:2600};
+const PROTEIN_TARGETS = {Bulk:140,  Cut:160,  Maintain:120,  Athletic:150};
+
+window.onload = function() {
+  const budgetFoods = localStorage.getItem("budgetFoods");
+  if (budgetFoods) {
+    document.getElementById("foods").value = budgetFoods;
+  }
+
+  const savedMeal = localStorage.getItem("mealData");
+  const savedDate = localStorage.getItem("mealDate");
+  const today = new Date().toDateString();
+
+  if (savedMeal && savedDate === today) {
+    document.getElementById("mainContent").innerHTML =
+      `<div class="locked-banner">
+        <div style="font-size:24px;">🔒</div>
+        <div><strong>Today's Meal Plan Ready</strong><p>Generated once per day. Come back tomorrow for a fresh plan.</p></div>
+      </div>` + renderMealHTML(JSON.parse(savedMeal));
+  }
+};
+
+async function generateMeal() {
+  const foods = document.getElementById("foods").value.trim();
+  const meals = document.getElementById("meals").value;
+  const btn   = document.getElementById("genBtn");
+
+  if (!foods) { alert("⚠️ Enter the foods you have!"); return; }
+
+  btn.disabled = true;
+  document.getElementById("mealResult").innerHTML =
+    `<div class="loading">🍳 Creating Your Meal Plan<div class="dots"><span></span><span></span><span></span></div></div>`;
+
+  const calTarget  = CALORIE_TARGETS[goal] || 2500;
+  const protTarget = PROTEIN_TARGETS[goal] || 130;
+
+  const mealNames = meals == 4
+    ? "Breakfast, Lunch, Snack, Dinner"
+    : meals == 5
+    ? "Breakfast, Lunch, Snack, Pre-Workout, Dinner"
+    : "Breakfast, Lunch, Snack, Pre-Workout, Post-Workout, Dinner";
+
+  const prompt = `Indian fitness meal planner. Goal: ${goal}. Target: ${calTarget}cal, ${protTarget}g protein.
+Available foods: ${foods}.
+Create ${meals} meals: ${mealNames}.
+Use ONLY the listed foods. Indian style. Keep it short and clear.
+
+FORMAT:
+BREAKFAST — 350cal | 25g P
+- 3 Eggs scrambled
+- 1 cup Oats with banana
+
+LUNCH — 500cal | 40g P
+- 150g Chicken curry
+- 1 cup Rice
+
+[continue for all meals]
+
+DAILY TOTAL:
+Calories: Xkcal | Protein: Xg | Carbs: Xg | Fat: Xg
+
+No extra text. Only meals and totals.`;
+
+  try {
+    const res  = await fetch(WORKER, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+    const data = await res.json();
+    const text = data.text || "";
+    if (!text) throw new Error("No response");
+
+    const parsed = parseMeal(text);
+    localStorage.setItem("mealData", JSON.stringify(parsed));
+    localStorage.setItem("mealDate", new Date().toDateString());
+
+    document.getElementById("mealResult").innerHTML = renderMealHTML(parsed);
+  } catch(err) {
+    document.getElementById("mealResult").innerHTML = `<div class="error-box">⚠️ ${err.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+function parseMeal(text) {
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  const meals = [];
+  const totals = {};
+  let current = null;
+
+  const mealKeywords = /^(breakfast|lunch|snack|dinner|pre-workout|post-workout|pre workout|post workout)/i;
+
+  lines.forEach(line => {
+    if (line.match(/^daily total/i)) { current = null; return; }
+    if (line.match(/^calories/i) && !current) { const m = line.match(/(\d+)/); if(m) totals.cal = m[1]; return; }
+    if (line.match(/^protein/i)  && !current) { const m = line.match(/(\d+)/); if(m) totals.prot = m[1]; return; }
+    if (line.match(/^carbs/i)    && !current) { const m = line.match(/(\d+)/); if(m) totals.carbs = m[1]; return; }
+    if (line.match(/^fat/i)      && !current) { const m = line.match(/(\d+)/); if(m) totals.fat = m[1]; return; }
+
+    if (line.match(mealKeywords)) {
+      if (current) meals.push(current);
+      const calM  = line.match(/(\d+)cal/i);
+      const protM = line.match(/(\d+)g\s*P/i);
+      const titleClean = line.split("—")[0].split("|")[0].trim();
+      current = { title: titleClean, cal: calM?.[1]||"", prot: protM?.[1]||"", items: [] };
+    } else if (current && line.match(/^[•\-]/)) {
+      current.items.push(line.replace(/^[•\-]\s*/,""));
+    }
+  });
+  if (current) meals.push(current);
+
+  return { meals, totals };
+}
+
+function renderMealHTML(data) {
+  const calTarget  = CALORIE_TARGETS[goal] || 2500;
+  const protTarget = PROTEIN_TARGETS[goal] || 130;
+
+  const mealEmojis = {
+    breakfast:"🌅", lunch:"☀️", snack:"⚡",
+    dinner:"🌙", "pre-workout":"💪", "post-workout":"🔄"
+  };
+
+  let html = `
+    <div class="macro-row">
+      <div class="macro-card"><div class="macro-val orange">${data.totals.cal || calTarget}</div><div class="macro-label">Calories</div></div>
+      <div class="macro-card"><div class="macro-val green">${data.totals.prot || protTarget}g</div><div class="macro-label">Protein</div></div>
+      <div class="macro-card"><div class="macro-val blue">${data.totals.carbs || "—"}g</div><div class="macro-label">Carbs</div></div>
+      <div class="macro-card"><div class="macro-val gold">${data.totals.fat || "—"}g</div><div class="macro-label">Fat</div></div>
+    </div>`;
+
+  data.meals.forEach(meal => {
+    const key   = Object.keys(mealEmojis).find(k => meal.title.toLowerCase().includes(k));
+    const emoji = key ? mealEmojis[key] : "🍽️";
+    html += `
+      <div class="meal-card">
+        <div class="meal-header">
+          <div class="meal-title">${emoji} ${meal.title}</div>
+          ${meal.cal ? `<div class="meal-cal">${meal.cal}kcal${meal.prot ? " · "+meal.prot+"g P":""}</div>` : ""}
+        </div>
+        ${meal.items.map(item => `<div class="food-item"><div class="f-dot"></div><span>${item}</span></div>`).join("")}
+      </div>`;
+  });
+
+  html += `
+    <div class="day-note">
+      Today's plan · Resets tomorrow
+      <span>📅 ${new Date().toDateString()}</span>
+    </div>
+    <div class="locked-note"><strong>✅ One plan per day.</strong> Stay consistent with your goal: ${goal}. Prep meals in advance for best results.</div>
+    <button class="btn-home" onclick="window.location.href='home.html'">← Back to Home</button>`;
+
+  return html;
+}
+</script>
+</body>
+</html>

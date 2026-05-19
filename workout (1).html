@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PavenFitzz — Workout</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#101010;--green:#00ff88;--blue:#00c3ff;--gold:#ffd000;--red:#ff4455;--border:rgba(255,255,255,0.07);--muted:#666;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height:100vh;}
+.wrap{max-width:860px;margin:auto;padding:24px 16px 60px;}
+.header{text-align:center;margin-bottom:28px;}
+.logo{font-size:44px;}
+.brand{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tagline{color:var(--muted);font-size:12px;letter-spacing:2px;margin-top:2px;}
+.nav{display:flex;gap:8px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;}
+.nav a{text-decoration:none;padding:8px 18px;border-radius:50px;font-size:12px;font-weight:700;letter-spacing:1px;border:1px solid var(--border);color:var(--muted);transition:all .2s;}
+.nav a:hover{border-color:var(--green);color:var(--green);}
+.nav a.active{background:var(--green);color:#000;border-color:var(--green);}
+.box{background:var(--card);border-radius:20px;padding:24px;border:1px solid var(--border);}
+.input-label{display:block;margin-top:18px;margin-bottom:6px;font-weight:700;color:var(--muted);letter-spacing:2px;font-size:11px;font-family:'DM Mono',monospace;text-transform:uppercase;}
+select{width:100%;padding:13px 16px;border:1px solid #222;border-radius:12px;background:#0d0d0d;color:white;font-size:15px;font-family:'Syne',sans-serif;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;transition:border-color .2s;}
+select:focus{border-color:var(--green);}
+.gen-btn{width:100%;padding:16px;border:none;border-radius:14px;margin-top:24px;font-size:16px;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--green),var(--blue));color:#000;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;transition:all .2s;}
+.gen-btn:hover{transform:translateY(-2px);}
+.gen-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;filter:grayscale(1);}
+.locked-banner{background:linear-gradient(135deg,#0a1f13,#051209);border:1px solid rgba(0,255,136,0.2);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;}
+.locked-icon{font-size:28px;}
+.locked-text{font-size:13px;color:#aaa;line-height:1.7;}
+.locked-text strong{color:var(--green);}
+.loading{text-align:center;padding:40px;color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:14px;}
+.dots span{width:9px;height:9px;background:var(--green);border-radius:50%;animation:bop 1s ease infinite;}
+.dots span:nth-child(2){animation-delay:.15s;}
+.dots span:nth-child(3){animation-delay:.3s;}
+@keyframes bop{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-8px);opacity:1}}
+.week-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--green);margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.week-badge{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);border-radius:50px;padding:3px 14px;font-size:13px;}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.tab{padding:8px 16px;border-radius:50px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.tab.active{background:var(--green);color:#000;border-color:var(--green);}
+.tab:hover:not(.active){border-color:var(--green);color:var(--green);}
+.day-panel{display:none;}
+.day-panel.active{display:block;}
+.day-card{background:#0d0d0d;border:1px solid var(--border);border-left:3px solid var(--green);border-radius:16px;padding:20px;}
+.day-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;color:var(--green);margin-bottom:16px;}
+.exercise{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;gap:10px;align-items:flex-start;}
+.exercise:last-child{border-bottom:none;}
+.ex-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:3px;}
+.ex-content{flex:1;}
+.ex-name{font-size:15px;font-weight:700;color:#f0f0f0;margin-bottom:3px;}
+.ex-detail{font-size:13px;color:var(--muted);font-family:'DM Mono',monospace;}
+.ex-tip{font-size:12px;color:#555;margin-top:3px;font-style:italic;}
+.day-note{background:rgba(0,255,136,0.04);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:13px;color:#888;line-height:1.7;}
+.progress-bar{height:4px;background:#1a1a1a;border-radius:99px;margin-bottom:20px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .5s ease;}
+.lock-info{background:#0d0d0d;border-radius:12px;padding:14px 16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;}
+.lock-info-text{font-size:13px;color:var(--muted);}
+.lock-info-val{font-size:13px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
+.btn-next{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;background:linear-gradient(90deg,var(--gold),#ff9900);color:#000;margin-top:16px;transition:all .2s;}
+.btn-next:hover{transform:translateY(-2px);}
+.error-box{background:#1a0a0a;color:#ff7777;padding:18px;border-radius:14px;margin-top:16px;border:1px solid rgba(255,68,85,0.3);font-size:14px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal{background:#121212;border:1px solid rgba(0,255,136,0.2);border-radius:22px;padding:28px;max-width:420px;width:100%;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--green);margin-bottom:18px;}
+.modal-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.modal-label{color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;}
+.modal-val{font-weight:700;font-size:14px;}
+.modal-warn{background:rgba(255,208,0,0.06);border:1px solid rgba(255,208,0,0.2);border-radius:10px;padding:12px 14px;margin-top:16px;font-size:13px;color:#aaa;line-height:1.7;}
+.modal-warn strong{color:var(--gold);}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+.modal-cancel{background:#1a1a1a;color:#aaa;border:1px solid #333;padding:13px;border-radius:11px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;font-size:14px;}
+.modal-cancel:hover{border-color:var(--red);color:var(--red);}
+.modal-ok{background:var(--green);color:#000;border:none;padding:13px;border-radius:11px;font-family:'Syne',sans-serif;font-weight:800;cursor:pointer;font-size:14px;transition:all .2s;}
+.modal-ok:hover{background:#00ffaa;}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">⚡ Confirm Split</div>
+    <div class="modal-row"><span class="modal-label">Goal</span><span class="modal-val" id="m-goal"></span></div>
+    <div class="modal-row"><span class="modal-label">Level</span><span class="modal-val" id="m-level"></span></div>
+    <div class="modal-row"><span class="modal-label">Split</span><span class="modal-val" id="m-split"></span></div>
+    <div class="modal-row" style="border:none;"><span class="modal-label">Days</span><span class="modal-val" id="m-days"></span></div>
+    <div class="modal-warn"><strong>⚠️ Once confirmed this split is locked</strong> until all days are completed. You cannot change it midway.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">← Edit</button>
+      <button class="modal-ok" onclick="confirmGenerate()">Lock & Generate 🔥</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <div class="logo">💪</div>
+    <div class="brand">Workout Coach</div>
+    <div class="tagline">PERSONALIZED SPLIT PROGRAM</div>
+  </div>
+  <div class="nav">
+    <a href="workout.html" class="active">💪 Workout</a>
+    <a href="diet.html">💰 Diet</a>
+    <a href="meal.html">🍗 Meal</a>
+    <a href="home.html">🏠 Home</a>
+  </div>
+
+  <div id="formSection">
+    <div class="box">
+      <label class="input-label">Fitness Goal</label>
+      <select id="goal">
+        <option>Bulk</option>
+        <option>Cut</option>
+        <option>Maintain</option>
+        <option>Athletic</option>
+      </select>
+      <label class="input-label">Experience Level</label>
+      <select id="level">
+        <option>Beginner</option>
+        <option>Intermediate</option>
+        <option>Advanced</option>
+      </select>
+      <label class="input-label">Workout Split</label>
+      <select id="split">
+        <option value="PPL">PPL (Push Pull Legs) — 6 days</option>
+        <option value="Bro Split">Bro Split (Chest/Back/Shoulder/Arms/Legs) — 5 days</option>
+        <option value="Upper Lower">Upper Lower — 4 days</option>
+        <option value="Full Body">Full Body — 3 days</option>
+      </select>
+      <button class="gen-btn" id="genBtn" onclick="openModal()">Generate My Program 🔥</button>
+    </div>
+  </div>
+
+  <div id="resultSection" style="display:none;">
+    <div class="locked-banner">
+      <div class="locked-icon">🔒</div>
+      <div class="locked-text">
+        <strong>Split Locked</strong> — <span id="lockInfo"></span><br>
+        <span id="daysRemaining" style="color:var(--gold);font-weight:700;"></span>
+      </div>
+    </div>
+    <div class="week-title">
+      📅 <span id="weekTitle"></span>
+      <span class="week-badge" id="weekBadge"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="tabs" id="tabsContainer"></div>
+    <div id="dayPanels"></div>
+    <div class="lock-info">
+      <span class="lock-info-text">Split resets after all days done</span>
+      <span class="lock-info-val" id="resetDate"></span>
+    </div>
+    <button class="btn-next"
+onclick="window.location.href='diet.html'">
+
+Next: Diet Plan →
+
+</button>
+  </div>
+</div>
+
+<script>
+const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
+
+const SPLIT_DAYS = {
+  "PPL": 6,
+  "Bro Split": 5,
+  "Upper Lower": 4,
+  "Full Body": 3
+};
+
+const SPLIT_STRUCTURE = {
+  "PPL": ["Push (Chest/Shoulders/Triceps)", "Pull (Back/Biceps)", "Legs", "Push", "Pull", "Legs"],
+  "Bro Split": ["Chest", "Back", "Shoulders", "Arms (Biceps/Triceps)", "Legs"],
+  "Upper Lower": ["Upper A", "Lower A", "Upper B", "Lower B"],
+  "Full Body": ["Full Body A", "Full Body B", "Full Body C"]
+};
+
+window.onload = function() {
+  const saved = localStorage.getItem("workoutData");
+  const lockStart = localStorage.getItem("workoutLockStart");
+  const split = localStorage.getItem("lockedSplit");
+
+  if (saved && lockStart && split) {
+    const startDate = new Date(lockStart);
+    const totalDays = SPLIT_DAYS[split] || 6;
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + totalDays);
+    const now = new Date();
+
+    if (now < endDate) {
+      document.getElementById("formSection").style.display = "none";
+      document.getElementById("resultSection").style.display = "block";
+      renderWorkout(JSON.parse(saved));
+      return;
+    } else {
+      localStorage.removeItem("workoutData");
+      localStorage.removeItem("workoutLockStart");
+      localStorage.removeItem("lockedSplit");
+    }
+  }
+};
+
+function openModal() {
+  const split = document.getElementById("split").value;
+  const days = SPLIT_DAYS[split];
+  document.getElementById("m-goal").innerText = document.getElementById("goal").value;
+  document.getElementById("m-level").innerText = document.getElementById("level").value;
+  document.getElementById("m-split").innerText = split;
+  document.getElementById("m-days").innerText = days + " days per cycle";
+  document.getElementById("modalOverlay").classList.add("show");
+}
+
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("show");
+}
+
+async function confirmGenerate() {
+  closeModal();
+  const goal  = document.getElementById("goal").value;
+  const level = document.getElementById("level").value;
+  const split = document.getElementById("split").value;
+  const days  = SPLIT_DAYS[split];
+  const structure = SPLIT_STRUCTURE[split];
+
+  document.getElementById("formSection").innerHTML =
+    `<div class="loading">🤖 Building Your ${split} Program<div class="dots"><span></span><span></span><span></span></div></div>`;
+
+  const splitDay = structure.map((s,i) => `Day ${i+1}: ${s}`).join("\n");
+
+const prompt = `You are a gym coach. Create a STRICT ${split} workout plan.
+Goal: ${goal}. Level: ${level}.
+
+THIS IS A ${split.toUpperCase()} SPLIT. Follow this EXACT structure:
+${splitDay}
+
+IMPORTANT RULES:
+- Day 1 MUST be ${structure[0]}
+- Day 2 MUST be ${structure[1]}  
+- Do NOT mix with PPL or any other split
+- Each day: 5 exercises matching that muscle group ONLY
+
+FORMAT:
+DAY 1 — ${structure[0]}
+1. [exercise for ${structure[0]}] | sets x reps | tip
+2. [exercise] | sets x reps | tip
+3. [exercise] | sets x reps | tip
+4. [exercise] | sets x reps | tip
+5. [exercise] | sets x reps | tip
+
+DAY 2 — ${structure[1]}
+[continue same format for all ${days} days]
+
+No rest days. No extra text.`;
+
+  try {
+    const res  = await fetch(WORKER, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({prompt})});
+    const data = await res.json();
+    const text = data.text || "";
+
+    if (!text) throw new Error("No response from AI");
+
+    const parsed = parseWorkout(text, split);
+
+    localStorage.setItem("workoutData", JSON.stringify(parsed));
+    localStorage.setItem("workoutLockStart", new Date().toISOString());
+    localStorage.setItem("lockedSplit", split);
+    localStorage.setItem("goal", goal);
+    localStorage.setItem("level", level);
+    localStorage.setItem("split", split);
+    localStorage.setItem("days", days);
+
+    document.getElementById("formSection").style.display = "none";
+    document.getElementById("resultSection").style.display = "block";
+    renderWorkout(parsed);
+
+  } catch(err) {
+    document.getElementById("formSection").innerHTML =
+      `<div class="error-box">⚠️ ${err.message}</div>
+       <button class="gen-btn" onclick="location.reload()" style="margin-top:16px;">Try Again</button>`;
+  }
+}
+
+function parseWorkout(text, split) {
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  const days = [];
+  let current = null;
+
+  lines.forEach(line => {
+    if (line.match(/^DAY\s*\d+/i)) {
+      if (current) days.push(current);
+      current = { title: line.replace(/^DAY\s*\d+\s*[—-]\s*/i, "").trim(), fullTitle: line, exercises: [] };
+    } else if (current && line.match(/^\d+\./)) {
+      const parts = line.replace(/^\d+\.\s*/, "").split("|").map(p => p.trim());
+      current.exercises.push({
+        name: parts[0] || line,
+        detail: parts[1] || "",
+        tip: parts[2] || ""
+      });
+    } else if (current && line.match(/^[-•]\s*/)) {
+      const content = line.replace(/^[-•]\s*/, "");
+      const parts = content.split("|").map(p => p.trim());
+      current.exercises.push({
+        name: parts[0] || content,
+        detail: parts[1] || "",
+        tip: parts[2] || ""
+      });
+    }
+  });
+
+  if (current) days.push(current);
+  return { split, days };
+}
+
+function renderWorkout(data) {
+  const split = data.split || localStorage.getItem("lockedSplit");
+  const totalDays = SPLIT_DAYS[split] || data.days.length;
+  const lockStart = new Date(localStorage.getItem("workoutLockStart"));
+  const endDate = new Date(lockStart);
+  endDate.setDate(endDate.getDate() + totalDays);
+  const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000*60*60*24)));
+  const pct = Math.round(((totalDays - daysLeft) / totalDays) * 100);
+
+  document.getElementById("weekTitle").innerText = split + " Program";
+  document.getElementById("weekBadge").innerText = totalDays + " Days";
+  document.getElementById("lockInfo").innerText = split + " · " + totalDays + " day cycle";
+  document.getElementById("daysRemaining").innerText = daysLeft + " days remaining";
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("resetDate").innerText = "Resets: " + endDate.toDateString();
+
+  const tabs = document.getElementById("tabsContainer");
+  const panels = document.getElementById("dayPanels");
+  tabs.innerHTML = "";
+  panels.innerHTML = "";
+
+  data.days.forEach((day, i) => {
+    const tab = document.createElement("button");
+    tab.className = "tab" + (i === 0 ? " active" : "");
+    tab.innerText = "Day " + (i+1);
+    tab.onclick = () => switchTab(i);
+    tabs.appendChild(tab);
+
+    const panel = document.createElement("div");
+    panel.className = "day-panel" + (i === 0 ? " active" : "");
+    panel.id = "panel-" + i;
+
+    let exHtml = day.exercises.map((ex, j) => `
+      <div class="exercise">
+        <span class="ex-num">${j+1}</span>
+        <div class="ex-content">
+          <div class="ex-name">${ex.name}</div>
+          ${ex.detail ? `<div class="ex-detail">${ex.detail}</div>` : ""}
+          ${ex.tip ? `<div class="ex-tip">💡 ${ex.tip}</div>` : ""}
+        </div>
+      </div>
+    `).join("");
+
+    panel.innerHTML = `
+      <div class="day-card">
+        <div class="day-name">Day ${i+1} — ${day.title}</div>
+        ${exHtml || "<p style='color:var(--muted);font-size:14px;'>Rest day or data unavailable.</p>"}
+        <div class="day-note">💪 Complete all sets with proper form. Rest 60-90 sec between sets.</div>
+      </div>
+    `;
+    panels.appendChild(panel);
+  });
+}
+
+function switchTab(index) {
+  document.querySelectorAll(".tab").forEach((t,i) => t.classList.toggle("active", i === index));
+  document.querySelectorAll(".day-panel").forEach((p,i) => p.classList.toggle("active", i === index));
+}
+</script>
+</body>
+</html>
