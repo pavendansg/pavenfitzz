@@ -55,7 +55,7 @@ select:focus{border-color:var(--green);}
 .day-note{background:rgba(0,255,136,0.04);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:13px;color:#888;line-height:1.7;}
 .progress-bar{height:4px;background:#1a1a1a;border-radius:99px;margin-bottom:20px;overflow:hidden;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:99px;transition:width .5s ease;}
-.lock-info{background:#0d0d0d;border-radius:12px;padding:14px 16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;}
+.lock-info{background:#0d0d0d;border-radius:12px;padding:14px 16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 .lock-info-text{font-size:13px;color:var(--muted);}
 .lock-info-val{font-size:13px;font-weight:700;color:var(--green);font-family:'DM Mono',monospace;}
 .btn-next{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;background:linear-gradient(90deg,var(--gold),#ff9900);color:#000;margin-top:16px;transition:all .2s;}
@@ -102,25 +102,20 @@ select:focus{border-color:var(--green);}
   </div>
   <div class="nav">
     <a href="workout.html" class="active">💪 Workout</a>
-    <a href="diet.html">💰 Diet</a>
+    <a href="diet.html">🧬 Diet</a>
     <a href="meal.html">🍗 Meal</a>
-    <a href="home.html">🏠 Home</a>
+    <a href="dashboard.html">🏠 Dashboard</a>
   </div>
 
   <div id="formSection">
     <div class="box">
       <label class="input-label">Fitness Goal</label>
       <select id="goal">
-        <option>Bulk</option>
-        <option>Cut</option>
-        <option>Maintain</option>
-        <option>Athletic</option>
+        <option>Bulk</option><option>Cut</option><option>Maintain</option><option>Athletic</option>
       </select>
       <label class="input-label">Experience Level</label>
       <select id="level">
-        <option>Beginner</option>
-        <option>Intermediate</option>
-        <option>Advanced</option>
+        <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
       </select>
       <label class="input-label">Workout Split</label>
       <select id="split">
@@ -152,45 +147,30 @@ select:focus{border-color:var(--green);}
       <span class="lock-info-text">Split resets after all days done</span>
       <span class="lock-info-val" id="resetDate"></span>
     </div>
-    <button class="btn-next"
-onclick="window.location.href='diet.html'">
-
-Next: Diet Plan →
-
-</button>
+    <button class="btn-next" onclick="window.location.href='diet.html'">Next: Diet Plan →</button>
   </div>
 </div>
 
 <script>
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
-
-const SPLIT_DAYS = {
-  "PPL": 6,
-  "Bro Split": 5,
-  "Upper Lower": 4,
-  "Full Body": 3
-};
-
+const SPLIT_DAYS = {"PPL":6,"Bro Split":5,"Upper Lower":4,"Full Body":3};
 const SPLIT_STRUCTURE = {
-  "PPL": ["Push (Chest/Shoulders/Triceps)", "Pull (Back/Biceps)", "Legs", "Push", "Pull", "Legs"],
-  "Bro Split": ["Chest", "Back", "Shoulders", "Arms (Biceps/Triceps)", "Legs"],
-  "Upper Lower": ["Upper A", "Lower A", "Upper B", "Lower B"],
-  "Full Body": ["Full Body A", "Full Body B", "Full Body C"]
+  "PPL":["Push (Chest/Shoulders/Triceps)","Pull (Back/Biceps)","Legs","Push","Pull","Legs"],
+  "Bro Split":["Chest","Back","Shoulders","Arms (Biceps/Triceps)","Legs"],
+  "Upper Lower":["Upper A","Lower A","Upper B","Lower B"],
+  "Full Body":["Full Body A","Full Body B","Full Body C"]
 };
 
 window.onload = function() {
   const saved = localStorage.getItem("workoutData");
   const lockStart = localStorage.getItem("workoutLockStart");
   const split = localStorage.getItem("lockedSplit");
-
   if (saved && lockStart && split) {
     const startDate = new Date(lockStart);
     const totalDays = SPLIT_DAYS[split] || 6;
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + totalDays);
-    const now = new Date();
-
-    if (now < endDate) {
+    if (new Date() < endDate) {
       document.getElementById("formSection").style.display = "none";
       document.getElementById("resultSection").style.display = "block";
       renderWorkout(JSON.parse(saved));
@@ -205,24 +185,22 @@ window.onload = function() {
 
 function openModal() {
   const split = document.getElementById("split").value;
-  const days = SPLIT_DAYS[split];
-  document.getElementById("m-goal").innerText = document.getElementById("goal").value;
+  const days  = SPLIT_DAYS[split];
+  document.getElementById("m-goal").innerText  = document.getElementById("goal").value;
   document.getElementById("m-level").innerText = document.getElementById("level").value;
   document.getElementById("m-split").innerText = split;
-  document.getElementById("m-days").innerText = days + " days per cycle";
+  document.getElementById("m-days").innerText  = days + " days per cycle";
   document.getElementById("modalOverlay").classList.add("show");
 }
 
-function closeModal() {
-  document.getElementById("modalOverlay").classList.remove("show");
-}
+function closeModal() { document.getElementById("modalOverlay").classList.remove("show"); }
 
 async function confirmGenerate() {
   closeModal();
-  const goal  = document.getElementById("goal").value;
-  const level = document.getElementById("level").value;
-  const split = document.getElementById("split").value;
-  const days  = SPLIT_DAYS[split];
+  const goal      = document.getElementById("goal").value;
+  const level     = document.getElementById("level").value;
+  const split     = document.getElementById("split").value;
+  const days      = SPLIT_DAYS[split];
   const structure = SPLIT_STRUCTURE[split];
 
   document.getElementById("formSection").innerHTML =
@@ -230,52 +208,44 @@ async function confirmGenerate() {
 
   const splitDay = structure.map((s,i) => `Day ${i+1}: ${s}`).join("\n");
 
-const prompt = `You are a gym coach. Create a STRICT ${split} workout plan.
+  const prompt = `You are a gym coach. Create a STRICT ${split} workout plan.
 Goal: ${goal}. Level: ${level}.
-
 THIS IS A ${split.toUpperCase()} SPLIT. Follow this EXACT structure:
 ${splitDay}
-
 IMPORTANT RULES:
 - Day 1 MUST be ${structure[0]}
-- Day 2 MUST be ${structure[1]}  
+- Day 2 MUST be ${structure[1]}
 - Do NOT mix with PPL or any other split
 - Each day: 5 exercises matching that muscle group ONLY
-
 FORMAT:
 DAY 1 — ${structure[0]}
-1. [exercise for ${structure[0]}] | sets x reps | tip
+1. [exercise] | sets x reps | tip
 2. [exercise] | sets x reps | tip
 3. [exercise] | sets x reps | tip
 4. [exercise] | sets x reps | tip
 5. [exercise] | sets x reps | tip
-
 DAY 2 — ${structure[1]}
 [continue same format for all ${days} days]
-
 No rest days. No extra text.`;
 
   try {
-    const res  = await fetch(WORKER, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({prompt})});
+    const res  = await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
     const data = await res.json();
     const text = data.text || "";
-
     if (!text) throw new Error("No response from AI");
 
     const parsed = parseWorkout(text, split);
-
-    localStorage.setItem("workoutData", JSON.stringify(parsed));
+    localStorage.setItem("workoutData",      JSON.stringify(parsed));
     localStorage.setItem("workoutLockStart", new Date().toISOString());
-    localStorage.setItem("lockedSplit", split);
-    localStorage.setItem("goal", goal);
+    localStorage.setItem("lockedSplit",      split);
+    localStorage.setItem("goal",  goal);
     localStorage.setItem("level", level);
     localStorage.setItem("split", split);
-    localStorage.setItem("days", days);
+    localStorage.setItem("days",  days);
 
-    document.getElementById("formSection").style.display = "none";
-    document.getElementById("resultSection").style.display = "block";
+    document.getElementById("formSection").style.display    = "none";
+    document.getElementById("resultSection").style.display  = "block";
     renderWorkout(parsed);
-
   } catch(err) {
     document.getElementById("formSection").innerHTML =
       `<div class="error-box">⚠️ ${err.message}</div>
@@ -284,93 +254,79 @@ No rest days. No extra text.`;
 }
 
 function parseWorkout(text, split) {
-  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-  const days = [];
+  const lines = text.split("\n").map(l=>l.trim()).filter(Boolean);
+  const days  = [];
   let current = null;
-
   lines.forEach(line => {
     if (line.match(/^DAY\s*\d+/i)) {
       if (current) days.push(current);
-      current = { title: line.replace(/^DAY\s*\d+\s*[—-]\s*/i, "").trim(), fullTitle: line, exercises: [] };
+      current = { title:line.replace(/^DAY\s*\d+\s*[—-]\s*/i,"").trim(), fullTitle:line, exercises:[] };
     } else if (current && line.match(/^\d+\./)) {
-      const parts = line.replace(/^\d+\.\s*/, "").split("|").map(p => p.trim());
-      current.exercises.push({
-        name: parts[0] || line,
-        detail: parts[1] || "",
-        tip: parts[2] || ""
-      });
+      const parts = line.replace(/^\d+\.\s*/,"").split("|").map(p=>p.trim());
+      current.exercises.push({name:parts[0]||line, detail:parts[1]||"", tip:parts[2]||""});
     } else if (current && line.match(/^[-•]\s*/)) {
-      const content = line.replace(/^[-•]\s*/, "");
-      const parts = content.split("|").map(p => p.trim());
-      current.exercises.push({
-        name: parts[0] || content,
-        detail: parts[1] || "",
-        tip: parts[2] || ""
-      });
+      const parts = line.replace(/^[-•]\s*/,"").split("|").map(p=>p.trim());
+      current.exercises.push({name:parts[0]||line, detail:parts[1]||"", tip:parts[2]||""});
     }
   });
-
   if (current) days.push(current);
   return { split, days };
 }
 
 function renderWorkout(data) {
-  const split = data.split || localStorage.getItem("lockedSplit");
+  const split     = data.split || localStorage.getItem("lockedSplit");
   const totalDays = SPLIT_DAYS[split] || data.days.length;
   const lockStart = new Date(localStorage.getItem("workoutLockStart"));
-  const endDate = new Date(lockStart);
+  const endDate   = new Date(lockStart);
   endDate.setDate(endDate.getDate() + totalDays);
-  const daysLeft = Math.max(0, Math.ceil((endDate - new Date()) / (1000*60*60*24)));
-  const pct = Math.round(((totalDays - daysLeft) / totalDays) * 100);
+  const daysLeft = Math.max(0, Math.ceil((endDate-new Date())/(1000*60*60*24)));
+  const pct      = Math.round(((totalDays-daysLeft)/totalDays)*100);
 
-  document.getElementById("weekTitle").innerText = split + " Program";
-  document.getElementById("weekBadge").innerText = totalDays + " Days";
-  document.getElementById("lockInfo").innerText = split + " · " + totalDays + " day cycle";
+  document.getElementById("weekTitle").innerText    = split + " Program";
+  document.getElementById("weekBadge").innerText    = totalDays + " Days";
+  document.getElementById("lockInfo").innerText     = split + " · " + totalDays + " day cycle";
   document.getElementById("daysRemaining").innerText = daysLeft + " days remaining";
   document.getElementById("progressFill").style.width = pct + "%";
-  document.getElementById("resetDate").innerText = "Resets: " + endDate.toDateString();
+  document.getElementById("resetDate").innerText    = "Resets: " + endDate.toDateString();
 
-  const tabs = document.getElementById("tabsContainer");
+  const tabs   = document.getElementById("tabsContainer");
   const panels = document.getElementById("dayPanels");
-  tabs.innerHTML = "";
-  panels.innerHTML = "";
+  tabs.innerHTML = ""; panels.innerHTML = "";
 
-  data.days.forEach((day, i) => {
+  data.days.forEach((day,i) => {
     const tab = document.createElement("button");
-    tab.className = "tab" + (i === 0 ? " active" : "");
-    tab.innerText = "Day " + (i+1);
-    tab.onclick = () => switchTab(i);
+    tab.className = "tab" + (i===0?" active":"");
+    tab.innerText = "Day "+(i+1);
+    tab.onclick   = () => switchTab(i);
     tabs.appendChild(tab);
 
     const panel = document.createElement("div");
-    panel.className = "day-panel" + (i === 0 ? " active" : "");
-    panel.id = "panel-" + i;
+    panel.className = "day-panel"+(i===0?" active":"");
+    panel.id = "panel-"+i;
 
-    let exHtml = day.exercises.map((ex, j) => `
+    const exHtml = day.exercises.map((ex,j) => `
       <div class="exercise">
         <span class="ex-num">${j+1}</span>
         <div class="ex-content">
           <div class="ex-name">${ex.name}</div>
-          ${ex.detail ? `<div class="ex-detail">${ex.detail}</div>` : ""}
-          ${ex.tip ? `<div class="ex-tip">💡 ${ex.tip}</div>` : ""}
+          ${ex.detail?`<div class="ex-detail">${ex.detail}</div>`:""}
+          ${ex.tip?`<div class="ex-tip">💡 ${ex.tip}</div>`:""}
         </div>
-      </div>
-    `).join("");
+      </div>`).join("");
 
     panel.innerHTML = `
       <div class="day-card">
         <div class="day-name">Day ${i+1} — ${day.title}</div>
-        ${exHtml || "<p style='color:var(--muted);font-size:14px;'>Rest day or data unavailable.</p>"}
+        ${exHtml||"<p style='color:var(--muted);font-size:14px;'>Rest day or data unavailable.</p>"}
         <div class="day-note">💪 Complete all sets with proper form. Rest 60-90 sec between sets.</div>
-      </div>
-    `;
+      </div>`;
     panels.appendChild(panel);
   });
 }
 
 function switchTab(index) {
-  document.querySelectorAll(".tab").forEach((t,i) => t.classList.toggle("active", i === index));
-  document.querySelectorAll(".day-panel").forEach((p,i) => p.classList.toggle("active", i === index));
+  document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active",i===index));
+  document.querySelectorAll(".day-panel").forEach((p,i)=>p.classList.toggle("active",i===index));
 }
 </script>
 </body>
