@@ -34,8 +34,6 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .dots span:nth-child(3){animation-delay:.3s;}
 @keyframes bop{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-8px);opacity:1}}
 .result{margin-top:24px;}
-
-/* Body Analysis Card */
 .analysis-card{background:linear-gradient(135deg,#0d1a0d,#0a1200);border:1px solid rgba(0,255,136,0.2);border-radius:18px;padding:22px;margin-bottom:16px;}
 .body-type-header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
 .body-type-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.2);}
@@ -56,8 +54,6 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .bmi-ranges{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;}
 .trait-list{display:flex;flex-wrap:wrap;gap:8px;}
 .trait{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.15);color:#aaa;font-size:12px;padding:5px 12px;border-radius:50px;font-family:'DM Mono',monospace;}
-
-/* Macro Card */
 .macro-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;}
 .macro-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--gold);margin-bottom:14px;}
 .macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
@@ -75,8 +71,6 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .macro-bar-f{background:var(--gold);}
 .macro-legend{display:flex;gap:14px;margin-top:6px;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);}
 .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
-
-/* Meal Plan */
 .meal-section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;}
 .meal-section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--orange);margin-bottom:14px;}
 .meal-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
@@ -84,14 +78,11 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .meal-time{font-size:10px;color:var(--gold);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
 .meal-foods{font-size:14px;color:#ccc;line-height:1.7;}
 .meal-macros{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:4px;}
-
-/* Foods Section */
 .foods-section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;}
 .foods-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--green);margin-bottom:14px;}
 .food-tags{display:flex;flex-wrap:wrap;gap:8px;}
 .food-tag{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.15);color:#aaa;font-size:13px;padding:6px 14px;border-radius:50px;}
 .food-tag.avoid{background:rgba(255,68,85,0.06);border-color:rgba(255,68,85,0.2);color:#ff7777;}
-
 .lock-note{background:#0d0d0d;border-radius:10px;padding:12px 14px;margin-top:4px;font-size:13px;color:var(--muted);line-height:1.7;}
 .lock-note strong{color:var(--gold);}
 .btn-next{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;background:linear-gradient(90deg,var(--green),var(--blue));color:#000;margin-top:14px;transition:all .2s;}
@@ -113,32 +104,19 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <a href="workout.html">💪 Workout</a>
     <a href="diet.html" class="active">🧬 Diet</a>
     <a href="meal.html">🍗 Meal</a>
-    <a href="home.html">🏠 Home</a>
+    <a href="dashboard.html">🏠 Dashboard</a>
   </div>
 
   <div id="mainContent">
     <div class="box">
       <div class="two-col">
-        <div>
-          <label class="input-label">Height (cm)</label>
-          <input type="number" id="height" placeholder="e.g. 175">
-        </div>
-        <div>
-          <label class="input-label">Weight (kg)</label>
-          <input type="number" id="weight" placeholder="e.g. 70">
-        </div>
+        <div><label class="input-label">Height (cm)</label><input type="number" id="height" placeholder="e.g. 175"></div>
+        <div><label class="input-label">Weight (kg)</label><input type="number" id="weight" placeholder="e.g. 70"></div>
       </div>
       <div class="two-col">
-        <div>
-          <label class="input-label">Age</label>
-          <input type="number" id="age" placeholder="e.g. 22">
-        </div>
-        <div>
-          <label class="input-label">Gender</label>
-          <select id="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
+        <div><label class="input-label">Age</label><input type="number" id="age" placeholder="e.g. 22"></div>
+        <div><label class="input-label">Gender</label>
+          <select id="gender"><option value="male">Male</option><option value="female">Female</option></select>
         </div>
       </div>
       <label class="input-label">Activity Level</label>
@@ -156,9 +134,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         <option value="Maintain">Maintain — Stay at Current Weight</option>
         <option value="Recomp">Recomp — Lose Fat + Gain Muscle</option>
       </select>
-      <button class="gen-btn" id="genBtn" onclick="analyzeDiet()">
-        Analyze My Body & Generate Diet 🧬
-      </button>
+      <button class="gen-btn" id="genBtn" onclick="analyzeDiet()">Analyze My Body & Generate Diet 🧬</button>
     </div>
     <div id="dietResult" class="result"></div>
   </div>
@@ -168,64 +144,46 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
 
 window.onload = function() {
-  const saved     = localStorage.getItem("dietData");
+  const saved = localStorage.getItem("dietData");
   const savedDate = localStorage.getItem("dietDate");
-  const today     = new Date().toDateString();
-  if (saved && savedDate === today) {
+  if (saved && savedDate === new Date().toDateString()) {
     document.getElementById("mainContent").innerHTML =
-      `<div class="locked-banner">
-        <div style="font-size:24px;">🔒</div>
-        <div><strong>Today's Diet Plan Ready</strong>
-        <p>Generated once per day. Come back tomorrow for a fresh plan.</p></div>
-      </div>` + renderDietHTML(JSON.parse(saved));
+      `<div class="locked-banner"><div style="font-size:24px;">🔒</div>
+      <div><strong>Today's Diet Plan Ready</strong><p>Generated once per day. Come back tomorrow for a fresh plan.</p></div></div>`
+      + renderDietHTML(JSON.parse(saved));
   }
 };
 
-function calcBMI(w, h) {
-  return (w / ((h/100) ** 2)).toFixed(1);
+function calcBMI(w,h){ return (w/((h/100)**2)).toFixed(1); }
+
+function getBodyType(bmi) {
+  if(bmi<18.5) return {type:"Ectomorph",icon:"🦴",desc:"Naturally lean, fast metabolism, hard to gain weight",traits:["Fast metabolism","Thin frame","Hard gainer","Low body fat"]};
+  if(bmi<25)   return {type:"Mesomorph",icon:"💪",desc:"Athletic build, gains muscle easily, balanced metabolism",traits:["Athletic build","Gains muscle easily","Medium frame","Good metabolism"]};
+  if(bmi<30)   return {type:"Endomorph",icon:"🔥",desc:"Solid build, gains weight easily, needs more cardio",traits:["Gains weight easily","Strong build","Slower metabolism","Good strength"]};
+  return {type:"Endomorph+",icon:"⚡",desc:"Higher body fat, prioritize fat loss with structured diet",traits:["High body fat","Slow metabolism","Strong base","Needs deficit"]};
 }
 
-function getBodyType(bmi, gender) {
-  if (bmi < 18.5) return { type: "Ectomorph", icon: "🦴", desc: "Naturally lean, fast metabolism, hard to gain weight", traits: ["Fast metabolism","Thin frame","Hard gainer","Low body fat"] };
-  if (bmi < 25)   return { type: "Mesomorph", icon: "💪", desc: "Athletic build, gains muscle easily, balanced metabolism", traits: ["Athletic build","Gains muscle easily","Medium frame","Good metabolism"] };
-  if (bmi < 30)   return { type: "Endomorph", icon: "🔥", desc: "Solid build, gains weight easily, needs more cardio", traits: ["Gains weight easily","Strong build","Slower metabolism","Good strength"] };
-  return { type: "Endomorph+", icon: "⚡", desc: "Higher body fat, prioritize fat loss with structured diet", traits: ["High body fat","Slow metabolism","Strong base","Needs deficit"] };
+function calcTDEE(weight,height,age,gender,activity) {
+  const bmr = gender==="male"
+    ? (10*weight)+(6.25*height)-(5*age)+5
+    : (10*weight)+(6.25*height)-(5*age)-161;
+  return Math.round(bmr*activity);
 }
 
-function calcTDEE(weight, height, age, gender, activity) {
-  let bmr;
-  if (gender === "male") {
-    bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
-  } else {
-    bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
-  }
-  return Math.round(bmr * activity);
-}
-
-function getCalorieTarget(tdee, goal) {
-  if (goal === "Bulk")     return tdee + 350;
-  if (goal === "Cut")      return tdee - 400;
-  if (goal === "Recomp")   return tdee;
+function getCalorieTarget(tdee,goal) {
+  if(goal==="Bulk") return tdee+350;
+  if(goal==="Cut")  return tdee-400;
   return tdee;
 }
 
-function getMacros(calories, weight, goal) {
-  let protein, fat, carbs;
-  if (goal === "Bulk") {
-    protein = Math.round(weight * 2.0);
-    fat     = Math.round(weight * 0.8);
-  } else if (goal === "Cut") {
-    protein = Math.round(weight * 2.4);
-    fat     = Math.round(weight * 0.7);
-  } else if (goal === "Recomp") {
-    protein = Math.round(weight * 2.2);
-    fat     = Math.round(weight * 0.75);
-  } else {
-    protein = Math.round(weight * 1.8);
-    fat     = Math.round(weight * 0.7);
-  }
-  carbs = Math.max(0, Math.round((calories - (protein*4) - (fat*9)) / 4));
-  return { protein, fat, carbs };
+function getMacros(calories,weight,goal) {
+  let protein,fat,carbs;
+  if(goal==="Bulk")   { protein=Math.round(weight*2.0); fat=Math.round(weight*0.8); }
+  else if(goal==="Cut")    { protein=Math.round(weight*2.4); fat=Math.round(weight*0.7); }
+  else if(goal==="Recomp") { protein=Math.round(weight*2.2); fat=Math.round(weight*0.75); }
+  else                     { protein=Math.round(weight*1.8); fat=Math.round(weight*0.7); }
+  carbs=Math.max(0,Math.round((calories-(protein*4)-(fat*9))/4));
+  return {protein,fat,carbs};
 }
 
 async function analyzeDiet() {
@@ -235,73 +193,54 @@ async function analyzeDiet() {
   const gender   = document.getElementById("gender").value;
   const activity = parseFloat(document.getElementById("activity").value);
   const goal     = document.getElementById("userGoal").value;
-
-  if (!height || !weight || !age) {
-    alert("⚠️ Fill all fields!"); return;
-  }
+  if(!height||!weight||!age){ alert("⚠️ Fill all fields!"); return; }
 
   const btn = document.getElementById("genBtn");
   btn.disabled = true;
   document.getElementById("dietResult").innerHTML =
     `<div class="loading">🧬 Analyzing Your Body Type<div class="dots"><span></span><span></span><span></span></div></div>`;
 
-  const bmi        = calcBMI(weight, height);
-  const bodyType   = getBodyType(parseFloat(bmi), gender);
-  const tdee       = calcTDEE(weight, height, age, gender, activity);
-  const calTarget  = getCalorieTarget(tdee, goal);
-  const macros     = getMacros(calTarget, weight, goal);
-  const bmiPct     = Math.min(100, Math.max(0, ((parseFloat(bmi) - 15) / (40-15)) * 100)).toFixed(0);
+  const bmi       = calcBMI(weight,height);
+  const bodyType  = getBodyType(parseFloat(bmi));
+  const tdee      = calcTDEE(weight,height,age,gender,activity);
+  const calTarget = getCalorieTarget(tdee,goal);
+  const macros    = getMacros(calTarget,weight,goal);
+  const bmiPct    = Math.min(100,Math.max(0,((parseFloat(bmi)-15)/(40-15))*100)).toFixed(0);
 
   const prompt = `You are an expert Indian nutritionist. Create a personalized diet plan.
-
 Body: ${gender}, ${age} years, ${height}cm, ${weight}kg
 BMI: ${bmi} — Body Type: ${bodyType.type}
 Goal: ${goal}
 Daily Calories: ${calTarget}kcal
 Targets: ${macros.protein}g protein, ${macros.carbs}g carbs, ${macros.fat}g fat
-
 Create a COMPLETE Indian diet plan. Format STRICTLY:
-
 MEAL PLAN:
 Breakfast | 7:00 AM | Xcal | Xg P
 - [food item with quantity]
-- [food item with quantity]
-
 Lunch | 1:00 PM | Xcal | Xg P
 - [food item with quantity]
-- [food item with quantity]
-
 Snack | 4:00 PM | Xcal | Xg P
 - [food item with quantity]
-
 Dinner | 8:00 PM | Xcal | Xg P
 - [food item with quantity]
-- [food item with quantity]
-
 EAT MORE:
-[list 6 best foods for ${bodyType.type} + ${goal} goal, one per line with reason]
-
+[list 6 best foods for ${bodyType.type} + ${goal} goal, one per line]
 AVOID:
-[list 4 foods to avoid, one per line with reason]
-
+[list 4 foods to avoid, one per line]
 TIPS:
 [3 specific tips for ${bodyType.type} body type with ${goal} goal]
-
 Keep it short, practical, Indian foods. No extra text.`;
 
   try {
-    const res  = await fetch(WORKER, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({prompt})});
+    const res  = await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
     const data = await res.json();
-    const text = data.text || "";
-    if (!text) throw new Error("No response from AI");
-
-    const parsed = parseDiet(text);
-    const fullData = { bmi, bodyType, tdee, calTarget, macros, bmiPct, goal, parsed, weight, height, age, gender };
-
+    const text = data.text||"";
+    if(!text) throw new Error("No response from AI");
+    const parsed   = parseDiet(text);
+    const fullData = {bmi,bodyType,tdee,calTarget,macros,bmiPct,goal,parsed,weight,height,age,gender};
     localStorage.setItem("dietData", JSON.stringify(fullData));
     localStorage.setItem("dietDate", new Date().toDateString());
     localStorage.setItem("goal", goal);
-
     document.getElementById("dietResult").innerHTML = renderDietHTML(fullData);
   } catch(err) {
     document.getElementById("dietResult").innerHTML = `<div class="error-box">⚠️ ${err.message}</div>`;
@@ -310,54 +249,36 @@ Keep it short, practical, Indian foods. No extra text.`;
 }
 
 function parseDiet(text) {
-  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-  const meals = [];
-  const eatMore = [];
-  const avoid   = [];
-  const tips    = [];
-  let section = "";
-  let current = null;
-
+  const lines   = text.split("\n").map(l=>l.trim()).filter(Boolean);
+  const meals   = [], eatMore = [], avoid = [], tips = [];
+  let section = "", current = null;
   lines.forEach(line => {
-    if (line.match(/^meal plan/i))  { section = "meals"; return; }
-    if (line.match(/^eat more/i))   { if(current) meals.push(current); current=null; section = "eat"; return; }
-    if (line.match(/^avoid/i))      { section = "avoid"; return; }
-    if (line.match(/^tips/i))       { section = "tips"; return; }
-
-    if (section === "meals") {
-      const mealHeader = line.match(/^(breakfast|lunch|snack|dinner|pre|post)/i);
-      if (mealHeader) {
-        if (current) meals.push(current);
-        const parts = line.split("|").map(p => p.trim());
-        current = {
-          name:  parts[0] || line,
-          time:  parts[1] || "",
-          cal:   (parts[2] || "").replace("cal","").replace("kcal","").trim(),
-          prot:  (parts[3] || "").replace("g P","").replace("g protein","").trim(),
-          foods: []
-        };
-      } else if (current && line.match(/^[•\-]/)) {
-        current.foods.push(line.replace(/^[•\-]\s*/,""));
-      }
+    if(line.match(/^meal plan/i))  { section="meals"; return; }
+    if(line.match(/^eat more/i))   { if(current) meals.push(current); current=null; section="eat"; return; }
+    if(line.match(/^avoid/i))      { section="avoid"; return; }
+    if(line.match(/^tips/i))       { section="tips"; return; }
+    if(section==="meals") {
+      if(line.match(/^(breakfast|lunch|snack|dinner|pre|post)/i)) {
+        if(current) meals.push(current);
+        const parts = line.split("|").map(p=>p.trim());
+        current={name:parts[0]||line,time:parts[1]||"",cal:(parts[2]||"").replace("cal","").replace("kcal","").trim(),prot:(parts[3]||"").replace("g P","").replace("g protein","").trim(),foods:[]};
+      } else if(current&&line.match(/^[•\-]/)) current.foods.push(line.replace(/^[•\-]\s*/,""));
     }
-
-    if (section === "eat"   && line.match(/^[•\-]/)) eatMore.push(line.replace(/^[•\-]\s*/,""));
-    if (section === "avoid" && line.match(/^[•\-]/)) avoid.push(line.replace(/^[•\-]\s*/,""));
-    if (section === "tips"  && line.match(/^[•\-\d]/)) tips.push(line.replace(/^[\d\.\-•]\s*/,""));
+    if(section==="eat"   &&line.match(/^[•\-]/)) eatMore.push(line.replace(/^[•\-]\s*/,""));
+    if(section==="avoid" &&line.match(/^[•\-]/)) avoid.push(line.replace(/^[•\-]\s*/,""));
+    if(section==="tips"  &&line.match(/^[•\-\d]/)) tips.push(line.replace(/^[\d\.\-•]\s*/,""));
   });
-
-  if (current) meals.push(current);
-  return { meals, eatMore, avoid, tips };
+  if(current) meals.push(current);
+  return {meals,eatMore,avoid,tips};
 }
 
 function renderDietHTML(data) {
-  const { bmi, bodyType, tdee, calTarget, macros, bmiPct, goal, parsed } = data;
-  const totalMacCal = (macros.protein*4) + (macros.carbs*4) + (macros.fat*9);
+  const {bmi,bodyType,tdee,calTarget,macros,bmiPct,goal,parsed} = data;
+  const totalMacCal = (macros.protein*4)+(macros.carbs*4)+(macros.fat*9);
   const pPct = Math.round((macros.protein*4)/totalMacCal*100);
   const cPct = Math.round((macros.carbs*4)/totalMacCal*100);
-  const fPct = 100 - pPct - cPct;
-
-  const mealEmojis = { breakfast:"🌅", lunch:"☀️", snack:"⚡", dinner:"🌙", pre:"💪", post:"🔄" };
+  const fPct = 100-pPct-cPct;
+  const mealEmojis = {breakfast:"🌅",lunch:"☀️",snack:"⚡",dinner:"🌙",pre:"💪",post:"🔄"};
 
   let html = `
     <div class="analysis-card">
@@ -368,23 +289,18 @@ function renderDietHTML(data) {
           <div class="body-type-sub">${bodyType.desc}</div>
         </div>
       </div>
-
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-val green">${bmi}</div><div class="stat-lbl">BMI</div></div>
         <div class="stat-box"><div class="stat-val gold">${calTarget}</div><div class="stat-lbl">Calories</div></div>
         <div class="stat-box"><div class="stat-val blue">${tdee}</div><div class="stat-lbl">TDEE</div></div>
         <div class="stat-box"><div class="stat-val orange">${goal}</div><div class="stat-lbl">Goal</div></div>
       </div>
-
       <div class="bmi-bar-wrap">
         <div class="bmi-bar-label"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
         <div class="bmi-bar"><div class="bmi-marker" style="left:${bmiPct}%"></div></div>
         <div class="bmi-ranges"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
       </div>
-
-      <div class="trait-list">
-        ${bodyType.traits.map(t => `<span class="trait">${t}</span>`).join("")}
-      </div>
+      <div class="trait-list">${bodyType.traits.map(t=>`<span class="trait">${t}</span>`).join("")}</div>
     </div>
 
     <div class="macro-card">
@@ -409,45 +325,41 @@ function renderDietHTML(data) {
       </div>
     </div>`;
 
-  if (parsed.meals.length > 0) {
-    html += `<div class="meal-section"><div class="meal-section-title">🍽️ Daily Meal Plan</div>`;
-    parsed.meals.forEach(meal => {
-      const key   = Object.keys(mealEmojis).find(k => meal.name.toLowerCase().includes(k));
-      const emoji = key ? mealEmojis[key] : "🍽️";
-      html += `
-        <div class="meal-item">
-          <div class="meal-time">${emoji} ${meal.name} ${meal.time ? "· "+meal.time : ""}</div>
-          <div class="meal-foods">${meal.foods.map(f => "• "+f).join("<br>")}</div>
-          ${meal.cal || meal.prot ? `<div class="meal-macros">${meal.cal ? meal.cal+"kcal" : ""} ${meal.prot ? "· "+meal.prot+"g protein" : ""}</div>` : ""}
-        </div>`;
+  if(parsed.meals.length>0){
+    html+=`<div class="meal-section"><div class="meal-section-title">🍽️ Daily Meal Plan</div>`;
+    parsed.meals.forEach(meal=>{
+      const key=Object.keys(mealEmojis).find(k=>meal.name.toLowerCase().includes(k));
+      const emoji=key?mealEmojis[key]:"🍽️";
+      html+=`<div class="meal-item">
+        <div class="meal-time">${emoji} ${meal.name} ${meal.time?"· "+meal.time:""}</div>
+        <div class="meal-foods">${meal.foods.map(f=>"• "+f).join("<br>")}</div>
+        ${meal.cal||meal.prot?`<div class="meal-macros">${meal.cal?meal.cal+"kcal":""} ${meal.prot?"· "+meal.prot+"g protein":""}</div>`:""}
+      </div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   }
 
-  if (parsed.eatMore.length > 0) {
-    html += `<div class="foods-section"><div class="foods-title">✅ Eat More</div><div class="food-tags">`;
-    parsed.eatMore.forEach(f => { html += `<span class="food-tag">${f}</span>`; });
-    html += `</div></div>`;
+  if(parsed.eatMore.length>0){
+    html+=`<div class="foods-section"><div class="foods-title">✅ Eat More</div><div class="food-tags">`;
+    parsed.eatMore.forEach(f=>{html+=`<span class="food-tag">${f}</span>`;});
+    html+=`</div></div>`;
   }
 
-  if (parsed.avoid.length > 0) {
-    html += `<div class="foods-section"><div class="foods-title" style="color:var(--red)">❌ Avoid</div><div class="food-tags">`;
-    parsed.avoid.forEach(f => { html += `<span class="food-tag avoid">${f}</span>`; });
-    html += `</div></div>`;
+  if(parsed.avoid.length>0){
+    html+=`<div class="foods-section"><div class="foods-title" style="color:var(--red)">❌ Avoid</div><div class="food-tags">`;
+    parsed.avoid.forEach(f=>{html+=`<span class="food-tag avoid">${f}</span>`;});
+    html+=`</div></div>`;
   }
 
-  if (parsed.tips.length > 0) {
-    html += `<div class="meal-section"><div class="meal-section-title" style="color:var(--green)">💡 Tips for ${bodyType.type}</div>`;
-    parsed.tips.forEach((tip,i) => {
-      html += `<div class="meal-item"><div class="meal-foods">${i+1}. ${tip}</div></div>`;
-    });
-    html += `</div>`;
+  if(parsed.tips.length>0){
+    html+=`<div class="meal-section"><div class="meal-section-title" style="color:var(--green)">💡 Tips for ${bodyType.type}</div>`;
+    parsed.tips.forEach((tip,i)=>{html+=`<div class="meal-item"><div class="meal-foods">${i+1}. ${tip}</div></div>`;});
+    html+=`</div>`;
   }
 
-  html += `
+  html+=`
     <div class="lock-note"><strong>🔒 One analysis per day.</strong> Your diet plan resets tomorrow. Stay consistent with your ${goal} goal!</div>
     <button class="btn-next" onclick="window.location.href='meal.html'">Continue to Meal Planner →</button>`;
-
   return html;
 }
 </script>
