@@ -73,14 +73,14 @@ select:focus{border-color:var(--orange);}
   </div>
   <div class="nav">
     <a href="workout.html">💪 Workout</a>
-    <a href="budget.html">💰 Budget</a>
+    <a href="diet.html">🧬 Diet</a>
     <a href="meal.html" class="active">🍗 Meal</a>
-    <a href="home.html">🏠 Home</a>
+    <a href="dashboard.html">🏠 Dashboard</a>
   </div>
 
   <div id="mainContent">
     <div class="hint-box">
-      💡 <strong>Tip:</strong> Enter the foods from your budget grocery list. AI generates a full day plan with calories and protein using only those foods.
+      💡 <strong>Tip:</strong> Enter the foods you have at home. AI generates a full day plan with calories and protein using only those foods.
     </div>
     <div class="box">
       <label class="input-label">Foods You Have</label>
@@ -99,27 +99,20 @@ select:focus{border-color:var(--orange);}
 
 <script>
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
-const goal = localStorage.getItem("goal") || "Bulk";
-
-const CALORIE_TARGETS = {Bulk:3000, Cut:1800, Maintain:2400, Athletic:2600};
-const PROTEIN_TARGETS = {Bulk:140,  Cut:160,  Maintain:120,  Athletic:150};
+const goal   = localStorage.getItem("goal") || "Bulk";
+const CALORIE_TARGETS = {Bulk:3000,Cut:1800,Maintain:2400,Athletic:2600};
+const PROTEIN_TARGETS = {Bulk:140, Cut:160, Maintain:120, Athletic:150};
 
 window.onload = function() {
   const budgetFoods = localStorage.getItem("budgetFoods");
-  if (budgetFoods) {
-    document.getElementById("foods").value = budgetFoods;
-  }
-
+  if(budgetFoods) document.getElementById("foods").value = budgetFoods;
   const savedMeal = localStorage.getItem("mealData");
   const savedDate = localStorage.getItem("mealDate");
-  const today = new Date().toDateString();
-
-  if (savedMeal && savedDate === today) {
+  if(savedMeal && savedDate === new Date().toDateString()){
     document.getElementById("mainContent").innerHTML =
-      `<div class="locked-banner">
-        <div style="font-size:24px;">🔒</div>
-        <div><strong>Today's Meal Plan Ready</strong><p>Generated once per day. Come back tomorrow for a fresh plan.</p></div>
-      </div>` + renderMealHTML(JSON.parse(savedMeal));
+      `<div class="locked-banner"><div style="font-size:24px;">🔒</div>
+      <div><strong>Today's Meal Plan Ready</strong><p>Generated once per day. Come back tomorrow for a fresh plan.</p></div></div>`
+      + renderMealHTML(JSON.parse(savedMeal));
   }
 };
 
@@ -127,8 +120,7 @@ async function generateMeal() {
   const foods = document.getElementById("foods").value.trim();
   const meals = document.getElementById("meals").value;
   const btn   = document.getElementById("genBtn");
-
-  if (!foods) { alert("⚠️ Enter the foods you have!"); return; }
+  if(!foods){ alert("⚠️ Enter the foods you have!"); return; }
 
   btn.disabled = true;
   document.getElementById("mealResult").innerHTML =
@@ -136,10 +128,9 @@ async function generateMeal() {
 
   const calTarget  = CALORIE_TARGETS[goal] || 2500;
   const protTarget = PROTEIN_TARGETS[goal] || 130;
-
-  const mealNames = meals == 4
+  const mealNames  = meals==4
     ? "Breakfast, Lunch, Snack, Dinner"
-    : meals == 5
+    : meals==5
     ? "Breakfast, Lunch, Snack, Pre-Workout, Dinner"
     : "Breakfast, Lunch, Snack, Pre-Workout, Post-Workout, Dinner";
 
@@ -147,33 +138,26 @@ async function generateMeal() {
 Available foods: ${foods}.
 Create ${meals} meals: ${mealNames}.
 Use ONLY the listed foods. Indian style. Keep it short and clear.
-
 FORMAT:
 BREAKFAST — 350cal | 25g P
 - 3 Eggs scrambled
 - 1 cup Oats with banana
-
 LUNCH — 500cal | 40g P
 - 150g Chicken curry
 - 1 cup Rice
-
 [continue for all meals]
-
 DAILY TOTAL:
 Calories: Xkcal | Protein: Xg | Carbs: Xg | Fat: Xg
-
 No extra text. Only meals and totals.`;
 
   try {
-    const res  = await fetch(WORKER, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+    const res  = await fetch(WORKER,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
     const data = await res.json();
-    const text = data.text || "";
-    if (!text) throw new Error("No response");
-
+    const text = data.text||"";
+    if(!text) throw new Error("No response");
     const parsed = parseMeal(text);
     localStorage.setItem("mealData", JSON.stringify(parsed));
     localStorage.setItem("mealDate", new Date().toDateString());
-
     document.getElementById("mealResult").innerHTML = renderMealHTML(parsed);
   } catch(err) {
     document.getElementById("mealResult").innerHTML = `<div class="error-box">⚠️ ${err.message}</div>`;
@@ -182,73 +166,55 @@ No extra text. Only meals and totals.`;
 }
 
 function parseMeal(text) {
-  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-  const meals = [];
-  const totals = {};
-  let current = null;
-
-  const mealKeywords = /^(breakfast|lunch|snack|dinner|pre-workout|post-workout|pre workout|post workout)/i;
-
+  const lines   = text.split("\n").map(l=>l.trim()).filter(Boolean);
+  const meals   = [];
+  const totals  = {};
+  let current   = null;
+  const mealKW  = /^(breakfast|lunch|snack|dinner|pre-workout|post-workout|pre workout|post workout)/i;
   lines.forEach(line => {
-    if (line.match(/^daily total/i)) { current = null; return; }
-    if (line.match(/^calories/i) && !current) { const m = line.match(/(\d+)/); if(m) totals.cal = m[1]; return; }
-    if (line.match(/^protein/i)  && !current) { const m = line.match(/(\d+)/); if(m) totals.prot = m[1]; return; }
-    if (line.match(/^carbs/i)    && !current) { const m = line.match(/(\d+)/); if(m) totals.carbs = m[1]; return; }
-    if (line.match(/^fat/i)      && !current) { const m = line.match(/(\d+)/); if(m) totals.fat = m[1]; return; }
-
-    if (line.match(mealKeywords)) {
-      if (current) meals.push(current);
-      const calM  = line.match(/(\d+)cal/i);
-      const protM = line.match(/(\d+)g\s*P/i);
-      const titleClean = line.split("—")[0].split("|")[0].trim();
-      current = { title: titleClean, cal: calM?.[1]||"", prot: protM?.[1]||"", items: [] };
-    } else if (current && line.match(/^[•\-]/)) {
-      current.items.push(line.replace(/^[•\-]\s*/,""));
-    }
+    if(line.match(/^daily total/i)){ current=null; return; }
+    if(line.match(/^calories/i)&&!current){ const m=line.match(/(\d+)/); if(m) totals.cal=m[1]; return; }
+    if(line.match(/^protein/i) &&!current){ const m=line.match(/(\d+)/); if(m) totals.prot=m[1]; return; }
+    if(line.match(/^carbs/i)   &&!current){ const m=line.match(/(\d+)/); if(m) totals.carbs=m[1]; return; }
+    if(line.match(/^fat/i)     &&!current){ const m=line.match(/(\d+)/); if(m) totals.fat=m[1]; return; }
+    if(line.match(mealKW)){
+      if(current) meals.push(current);
+      const calM=line.match(/(\d+)cal/i), protM=line.match(/(\d+)g\s*P/i);
+      current={title:line.split("—")[0].split("|")[0].trim(), cal:calM?.[1]||"", prot:protM?.[1]||"", items:[]};
+    } else if(current&&line.match(/^[•\-]/)) current.items.push(line.replace(/^[•\-]\s*/,""));
   });
-  if (current) meals.push(current);
-
-  return { meals, totals };
+  if(current) meals.push(current);
+  return {meals,totals};
 }
 
 function renderMealHTML(data) {
-  const calTarget  = CALORIE_TARGETS[goal] || 2500;
-  const protTarget = PROTEIN_TARGETS[goal] || 130;
+  const calTarget  = CALORIE_TARGETS[goal]||2500;
+  const protTarget = PROTEIN_TARGETS[goal]||130;
+  const mealEmojis = {breakfast:"🌅",lunch:"☀️",snack:"⚡",dinner:"🌙","pre-workout":"💪","post-workout":"🔄"};
 
-  const mealEmojis = {
-    breakfast:"🌅", lunch:"☀️", snack:"⚡",
-    dinner:"🌙", "pre-workout":"💪", "post-workout":"🔄"
-  };
+  let html = `<div class="macro-row">
+    <div class="macro-card"><div class="macro-val orange">${data.totals.cal||calTarget}</div><div class="macro-label">Calories</div></div>
+    <div class="macro-card"><div class="macro-val green">${data.totals.prot||protTarget}g</div><div class="macro-label">Protein</div></div>
+    <div class="macro-card"><div class="macro-val blue">${data.totals.carbs||"—"}g</div><div class="macro-label">Carbs</div></div>
+    <div class="macro-card"><div class="macro-val gold">${data.totals.fat||"—"}g</div><div class="macro-label">Fat</div></div>
+  </div>`;
 
-  let html = `
-    <div class="macro-row">
-      <div class="macro-card"><div class="macro-val orange">${data.totals.cal || calTarget}</div><div class="macro-label">Calories</div></div>
-      <div class="macro-card"><div class="macro-val green">${data.totals.prot || protTarget}g</div><div class="macro-label">Protein</div></div>
-      <div class="macro-card"><div class="macro-val blue">${data.totals.carbs || "—"}g</div><div class="macro-label">Carbs</div></div>
-      <div class="macro-card"><div class="macro-val gold">${data.totals.fat || "—"}g</div><div class="macro-label">Fat</div></div>
+  data.meals.forEach(meal=>{
+    const key  =Object.keys(mealEmojis).find(k=>meal.title.toLowerCase().includes(k));
+    const emoji=key?mealEmojis[key]:"🍽️";
+    html+=`<div class="meal-card">
+      <div class="meal-header">
+        <div class="meal-title">${emoji} ${meal.title}</div>
+        ${meal.cal?`<div class="meal-cal">${meal.cal}kcal${meal.prot?" · "+meal.prot+"g P":""}</div>`:""}
+      </div>
+      ${meal.items.map(item=>`<div class="food-item"><div class="f-dot"></div><span>${item}</span></div>`).join("")}
     </div>`;
-
-  data.meals.forEach(meal => {
-    const key   = Object.keys(mealEmojis).find(k => meal.title.toLowerCase().includes(k));
-    const emoji = key ? mealEmojis[key] : "🍽️";
-    html += `
-      <div class="meal-card">
-        <div class="meal-header">
-          <div class="meal-title">${emoji} ${meal.title}</div>
-          ${meal.cal ? `<div class="meal-cal">${meal.cal}kcal${meal.prot ? " · "+meal.prot+"g P":""}</div>` : ""}
-        </div>
-        ${meal.items.map(item => `<div class="food-item"><div class="f-dot"></div><span>${item}</span></div>`).join("")}
-      </div>`;
   });
 
-  html += `
-    <div class="day-note">
-      Today's plan · Resets tomorrow
-      <span>📅 ${new Date().toDateString()}</span>
-    </div>
+  html+=`
+    <div class="day-note">Today's plan · Resets tomorrow <span>📅 ${new Date().toDateString()}</span></div>
     <div class="locked-note"><strong>✅ One plan per day.</strong> Stay consistent with your goal: ${goal}. Prep meals in advance for best results.</div>
-    <button class="btn-home" onclick="window.location.href='home.html'">← Back to Home</button>`;
-
+    <button class="btn-home" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>`;
   return html;
 }
 </script>
