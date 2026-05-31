@@ -12,18 +12,19 @@
   <div style="text-align:center;margin-bottom:24px;">
     <div class="page-icon-wrap">🍗</div>
     <h1 style="font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;">Your Macros</h1>
-    <p style="font-size:13px;color:#555;">Personalized nutrition for your goal</p>
+    <p style="font-size:13px;color:#555;">Step 3 of 3 — Personalized nutrition</p>
+    <div style="display:flex;justify-content:center;gap:6px;margin-top:10px;">
+      <div style="width:28px;height:4px;border-radius:2px;background:#00ff88;"></div>
+      <div style="width:28px;height:4px;border-radius:2px;background:#00ff88;"></div>
+      <div style="width:28px;height:4px;border-radius:2px;background:#00ff88;"></div>
+    </div>
   </div>
 
-  <!-- CALORIES PILL -->
   <div class="info-pill" id="calInfo"></div>
-
-  <!-- GOAL BADGE -->
   <div style="text-align:center;margin-bottom:16px;">
     <span class="goal-badge" id="goalBadge"></span>
   </div>
 
-  <!-- MACRO CARDS -->
   <div class="macro-grid">
     <div class="macro-card protein-card">
       <div class="macro-icon">🍗</div>
@@ -45,7 +46,6 @@
     </div>
   </div>
 
-  <!-- MACRO BAR -->
   <div class="macro-bar-wrap">
     <div class="macro-bar-fill protein-fill" id="proteinBar"></div>
     <div class="macro-bar-fill carbs-fill"   id="carbsBar"></div>
@@ -57,7 +57,6 @@
     <span style="color:#00ff88;">● Fats</span>
   </div>
 
-  <!-- DIET PLAN -->
   <div class="box" style="margin-top:16px;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
       <span style="font-size:16px;">🥗</span>
@@ -68,171 +67,106 @@
 
   <div class="btns" style="margin-top:16px;">
     <button class="secondary-btn" onclick="location.href='calorie.html'">← Back</button>
-    <button class="primary-btn"   onclick="location.href='dashboard.html'">Dashboard 📊</button>
+    <button class="primary-btn" onclick="goToDashboard()">Go to Dashboard 📊</button>
   </div>
 
 </div>
 </div>
 
 <style>
-.page-icon-wrap {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255,215,0,0.08);
-  border: 2px solid rgba(255,215,0,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 14px;
-}
-
-.goal-badge {
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 800;
-  padding: 6px 18px;
-  border-radius: 99px;
-  border: 1px solid rgba(0,255,136,0.3);
-  background: rgba(0,255,136,0.08);
-  color: #00ff88;
-}
-
-.macro-cal {
-  font-size: 10px;
-  color: #444;
-  margin-top: 2px;
-}
-
-.macro-bar-wrap {
-  display: flex;
-  height: 8px;
-  border-radius: 99px;
-  overflow: hidden;
-  margin: 12px 0 6px;
-  background: #111;
-}
-
-.macro-bar-fill { height: 100%; transition: width 1s ease; }
-.protein-fill   { background: #ff6b6b; }
-.carbs-fill     { background: #ffd700; }
-.fats-fill      { background: #00ff88; }
-
-.macro-bar-legend {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  font-size: 11px;
-  color: #555;
-  margin-bottom: 4px;
-}
-
-.diet-plan-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.diet-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  background: #0d0d0d;
-  border: 1px solid rgba(255,255,255,0.04);
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: #bbb;
-  line-height: 1.5;
-}
-
-.diet-item-icon {
-  font-size: 16px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+.page-icon-wrap{width:64px;height:64px;border-radius:50%;background:rgba(255,215,0,0.08);border:2px solid rgba(255,215,0,0.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px;}
+.goal-badge{display:inline-block;font-size:13px;font-weight:800;padding:6px 18px;border-radius:99px;border:1px solid rgba(0,255,136,0.3);background:rgba(0,255,136,0.08);color:#00ff88;}
+.macro-cal{font-size:10px;color:#444;margin-top:2px;}
+.macro-bar-wrap{display:flex;height:8px;border-radius:99px;overflow:hidden;margin:12px 0 6px;background:#111;}
+.macro-bar-fill{height:100%;transition:width 1s ease;}
+.protein-fill{background:#ff6b6b;}
+.carbs-fill{background:#ffd700;}
+.fats-fill{background:#00ff88;}
+.macro-bar-legend{display:flex;justify-content:center;gap:16px;font-size:11px;color:#555;margin-bottom:4px;}
+.diet-plan-list{display:flex;flex-direction:column;gap:8px;}
+.diet-item{display:flex;align-items:flex-start;gap:10px;background:#0d0d0d;border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:10px 12px;font-size:13px;color:#bbb;line-height:1.5;}
+.diet-item-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 </style>
 
 <script>
+// STEP GUARD — needs calorie_done
+if (!localStorage.getItem("calorie_done")) {
+  location.href = "calorie.html";
+}
+
 const calories = Number(localStorage.getItem("calories"));
 const weight   = Number(localStorage.getItem("weight"));
 const goal     = localStorage.getItem("goal") || "maintain";
 
-// CALORIE PILL
 document.getElementById("calInfo").innerText =
   calories ? "Daily Calories: " + calories + " kcal 🔥" : "No calorie data — go back";
 
-// GOAL BADGE
-const goalLabels = { bulk: "💪 Bulking", maintain: "⚖️ Maintaining", cut: "🔥 Cutting" };
+const goalLabels = { bulk:"💪 Bulking", maintain:"⚖️ Maintaining", cut:"🔥 Cutting" };
 document.getElementById("goalBadge").innerText = goalLabels[goal] || goal;
 
 if (calories && weight) {
   let protein, fats, carbs;
+  if (goal==="bulk")     { protein=weight*2;   fats=weight*0.8; }
+  else if(goal==="maintain") { protein=weight*1.8; fats=weight*0.7; }
+  else                   { protein=weight*2.2; fats=weight*0.6; }
 
-  if (goal === "bulk") {
-    protein = weight * 2;
-    fats    = weight * 0.8;
-  } else if (goal === "maintain") {
-    protein = weight * 1.8;
-    fats    = weight * 0.7;
-  } else {
-    protein = weight * 2.2;
-    fats    = weight * 0.6;
-  }
-
-  carbs   = (calories - (protein * 4) - (fats * 9)) / 4;
+  carbs   = (calories-(protein*4)-(fats*9))/4;
   protein = Math.round(protein);
-  carbs   = Math.max(0, Math.round(carbs));
+  carbs   = Math.max(0,Math.round(carbs));
   fats    = Math.round(fats);
 
   localStorage.setItem("protein", protein);
   localStorage.setItem("carbs",   carbs);
   localStorage.setItem("fats",    fats);
 
-  document.getElementById("protein").innerText    = protein + "g";
-  document.getElementById("carbs").innerText      = carbs   + "g";
-  document.getElementById("fats").innerText       = fats    + "g";
-  document.getElementById("proteinCal").innerText = (protein * 4) + " kcal";
-  document.getElementById("carbsCal").innerText   = (carbs   * 4) + " kcal";
-  document.getElementById("fatsCal").innerText    = (fats    * 9) + " kcal";
+  document.getElementById("protein").innerText    = protein+"g";
+  document.getElementById("carbs").innerText      = carbs+"g";
+  document.getElementById("fats").innerText       = fats+"g";
+  document.getElementById("proteinCal").innerText = (protein*4)+" kcal";
+  document.getElementById("carbsCal").innerText   = (carbs*4)+" kcal";
+  document.getElementById("fatsCal").innerText    = (fats*9)+" kcal";
 
-  // MACRO BAR
-  const total = (protein * 4) + (carbs * 4) + (fats * 9);
-  document.getElementById("proteinBar").style.width = ((protein * 4) / total * 100) + "%";
-  document.getElementById("carbsBar").style.width   = ((carbs   * 4) / total * 100) + "%";
-  document.getElementById("fatsBar").style.width    = ((fats    * 9) / total * 100) + "%";
+  const total = (protein*4)+(carbs*4)+(fats*9);
+  document.getElementById("proteinBar").style.width = ((protein*4)/total*100)+"%";
+  document.getElementById("carbsBar").style.width   = ((carbs*4)/total*100)+"%";
+  document.getElementById("fatsBar").style.width    = ((fats*9)/total*100)+"%";
 
-  // DIET PLAN
   const plans = {
-    bulk: [
-      { icon: "🌅", text: "Breakfast: Eggs + Oats + Milk" },
-      { icon: "🍱", text: "Lunch: Rice + Chicken + Dal" },
-      { icon: "🍌", text: "Snack: Banana + Peanut Butter" },
-      { icon: "🌙", text: "Dinner: Rice + Paneer / Eggs" },
-      { icon: "💊", text: "Post-workout: Whey Protein shake" },
+    bulk:[
+      {icon:"🌅",text:"Breakfast: Eggs + Oats + Milk"},
+      {icon:"🍱",text:"Lunch: Rice + Chicken + Dal"},
+      {icon:"🍌",text:"Snack: Banana + Peanut Butter"},
+      {icon:"🌙",text:"Dinner: Rice + Paneer / Eggs"},
+      {icon:"💊",text:"Post-workout: Whey Protein"},
     ],
-    maintain: [
-      { icon: "🌅", text: "Breakfast: Oats + Fruits + Eggs" },
-      { icon: "🍱", text: "Lunch: Rice + Chicken + Veggies" },
-      { icon: "🍎", text: "Snack: Fruits + Mixed Nuts" },
-      { icon: "🌙", text: "Dinner: Light meal + Salad" },
+    maintain:[
+      {icon:"🌅",text:"Breakfast: Oats + Fruits + Eggs"},
+      {icon:"🍱",text:"Lunch: Rice + Chicken + Veggies"},
+      {icon:"🍎",text:"Snack: Fruits + Mixed Nuts"},
+      {icon:"🌙",text:"Dinner: Light meal + Salad"},
     ],
-    cut: [
-      { icon: "🌅", text: "Breakfast: Egg whites + Oats" },
-      { icon: "🍱", text: "Lunch: Chicken + Salad (no rice)" },
-      { icon: "🥗", text: "Snack: Cucumber + Greek Yogurt" },
-      { icon: "🌙", text: "Dinner: Lean protein + Veggies" },
+    cut:[
+      {icon:"🌅",text:"Breakfast: Egg whites + Oats"},
+      {icon:"🍱",text:"Lunch: Chicken + Salad (no rice)"},
+      {icon:"🥗",text:"Snack: Cucumber + Greek Yogurt"},
+      {icon:"🌙",text:"Dinner: Lean protein + Veggies"},
     ]
   };
 
   document.getElementById("dietPlan").innerHTML =
-    (plans[goal] || plans.maintain).map(item => `
+    (plans[goal]||plans.maintain).map(item=>`
       <div class="diet-item">
         <span class="diet-item-icon">${item.icon}</span>
         <span>${item.text}</span>
-      </div>
-    `).join("");
+      </div>`).join("");
+
+  // Mark step done
+  localStorage.setItem("macros_done","true");
+}
+
+function goToDashboard() {
+  localStorage.setItem("macros_done","true");
+  location.href = "dashboard.html";
 }
 </script>
 </body>
