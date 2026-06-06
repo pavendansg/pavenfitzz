@@ -10,6 +10,11 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
+  // ✅ STEP GUARD
+  if (!localStorage.getItem("macros_done")) {
+    location.href = "dashboard.html";
+  }
+
   const firebaseConfig = {
     apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
     authDomain: "evolvefit-07.firebaseapp.com",
@@ -24,8 +29,7 @@
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      // ✅ FIXED URL
-     location.href = "https://pavendansg.github.io/pavenfitzz/login.html";
+      location.href = "login.html";
       return;
     }
 
@@ -35,7 +39,8 @@
     // Check if already premium
     const snap = await getDoc(doc(db, "premium", user.uid));
     if (snap.exists() && snap.data().active === true) {
-      location.href = "ai-dashboard.html";
+      localStorage.setItem("premium", "true");
+      location.href = "dashboard-premium.html";
     }
   });
 
@@ -50,7 +55,7 @@
     btn.innerText = "Opening payment...";
 
     const options = {
-      key: "rzp_live_Sk2vCTkvCbTlpv", // 
+      key: "rzp_live_Sk2vCTkvCbTlpv",
       amount: 8900,
       currency: "INR",
       name: "PavenFitzz AI Coach",
@@ -79,7 +84,8 @@
           document.getElementById("successBox").style.display = "block";
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
-         setTimeout(() => { location.href = "workout.html"; }, 2000);
+          setTimeout(() => { location.href = "workout.html"; }, 2000);
+
         } catch(err) {
           alert("Payment done but save failed. Contact support with ID: "
             + response.razorpay_payment_id);
@@ -208,12 +214,12 @@ body {
         <div><strong>AI Workout Planner</strong><span>PPL, Bro Split, Upper Lower, Full Body</span></div>
       </div>
       <div class="feature-item">
-        <span class="feature-icon">🍽️</span>
-        <div><strong>AI Meal Generator</strong><span>Based on foods you have at home</span></div>
+        <span class="feature-icon">🧬</span>
+        <div><strong>Body Type Diet Analysis</strong><span>Ecto/Meso/Endo body type diet plan</span></div>
       </div>
       <div class="feature-item">
-        <span class="feature-icon">💰</span>
-        <div><strong>Budget Diet Planner</strong><span>Best nutrition within your budget</span></div>
+        <span class="feature-icon">🍗</span>
+        <div><strong>AI Meal Generator</strong><span>Based on foods you have at home</span></div>
       </div>
       <div class="feature-item">
         <span class="feature-icon">🎯</span>
@@ -235,7 +241,7 @@ body {
     <div class="success-sub">Welcome to PavenFitzz Premium 🔥</div>
     <div class="payment-id-box">Payment ID: <span id="paymentId"></span></div>
     <div class="redirect-note">
-      Redirecting to your dashboard
+      Redirecting to your workout plan
       <div class="dots"><span></span><span></span><span></span></div>
     </div>
   </div>
