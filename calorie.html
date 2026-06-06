@@ -12,7 +12,12 @@
   <div style="text-align:center;margin-bottom:24px;">
     <div class="page-icon-wrap">🔥</div>
     <h1 style="font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;">Calorie Calculator</h1>
-    <p style="font-size:13px;color:#555;">Find your perfect daily calorie target</p>
+    <p style="font-size:13px;color:#555;">Step 2 of 3 — Find your daily calorie target</p>
+    <div style="display:flex;justify-content:center;gap:6px;margin-top:10px;">
+      <div style="width:28px;height:4px;border-radius:2px;background:#00ff88;"></div>
+      <div style="width:28px;height:4px;border-radius:2px;background:#00ff88;"></div>
+      <div style="width:28px;height:4px;border-radius:2px;background:#222;"></div>
+    </div>
   </div>
 
   <div class="info-pill" id="info"></div>
@@ -29,6 +34,15 @@
     <option value="female">Female 👩</option>
   </select>
 
+  <label class="input-label">Activity Level</label>
+  <select id="activity">
+    <option value="1.2">Sedentary (no exercise)</option>
+    <option value="1.375">Light (1-3 days/week)</option>
+    <option value="1.55" selected>Moderate (3-5 days/week)</option>
+    <option value="1.725">Active (6-7 days/week)</option>
+    <option value="1.9">Very Active (athlete)</option>
+  </select>
+
   <label class="input-label">Your Goal</label>
   <select id="goal">
     <option value="bulk">Bulk 💪 — Build Muscle</option>
@@ -40,140 +54,138 @@
     Calculate My Calories ⚡
   </button>
 
-  <!-- RESULT -->
   <div id="resultBox" style="display:none;margin-top:16px;">
     <div class="cal-result-card">
       <div class="cal-result-label">Your Daily Target</div>
       <div class="cal-result-val" id="result">—</div>
       <div id="extra" style="margin-top:8px;"></div>
     </div>
-
     <div class="cal-breakdown" id="breakdown"></div>
-
     <button class="primary-btn" onclick="goToMacros()" style="margin-top:4px;">
       Next → View My Macros 🍗
     </button>
   </div>
 
-  <button class="secondary-btn" onclick="location.href='dashboard.html'" style="margin-top:10px;">
-    ← Back to Dashboard
+  <button class="secondary-btn" onclick="location.href='bmi.html'" style="margin-top:10px;">
+    ← Back
   </button>
 
 </div>
 </div>
 
 <style>
-.page-icon-wrap {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255,215,0,0.08);
-  border: 2px solid rgba(255,215,0,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 14px;
-}
-
-.cal-result-card {
-  background: #0a0f0a;
-  border: 2px solid rgba(0,255,136,0.2);
-  border-radius: 18px;
-  padding: 22px;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.cal-result-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #444;
-  margin-bottom: 8px;
-}
-
-.cal-result-val {
-  font-size: 44px;
-  font-weight: 900;
-  color: #00ff88;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-
-.cal-breakdown {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.cal-breakdown-item {
-  background: #0d0d0d;
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 12px;
-  padding: 12px 8px;
-  text-align: center;
-}
-
-.cal-breakdown-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #444;
-  margin-bottom: 4px;
-}
-
-.cal-breakdown-val {
-  font-size: 15px;
-  font-weight: 800;
-  color: #fff;
-}
+.page-icon-wrap{width:64px;height:64px;border-radius:50%;background:rgba(255,215,0,0.08);border:2px solid rgba(255,215,0,0.2);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 14px;}
+.cal-result-card{background:#0a0f0a;border:2px solid rgba(0,255,136,0.2);border-radius:18px;padding:22px;text-align:center;margin-bottom:12px;}
+.cal-result-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#444;margin-bottom:8px;}
+.cal-result-val{font-size:44px;font-weight:900;color:#00ff88;line-height:1;margin-bottom:6px;}
+.cal-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.cal-breakdown-item{background:#0d0d0d;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px 8px;text-align:center;}
+.cal-breakdown-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#444;margin-bottom:4px;}
+.cal-breakdown-val{font-size:15px;font-weight:800;}
+.bmr-info{background:#0d0d0d;border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#555;line-height:1.8;font-family:monospace;}
+.bmr-info span{color:#00ff88;font-weight:700;}
 </style>
 
 <script src="script.js"></script>
 <script>
-function runCalc() {
-  calculateCalories();
-  const rb = document.getElementById("resultBox");
-  const calories = localStorage.getItem("calories");
-  const goal     = document.getElementById("goal").value;
-  if (calories) {
-    rb.style.display = "block";
-
-    // result val already set by script.js
-    // build badge
-    const badges = {
-      bulk:     { label: "+300 kcal surplus 💪", color: "#00ff88" },
-      maintain: { label: "Maintenance ⚖️",       color: "#ffd700" },
-      cut:      { label: "-300 kcal deficit 🔥", color: "#ff6b6b" }
-    };
-    const b = badges[goal] || badges.maintain;
-    document.getElementById("extra").innerHTML =
-      `<span style="display:inline-block;background:${b.color}18;color:${b.color};
-       border:1px solid ${b.color}40;font-size:12px;font-weight:700;
-       padding:4px 14px;border-radius:99px;">${b.label}</span>`;
-
-    // breakdown
-    const cal = Number(calories);
-    document.getElementById("breakdown").innerHTML = `
-      <div class="cal-breakdown-item">
-        <div class="cal-breakdown-label">Protein</div>
-        <div class="cal-breakdown-val" style="color:#ff6b6b;">${Math.round(cal*0.3/4)}g</div>
-      </div>
-      <div class="cal-breakdown-item">
-        <div class="cal-breakdown-label">Carbs</div>
-        <div class="cal-breakdown-val" style="color:#ffd700;">${Math.round(cal*0.45/4)}g</div>
-      </div>
-      <div class="cal-breakdown-item">
-        <div class="cal-breakdown-label">Fats</div>
-        <div class="cal-breakdown-val" style="color:#00ff88;">${Math.round(cal*0.25/9)}g</div>
-      </div>
-    `;
-  }
+// STEP GUARD
+if (!localStorage.getItem("bmi_done")) {
+  location.href = "bmi.html";
 }
 
-function goToMacros() { location.href = "macros.html"; }
+// Auto fill
+window.onload = function() {
+  const h = localStorage.getItem("height");
+  if (h) document.getElementById("height").value = h;
+  const w = localStorage.getItem("weight");
+  const info = document.getElementById("info");
+  if (info && w) info.innerText = "Your weight: " + w + " kg 💪";
+};
+
+function runCalc() {
+  const weight   = Number(localStorage.getItem("weight"));
+  const height   = Number(document.getElementById("height").value);
+  const age      = Number(document.getElementById("age").value);
+  const gender   = document.getElementById("gender").value;
+  const activity = Number(document.getElementById("activity").value);
+  const goal     = document.getElementById("goal").value;
+
+  if (!weight || !height || !age) {
+    alert("Fill all fields ⚠️"); return;
+  }
+
+  localStorage.setItem("goal",   goal);
+  localStorage.setItem("height", height);
+
+  // ✅ CORRECT BMR — Mifflin-St Jeor
+  const bmr = gender === "male"
+    ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+    : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+
+  const tdee = Math.round(bmr * activity);
+
+  let finalCalories;
+  if (goal === "bulk")     finalCalories = tdee + 300;
+  else if (goal === "cut") finalCalories = tdee - 300;
+  else                     finalCalories = tdee;
+
+  finalCalories = Math.round(finalCalories);
+  localStorage.setItem("calories", finalCalories);
+  localStorage.setItem("calorie_done", "true");
+
+  // ✅ CORRECT MACROS — based on body weight
+  const protein = goal==="bulk"     ? Math.round(weight * 2.0)
+                : goal==="cut"      ? Math.round(weight * 2.2)
+                :                     Math.round(weight * 1.8);
+
+  const fats    = goal==="bulk"     ? Math.round(weight * 0.8)
+                : goal==="cut"      ? Math.round(weight * 0.6)
+                :                     Math.round(weight * 0.7);
+
+  const carbs   = Math.max(0, Math.round((finalCalories - (protein*4) - (fats*9)) / 4));
+
+  localStorage.setItem("protein", protein);
+  localStorage.setItem("carbs",   carbs);
+  localStorage.setItem("fats",    fats);
+
+  // SHOW RESULT
+  document.getElementById("resultBox").style.display = "block";
+  document.getElementById("result").innerHTML =
+    `<span style="font-size:44px;font-weight:900;color:#00ff88;">${finalCalories} kcal</span>`;
+
+  const badges = {
+    bulk:     { label: "+300 kcal surplus 💪", color: "#00ff88" },
+    maintain: { label: "Maintenance ⚖️",       color: "#ffd700" },
+    cut:      { label: "-300 kcal deficit 🔥", color: "#ff6b6b" }
+  };
+  const b = badges[goal];
+  document.getElementById("extra").innerHTML =
+    `<span style="display:inline-block;background:${b.color}18;color:${b.color};border:1px solid ${b.color}40;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;">${b.label}</span>
+     <div class="bmr-info" style="margin-top:10px;">
+       BMR: <span>${Math.round(bmr)} kcal</span> · TDEE: <span>${tdee} kcal</span> · Activity: <span>${activity}x</span>
+     </div>`;
+
+  document.getElementById("breakdown").innerHTML = `
+    <div class="cal-breakdown-item">
+      <div class="cal-breakdown-label">Protein</div>
+      <div class="cal-breakdown-val" style="color:#ff6b6b;">${protein}g</div>
+    </div>
+    <div class="cal-breakdown-item">
+      <div class="cal-breakdown-label">Carbs</div>
+      <div class="cal-breakdown-val" style="color:#ffd700;">${carbs}g</div>
+    </div>
+    <div class="cal-breakdown-item">
+      <div class="cal-breakdown-label">Fats</div>
+      <div class="cal-breakdown-val" style="color:#00ff88;">${fats}g</div>
+    </div>`;
+}
+
+function goToMacros() {
+  if (!localStorage.getItem("calorie_done")) {
+    alert("Calculate your calories first! ⚠️"); return;
+  }
+  location.href = "macros.html";
+}
 </script>
 </body>
 </html>
