@@ -141,6 +141,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 </div>
 
 <script>
+  // ✅ STEP GUARD
+if (localStorage.getItem("premium") !== "true") { location.href = "payment.html"; }
+if (!localStorage.getItem("workoutLockStart")) { location.href = "workout.html"; }
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
 
 window.onload = function() {
