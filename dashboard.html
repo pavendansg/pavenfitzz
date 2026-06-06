@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Dashboard - EvolveFit AI</title>
+<title>Dashboard - EvolveFit</title>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,6 @@
 <div class="container">
 <div class="card">
 
-  <!-- TOP BAR -->
   <div class="top-bar">
     <div class="avatar-wrap">
       <img id="profilePic" alt="Profile"/>
@@ -25,13 +24,11 @@
 
   <h1 class="title">🔥 Dashboard</h1>
 
-  <!-- RANK -->
   <div class="rank-box">
     <div id="rankTitle">🥉 BEGINNER</div>
     <div id="rankSub">Next Rank In 3 Days</div>
   </div>
 
-  <!-- XP LEVEL -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">⚡</span>
@@ -39,33 +36,18 @@
       <span id="levelText" class="box-badge"></span>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:12px;color:#555;margin-bottom:6px;">
-      <span id="xpText"></span>
-      <span id="xpPct"></span>
+      <span id="xpText"></span><span id="xpPct"></span>
     </div>
     <div class="progress"><div id="xpBar"></div></div>
   </div>
 
-  <!-- STATS GRID (Firebase BMI data) -->
   <div class="stats-grid">
-    <div class="stat-tile">
-      <div class="stat-tile-label">BMI</div>
-      <div class="stat-tile-val" id="bmi">—</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-tile-label">Weight</div>
-      <div class="stat-tile-val" id="weight">—</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-tile-label">Calories</div>
-      <div class="stat-tile-val" id="calories">—</div>
-    </div>
-    <div class="stat-tile">
-      <div class="stat-tile-label">Goal</div>
-      <div class="stat-tile-val" id="goal">—</div>
-    </div>
+    <div class="stat-tile"><div class="stat-tile-label">BMI</div><div class="stat-tile-val" id="bmi">—</div></div>
+    <div class="stat-tile"><div class="stat-tile-label">Weight</div><div class="stat-tile-val" id="weight">—</div></div>
+    <div class="stat-tile"><div class="stat-tile-label">Calories</div><div class="stat-tile-val" id="calories">—</div></div>
+    <div class="stat-tile"><div class="stat-tile-label">Goal</div><div class="stat-tile-val" id="goal">—</div></div>
   </div>
 
-  <!-- GOAL PROGRESS (Firebase) -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">🎯</span>
@@ -76,7 +58,6 @@
     <div class="progress"><div id="progressBar"></div></div>
   </div>
 
-  <!-- WATER TRACKER (from PavenFitzz) -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">💧</span>
@@ -87,99 +68,6 @@
     <button class="primary-btn" style="margin-top:12px;font-size:13px;padding:10px;" onclick="drinkWater()">+ Add Water 💧</button>
   </div>
 
-  <!-- TODAY'S WORKOUT PREVIEW (from PavenFitzz) -->
-  <div class="box">
-    <div class="box-header">
-      <span class="box-icon">💪</span>
-      <h3>Today's Workout</h3>
-      <span class="box-badge" id="programStatusBadge">Not Started</span>
-    </div>
-    <div class="workout-preview" id="workoutPreview">No workout generated yet. Go to AI Tools → Workout to create your plan.</div>
-    <div style="display:flex;gap:8px;margin-top:10px;">
-      <button class="primary-btn" style="font-size:13px;padding:10px;" onclick="completeWorkout()">Mark Complete ✅</button>
-      <button class="secondary-btn" style="font-size:13px;padding:10px;" onclick="location.href='workout.html'">View Full →</button>
-    </div>
-  </div>
-
-  <!-- NUTRITION TARGETS (from PavenFitzz) -->
-  <div class="box">
-    <div class="box-header">
-      <span class="box-icon">🍽️</span>
-      <h3>Daily Nutrition Targets</h3>
-    </div>
-    <div class="nut-grid">
-      <div class="nut-item"><div class="nut-val" id="calTarget">—</div><div class="nut-label">Calories</div></div>
-      <div class="nut-item"><div class="nut-val" id="protTarget">—</div><div class="nut-label">Protein</div></div>
-      <div class="nut-item"><div class="nut-val">8 hrs</div><div class="nut-label">Sleep</div></div>
-    </div>
-  </div>
-  
-  <!-- PREMIUM BANNER -->
-<div id="premiumBanner" style="display:none;">
-  <div style="background:linear-gradient(135deg,#1a1200,#0f0a00);border:1px solid rgba(255,208,0,0.3);border-radius:18px;padding:20px;margin-bottom:14px;text-align:center;">
-    <div style="font-size:28px;margin-bottom:8px;">⚡</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#ffd700;margin-bottom:6px;">UNLOCK AI FITNESS COACH</div>
-    <div style="font-size:13px;color:#888;margin-bottom:16px;line-height:1.7;">Personalized AI workout plans, body type diet analysis and smart meal planning</div>
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">
-      <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">💪 AI Workout</span>
-      <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">🧬 Body Diet</span>
-      <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">🍗 Meal Plan</span>
-    </div>
-    <button onclick="location.href='payment.html'" style="width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(90deg,#ffd700,#ffb300);color:#000;font-weight:900;font-size:16px;cursor:pointer;letter-spacing:1px;">
-      🔓 Unlock Premium — ₹89 Lifetime
-    </button>
-    <p style="font-size:11px;color:#555;margin-top:10px;">One-time · Lifetime access · No subscription</p>
-  </div>
-</div>
-
-  <!-- AI TOOLS SECTION -->
-  <div class="ai-section-header">
-    <span class="ai-section-icon">🤖</span>
-    <span>AI Fitness Tools</span>
-    <span class="ai-section-badge">Powered by AI</span>
-  </div>
-
-  <div class="ai-tools-grid">
-    <div class="ai-tool-card" onclick="location.href='workout.html'">
-      <div class="ai-tool-icon">💪</div>
-      <div class="ai-tool-name">Workout</div>
-      <div class="ai-tool-desc">Generate weekly program</div>
-      <div class="ai-tool-arrow">→</div>
-    </div>
-    <div class="ai-tool-card" onclick="location.href='budget.html'">
-      <div class="ai-tool-icon">🧬</div>
-      <div class="ai-tool-name">Body Type Diet</div>
-      <div class="ai-tool-desc">Diet for your body type</div>
-      <div class="ai-tool-arrow">→</div>
-    </div>
-    <div class="ai-tool-card" onclick="location.href='meal.html'">
-      <div class="ai-tool-icon">🍗</div>
-      <div class="ai-tool-name">Meal Planner</div>
-      <div class="ai-tool-desc">Turn groceries into meals</div>
-      <div class="ai-tool-arrow">→</div>
-    </div>
-  </div>
-
-  <!-- AI STATUS STRIP -->
-  <div class="ai-status-strip">
-    <div class="ai-status-item">
-      <span class="ai-dot" id="wDot"></span>
-      <span>Workout</span>
-      <span class="ai-status-val" id="workoutStatusVal">Not generated</span>
-    </div>
-    <div class="ai-status-item">
-      <span class="ai-dot" id="dDot"></span>
-      <span>Diet</span>
-      <span class="ai-status-val" id="dietStatusVal">Not generated</span>
-    </div>
-    <div class="ai-status-item">
-      <span class="ai-dot" id="mDot"></span>
-      <span>Meal</span>
-      <span class="ai-status-val" id="mealStatusVal">Not generated</span>
-    </div>
-  </div>
-
-  <!-- RECORDS -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">🏆</span>
@@ -188,7 +76,6 @@
     <p id="records"></p>
   </div>
 
-  <!-- ACHIEVEMENTS -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">🏅</span>
@@ -197,7 +84,6 @@
     <div id="badges" class="badge-wrap"></div>
   </div>
 
-  <!-- DAILY MISSIONS -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">📋</span>
@@ -208,7 +94,6 @@
     <div id="missions" class="mission-list"></div>
   </div>
 
-  <!-- DAILY REWARD -->
   <div class="box">
     <div class="box-header">
       <span class="box-icon">🎁</span>
@@ -218,7 +103,24 @@
     <div class="progress"><div id="rewardBar"></div></div>
   </div>
 
-  <!-- BUTTONS -->
+  <!-- PREMIUM UPGRADE BANNER -->
+  <div id="premiumBanner" style="display:none;margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#1a1200,#0f0a00);border:1px solid rgba(255,208,0,0.3);border-radius:18px;padding:24px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px;">⚡</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:#ffd700;margin-bottom:6px;">UNLOCK AI FITNESS COACH</div>
+      <div style="font-size:13px;color:#888;margin-bottom:16px;line-height:1.7;">Get AI workout plans, body type diet analysis and smart meal planning</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">
+        <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">💪 AI Workout</span>
+        <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">🧬 Body Diet</span>
+        <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);color:#00ff88;font-size:12px;padding:4px 12px;border-radius:50px;">🍗 Meal Plan</span>
+      </div>
+      <button onclick="location.href='payment.html'" style="width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(90deg,#ffd700,#ffb300);color:#000;font-weight:900;font-size:16px;cursor:pointer;letter-spacing:1px;">
+        🔓 Unlock Premium — ₹89 Lifetime
+      </button>
+      <p style="font-size:11px;color:#555;margin-top:10px;">One-time · Lifetime access · No subscription</p>
+    </div>
+  </div>
+
   <div class="btns" style="margin-top:4px;">
     <button class="primary-btn" onclick="location.href='bmi.html'">Daily Check-In ✅</button>
     <button class="secondary-btn" onclick="location.href='graph.html'">Progress 📈</button>
@@ -231,7 +133,6 @@
 </div>
 
 <style>
-/* IMPORTED FROM BOTH */
 .streak-pill{background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00ff88;font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px;white-space:nowrap;}
 .box-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 .box-icon{font-size:16px;}
@@ -247,53 +148,27 @@
 .badge-item{background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;}
 .mission-list{display:flex;flex-direction:column;gap:8px;}
 .mission-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#555;padding:10px 12px;background:#0d0d0d;border-radius:12px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:0.2s;user-select:none;}
-.mission-item:active{transform:scale(0.98);}
 .mission-item.done{color:#00ff88;border-color:rgba(0,255,136,0.15);background:rgba(0,255,136,0.04);}
-.mission-dot{width:20px;height:20px;border-radius:50%;border:2px solid #2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;transition:0.2s;}
+.mission-dot{width:20px;height:20px;border-radius:50%;border:2px solid #2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
 .mission-dot.done{background:#00ff88;border-color:#00ff88;color:#000;}
 #xpBar{background:linear-gradient(90deg,#00ff88,#00d9ff)!important;}
 #rewardBar{background:linear-gradient(90deg,#ffd700,#ffb300)!important;}
 #progressBar{background:linear-gradient(90deg,#00ff88,#ffd700)!important;}
 .logout-btn{width:100%;border-color:rgba(255,255,255,0.04)!important;color:#333!important;font-size:13px!important;}
-
-/* WATER DROPS */
 .drops{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
 .drop{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#1a1a1a;border:1px solid #333;transition:all .3s;}
 .drop.filled{background:#00c3ff;border-color:#00c3ff;box-shadow:0 0 6px rgba(0,195,255,0.4);}
-
-/* WORKOUT PREVIEW */
-.workout-preview{background:#0d0d0d;border-radius:12px;padding:12px;font-size:12px;line-height:1.9;color:#aaa;font-family:'DM Mono',monospace;max-height:150px;overflow-y:auto;margin-top:4px;}
-
-/* NUTRITION GRID */
-.nut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
-.nut-item{background:#0d0d0d;border-radius:12px;padding:12px;text-align:center;}
-.nut-val{font-size:18px;font-weight:800;color:#00ff88;}
-.nut-label{font-size:10px;color:#666;margin-top:3px;letter-spacing:1px;font-family:'DM Mono',monospace;}
-
-/* AI SECTION */
-.ai-section-header{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#00ff88;margin:20px 0 12px;letter-spacing:0.5px;}
-.ai-section-icon{font-size:18px;}
-.ai-section-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(0,255,136,0.08);color:#00ff88;border:1px solid rgba(0,255,136,0.2);letter-spacing:0.5px;}
-.ai-tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;}
-.ai-tool-card{background:linear-gradient(135deg,#0d150d,#0a0f0a);border:1px solid rgba(0,255,136,0.15);border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;transition:all 0.2s;}
-.ai-tool-card:hover{transform:translateY(-3px);border-color:rgba(0,255,136,0.4);box-shadow:0 8px 24px rgba(0,255,136,0.1);}
-.ai-tool-card:active{transform:scale(0.97);}
-.ai-tool-icon{font-size:24px;margin-bottom:6px;}
-.ai-tool-name{font-size:11px;font-weight:800;color:#fff;margin-bottom:3px;}
-.ai-tool-desc{font-size:10px;color:#555;line-height:1.4;margin-bottom:6px;}
-.ai-tool-arrow{font-size:13px;color:#00ff88;opacity:0.6;}
-.ai-status-strip{background:#0d0d0d;border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px;}
-.ai-status-item{display:flex;align-items:center;gap:8px;font-size:12px;color:#555;font-family:monospace;}
-.ai-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#2a2a2a;}
-.ai-dot.active{background:#00ff88;box-shadow:0 0 6px rgba(0,255,136,0.5);}
-.ai-status-val{margin-left:auto;font-size:11px;color:#444;}
-.ai-status-val.done{color:#00ff88;}
 </style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// ✅ STEP GUARD — needs macros_done
+if (!localStorage.getItem("macros_done")) {
+  location.href = "macros.html";
+}
 
 const firebaseConfig = {
   apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
@@ -305,218 +180,142 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-const CALORIE_TARGETS = {bulk:"3000kcal", cut:"1800kcal", maintain:"2400kcal", athletic:"2600kcal"};
-const PROTEIN_TARGETS = {bulk:"140g",     cut:"160g",     maintain:"120g",     athletic:"150g"};
-
-// PROFILE PIC
-const pic      = document.getElementById("profilePic");
-const fallback = document.getElementById("avatarFallback");
-const photo    = localStorage.getItem("photo");
+const pic   = document.getElementById("profilePic");
+const photo = localStorage.getItem("photo");
 if(photo){
   pic.src = photo;
-  pic.onload  = () => { pic.style.display="block"; fallback.style.display="none"; };
-  pic.onerror = () => { pic.style.display="none";  fallback.style.display="flex"; };
+  pic.onload  = () => { pic.style.display="block"; document.getElementById("avatarFallback").style.display="none"; };
+  pic.onerror = () => { pic.style.display="none";  document.getElementById("avatarFallback").style.display="flex"; };
 } else {
-  pic.style.display="none"; fallback.style.display="flex";
+  pic.style.display="none"; document.getElementById("avatarFallback").style.display="flex";
 }
 document.getElementById("user").innerText = localStorage.getItem("username") || "User";
 
-// WATER TRACKER
 function loadWater() {
-  const water = parseInt(localStorage.getItem("water") || 0);
-  document.getElementById("waterBadge").innerText = water + " / 4L";
+  const water = parseInt(localStorage.getItem("water")||0);
+  document.getElementById("waterBadge").innerText = water+" / 4L";
   const drops = document.getElementById("drops");
   drops.innerHTML = "";
   for(let i=0;i<8;i++){
-    const d = document.createElement("div");
-    d.className = "drop" + (i < water*2 ? " filled" : "");
+    const d=document.createElement("div");
+    d.className="drop"+(i<water*2?" filled":"");
     drops.appendChild(d);
   }
 }
 
 window.drinkWater = function() {
-  let w = parseInt(localStorage.getItem("water") || 0);
-  if(w < 4){ w++; localStorage.setItem("water", w); loadWater(); }
+  let w=parseInt(localStorage.getItem("water")||0);
+  if(w<4){w++;localStorage.setItem("water",w);loadWater();}
   else alert("💧 You've hit your 4L goal today!");
 };
 
-// WORKOUT PREVIEW
-function loadWorkoutPreview() {
-  const workout  = localStorage.getItem("generatedWorkout");
-  const locked   = localStorage.getItem("workoutLockStart");
-  const split    = localStorage.getItem("split") || "";
-  const badge    = document.getElementById("programStatusBadge");
-
-  if(workout && locked){
-    const totalDays = parseInt(localStorage.getItem("days") || 6);
-    const start = new Date(locked);
-    const end   = new Date(start);
-    end.setDate(end.getDate() + totalDays);
-    const now = new Date();
-    if(now < end){
-      const daysLeft = Math.max(0, Math.ceil((end-now)/(1000*60*60*24)));
-      badge.className  = "box-badge green";
-      badge.innerText  = "Active · " + daysLeft + "d left";
-      const lines = workout.split("\n").filter(l=>l.trim()).slice(0,8).join("\n");
-      document.getElementById("workoutPreview").innerText = lines;
-    } else {
-      badge.className = "box-badge red";
-      badge.innerText = "Split Ended";
-    }
-  } else {
-    badge.className = "box-badge red";
-    badge.innerText = "Not Started";
-  }
-}
-
-// AI STATUS
-function checkAIStatus() {
-  const w = localStorage.getItem("generatedWorkout");
-  const d = localStorage.getItem("budgetData");
-  const m = localStorage.getItem("budgetFoods");
-  if(w){ document.getElementById("wDot").classList.add("active"); document.getElementById("workoutStatusVal").innerText="✓ Ready"; document.getElementById("workoutStatusVal").className="ai-status-val done"; }
-  if(d){ document.getElementById("dDot").classList.add("active"); document.getElementById("dietStatusVal").innerText="✓ Ready"; document.getElementById("dietStatusVal").className="ai-status-val done"; }
-  if(m){ document.getElementById("mDot").classList.add("active"); document.getElementById("mealStatusVal").innerText="✓ Ready"; document.getElementById("mealStatusVal").className="ai-status-val done"; }
-}
-
-window.completeWorkout = function() {
-  let s = parseInt(localStorage.getItem("streak") || 0);
-  s++; localStorage.setItem("streak", s);
-  document.getElementById("streak").innerText = "🔥 " + s + " day streak";
-  alert("🔥 Workout done! " + s + " day streak!");
-};
-
 loadWater();
-loadWorkoutPreview();
-checkAIStatus();
 
 // MISSIONS
 const today = new Date().toISOString().split("T")[0];
-if(localStorage.getItem("missionDay") !== today){
-  ["workout","sleep","water","checkin"].forEach(id => localStorage.removeItem("mission_"+id));
-  localStorage.setItem("missionDay", today);
+if(localStorage.getItem("missionDay")!==today){
+  ["workout","sleep","water","checkin"].forEach(id=>localStorage.removeItem("mission_"+id));
+  localStorage.setItem("missionDay",today);
 }
 localStorage.setItem("mission_checkin","true");
 
-const missionDefs = [
-  {id:"workout", text:"Workout today 💪"},
-  {id:"sleep",   text:"Sleep 8 hours 😴"},
-  {id:"water",   text:"Drink 8 glasses of water 💧"},
-  {id:"checkin", text:"Log daily check-in ✅"},
+const missionDefs=[
+  {id:"workout",text:"Workout today 💪"},
+  {id:"sleep",  text:"Sleep 8 hours 😴"},
+  {id:"water",  text:"Drink 8 glasses 💧"},
+  {id:"checkin",text:"Log daily check-in ✅"},
 ];
 
-function renderMissions() {
-  const doneCount = missionDefs.filter(m => localStorage.getItem("mission_"+m.id)==="true").length;
-  document.getElementById("missionCount").innerText = doneCount + " / " + missionDefs.length + " done";
-  document.getElementById("missions").innerHTML = missionDefs.map(m => {
-    const done = localStorage.getItem("mission_"+m.id)==="true";
-    return `<div class="mission-item ${done?'done':''}" onclick="toggleMission('${m.id}')">
-      <div class="mission-dot ${done?'done':''}">${done?'✓':''}</div>
+function renderMissions(){
+  const done=missionDefs.filter(m=>localStorage.getItem("mission_"+m.id)==="true").length;
+  document.getElementById("missionCount").innerText=done+" / "+missionDefs.length+" done";
+  document.getElementById("missions").innerHTML=missionDefs.map(m=>{
+    const d=localStorage.getItem("mission_"+m.id)==="true";
+    return`<div class="mission-item ${d?"done":""}" onclick="toggleMission('${m.id}')">
+      <div class="mission-dot ${d?"done":""}">${d?"✓":""}</div>
       <span>${m.text}</span>
     </div>`;
   }).join("");
 }
 
-window.toggleMission = function(id) {
-  if(id==="checkin") return;
-  localStorage.setItem("mission_"+id, String(localStorage.getItem("mission_"+id)!=="true"));
+window.toggleMission=function(id){
+  if(id==="checkin")return;
+  localStorage.setItem("mission_"+id,String(localStorage.getItem("mission_"+id)!=="true"));
   renderMissions();
 };
 
 renderMissions();
 
 // FIREBASE
-onAuthStateChanged(auth, async (user) => {
-  if(!user){ location.href="login.html"; return; }
+onAuthStateChanged(auth, async(user)=>{
+  if(!user){location.href="login.html";return;}
+
+  // ✅ PREMIUM CHECK — if premium redirect to premium dashboard
+  try {
+    const premSnap = await getDoc(doc(db,"premium",user.uid));
+    if(premSnap.exists()&&premSnap.data().active===true){
+      localStorage.setItem("premium","true");
+      location.href="dashboard-premium.html";
+      return;
+    } else {
+      document.getElementById("premiumBanner").style.display="block";
+    }
+  } catch(e){ document.getElementById("premiumBanner").style.display="block"; }
 
   const snap = await getDocs(collection(db,"users",user.uid,"daily"));
-  if(snap.empty){ location.href="bmi.html"; return; }
+  if(snap.empty){location.href="bmi.html";return;}
 
-  let history = [];
-  snap.forEach(d => history.push(d.data()));
-  history.sort((a,b) => new Date(a.date)-new Date(b.date));
+  let history=[];
+  snap.forEach(d=>history.push(d.data()));
+  history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
-  const first  = history[0];
-  const latest = history[history.length-1];
-  const streak = history.length;
+  const first=history[0], latest=history[history.length-1];
+  const streak=history.length;
 
-  document.getElementById("streak").innerText = "🔥 " + streak + " day streak";
+  document.getElementById("streak").innerText="🔥 "+streak+" day streak";
 
-  // RANK
-  const rankTitle =
-    streak>=15?"👑 ELITE":streak>=8?"💪 BEAST":streak>=4?"⚔️ WARRIOR":"🥉 BEGINNER";
-  const daysLeft =
-    streak>=15?"MAX RANK 🏆":streak>=8?(15-streak)+" Day(s) to Elite":streak>=4?(8-streak)+" Day(s) to Beast":(4-streak)+" Day(s) to Warrior";
-  document.getElementById("rankTitle").innerText = rankTitle;
-  document.getElementById("rankSub").innerText   = daysLeft;
+  const rankTitle=streak>=15?"👑 ELITE":streak>=8?"💪 BEAST":streak>=4?"⚔️ WARRIOR":"🥉 BEGINNER";
+  const daysLeft=streak>=15?"MAX RANK 🏆":streak>=8?(15-streak)+" Day(s) to Elite":streak>=4?(8-streak)+" Day(s) to Beast":(4-streak)+" Day(s) to Warrior";
+  document.getElementById("rankTitle").innerText=rankTitle;
+  document.getElementById("rankSub").innerText=daysLeft;
 
-  // STATS
-  document.getElementById("bmi").innerText      = latest.bmi      || "—";
-  document.getElementById("weight").innerText   = (latest.weight  || "—") + " kg";
-  document.getElementById("calories").innerText = (latest.calories|| "—") + " kcal";
-  document.getElementById("goal").innerText     = (latest.goal    || "—").toUpperCase();
+  document.getElementById("bmi").innerText      = latest.bmi      ||"—";
+  document.getElementById("weight").innerText   = (latest.weight  ||"—")+" kg";
+  document.getElementById("calories").innerText = (latest.calories||"—")+" kcal";
+  document.getElementById("goal").innerText     = (latest.goal    ||"—").toUpperCase();
 
-  // Save goal for AI pages
-  if(latest.goal){
-    localStorage.setItem("goal", latest.goal);
-    document.getElementById("calTarget").innerText  = CALORIE_TARGETS[latest.goal] || "—";
-    document.getElementById("protTarget").innerText = PROTEIN_TARGETS[latest.goal] || "—";
-  }
-
-  // XP
   const xp=streak*10, level=Math.floor(xp/100)+1, curXP=xp%100;
-  document.getElementById("levelText").innerText = "Lvl " + level;
-  document.getElementById("xpText").innerText    = curXP + " / 100 XP";
-  document.getElementById("xpPct").innerText     = curXP + "%";
-  document.getElementById("xpBar").style.width   = curXP + "%";
+  document.getElementById("levelText").innerText="Lvl "+level;
+  document.getElementById("xpText").innerText=curXP+" / 100 XP";
+  document.getElementById("xpPct").innerText=curXP+"%";
+  document.getElementById("xpBar").style.width=curXP+"%";
 
-  // REWARD
-  document.getElementById("rewardText").innerText  = "+10 XP";
-  document.getElementById("rewardBar").style.width = "20%";
+  document.getElementById("rewardText").innerText="+10 XP";
+  document.getElementById("rewardBar").style.width="20%";
 
-  // RECORDS
-  document.getElementById("records").innerHTML =
+  document.getElementById("records").innerHTML=
     `<span style='color:#aaa;font-size:14px;'>Best Streak: <b style='color:#fff'>${streak} days</b></span><br>
      <span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>${history.length}</b></span>`;
 
-  // TARGET
-  const target   = Number(localStorage.getItem("targetWeight")) || (first.weight+5);
-  const progress = Math.min(100, Math.round(Math.abs(latest.weight-first.weight)/Math.abs(target-first.weight)*100));
-  document.getElementById("targetText").innerText    = "🎯 Target: " + target + " kg";
-  document.getElementById("goalStatus").innerText    = progress + "% done";
-  document.getElementById("progressText").innerText  = "Goal Progress";
-  document.getElementById("progressBar").style.width = progress + "%";
+  const target=Number(localStorage.getItem("targetWeight"))||(first.weight+5);
+  const progress=Math.min(100,Math.round(Math.abs(latest.weight-first.weight)/Math.abs(target-first.weight)*100));
+  document.getElementById("targetText").innerText="🎯 Target: "+target+" kg";
+  document.getElementById("goalStatus").innerText=progress+"% done";
+  document.getElementById("progressText").innerText="Goal Progress";
+  document.getElementById("progressBar").style.width=progress+"%";
 
-  // BADGES
-  const badgeData = [
-    {label:"🌟 First Check-In", show:true},
-    {label:"🔥 7-Day Streak",   show:streak>=7},
-    {label:"⚔️ Warrior",       show:streak>=4},
-    {label:"💪 Beast",          show:streak>=8},
-    {label:"👑 Elite",          show:streak>=15},
+  const badgeData=[
+    {label:"🌟 First Check-In",show:true},
+    {label:"🔥 7-Day Streak",  show:streak>=7},
+    {label:"⚔️ Warrior",      show:streak>=4},
+    {label:"💪 Beast",         show:streak>=8},
+    {label:"👑 Elite",         show:streak>=15},
   ];
-  document.getElementById("badges").innerHTML =
+  document.getElementById("badges").innerHTML=
     badgeData.filter(b=>b.show).map(b=>`<div class="badge-item">${b.label}</div>`).join("");
 });
 
-  // PREMIUM CHECK
-try {
-  const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js");
-  const premSnap = await getDoc(doc(db, "premium", user.uid));
-  const isPremium = premSnap.exists() && premSnap.data().active === true;
-  if (!isPremium) {
-    document.getElementById("premiumBanner").style.display = "block";
-    document.querySelector(".ai-section-header").style.display = "none";
-    document.querySelector(".ai-tools-grid").style.display = "none";
-    document.querySelector(".ai-status-strip").style.display = "none";
-    document.getElementById("workoutPreview").closest(".box").style.display = "none";
-  } else {
-    localStorage.setItem("premium","true");
-  }
-} catch(e) {
-  console.log("Premium check error:", e);
-}
-window.logout = () => { localStorage.clear(); location.href="login.html"; };
+window.logout=()=>{localStorage.clear();location.href="login.html";};
 </script>
 </body>
 </html>
