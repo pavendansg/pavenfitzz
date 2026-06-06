@@ -152,6 +152,8 @@ select:focus{border-color:var(--green);}
 </div>
 
 <script>
+  // ✅ STEP GUARD
+if (localStorage.getItem("premium") !== "true") { location.href = "payment.html"; }
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
 const SPLIT_DAYS = {"PPL":6,"Bro Split":5,"Upper Lower":4,"Full Body":3};
 const SPLIT_STRUCTURE = {
