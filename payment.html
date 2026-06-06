@@ -79,8 +79,7 @@
           document.getElementById("successBox").style.display = "block";
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
-          setTimeout(() => { location.href = "ai-dashboard.html"; }, 2000);
-
+         setTimeout(() => { location.href = "workout.html"; }, 2000);
         } catch(err) {
           alert("Payment done but save failed. Contact support with ID: "
             + response.razorpay_payment_id);
