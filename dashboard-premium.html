@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PavenFitzz — Premium Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--card:#101010;--green:#00ff88;--blue:#00c3ff;--gold:#ffd000;--red:#ff4455;--orange:#ff7700;--border:rgba(255,255,255,0.07);--muted:#666;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height:100vh;}
+.wrap{max-width:860px;margin:auto;padding:24px 16px 60px;}
+.top-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.avatar{width:48px;height:48px;border-radius:50%;border:2px solid var(--green);background:#111;display:flex;align-items:center;justify-content:center;font-size:20px;overflow:hidden;flex-shrink:0;}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.user-name{font-size:16px;font-weight:800;color:#fff;}
+.user-sub{font-size:12px;color:var(--muted);}
+.premium-pill{margin-left:auto;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;font-size:11px;font-weight:800;padding:5px 12px;border-radius:99px;white-space:nowrap;font-family:'DM Mono',monospace;}
+.brand{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:12px;}
+.card-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.card-icon{font-size:18px;}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--green);flex:1;}
+.card-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.2);}
+.card-badge.green{background:rgba(0,255,136,0.08);color:var(--green);border-color:rgba(0,255,136,0.2);}
+.card-badge.red{background:rgba(255,68,85,0.08);color:var(--red);border-color:rgba(255,68,85,0.2);}
+.stats-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.stats-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.stat-box{background:#0d0d0d;border-radius:12px;padding:12px;text-align:center;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
+.stat-val.green{color:var(--green);}
+.stat-val.gold{color:var(--gold);}
+.stat-val.blue{color:var(--blue);}
+.stat-val.orange{color:var(--orange);}
+.stat-lbl{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.prog-wrap{height:6px;background:#1a1a1a;border-radius:99px;overflow:hidden;margin:8px 0;}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .5s ease;}
+.rank-box{background:linear-gradient(145deg,#0f0f0f,#1a1a1a);border:2px solid var(--gold);border-radius:16px;padding:16px;text-align:center;margin-bottom:12px;}
+.rank-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:4px;}
+.rank-sub{font-size:12px;color:var(--gold);font-weight:700;}
+.workout-box{background:#0d0d0d;border-radius:12px;padding:12px;font-size:12px;line-height:1.9;color:#aaa;font-family:'DM Mono',monospace;max-height:140px;overflow-y:auto;}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.ai-card{background:linear-gradient(135deg,#0d150d,#0a0f0a);border:1px solid rgba(0,255,136,0.15);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
+.ai-card:hover{transform:translateY(-3px);border-color:rgba(0,255,136,0.4);}
+.ai-card:active{transform:scale(0.97);}
+.ai-card-icon{font-size:22px;margin-bottom:6px;}
+.ai-card-name{font-size:11px;font-weight:800;color:#fff;margin-bottom:3px;}
+.ai-card-status{font-size:10px;color:var(--muted);}
+.ai-card-status.done{color:var(--green);}
+.drops{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.drop{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#1a1a1a;border:1px solid #333;transition:all .3s;}
+.drop.filled{background:var(--blue);border-color:var(--blue);}
+.mission-list{display:flex;flex-direction:column;gap:6px;}
+.mission-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#555;padding:9px 12px;background:#0d0d0d;border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:.2s;user-select:none;}
+.mission-item.done{color:var(--green);border-color:rgba(0,255,136,0.12);background:rgba(0,255,136,0.03);}
+.mission-dot{width:18px;height:18px;border-radius:50%;border:2px solid #2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
+.mission-dot.done{background:var(--green);border-color:var(--green);color:#000;}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif;}
+.btn-green{background:var(--green);color:#000;}
+.btn-green:hover{background:#00ffaa;}
+.btn-row{display:flex;gap:8px;margin-top:10px;}
+.btn-row .btn{flex:1;}
+.btn-outline{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.08);font-size:13px;padding:12px;}
+.btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,68,85,0.2);margin-top:16px;font-size:13px;padding:12px;width:100%;border-radius:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <div class="avatar">
+      <img id="profilePic" alt="" style="display:none;">
+      <span id="avatarFallback">👤</span>
+    </div>
+    <div>
+      <div class="user-name" id="userName">—</div>
+      <div class="user-sub">Premium Member</div>
+    </div>
+    <div class="premium-pill">⚡ PREMIUM</div>
+  </div>
+
+  <div class="brand">PavenFitzz Dashboard</div>
+
+  <div class="rank-box">
+    <div class="rank-title" id="rankTitle">🥉 BEGINNER</div>
+    <div class="rank-sub" id="rankSub">Keep going!</div>
+  </div>
+
+  <div class="stats-4" style="margin-bottom:12px;">
+    <div class="stat-box"><div class="stat-val green" id="bmiVal">—</div><div class="stat-lbl">BMI</div></div>
+    <div class="stat-box"><div class="stat-val gold" id="weightVal">—</div><div class="stat-lbl">Weight</div></div>
+    <div class="stat-box"><div class="stat-val blue" id="calVal">—</div><div class="stat-lbl">Calories</div></div>
+    <div class="stat-box"><div class="stat-val orange" id="goalVal">—</div><div class="stat-lbl">Goal</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">⚡</span>
+      <span class="card-title">Progress</span>
+      <span class="card-badge" id="levelBadge">Lvl 1</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;">
+      <span id="xpText">0 / 100 XP</span>
+      <span id="xpPct">0%</span>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="xpBar" style="width:0%"></div></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+      <span style="font-size:13px;color:var(--muted);">Streak</span>
+      <span class="streak-num" id="streakNum">0</span>
+      <span style="font-size:13px;color:var(--muted);">days 🔥</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">💪</span>
+      <span class="card-title">Today's Workout</span>
+      <span class="card-badge green" id="workoutBadge">—</span>
+    </div>
+    <div class="workout-box" id="workoutBox">No workout generated yet.</div>
+    <div class="btn-row">
+      <button class="btn btn-green" onclick="completeWorkout()">Done ✅</button>
+      <button class="btn btn-outline" onclick="location.href='workout.html'">Full Plan →</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🍽️</span>
+      <span class="card-title">Daily Targets</span>
+    </div>
+    <div class="stats-3">
+      <div class="stat-box"><div class="stat-val orange" id="calTarget">—</div><div class="stat-lbl">Calories</div></div>
+      <div class="stat-box"><div class="stat-val green" id="protTarget">—</div><div class="stat-lbl">Protein</div></div>
+      <div class="stat-box"><div class="stat-val blue">8 hrs</div><div class="stat-lbl">Sleep</div></div>
+    </div>
+    <div style="margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
+        <span>Protein <span style="color:#ff6b6b;" id="pPct">0%</span></span>
+        <span>Carbs <span style="color:var(--gold);" id="cPct">0%</span></span>
+        <span>Fats <span style="color:var(--green);" id="fPct">0%</span></span>
+      </div>
+      <div style="display:flex;height:6px;border-radius:99px;overflow:hidden;background:#1a1a1a;">
+        <div id="pBar" style="background:#ff6b6b;transition:width .5s;"></div>
+        <div id="cBar" style="background:var(--gold);transition:width .5s;"></div>
+        <div id="fBar" style="background:var(--green);transition:width .5s;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">💧</span>
+      <span class="card-title">Water Intake</span>
+      <span class="card-badge green" id="waterBadge">0 / 4L</span>
+    </div>
+    <div class="drops" id="drops"></div>
+    <button class="btn btn-green" style="margin-top:12px;font-size:13px;padding:10px;" onclick="addWater()">+ Add Water 💧</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🤖</span>
+      <span class="card-title">AI Tools</span>
+      <span class="card-badge green">Premium</span>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card" onclick="location.href='workout.html'">
+        <div class="ai-card-icon">💪</div>
+        <div class="ai-card-name">Workout</div>
+        <div class="ai-card-status" id="wStatus">—</div>
+      </div>
+      <div class="ai-card" onclick="location.href='diet.html'">
+        <div class="ai-card-icon">🧬</div>
+        <div class="ai-card-name">Diet</div>
+        <div class="ai-card-status" id="dStatus">—</div>
+      </div>
+      <div class="ai-card" onclick="location.href='meal.html'">
+        <div class="ai-card-icon">🍗</div>
+        <div class="ai-card-name">Meal</div>
+        <div class="ai-card-status" id="mStatus">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">📋</span>
+      <span class="card-title">Daily Missions</span>
+      <span class="card-badge" id="missionCount">0/4</span>
+    </div>
+    <p style="font-size:11px;color:#444;margin-bottom:10px;">Tap to complete · Resets daily</p>
+    <div class="mission-list" id="missions"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🏅</span>
+      <span class="card-title">Achievements</span>
+    </div>
+    <div id="badges" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-green" onclick="location.href='bmi.html'">Check-In ✅</button>
+    <button class="btn btn-outline" onclick="location.href='graph.html'">Progress 📈</button>
+  </div>
+  <button class="btn-red" onclick="logout()">Logout</button>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// STEP GUARDS
+if (localStorage.getItem("premium") !== "true") { location.href = "payment.html"; }
+if (!localStorage.getItem("macros_done")) { location.href = "macros.html"; }
+
+const firebaseConfig = {
+  apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain:"evolvefit-07.firebaseapp.com",
+  projectId:"evolvefit-07"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+const CALORIE_TARGETS = {bulk:"3000",cut:"1800",maintain:"2400",athletic:"2600"};
+const PROTEIN_TARGETS = {bulk:"140g",cut:"160g",maintain:"120g",athletic:"150g"};
+
+// PROFILE PIC
+const pic = document.getElementById("profilePic");
+const photo = localStorage.getItem("photo");
+if (photo) {
+  pic.src = photo;
+  pic.onload = () => { pic.style.display="block"; document.getElementById("avatarFallback").style.display="none"; };
+}
+document.getElementById("userName").innerText = localStorage.getItem("username") || "User";
+
+// WATER
+function loadWater() {
+  const w = parseInt(localStorage.getItem("water")||0);
+  document.getElementById("waterBadge").innerText = w + " / 4L";
+  const drops = document.getElementById("drops");
+  drops.innerHTML = "";
+  for(let i=0;i<8;i++){
+    const d=document.createElement("div");
+    d.className="drop"+(i<w*2?" filled":"");
+    drops.appendChild(d);
+  }
+}
+
+window.addWater = function() {
+  let w=parseInt(localStorage.getItem("water")||0);
+  if(w<4){w++;localStorage.setItem("water",w);loadWater();}
+  else alert("💧 4L goal hit today!");
+};
+
+// WORKOUT PREVIEW
+function loadWorkout() {
+  const data = localStorage.getItem("workoutData");
+  const lockStart = localStorage.getItem("workoutLockStart");
+  const badge = document.getElementById("workoutBadge");
+
+  if (data && lockStart) {
+    const parsed = JSON.parse(data);
+    const totalDays = parsed.days?.length || 6;
+    const start = new Date(lockStart);
+    const end = new Date(start);
+    end.setDate(end.getDate()+totalDays);
+    const now = new Date();
+
+    if (now < end) {
+      const daysLeft = Math.max(0,Math.ceil((end-now)/(1000*60*60*24)));
+      badge.className = "card-badge green";
+      badge.innerText = "Active · "+daysLeft+"d left";
+      const dayIndex = Math.min(Math.floor((now-start)/(1000*60*60*24)), totalDays-1);
+      const today = parsed.days[dayIndex];
+      if (today) {
+        const preview = "Day "+(dayIndex+1)+" — "+today.title+"\n\n"+
+          today.exercises.slice(0,4).map((e,i)=>(i+1)+". "+e.name+" "+e.detail).join("\n");
+        document.getElementById("workoutBox").innerText = preview;
+      }
+    } else {
+      badge.className = "card-badge red";
+      badge.innerText = "Split Ended";
+    }
+  } else {
+    badge.className = "card-badge red";
+    badge.innerText = "Not Started";
+    document.getElementById("workoutBox").innerText = "Go to AI Tools → Workout to generate your plan.";
+  }
+}
+
+window.completeWorkout = function() {
+  let s=parseInt(localStorage.getItem("streak")||0);
+  s++;localStorage.setItem("streak",s);
+  document.getElementById("streakNum").innerText=s;
+  alert("🔥 Done! "+s+" day streak!");
+};
+
+// AI STATUS
+function checkAI() {
+  const today = new Date().toDateString();
+  const w = localStorage.getItem("workoutLockStart");
+  const d = localStorage.getItem("dietDate");
+  const m = localStorage.getItem("mealDate");
+
+  const ws=document.getElementById("wStatus");
+  const ds=document.getElementById("dStatus");
+  const ms=document.getElementById("mStatus");
+
+  if(w){ws.innerText="✓ Active";ws.className="ai-card-status done";}
+  else ws.innerText="Not started";
+
+  if(d===today){ds.innerText="✓ Today";ds.className="ai-card-status done";}
+  else ds.innerText="Not done";
+
+  if(m===today){ms.innerText="✓ Today";ms.className="ai-card-status done";}
+  else ms.innerText="Not done";
+}
+
+// MISSIONS
+const today = new Date().toISOString().split("T")[0];
+if(localStorage.getItem("missionDay")!==today){
+  ["workout","sleep","water","checkin"].forEach(id=>localStorage.removeItem("mission_"+id));
+  localStorage.setItem("missionDay",today);
+}
+localStorage.setItem("mission_checkin","true");
+
+const missionDefs=[
+  {id:"workout",text:"Workout today 💪"},
+  {id:"sleep",  text:"Sleep 8 hours 😴"},
+  {id:"water",  text:"Drink 8 glasses 💧"},
+  {id:"checkin",text:"Daily check-in ✅"},
+];
+
+function renderMissions(){
+  const done=missionDefs.filter(m=>localStorage.getItem("mission_"+m.id)==="true").length;
+  document.getElementById("missionCount").innerText=done+"/"+missionDefs.length;
+  document.getElementById("missions").innerHTML=missionDefs.map(m=>{
+    const d=localStorage.getItem("mission_"+m.id)==="true";
+    return`<div class="mission-item ${d?"done":""}" onclick="toggleMission('${m.id}')">
+      <div class="mission-dot ${d?"done":""}">${d?"✓":""}</div>
+      <span>${m.text}</span>
+    </div>`;
+  }).join("");
+}
+
+window.toggleMission=function(id){
+  if(id==="checkin")return;
+  localStorage.setItem("mission_"+id,String(localStorage.getItem("mission_"+id)!=="true"));
+  renderMissions();
+};
+
+// FIREBASE
+onAuthStateChanged(auth, async(user)=>{
+  if(!user){location.href="login.html";return;}
+
+  // Verify premium in Firestore
+  const premSnap = await getDoc(doc(db,"premium",user.uid));
+  if(!premSnap.exists()||premSnap.data().active!==true){
+    localStorage.removeItem("premium");
+    location.href="payment.html";
+    return;
+  }
+
+  const snap = await getDocs(collection(db,"users",user.uid,"daily"));
+  if(snap.empty){location.href="bmi.html";return;}
+
+  let history=[];
+  snap.forEach(d=>history.push(d.data()));
+  history.sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  const latest=history[history.length-1];
+  const streak=parseInt(localStorage.getItem("streak")||0);
+  const xpStreak=history.length;
+
+  // RANK
+  const rankTitle=xpStreak>=15?"👑 ELITE":xpStreak>=8?"💪 BEAST":xpStreak>=4?"⚔️ WARRIOR":"🥉 BEGINNER";
+  const daysLeft=xpStreak>=15?"MAX RANK":xpStreak>=8?(15-xpStreak)+"d to Elite":xpStreak>=4?(8-xpStreak)+"d to Beast":(4-xpStreak)+"d to Warrior";
+  document.getElementById("rankTitle").innerText=rankTitle;
+  document.getElementById("rankSub").innerText=daysLeft;
+
+  // STATS
+  document.getElementById("bmiVal").innerText    = latest.bmi      ||"—";
+  document.getElementById("weightVal").innerText = (latest.weight  ||"—")+"kg";
+  document.getElementById("calVal").innerText    = (latest.calories||"—");
+  document.getElementById("goalVal").innerText   = (latest.goal    ||"—").toUpperCase();
+
+  const goal = latest.goal || "bulk";
+  localStorage.setItem("goal",goal);
+
+  // NUTRITION TARGETS
+  const calories  = parseInt(localStorage.getItem("calories") || CALORIE_TARGETS[goal] || 2500);
+  const protein   = parseInt(localStorage.getItem("protein")  || 140);
+  const carbs     = parseInt(localStorage.getItem("carbs")    || 200);
+  const fats      = parseInt(localStorage.getItem("fats")     || 60);
+
+  document.getElementById("calTarget").innerText  = calories+"kcal";
+  document.getElementById("protTarget").innerText = protein+"g";
+
+  const total=(protein*4)+(carbs*4)+(fats*9)||1;
+  const pPct=Math.round((protein*4)/total*100);
+  const cPct=Math.round((carbs*4)/total*100);
+  const fPct=100-pPct-cPct;
+  document.getElementById("pBar").style.width=pPct+"%";
+  document.getElementById("cBar").style.width=cPct+"%";
+  document.getElementById("fBar").style.width=fPct+"%";
+  document.getElementById("pPct").innerText=pPct+"%";
+  document.getElementById("cPct").innerText=cPct+"%";
+  document.getElementById("fPct").innerText=fPct+"%";
+
+  // XP
+  const xp=xpStreak*10, level=Math.floor(xp/100)+1, curXP=xp%100;
+  document.getElementById("levelBadge").innerText="Lvl "+level;
+  document.getElementById("xpText").innerText=curXP+" / 100 XP";
+  document.getElementById("xpPct").innerText=curXP+"%";
+  document.getElementById("xpBar").style.width=curXP+"%";
+  document.getElementById("streakNum").innerText=streak||xpStreak;
+
+  // BADGES
+  const badgeData=[
+    {label:"🌟 First Check-In",show:true},
+    {label:"🔥 7-Day Streak",  show:xpStreak>=7},
+    {label:"⚔️ Warrior",      show:xpStreak>=4},
+    {label:"💪 Beast",         show:xpStreak>=8},
+    {label:"👑 Elite",         show:xpStreak>=15},
+    {label:"⚡ Premium",       show:true},
+  ];
+  document.getElementById("badges").innerHTML=
+    badgeData.filter(b=>b.show).map(b=>
+      `<span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;">${b.label}</span>`
+    ).join("");
+});
+
+loadWater();
+loadWorkout();
+checkAI();
+renderMissions();
+
+window.logout=()=>{localStorage.clear();location.href="login.html";};
+</script>
+</body>
+</html>
