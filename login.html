@@ -21,6 +21,12 @@
          width="20" height="20" style="vertical-align:middle;margin-right:10px;">
     Continue with Google
   </button>
+  
+  <!-- Resend verification button -->
+  <button class="secondary-btn" onclick="resendVerification()" style="margin-top:12px;">
+    Resend Verification Email 📧
+  </button>
+  
   <p id="msg" style="color:#ff4444;margin-top:12px;font-size:13px;"></p>
   <p style="opacity:.4;font-size:12px;margin-top:24px;">
     By continuing you agree to our Terms & Privacy Policy
@@ -32,7 +38,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
   getAuth, signInWithPopup,
-  GoogleAuthProvider, onAuthStateChanged
+  GoogleAuthProvider, onAuthStateChanged,
+  sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -48,14 +55,12 @@ const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// ✅ FIXED goNext — detects if came from AI Coach
 function goNext() {
   // Check if user came from AI Coach payment page
   const ref = document.referrer;
   const aiPaymentURL = "https://pavendansg.github.io/pavenfitzz-ai/payment.html";
 
   if (ref.includes("pavenfitzz-ai")) {
-    // Came from AI Coach — send back to payment
     location.href = aiPaymentURL;
     return;
   }
@@ -70,6 +75,13 @@ function goNext() {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    // ✅ EMAIL VERIFICATION CHECK
+    if (!user.emailVerified) {
+      document.getElementById("msg").innerHTML = "⚠️ Please verify your email. Check your inbox (and spam).";
+      document.getElementById("msg").style.color = "#ffd700";
+      auth.signOut();
+      return;
+    }
     localStorage.setItem("username", user.displayName || "User");
     localStorage.setItem("photo",    user.photoURL    || "");
     goNext();
@@ -80,21 +92,49 @@ window.googleLogin = function() {
   const btn = document.querySelector(".google-btn");
   btn.innerHTML = "Signing in...";
   btn.disabled  = true;
+  document.getElementById("msg").innerHTML = "";
 
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
       const user = result.user;
-      localStorage.setItem("username", user.displayName || "User");
-      localStorage.setItem("photo",    user.photoURL    || "");
-      goNext();
+      // If email not verified, send verification and sign out
+      if (!user.emailVerified) {
+        await sendEmailVerification(user);
+        document.getElementById("msg").innerHTML = "📧 Verification email sent! Please verify and login again.";
+        document.getElementById("msg").style.color = "#00ff88";
+        await auth.signOut();
+      } else {
+        localStorage.setItem("username", user.displayName || "User");
+        localStorage.setItem("photo",    user.photoURL    || "");
+        goNext();
+      }
     })
     .catch((err) => {
-      document.getElementById("msg").innerText = "Login failed. Try again.";
+      document.getElementById("msg").innerHTML = "Login failed: " + err.message;
+      document.getElementById("msg").style.color = "#ff4444";
+    })
+    .finally(() => {
       btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
         width="20" height="20" style="vertical-align:middle;margin-right:10px;">
         Continue with Google`;
       btn.disabled = false;
     });
+};
+
+// Resend verification button handler
+window.resendVerification = async function() {
+  const user = auth.currentUser;
+  if (user && !user.emailVerified) {
+    await sendEmailVerification(user);
+    document.getElementById("msg").innerHTML = "✅ Verification email resent! Check your inbox.";
+    document.getElementById("msg").style.color = "#00ff88";
+  } else if (user && user.emailVerified) {
+    document.getElementById("msg").innerHTML = "✅ Email already verified. Please login again.";
+    document.getElementById("msg").style.color = "#00ff88";
+  } else {
+    document.getElementById("msg").innerHTML = "No user signed in. Click 'Continue with Google' first.";
+    document.getElementById("msg").style.color = "#ff4444";
+  }
 };
 </script>
 </body>
