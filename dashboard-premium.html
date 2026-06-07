@@ -437,13 +437,13 @@ const daysLeft=
 
   // BADGES
   const badgeData=[
-    {label:"🌟 First Check-In",show:true},
-    {label:"🔥 7-Day Streak",  show:xpStreak>=7},
-    {label:"⚔️ Warrior",      show:xpStreak>=4},
-    {label:"💪 Beast",         show:xpStreak>=8},
-    {label:"👑 Elite",         show:xpStreak>=15},
-    {label:"⚡ Premium",       show:true},
-  ];
+  {label:"🌱 First Check-In", show:true},
+  {label:"⚡ Contender",      show:streak>=7},
+  {label:"🔥 Warrior",        show:streak>=30},
+  {label:"💎 Beast",          show:streak>=90},
+  {label:"👑 Elite",          show:streak>=180},
+  {label:"⚡ Premium",        show:true}, // premium dashboard only
+];
   document.getElementById("badges").innerHTML=
     badgeData.filter(b=>b.show).map(b=>
       `<span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;">${b.label}</span>`
