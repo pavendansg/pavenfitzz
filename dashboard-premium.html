@@ -298,10 +298,8 @@ function loadWorkout() {
 }
 
 window.completeWorkout = function() {
-  let s=parseInt(localStorage.getItem("streak")||0);
-  s++;localStorage.setItem("streak",s);
-  document.getElementById("streakNum").innerText=s;
-  alert("🔥 Done! "+s+" day streak!");
+  // Don't rely on localStorage streak anymore - just show message
+  alert("🔥 Great job completing your workout! Check-in tomorrow to maintain streak.");
 };
 
 // AI STATUS
@@ -326,10 +324,10 @@ function checkAI() {
 }
 
 // MISSIONS
-const today = new Date().toISOString().split("T")[0];
-if(localStorage.getItem("missionDay")!==today){
+const todayStr = new Date().toISOString().split("T")[0];
+if(localStorage.getItem("missionDay")!==todayStr){
   ["workout","sleep","water","checkin"].forEach(id=>localStorage.removeItem("mission_"+id));
-  localStorage.setItem("missionDay",today);
+  localStorage.setItem("missionDay",todayStr);
 }
 localStorage.setItem("mission_checkin","true");
 
@@ -378,25 +376,48 @@ onAuthStateChanged(auth, async(user)=>{
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
   const latest=history[history.length-1];
-  const streak=parseInt(localStorage.getItem("streak")||0);
-  const xpStreak=history.length;
+  
+  // ✅ FIX: Calculate REAL consecutive days streak from history
+  let streak = 0;
+  let lastDate = null;
+  // history is already sorted ascending (oldest to newest)
+  for (let i = history.length - 1; i >= 0; i--) {
+    const currentDate = new Date(history[i].date);
+    if (!lastDate) {
+      streak = 1;
+      lastDate = currentDate;
+      continue;
+    }
+    const diffDays = (lastDate - currentDate) / (1000 * 60 * 60 * 24);
+    if (diffDays === 1) {
+      streak++;
+      lastDate = currentDate;
+    } else {
+      break; // gap found, stop counting
+    }
+  }
 
-  // RANK
-  const rankTitle=
-  streak>=180?"👑 ELITE":
-  streak>=90?"💎 BEAST":
-  streak>=30?"🔥 WARRIOR":
-  streak>=7?"⚡ CONTENDER":
-  "🌱 BEGINNER";
+  // Save streak to localStorage for other features (optional)
+  localStorage.setItem("streak", streak);
+  document.getElementById("streakNum").innerText = streak;
 
-const daysLeft=
-  streak>=180?"👑 MAX RANK — You're Elite":
-  streak>=90?"🔥 "+(180-streak)+" days to Elite":
-  streak>=30?"💎 "+(90-streak)+" days to Beast":
-  streak>=7?"🔥 "+(30-streak)+" days to Warrior":
-  "⚡ "+(7-streak)+" days to Contender";
-  document.getElementById("rankTitle").innerText=rankTitle;
-  document.getElementById("rankSub").innerText=daysLeft;
+  // RANK based on real streak
+  const rankTitle =
+    streak >= 180 ? "👑 ELITE" :
+    streak >= 90 ? "💎 BEAST" :
+    streak >= 30 ? "🔥 WARRIOR" :
+    streak >= 7 ? "⚡ CONTENDER" :
+    "🌱 BEGINNER";
+
+  const daysLeft =
+    streak >= 180 ? "👑 MAX RANK — You're Elite" :
+    streak >= 90 ? "🔥 " + (180 - streak) + " days to Elite" :
+    streak >= 30 ? "💎 " + (90 - streak) + " days to Beast" :
+    streak >= 7 ? "🔥 " + (30 - streak) + " days to Warrior" :
+    "⚡ " + (7 - streak) + " days to Contender";
+    
+  document.getElementById("rankTitle").innerText = rankTitle;
+  document.getElementById("rankSub").innerText = daysLeft;
 
   // STATS
   document.getElementById("bmiVal").innerText    = latest.bmi      ||"—";
@@ -427,24 +448,25 @@ const daysLeft=
   document.getElementById("cPct").innerText=cPct+"%";
   document.getElementById("fPct").innerText=fPct+"%";
 
-  // XP
-  const xp=xpStreak*10, level=Math.floor(xp/100)+1, curXP=xp%100;
-  document.getElementById("levelBadge").innerText="Lvl "+level;
-  document.getElementById("xpText").innerText=curXP+" / 100 XP";
-  document.getElementById("xpPct").innerText=curXP+"%";
-  document.getElementById("xpBar").style.width=curXP+"%";
-  document.getElementById("streakNum").innerText=streak||xpStreak;
+  // XP based on streak (consecutive days)
+  const xp = streak * 10;
+  const level = Math.floor(xp / 100) + 1;
+  const curXP = xp % 100;
+  document.getElementById("levelBadge").innerText = "Lvl " + level;
+  document.getElementById("xpText").innerText = curXP + " / 100 XP";
+  document.getElementById("xpPct").innerText = curXP + "%";
+  document.getElementById("xpBar").style.width = curXP + "%";
 
-  // BADGES
-  const badgeData=[
-  {label:"🌱 First Check-In", show:true},
-  {label:"⚡ Contender",      show:streak>=7},
-  {label:"🔥 Warrior",        show:streak>=30},
-  {label:"💎 Beast",          show:streak>=90},
-  {label:"👑 Elite",          show:streak>=180},
-  {label:"⚡ Premium",        show:true}, // premium dashboard only
-];
-  document.getElementById("badges").innerHTML=
+  // BADGES based on real streak
+  const badgeData = [
+    {label:"🌱 First Check-In", show: true},
+    {label:"⚡ Contender",      show: streak >= 7},
+    {label:"🔥 Warrior",        show: streak >= 30},
+    {label:"💎 Beast",          show: streak >= 90},
+    {label:"👑 Elite",          show: streak >= 180},
+    {label:"⚡ Premium",        show: true},
+  ];
+  document.getElementById("badges").innerHTML =
     badgeData.filter(b=>b.show).map(b=>
       `<span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;">${b.label}</span>`
     ).join("");
@@ -455,7 +477,11 @@ loadWorkout();
 checkAI();
 renderMissions();
 
-window.logout=()=>{localStorage.clear();location.href="login.html";};
+window.logout = () => {
+  // Clear only session data, keep premium? Better to clear all for safety
+  localStorage.clear();
+  location.href = "login.html";
+};
 </script>
 </body>
 </html>
