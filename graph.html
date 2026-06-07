@@ -267,15 +267,13 @@ onAuthStateChanged(auth, async (user) => {
     Math.abs(target - latest.weight).toFixed(1) + " kg to go";
 
   // MILESTONES
-  const milestoneData = [
-    { days:1,  icon:"🌟", label:"First Check-In" },
-    { days:3,  icon:"🥉", label:"3-Day Streak" },
-    { days:7,  icon:"🔥", label:"7-Day Streak" },
-    { days:4,  icon:"⚔️", label:"Warrior Rank (4 days)" },
-    { days:8,  icon:"💪", label:"Beast Rank (8 days)" },
-    { days:15, icon:"👑", label:"Elite Rank (15 days)" },
-    { days:30, icon:"🏆", label:"30-Day Legend" },
-  ];
+ const milestoneData=[
+  {days:1,   icon:"🌱", label:"First Check-In"},
+  {days:7,   icon:"⚡", label:"Contender (7 days)"},
+  {days:30,  icon:"🔥", label:"Warrior (30 days)"},
+  {days:90,  icon:"💎", label:"Beast (90 days)"},
+  {days:180, icon:"👑", label:"Elite (180 days)"},
+];
   document.getElementById("milestones").innerHTML = milestoneData.map(m => {
     const done = streak >= m.days;
     return `<div class="milestone-item ${done ? 'achieved' : ''}">
