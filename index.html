@@ -1,148 +1,789 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>EvolveFit — Become Elite</title>
-<link rel="stylesheet" href="style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;
+  --white:#f0ede6;
+  --accent:#c8f542;
+  --accent-dim:rgba(200,245,66,0.12);
+  --muted:#6b6b5a;
+  --card:#111110;
+  --border:rgba(255,255,255,0.06);
+  --font-display:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:var(--font-body);overflow-x:hidden}
+
+/* ── VIDEO HERO ── */
+.hero{
+  position:relative;height:100vh;min-height:600px;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  overflow:hidden;
+}
+.video-wrap{
+  position:absolute;inset:0;z-index:0;
+}
+.video-wrap iframe{
+  position:absolute;
+  top:50%;left:50%;
+  width:100vw;height:56.25vw;
+  min-height:100vh;min-width:177.78vh;
+  transform:translate(-50%,-50%);
+  pointer-events:none;border:none;
+}
+/* Fallback gradient if video doesn't load */
+.video-fallback{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#0a0a08 0%,#151510 40%,#0d1208 100%);
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    to top,
+    rgba(8,8,8,0.97) 0%,
+    rgba(8,8,8,0.7) 35%,
+    rgba(8,8,8,0.25) 65%,
+    rgba(8,8,8,0.4) 100%
+  );
+}
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 6% 72px;
+  max-width:780px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(200,245,66,0.1);
+  border:1px solid rgba(200,245,66,0.25);
+  color:var(--accent);font-size:11px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;
+  padding:6px 14px;border-radius:50px;margin-bottom:28px;
+}
+.hero-eyebrow::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--accent);animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero-headline{
+  font-family:var(--font-display);
+  font-size:clamp(52px,9vw,120px);
+  font-weight:800;line-height:0.9;
+  letter-spacing:-3px;margin-bottom:24px;
+}
+.hero-headline .stroke{
+  -webkit-text-stroke:1px rgba(240,237,230,0.3);
+  color:transparent;
+}
+.hero-headline .lit{color:var(--accent)}
+.hero-sub{
+  font-size:clamp(15px,1.8vw,18px);font-weight:300;
+  color:rgba(240,237,230,0.6);max-width:480px;
+  line-height:1.75;margin-bottom:40px;
+  font-style:italic;
+}
+.hero-sub b{color:var(--white);font-style:normal;font-weight:500}
+.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.btn-main{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--accent);color:#080808;
+  border:none;padding:15px 32px;border-radius:50px;
+  font-size:15px;font-weight:700;font-family:var(--font-body);
+  cursor:pointer;text-decoration:none;
+  transition:transform .15s,box-shadow .2s;
+}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(200,245,66,0.35)}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.06);color:var(--white);
+  border:1px solid rgba(255,255,255,0.12);
+  padding:14px 28px;border-radius:50px;
+  font-size:15px;font-weight:400;font-family:var(--font-body);
+  cursor:pointer;text-decoration:none;
+  transition:background .2s,border-color .2s;
+}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25)}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 6%;
+  transition:background .3s,backdrop-filter .3s;
+}
+nav.solid{
+  background:rgba(8,8,8,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:var(--font-display);font-size:20px;
+  font-weight:800;color:var(--white);text-decoration:none;
+  letter-spacing:-0.3px;
+}
+.nav-logo em{color:var(--accent);font-style:normal}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  color:var(--muted);font-size:14px;text-decoration:none;
+  letter-spacing:0.02em;transition:color .2s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-cta{
+  background:var(--accent);color:#080808;border:none;
+  padding:9px 20px;border-radius:50px;
+  font-size:13px;font-weight:700;font-family:var(--font-body);
+  cursor:pointer;text-decoration:none;
+  transition:opacity .15s,transform .15s;
+}
+.nav-cta:hover{opacity:.88;transform:scale(0.97)}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  background:#0d0d0b;border-bottom:1px solid var(--border);
+  display:flex;justify-content:center;
+}
+.stat-unit{
+  flex:1;max-width:220px;
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 16px;
+  border-right:1px solid var(--border);
+}
+.stat-unit:last-child{border-right:none}
+.stat-num{
+  font-family:var(--font-display);font-size:30px;
+  font-weight:800;color:var(--accent);letter-spacing:-1px;
+  line-height:1;
+}
+.stat-lbl{
+  font-size:11px;color:var(--muted);margin-top:6px;
+  letter-spacing:0.08em;text-transform:uppercase;
+}
+
+/* ── TICKER ── */
+.ticker{background:var(--accent);padding:12px 0;overflow:hidden}
+.ticker-track{display:flex;width:max-content;animation:scroll 30s linear infinite}
+.ticker-item{
+  font-family:var(--font-display);font-size:12px;
+  font-weight:700;color:#080808;letter-spacing:0.1em;
+  text-transform:uppercase;padding:0 28px;white-space:nowrap;
+}
+.ticker-item::after{content:' ✦ '}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION BASE ── */
+section{padding:100px 6%}
+.section-tag{
+  font-size:11px;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--accent);
+  font-weight:600;margin-bottom:14px;
+}
+.section-h{
+  font-family:var(--font-display);
+  font-size:clamp(34px,5vw,58px);
+  font-weight:800;letter-spacing:-2px;line-height:0.95;
+  margin-bottom:16px;
+}
+.section-h .ghost{
+  -webkit-text-stroke:1px rgba(240,237,230,0.2);
+  color:transparent;
+}
+.section-sub{
+  font-size:16px;color:var(--muted);font-weight:300;
+  max-width:480px;line-height:1.7;margin-bottom:56px;
+}
+
+/* ── FEATURES BENTO ── */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:auto auto;
+  gap:2px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+}
+.bento-card{
+  background:var(--card);padding:36px 32px;
+  transition:background .2s;position:relative;
+}
+.bento-card:hover{background:#161615}
+.bento-card.wide{grid-column:span 2}
+.bento-card.tall{grid-row:span 2}
+.b-icon{
+  font-size:28px;
+  width:52px;height:52px;border-radius:12px;
+  background:var(--accent-dim);border:1px solid rgba(200,245,66,0.2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:20px;
+}
+.b-name{
+  font-family:var(--font-display);font-size:19px;
+  font-weight:700;margin-bottom:10px;letter-spacing:-0.3px;
+}
+.b-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.b-pill{
+  display:inline-block;margin-top:14px;
+  background:var(--accent-dim);color:var(--accent);
+  font-size:11px;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;padding:4px 12px;border-radius:50px;
+  border:1px solid rgba(200,245,66,0.2);
+}
+/* mini chart in wide card */
+.mini-chart{
+  margin-top:20px;height:60px;
+  display:flex;align-items:flex-end;gap:3px;
+}
+.mini-bar{
+  flex:1;border-radius:3px 3px 0 0;
+  background:rgba(200,245,66,0.15);
+  transition:height 1s ease;
+}
+.mini-bar.hi{background:var(--accent)}
+
+/* ── HOW IT WORKS ── */
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.steps{margin-top:40px}
+.step{
+  display:flex;gap:20px;
+  padding:24px 0;
+  border-bottom:1px solid var(--border);
+}
+.step:first-child{border-top:1px solid var(--border)}
+.step-n{
+  font-family:var(--font-display);font-size:44px;
+  font-weight:800;color:rgba(255,255,255,0.05);
+  line-height:1;width:48px;flex-shrink:0;margin-top:-4px;
+}
+.step.on .step-n{color:var(--accent)}
+.step-body h3{
+  font-family:var(--font-display);font-size:17px;
+  font-weight:700;margin-bottom:6px;letter-spacing:-0.2px;
+}
+.step-body p{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* phone mockup */
+.phone{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:28px;padding:20px;
+  max-width:260px;margin:0 auto;
+}
+.phone-pill{
+  width:60px;height:5px;background:#1e1e1c;
+  border-radius:3px;margin:0 auto 20px;
+}
+.phone-rank{
+  background:var(--accent-dim);border:1px solid rgba(200,245,66,0.2);
+  border-radius:14px;padding:16px;text-align:center;margin-bottom:12px;
+}
+.phone-rank-label{font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.phone-rank-val{
+  font-family:var(--font-display);font-size:26px;
+  font-weight:800;color:var(--accent);letter-spacing:-1px;line-height:1;
+}
+.phone-rank-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.phone-row{
+  background:#161615;border-radius:12px;padding:12px;
+  margin-bottom:8px;display:flex;
+  align-items:center;justify-content:space-between;
+}
+.phone-row-label{font-size:12px;color:var(--muted)}
+.phone-row-val{
+  font-family:var(--font-display);font-size:20px;
+  font-weight:800;color:var(--white);
+}
+.phone-bars{background:#161615;border-radius:12px;padding:12px}
+.phone-bars-label{font-size:10px;color:var(--muted);letter-spacing:0.05em;margin-bottom:8px;text-transform:uppercase}
+.bars-row{display:flex;align-items:flex-end;gap:3px;height:40px}
+.pbar{flex:1;border-radius:2px 2px 0 0;background:rgba(200,245,66,0.15)}
+.pbar.lit{background:var(--accent)}
+
+/* ── RANKS ── */
+.ranks-grid{
+  display:flex;gap:2px;
+  background:var(--border);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+}
+.rank-card{
+  flex:1;padding:28px 20px;background:var(--card);
+  text-align:center;transition:background .2s;
+}
+.rank-card:hover{background:#161615}
+.rank-card.crown{
+  background:linear-gradient(160deg,#111110,#181e0d);
+  position:relative;
+}
+.rank-card.crown::after{
+  content:'TOP 4%';
+  position:absolute;top:0;right:0;
+  background:var(--accent);color:#080808;
+  font-size:9px;font-weight:700;letter-spacing:0.1em;
+  padding:4px 10px;border-radius:0 0 0 8px;
+}
+.rank-ico{font-size:28px;margin-bottom:10px}
+.rank-name{
+  font-family:var(--font-display);font-size:15px;
+  font-weight:800;letter-spacing:0.5px;margin-bottom:6px;
+}
+.rank-req{font-size:12px;color:var(--muted);line-height:1.5}
+.rank-days{
+  display:inline-block;margin-top:10px;
+  background:rgba(255,255,255,0.05);
+  font-size:11px;color:var(--muted);font-weight:600;
+  padding:3px 10px;border-radius:50px;letter-spacing:0.06em;
+}
+.rank-card.crown .rank-days{
+  background:var(--accent-dim);color:var(--accent);
+  border:1px solid rgba(200,245,66,0.2);
+}
+
+/* ── TESTIMONIALS ── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.testi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:26px;
+}
+.testi-card.big{grid-column:span 2}
+.testi-text{
+  font-size:14px;line-height:1.75;
+  color:rgba(240,237,230,0.8);margin-bottom:18px;font-style:italic;
+}
+.testi-card.big .testi-text{font-size:17px}
+.testi-who{display:flex;align-items:center;gap:12px}
+.testi-av{
+  width:36px;height:36px;border-radius:50%;
+  font-family:var(--font-display);font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;color:#080808;
+}
+.testi-name{font-size:14px;font-weight:600}
+.testi-meta{font-size:12px;color:var(--muted)}
+.testi-rank-pill{
+  margin-left:auto;background:var(--accent-dim);color:var(--accent);
+  font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:50px;border:1px solid rgba(200,245,66,0.2);
+  white-space:nowrap;
+}
+
+/* ── CTA / GOAL QUIZ ── */
+.quiz-wrap{
+  max-width:660px;margin:0 auto;text-align:center;
+}
+.quiz-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-bottom:32px;
+}
+.qcard{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:26px 18px;
+  cursor:pointer;transition:all .2s;text-align:left;
+}
+.qcard:hover,.qcard.on{
+  border-color:var(--accent);
+  background:rgba(200,245,66,0.04);
+}
+.qcard-ico{
+  font-size:22px;width:44px;height:44px;
+  background:rgba(255,255,255,0.04);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;transition:background .2s;
+}
+.qcard.on .qcard-ico{background:var(--accent-dim)}
+.qcard-title{
+  font-family:var(--font-display);font-size:15px;
+  font-weight:700;margin-bottom:4px;letter-spacing:-0.2px;
+}
+.qcard-sub{font-size:12px;color:var(--muted);line-height:1.5}
+.quiz-main-btn{
+  background:var(--accent);color:#080808;border:none;
+  padding:17px 52px;border-radius:50px;
+  font-size:15px;font-weight:700;font-family:var(--font-body);
+  cursor:pointer;transition:transform .15s,box-shadow .2s,opacity .2s;
+  opacity:.4;pointer-events:none;
+}
+.quiz-main-btn.go{opacity:1;pointer-events:all}
+.quiz-main-btn.go:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 48px rgba(200,245,66,0.35);
+}
+.quiz-fine{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:0.02em}
+
+/* ── FOOTER ── */
+footer{
+  padding:52px 6%;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.foot-logo{
+  font-family:var(--font-display);font-size:18px;
+  font-weight:800;color:var(--white);
+}
+.foot-logo em{color:var(--accent);font-style:normal}
+.foot-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap}
+.foot-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--white)}
+.foot-copy{font-size:12px;color:rgba(107,107,90,0.5)}
+
+/* ── REVEAL ANIMATION ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}
+.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  section{padding:64px 24px}
+  .bento{grid-template-columns:1fr}
+  .bento-card.wide,.bento-card.tall{grid-column:span 1;grid-row:span 1}
+  .how-grid{grid-template-columns:1fr;gap:40px}
+  .ranks-grid{flex-direction:column}
+  .testi-grid{grid-template-columns:1fr}
+  .testi-card.big{grid-column:span 1}
+  .quiz-cards{grid-template-columns:1fr}
+  .hero-content{padding:0 24px 56px}
+}
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="navbar">
-  <div class="nav-logo">⚡ EvolveFit</div>
-  <button class="join-btn nav-btn" onclick="goApp()">Get Started 🚀</button>
+<nav id="nav">
+  <a href="#" class="nav-logo">Evolve<em>Fit</em></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#ranks">Ranks</a></li>
+    <li><a href="#cta">Get started</a></li>
+  </ul>
+  <a href="login.html" class="nav-cta" id="navCta">Start Free →</a>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="bg-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-badge">🏆 #1 Fitness Tracker</div>
-    <h1 class="hero-title">EVOLVE.<br>BECOME<br>ELITE.</h1>
-    <p class="hero-sub">
-      Build Muscle. Burn Fat. Track Progress.<br>
-      Your transformation starts today.
-    </p>
-    <button class="join-btn hero-btn" onclick="goApp()">
-      Start For Free 🚀
-    </button>
-    <p class="hero-note">No credit card · Free forever</p>
+<!-- HERO with video -->
+<section class="hero" id="home">
+  <div class="video-fallback"></div>
+  <div class="video-wrap">
+    <!-- Muted autoplay YouTube embed — gym footage, no controls, loop -->
+    <iframe
+      src="https://www.youtube.com/embed/dmMPSogNFkQ?autoplay=1&mute=1&loop=1&playlist=dmMPSogNFkQ&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
+      title="Background gym video"
+    ></iframe>
   </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Elite Fitness OS</div>
+    <h1 class="hero-headline">
+      Most people<br>
+      <span class="stroke">track. Few</span><br>
+      <span class="lit">transform.</span>
+    </h1>
+    <p class="hero-sub">
+      EvolveFit is built for the obsessed.<br>
+      <b>Track smarter. Rank up. Become Elite.</b>
+    </p>
+    <div class="hero-actions">
+      <a href="login.html" class="btn-main">Start For Free →</a>
+      <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-unit"><div class="stat-num">10K+</div><div class="stat-lbl">Members worldwide</div></div>
+  <div class="stat-unit"><div class="stat-num">500K+</div><div class="stat-lbl">Daily check-ins</div></div>
+  <div class="stat-unit"><div class="stat-num">4.9★</div><div class="stat-lbl">Average rating</div></div>
+  <div class="stat-unit"><div class="stat-num">98%</div><div class="stat-lbl">Report progress</div></div>
 </div>
 
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="stat-item"><span class="stat-num">10K+</span><span class="stat-label">Members</span></div>
-  <div class="stat-item"><span class="stat-num">500K+</span><span class="stat-label">Check-ins</span></div>
-  <div class="stat-item"><span class="stat-num">98%</span><span class="stat-label">Success Rate</span></div>
-  <div class="stat-item"><span class="stat-num">4.9⭐</span><span class="stat-label">Rating</span></div>
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">BMI Tracking</span>
+    <span class="ticker-item">Calorie Precision</span>
+    <span class="ticker-item">Macro Planner</span>
+    <span class="ticker-item">Rank System</span>
+    <span class="ticker-item">AI Coach</span>
+    <span class="ticker-item">Daily Streak</span>
+    <span class="ticker-item">Progress Charts</span>
+    <span class="ticker-item">Daily Missions</span>
+    <span class="ticker-item">Premium Workouts</span>
+    <span class="ticker-item">Body Type Diet</span>
+    <span class="ticker-item">Meal Planner</span>
+    <span class="ticker-item">BMI Tracking</span>
+    <span class="ticker-item">Calorie Precision</span>
+    <span class="ticker-item">Macro Planner</span>
+    <span class="ticker-item">Rank System</span>
+    <span class="ticker-item">AI Coach</span>
+    <span class="ticker-item">Daily Streak</span>
+    <span class="ticker-item">Progress Charts</span>
+    <span class="ticker-item">Daily Missions</span>
+    <span class="ticker-item">Premium Workouts</span>
+    <span class="ticker-item">Body Type Diet</span>
+    <span class="ticker-item">Meal Planner</span>
+  </div>
 </div>
 
 <!-- FEATURES -->
-<div class="section">
-  <h2 class="section-title">Everything You Need to <span class="gold">Evolve</span></h2>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">📊</div>
-      <h3>BMI Tracking</h3>
-      <p>Log your weight daily and watch your BMI trend in real time with beautiful charts.</p>
+<section id="features">
+  <div class="reveal">
+    <div class="section-tag">Everything you need</div>
+    <h2 class="section-h">Built for people<br><span class="ghost">who don't quit.</span></h2>
+    <p class="section-sub">Every tool dialled for your goal — not a generic wellness app. Precision fitness, gamified.</p>
+  </div>
+  <div class="bento reveal d1">
+    <div class="bento-card wide">
+      <div class="b-icon">📊</div>
+      <div class="b-name">Live BMI + Body Intelligence</div>
+      <p class="b-desc">Log daily weight. Watch your BMI trend shift in real time with analytics that actually tell you something useful.</p>
+      <span class="b-pill">Most used feature</span>
+      <div class="mini-chart" id="miniChart"></div>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔥</div>
-      <h3>Calorie Counter</h3>
-      <p>Know exactly how many calories you need based on your goal — bulk, cut or maintain.</p>
+    <div class="bento-card">
+      <div class="b-icon">🔥</div>
+      <div class="b-name">Calorie Intelligence</div>
+      <p class="b-desc">Precise targets based on your goal — bulk, cut, or maintain. Adapts as you evolve.</p>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">💪</div>
-      <h3>Macro Planner</h3>
-      <p>Get your perfect protein, carb and fat targets to fuel your performance.</p>
+    <div class="bento-card">
+      <div class="b-icon">💪</div>
+      <div class="b-name">Macro Architect</div>
+      <p class="b-desc">Protein. Carbs. Fat. Dialled to your body — not a template. Elite fuel.</p>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏆</div>
-      <h3>Rank System</h3>
-      <p>Earn ranks from Beginner to Elite as you stay consistent and hit your goals.</p>
+    <div class="bento-card">
+      <div class="b-icon">🏆</div>
+      <div class="b-name">Rank System</div>
+      <p class="b-desc">Rise from Beginner to Elite. Streak earns rank. Consistency is the currency.</p>
+      <span class="b-pill">Fan favourite</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">📈</div>
-      <h3>Progress Charts</h3>
-      <p>Visualize your weight and BMI journey with elite analytics over time.</p>
+    <div class="bento-card">
+      <div class="b-icon">🤖</div>
+      <div class="b-name">AI Coach</div>
+      <p class="b-desc">Workout plans, body-type diet analysis, meal planning — all AI-generated, goal-specific.</p>
+      <span class="b-pill">Premium</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <h3>Daily Missions</h3>
-      <p>Complete daily challenges, spin for rewards and unlock achievements every day.</p>
+    <div class="bento-card">
+      <div class="b-icon">🎯</div>
+      <div class="b-name">Daily Missions</div>
+      <p class="b-desc">Challenges, spins, achievements. Every day is a new chance to level up.</p>
     </div>
   </div>
-</div>
+</section>
 
 <!-- HOW IT WORKS -->
-<div class="section section-dark">
-  <h2 class="section-title">How It <span class="gold">Works</span></h2>
-  <div class="steps-wrap">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h3>Sign Up Free</h3>
-      <p>Login with Google in one tap — no forms, no hassle.</p>
+<section id="how" style="background:#0d0d0b">
+  <div class="how-grid">
+    <div>
+      <div class="reveal"><div class="section-tag">The method</div></div>
+      <h2 class="section-h reveal d1">Three steps.<br><span class="ghost">Zero excuses.</span></h2>
+      <div class="steps">
+        <div class="step on reveal d1">
+          <div class="step-n">01</div>
+          <div class="step-body">
+            <h3>Sign up in one tap</h3>
+            <p>Google login. No forms. No friction. You're in before you can talk yourself out of it.</p>
+          </div>
+        </div>
+        <div class="step reveal d2">
+          <div class="step-n">02</div>
+          <div class="step-body">
+            <h3>Set your goal, own it</h3>
+            <p>Enter your stats. The engine sets your exact calorie and macro targets. You focus on execution.</p>
+          </div>
+        </div>
+        <div class="step reveal d3">
+          <div class="step-n">03</div>
+          <div class="step-body">
+            <h3>Check in. Rank up. Repeat.</h3>
+            <p>Daily check-ins build your streak. Streak builds rank. Rank builds identity. This is the loop.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="step-arrow">→</div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h3>Set Your Goal</h3>
-      <p>Enter your weight, height and target. We handle the rest.</p>
-    </div>
-    <div class="step-arrow">→</div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h3>Check In Daily</h3>
-      <p>Log your weight every day and watch your transformation happen.</p>
+    <div class="reveal d2">
+      <div class="phone">
+        <div class="phone-pill"></div>
+        <div class="phone-rank">
+          <div class="phone-rank-label">Current Rank</div>
+          <div class="phone-rank-val">ELITE</div>
+          <div class="phone-rank-sub">Top 4% · 🔥 127 day streak</div>
+        </div>
+        <div class="phone-row">
+          <span class="phone-row-label">Today's streak</span>
+          <span class="phone-row-val" style="color:var(--accent)">127d 🔥</span>
+        </div>
+        <div class="phone-bars">
+          <div class="phone-bars-label">Weight trend — 7 days</div>
+          <div class="bars-row" id="phoneBars"></div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- RANKS -->
+<section id="ranks">
+  <div class="reveal">
+    <div class="section-tag">Progression system</div>
+    <h2 class="section-h">Your rank.<br><span class="ghost">Earned, not given.</span></h2>
+    <p class="section-sub">Stay consistent, rise through the ranks. The top 4% earn Elite — proof that they never quit.</p>
+  </div>
+  <div class="ranks-grid reveal d1">
+    <div class="rank-card"><div class="rank-ico">🌱</div><div class="rank-name">BEGINNER</div><div class="rank-req">Start logging.<br>Build the habit.</div><div class="rank-days">0–6 days</div></div>
+    <div class="rank-card"><div class="rank-ico">⚡</div><div class="rank-name">CONTENDER</div><div class="rank-req">First week done.<br>Habit forming.</div><div class="rank-days">7–29 days</div></div>
+    <div class="rank-card"><div class="rank-ico">🔥</div><div class="rank-name">WARRIOR</div><div class="rank-req">One month strong.<br>Top 30%.</div><div class="rank-days">4+ days</div></div>
+    <div class="rank-card"><div class="rank-ico">💎</div><div class="rank-name">BEAST</div><div class="rank-req">Unstoppable.<br>8+ day streak.</div><div class="rank-days">8+ days</div></div>
+    <div class="rank-card crown"><div class="rank-ico">👑</div><div class="rank-name" style="color:var(--accent)">ELITE</div><div class="rank-req">15+ days.<br>Pinnacle.</div><div class="rank-days">15+ days</div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:#0d0d0b">
+  <div class="reveal">
+    <div class="section-tag">Real results</div>
+    <h2 class="section-h">They showed up.<br><span class="ghost">Every single day.</span></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card big reveal">
+      <p class="testi-text">"I tried six fitness apps. The rank system is the only thing that's made me show up consistently. 214 days. I'm not stopping."</p>
+      <div class="testi-who">
+        <div class="testi-av" style="background:var(--accent)">RK</div>
+        <div><div class="testi-name">Rajan K.</div><div class="testi-meta">Lost 18kg · Chennai</div></div>
+        <span class="testi-rank-pill">👑 Elite</span>
+      </div>
+    </div>
+    <div class="testi-card reveal d1">
+      <p class="testi-text">"The macro planner alone is worth it. Results in week 3."</p>
+      <div class="testi-who">
+        <div class="testi-av" style="background:#42f5a1">SL</div>
+        <div><div class="testi-name">Sara L.</div><div class="testi-meta">47 day streak</div></div>
+        <span class="testi-rank-pill">🔥 Warrior</span>
+      </div>
+    </div>
+    <div class="testi-card reveal d1">
+      <p class="testi-text">"Checked in 90 days straight. Hit Beast. I cried a little. No shame."</p>
+      <div class="testi-who">
+        <div class="testi-av" style="background:#f542a1">AM</div>
+        <div><div class="testi-name">Arjun M.</div><div class="testi-meta">Cut 12kg</div></div>
+        <span class="testi-rank-pill">💪 Beast</span>
+      </div>
+    </div>
+    <div class="testi-card reveal d2">
+      <p class="testi-text">"Daily missions keep it addictive. Feels like a game. Best fitness app I've used."</p>
+      <div class="testi-who">
+        <div class="testi-av" style="background:#42b0f5">PT</div>
+        <div><div class="testi-name">Priya T.</div><div class="testi-meta">58 day streak</div></div>
+        <span class="testi-rank-pill">🔥 Warrior</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- CTA -->
-<div class="section cta-section">
-  <h2 class="section-title">Ready to <span class="gold">Evolve?</span></h2>
-  <p style="opacity:.7;margin-bottom:28px;font-size:16px;">
-    Join thousands already on their elite fitness journey.
-  </p>
-  <button class="join-btn cta-btn" onclick="goApp()">
-    Start Free Today 🚀
-  </button>
-</div>
+<section id="cta" style="text-align:center">
+  <div class="quiz-wrap">
+    <div class="reveal">
+      <div class="section-tag" style="text-align:center">Your transformation starts here</div>
+      <h2 class="section-h">What's your goal?</h2>
+      <p class="section-sub" style="margin:0 auto 40px;text-align:center">Pick one. We build your exact plan in seconds.</p>
+    </div>
+    <div class="quiz-cards reveal d1">
+      <div class="qcard" onclick="pick(this)">
+        <div class="qcard-ico">🔥</div>
+        <div class="qcard-title">Burn Fat</div>
+        <p class="qcard-sub">Precision deficit. Lean out without losing muscle.</p>
+      </div>
+      <div class="qcard" onclick="pick(this)">
+        <div class="qcard-ico">💪</div>
+        <div class="qcard-title">Build Muscle</div>
+        <p class="qcard-sub">Smart bulk. Macro-tuned for maximum gains.</p>
+      </div>
+      <div class="qcard" onclick="pick(this)">
+        <div class="qcard-ico">⚖️</div>
+        <div class="qcard-title">Stay Fit</div>
+        <p class="qcard-sub">Maintain your weight. Lock in your lifestyle.</p>
+      </div>
+    </div>
+    <div class="reveal d2">
+      <button class="quiz-main-btn" id="quizBtn" onclick="goLogin()">Build My Plan →</button>
+      <p class="quiz-fine">Free forever · No credit card · Google sign-in</p>
+    </div>
+  </div>
+</section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <p>⚡ EvolveFit · Built for the ones who don't quit</p>
+<footer>
+  <div class="foot-logo">Evolve<em>Fit</em></div>
+  <ul class="foot-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#ranks">Ranks</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+  <p class="foot-copy">© 2026 EvolveFit · Built for the ones who don't quit</p>
 </footer>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
-  authDomain: "evolvefit-07.firebaseapp.com",
-  projectId: "evolvefit-07"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    localStorage.setItem("username", user.displayName || "User");
-    localStorage.setItem("photo", user.photoURL || "");
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+const cfg={apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
+const app=initializeApp(cfg);
+const auth=getAuth(app);
+onAuthStateChanged(auth,u=>{
+  if(u){
+    localStorage.setItem("username",u.displayName||"User");
+    localStorage.setItem("photo",u.photoURL||"");
+    document.getElementById("navCta").innerText="Dashboard →";
+    document.getElementById("navCta").href=localStorage.getItem("height")?"dashboard.html":"bmi.html";
   }
 });
+</script>
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('solid',scrollY>60);
+});
 
-window.goApp = function() {
-  const user = auth.currentUser;
-  if (user) {
-    location.href = localStorage.getItem("height") ? "dashboard.html" : "bmi.html";
-  } else {
-    location.href = "login.html";
-  }
-};
+// Reveal observer
+const obs=new IntersectionObserver(els=>{els.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Mini chart bars
+const heights=[45,58,52,70,64,82,90];
+const mc=document.getElementById('miniChart');
+heights.forEach((h,i)=>{
+  const b=document.createElement('div');
+  b.className='mini-bar'+(i===heights.length-1?' hi':'');
+  b.style.height=h+'%';mc.appendChild(b);
+});
+
+// Phone bars
+const ph=[55,62,58,70,65,80,88];
+const pb=document.getElementById('phoneBars');
+ph.forEach((h,i)=>{
+  const b=document.createElement('div');
+  b.className='pbar'+(i===ph.length-1?' lit':'');
+  b.style.height=h+'%';pb.appendChild(b);
+});
+
+// Quiz
+let picked=null;
+function pick(el){
+  document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');picked=el;
+  document.getElementById('quizBtn').classList.add('go');
+}
+function goLogin(){if(picked)location.href='login.html';}
+window.pick=pick;window.goLogin=goLogin;
 </script>
 </body>
 </html>
