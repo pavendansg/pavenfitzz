@@ -275,8 +275,19 @@ onAuthStateChanged(auth, async(user)=>{
 
   document.getElementById("streak").innerText="🔥 "+streak+" day streak";
 
-  const rankTitle=streak>=15?"👑 ELITE":streak>=8?"💪 BEAST":streak>=4?"⚔️ WARRIOR":"🥉 BEGINNER";
-  const daysLeft=streak>=15?"MAX RANK 🏆":streak>=8?(15-streak)+" Day(s) to Elite":streak>=4?(8-streak)+" Day(s) to Beast":(4-streak)+" Day(s) to Warrior";
+ const rankTitle=
+  streak>=180?"👑 ELITE":
+  streak>=90?"💎 BEAST":
+  streak>=30?"🔥 WARRIOR":
+  streak>=7?"⚡ CONTENDER":
+  "🌱 BEGINNER";
+
+const daysLeft=
+  streak>=180?"👑 MAX RANK — You're Elite":
+  streak>=90?"🔥 "+(180-streak)+" days to Elite":
+  streak>=30?"💎 "+(90-streak)+" days to Beast":
+  streak>=7?"🔥 "+(30-streak)+" days to Warrior":
+  "⚡ "+(7-streak)+" days to Contender";
   document.getElementById("rankTitle").innerText=rankTitle;
   document.getElementById("rankSub").innerText=daysLeft;
 
