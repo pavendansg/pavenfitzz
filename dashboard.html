@@ -316,13 +316,14 @@ const daysLeft=
   document.getElementById("progressText").innerText="Goal Progress";
   document.getElementById("progressBar").style.width=progress+"%";
 
-  const badgeData=[
-    {label:"🌟 First Check-In",show:true},
-    {label:"🔥 7-Day Streak",  show:streak>=7},
-    {label:"⚔️ Warrior",      show:streak>=4},
-    {label:"💪 Beast",         show:streak>=8},
-    {label:"👑 Elite",         show:streak>=15},
-  ];
+ const badgeData=[
+  {label:"🌱 First Check-In", show:true},
+  {label:"⚡ Contender",      show:streak>=7},
+  {label:"🔥 Warrior",        show:streak>=30},
+  {label:"💎 Beast",          show:streak>=90},
+  {label:"👑 Elite",          show:streak>=180},
+  {label:"⚡ Premium",        show:true}, // premium dashboard only
+];
   document.getElementById("badges").innerHTML=
     badgeData.filter(b=>b.show).map(b=>`<div class="badge-item">${b.label}</div>`).join("");
 });
