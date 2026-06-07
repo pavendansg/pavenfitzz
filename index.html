@@ -167,12 +167,12 @@ section{padding:100px 6%}
 }
 .section-h{
   font-family:var(--font-display);
-  font-size:clamp(34px,5vw,58px);
-  font-weight:800;letter-spacing:-2px;line-height:0.95;
-  margin-bottom:16px;
+  font-size:clamp(28px,4vw,52px);
+  font-weight:800;letter-spacing:-1.5px;line-height:0.97;
+  margin-bottom:14px;
 }
 .section-h .ghost{
-  -webkit-text-stroke:1px rgba(240,237,230,0.2);
+  -webkit-text-stroke:1px rgba(240,237,230,0.18);
   color:transparent;
 }
 .section-sub{
@@ -198,11 +198,12 @@ section{padding:100px 6%}
 .bento-card.wide{grid-column:span 2}
 .bento-card.tall{grid-row:span 2}
 .b-icon{
-  font-size:28px;
-  width:52px;height:52px;border-radius:12px;
+  font-size:22px;
+  width:50px;height:50px;border-radius:12px;
   background:var(--accent-dim);border:1px solid rgba(200,245,66,0.2);
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:20px;
+  margin-bottom:18px;
+  font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;
 }
 .b-name{
   font-family:var(--font-display);font-size:19px;
@@ -218,13 +219,14 @@ section{padding:100px 6%}
 }
 /* mini chart in wide card */
 .mini-chart{
-  margin-top:20px;height:60px;
-  display:flex;align-items:flex-end;gap:3px;
+  margin-top:20px;height:56px;
+  display:flex;align-items:flex-end;gap:4px;
 }
 .mini-bar{
-  flex:1;border-radius:3px 3px 0 0;
-  background:rgba(200,245,66,0.15);
-  transition:height 1s ease;
+  flex:1;border-radius:4px 4px 0 0;
+  background:rgba(200,245,66,0.18);
+  min-height:8px;
+  transition:height .8s ease;
 }
 .mini-bar.hi{background:var(--accent)}
 
@@ -360,12 +362,15 @@ section{padding:100px 6%}
   padding:17px 52px;border-radius:50px;
   font-size:15px;font-weight:700;font-family:var(--font-body);
   cursor:pointer;transition:transform .15s,box-shadow .2s,opacity .2s;
-  opacity:.4;pointer-events:none;
+  opacity:.35;pointer-events:none;
+  letter-spacing:0.01em;
 }
-.quiz-main-btn.go{opacity:1;pointer-events:all}
+.quiz-main-btn.go{
+  opacity:1;pointer-events:all;
+}
 .quiz-main-btn.go:hover{
   transform:translateY(-2px);
-  box-shadow:0 16px 48px rgba(200,245,66,0.35);
+  box-shadow:0 16px 48px rgba(200,245,66,0.4);
 }
 .quiz-fine{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:0.02em}
 
@@ -486,7 +491,7 @@ footer{
   </div>
   <div class="bento reveal d1">
     <div class="bento-card wide">
-      <div class="b-icon">📊</div>
+      <div class="b-icon">📈</div>
       <div class="b-name">Live BMI + Body Intelligence</div>
       <p class="b-desc">Log daily weight. Watch your BMI trend shift in real time with analytics that actually tell you something useful.</p>
       <span class="b-pill">Most used feature</span>
@@ -498,7 +503,7 @@ footer{
       <p class="b-desc">Precise targets based on your goal — bulk, cut, or maintain. Adapts as you evolve.</p>
     </div>
     <div class="bento-card">
-      <div class="b-icon">💪</div>
+      <div class="b-icon">🥗</div>
       <div class="b-name">Macro Architect</div>
       <p class="b-desc">Protein. Carbs. Fat. Dialled to your body — not a template. Elite fuel.</p>
     </div>
