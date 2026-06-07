@@ -25,9 +25,9 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 
 /* ── VIDEO HERO ── */
 .hero{
-  position:relative;height:100vh;min-height:600px;
+  position:relative;height:100vh;min-height:620px;
   display:flex;flex-direction:column;
-  justify-content:flex-end;
+  justify-content:center;
   overflow:hidden;
 }
 .video-wrap{
@@ -47,17 +47,17 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
   background:linear-gradient(
-    to top,
-    rgba(8,8,8,0.97) 0%,
-    rgba(8,8,8,0.7) 35%,
-    rgba(8,8,8,0.25) 65%,
-    rgba(8,8,8,0.4) 100%
+    160deg,
+    rgba(8,8,8,0.55) 0%,
+    rgba(8,8,8,0.3) 40%,
+    rgba(8,8,8,0.65) 75%,
+    rgba(8,8,8,0.97) 100%
   );
 }
 .hero-content{
   position:relative;z-index:2;
-  padding:0 6% 72px;
-  max-width:780px;
+  padding:100px 6% 60px;
+  max-width:820px;
 }
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
@@ -145,27 +145,7 @@ nav.solid{
 }
 .nav-cta:hover{opacity:.88;transform:scale(0.97)}
 
-/* ── STATS BAR ── */
-.stats-bar{
-  background:#0d0d0b;border-bottom:1px solid var(--border);
-  display:flex;justify-content:center;
-}
-.stat-unit{
-  flex:1;max-width:220px;
-  display:flex;flex-direction:column;align-items:center;
-  padding:28px 16px;
-  border-right:1px solid var(--border);
-}
-.stat-unit:last-child{border-right:none}
-.stat-num{
-  font-family:var(--font-display);font-size:30px;
-  font-weight:800;color:var(--accent);letter-spacing:-1px;
-  line-height:1;
-}
-.stat-lbl{
-  font-size:11px;color:var(--muted);margin-top:6px;
-  letter-spacing:0.08em;text-transform:uppercase;
-}
+
 
 /* ── TICKER ── */
 .ticker{background:var(--accent);padding:12px 0;overflow:hidden}
@@ -344,32 +324,7 @@ section{padding:100px 6%}
   border:1px solid rgba(200,245,66,0.2);
 }
 
-/* ── TESTIMONIALS ── */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.testi-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:18px;padding:26px;
-}
-.testi-card.big{grid-column:span 2}
-.testi-text{
-  font-size:14px;line-height:1.75;
-  color:rgba(240,237,230,0.8);margin-bottom:18px;font-style:italic;
-}
-.testi-card.big .testi-text{font-size:17px}
-.testi-who{display:flex;align-items:center;gap:12px}
-.testi-av{
-  width:36px;height:36px;border-radius:50%;
-  font-family:var(--font-display);font-size:12px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;color:#080808;
-}
-.testi-name{font-size:14px;font-weight:600}
-.testi-meta{font-size:12px;color:var(--muted)}
-.testi-rank-pill{
-  margin-left:auto;background:var(--accent-dim);color:var(--accent);
-  font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
-  padding:4px 10px;border-radius:50px;border:1px solid rgba(200,245,66,0.2);
-  white-space:nowrap;
-}
+
 
 /* ── CTA / GOAL QUIZ ── */
 .quiz-wrap{
@@ -492,13 +447,7 @@ footer{
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="stat-unit"><div class="stat-num">10K+</div><div class="stat-lbl">Members worldwide</div></div>
-  <div class="stat-unit"><div class="stat-num">500K+</div><div class="stat-lbl">Daily check-ins</div></div>
-  <div class="stat-unit"><div class="stat-num">4.9★</div><div class="stat-lbl">Average rating</div></div>
-  <div class="stat-unit"><div class="stat-num">98%</div><div class="stat-lbl">Report progress</div></div>
-</div>
+
 
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
@@ -640,47 +589,7 @@ footer{
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section style="background:#0d0d0b">
-  <div class="reveal">
-    <div class="section-tag">Real results</div>
-    <h2 class="section-h">They showed up.<br><span class="ghost">Every single day.</span></h2>
-  </div>
-  <div class="testi-grid">
-    <div class="testi-card big reveal">
-      <p class="testi-text">"I tried six fitness apps. The rank system is the only thing that's made me show up consistently. 214 days. I'm not stopping."</p>
-      <div class="testi-who">
-        <div class="testi-av" style="background:var(--accent)">RK</div>
-        <div><div class="testi-name">Rajan K.</div><div class="testi-meta">Lost 18kg · Chennai</div></div>
-        <span class="testi-rank-pill">👑 Elite</span>
-      </div>
-    </div>
-    <div class="testi-card reveal d1">
-      <p class="testi-text">"The macro planner alone is worth it. Results in week 3."</p>
-      <div class="testi-who">
-        <div class="testi-av" style="background:#42f5a1">SL</div>
-        <div><div class="testi-name">Sara L.</div><div class="testi-meta">47 day streak</div></div>
-        <span class="testi-rank-pill">🔥 Warrior</span>
-      </div>
-    </div>
-    <div class="testi-card reveal d1">
-      <p class="testi-text">"Checked in 90 days straight. Hit Beast. I cried a little. No shame."</p>
-      <div class="testi-who">
-        <div class="testi-av" style="background:#f542a1">AM</div>
-        <div><div class="testi-name">Arjun M.</div><div class="testi-meta">Cut 12kg</div></div>
-        <span class="testi-rank-pill">💪 Beast</span>
-      </div>
-    </div>
-    <div class="testi-card reveal d2">
-      <p class="testi-text">"Daily missions keep it addictive. Feels like a game. Best fitness app I've used."</p>
-      <div class="testi-who">
-        <div class="testi-av" style="background:#42b0f5">PT</div>
-        <div><div class="testi-name">Priya T.</div><div class="testi-meta">58 day streak</div></div>
-        <span class="testi-rank-pill">🔥 Warrior</span>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- CTA -->
 <section id="cta" style="text-align:center">
@@ -755,14 +664,14 @@ onAuthStateChanged(auth,u=>{
   window.addEventListener('resize', resize);
 
   // Floating dust particles
-  for(let i=0;i<90;i++){
+  for(let i=0;i<110;i++){
     particles.push({
       x: Math.random()*2000,
       y: Math.random()*1000,
-      r: Math.random()*1.4+0.3,
+      r: Math.random()*1.8+0.4,
       vx: (Math.random()-.5)*0.18,
       vy: -Math.random()*0.22-0.06,
-      o: Math.random()*0.45+0.08
+      o: Math.random()*0.6+0.15
     });
   }
 
@@ -790,15 +699,21 @@ onAuthStateChanged(auth,u=>{
 
     // Ambient glow — bottom left green
     const g1 = ctx.createRadialGradient(W*0.15, H*0.85, 0, W*0.15, H*0.85, W*0.55);
-    g1.addColorStop(0,'rgba(200,245,66,0.07)');
+    g1.addColorStop(0,'rgba(200,245,66,0.13)');
     g1.addColorStop(1,'transparent');
     ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
 
     // Ambient glow — top right dim
     const g2 = ctx.createRadialGradient(W*0.85, H*0.2, 0, W*0.85, H*0.2, W*0.45);
-    g2.addColorStop(0,'rgba(80,100,60,0.06)');
+    g2.addColorStop(0,'rgba(120,160,80,0.09)');
     g2.addColorStop(1,'transparent');
     ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+
+    // Center glow — subtle
+    const g3 = ctx.createRadialGradient(W*0.5, H*0.45, 0, W*0.5, H*0.45, W*0.6);
+    g3.addColorStop(0,'rgba(200,245,66,0.04)');
+    g3.addColorStop(1,'transparent');
+    ctx.fillStyle=g3; ctx.fillRect(0,0,W,H);
 
     // Horizontal scan line (subtle, slow)
     const scanY = (H * 0.3) + Math.sin(t*0.0004)*H*0.08;
@@ -837,17 +752,20 @@ onAuthStateChanged(auth,u=>{
       ctx.fill();
     });
 
-    // Grid lines (very subtle)
-    ctx.strokeStyle='rgba(200,245,66,0.025)';
+    // Grid lines
+    ctx.strokeStyle='rgba(200,245,66,0.045)';
     ctx.lineWidth=1;
     const gridH=80;
     for(let y=0;y<H;y+=gridH){
+      ctx.globalAlpha = 0.5+0.5*Math.sin(t*0.0005+y*0.02);
       ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
     }
     const gridV=120;
     for(let x=0;x<W;x+=gridV){
+      ctx.globalAlpha = 0.5+0.5*Math.sin(t*0.0005+x*0.01);
       ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
     }
+    ctx.globalAlpha=1;
 
     t++;
     requestAnimationFrame(draw);
