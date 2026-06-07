@@ -271,64 +271,90 @@ onAuthStateChanged(auth, async(user)=>{
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
   const first=history[0], latest=history[history.length-1];
-  const streak=history.length;
+  
+  // ✅ FIX: Calculate REAL consecutive days streak
+  let streak = 0;
+  let lastDate = null;
+  // history is already sorted ascending (oldest to newest)
+  for (let i = history.length - 1; i >= 0; i--) {
+    const currentDate = new Date(history[i].date);
+    if (!lastDate) {
+      streak = 1;
+      lastDate = currentDate;
+      continue;
+    }
+    const diffDays = (lastDate - currentDate) / (1000 * 60 * 60 * 24);
+    if (diffDays === 1) {
+      streak++;
+      lastDate = currentDate;
+    } else {
+      break; // gap found, stop counting
+    }
+  }
 
   document.getElementById("streak").innerText="🔥 "+streak+" day streak";
 
- const rankTitle=
-  streak>=180?"👑 ELITE":
-  streak>=90?"💎 BEAST":
-  streak>=30?"🔥 WARRIOR":
-  streak>=7?"⚡ CONTENDER":
-  "🌱 BEGINNER";
+  const rankTitle =
+    streak >= 180 ? "👑 ELITE" :
+    streak >= 90 ? "💎 BEAST" :
+    streak >= 30 ? "🔥 WARRIOR" :
+    streak >= 7 ? "⚡ CONTENDER" :
+    "🌱 BEGINNER";
 
-const daysLeft=
-  streak>=180?"👑 MAX RANK — You're Elite":
-  streak>=90?"🔥 "+(180-streak)+" days to Elite":
-  streak>=30?"💎 "+(90-streak)+" days to Beast":
-  streak>=7?"🔥 "+(30-streak)+" days to Warrior":
-  "⚡ "+(7-streak)+" days to Contender";
-  document.getElementById("rankTitle").innerText=rankTitle;
-  document.getElementById("rankSub").innerText=daysLeft;
+  const daysLeft =
+    streak >= 180 ? "👑 MAX RANK — You're Elite" :
+    streak >= 90 ? "🔥 " + (180 - streak) + " days to Elite" :
+    streak >= 30 ? "💎 " + (90 - streak) + " days to Beast" :
+    streak >= 7 ? "🔥 " + (30 - streak) + " days to Warrior" :
+    "⚡ " + (7 - streak) + " days to Contender";
+
+  document.getElementById("rankTitle").innerText = rankTitle;
+  document.getElementById("rankSub").innerText = daysLeft;
 
   document.getElementById("bmi").innerText      = latest.bmi      ||"—";
   document.getElementById("weight").innerText   = (latest.weight  ||"—")+" kg";
   document.getElementById("calories").innerText = (latest.calories||"—")+" kcal";
   document.getElementById("goal").innerText     = (latest.goal    ||"—").toUpperCase();
 
-  const xp=streak*10, level=Math.floor(xp/100)+1, curXP=xp%100;
-  document.getElementById("levelText").innerText="Lvl "+level;
-  document.getElementById("xpText").innerText=curXP+" / 100 XP";
-  document.getElementById("xpPct").innerText=curXP+"%";
-  document.getElementById("xpBar").style.width=curXP+"%";
+  // XP based on streak (consecutive days)
+  const xp = streak * 10;
+  const level = Math.floor(xp / 100) + 1;
+  const curXP = xp % 100;
+  document.getElementById("levelText").innerText = "Lvl " + level;
+  document.getElementById("xpText").innerText = curXP + " / 100 XP";
+  document.getElementById("xpPct").innerText = curXP + "%";
+  document.getElementById("xpBar").style.width = curXP + "%";
 
-  document.getElementById("rewardText").innerText="+10 XP";
-  document.getElementById("rewardBar").style.width="20%";
+  document.getElementById("rewardText").innerText = "+10 XP";
+  document.getElementById("rewardBar").style.width = "20%";
 
-  document.getElementById("records").innerHTML=
+  document.getElementById("records").innerHTML =
     `<span style='color:#aaa;font-size:14px;'>Best Streak: <b style='color:#fff'>${streak} days</b></span><br>
      <span style='color:#aaa;font-size:14px;'>Total Check-ins: <b style='color:#fff'>${history.length}</b></span>`;
 
-  const target=Number(localStorage.getItem("targetWeight"))||(first.weight+5);
-  const progress=Math.min(100,Math.round(Math.abs(latest.weight-first.weight)/Math.abs(target-first.weight)*100));
-  document.getElementById("targetText").innerText="🎯 Target: "+target+" kg";
-  document.getElementById("goalStatus").innerText=progress+"% done";
-  document.getElementById("progressText").innerText="Goal Progress";
-  document.getElementById("progressBar").style.width=progress+"%";
+  const target = Number(localStorage.getItem("targetWeight")) || (first.weight + 5);
+  const progress = Math.min(100, Math.round(Math.abs(latest.weight - first.weight) / Math.abs(target - first.weight) * 100));
+  document.getElementById("targetText").innerText = "🎯 Target: " + target + " kg";
+  document.getElementById("goalStatus").innerText = progress + "% done";
+  document.getElementById("progressText").innerText = "Goal Progress";
+  document.getElementById("progressBar").style.width = progress + "%";
 
- const badgeData=[
-  {label:"🌱 First Check-In", show:true},
-  {label:"⚡ Contender",      show:streak>=7},
-  {label:"🔥 Warrior",        show:streak>=30},
-  {label:"💎 Beast",          show:streak>=90},
-  {label:"👑 Elite",          show:streak>=180},
-  {label:"⚡ Premium",        show:true}, // premium dashboard only
-];
-  document.getElementById("badges").innerHTML=
-    badgeData.filter(b=>b.show).map(b=>`<div class="badge-item">${b.label}</div>`).join("");
+  const badgeData = [
+    { label: "🌱 First Check-In", show: true },
+    { label: "⚡ Contender",      show: streak >= 7 },
+    { label: "🔥 Warrior",        show: streak >= 30 },
+    { label: "💎 Beast",          show: streak >= 90 },
+    { label: "👑 Elite",          show: streak >= 180 },
+    { label: "⚡ Premium",        show: true },
+  ];
+  document.getElementById("badges").innerHTML =
+    badgeData.filter(b => b.show).map(b => `<div class="badge-item">${b.label}</div>`).join("");
 });
 
-window.logout=()=>{localStorage.clear();location.href="login.html";};
+window.logout = () => {
+  localStorage.clear();
+  location.href = "login.html";
+};
 </script>
 </body>
 </html>
