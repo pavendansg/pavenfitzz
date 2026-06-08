@@ -11,9 +11,9 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-  // ✅ STEP GUARD
+  // ✅ STEP GUARD — fixed: no longer goes to deleted dashboard.html
   if (!localStorage.getItem("macros_done")) {
-    location.href = "dashboard.html";
+    location.href = "graph.html";
   }
 
   const firebaseConfig = {
@@ -37,11 +37,19 @@
     currentUser = user;
     document.getElementById("userEmail").innerText = user.email;
 
-    // Check if already premium
+    // ✅ FIXED — already premium users go to workout first, not dashboard
+    // They still need to go through workout → diet → meal → dashboard-premium
     const snap = await getDoc(doc(db, "premium", user.uid));
     if (snap.exists() && snap.data().active === true) {
       localStorage.setItem("premium", "true");
-      location.href = "dashboard-premium.html";
+      // Check if they've already done workout/diet/meal
+      if (localStorage.getItem("workoutLockStart") && localStorage.getItem("dietDate") && localStorage.getItem("mealDate")) {
+        // All AI pages done — go straight to dashboard
+        location.href = "dashboard-premium.html";
+      } else {
+        // Premium but haven't done AI pages yet — start from workout
+        location.href = "workout.html";
+      }
     }
   });
 
@@ -85,6 +93,7 @@
           document.getElementById("successBox").style.display = "block";
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
+          // ✅ After payment — always go to workout first
           setTimeout(() => { location.href = "workout.html"; }, 2000);
 
         } catch(err) {
