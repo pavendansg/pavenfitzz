@@ -95,9 +95,10 @@
     <p id="checkins" style="opacity:.5;font-size:12px;"></p>
   </div>
 
+  <!-- FIXED BUTTONS — smart routing based on premium status -->
   <div class="btns" style="margin-top:16px;">
-    <button class="secondary-btn" onclick="location.href='dashboard.html'">← Dashboard</button>
-    <button class="primary-btn" onclick="location.href='bmi.html'">Check In Today ✅</button>
+    <button class="secondary-btn" onclick="location.href='bmi.html'">← Back</button>
+    <button class="primary-btn" id="nextBtn" onclick="goNext()">Unlock AI Coach 🔥</button>
   </div>
 
 </div>
@@ -209,6 +210,20 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
+// ✅ SMART NEXT BUTTON — new users go to payment, premium users go to dashboard
+window.goNext = function() {
+  if (localStorage.getItem("premium") === "true") {
+    location.href = "dashboard-premium.html";
+  } else {
+    location.href = "payment.html";
+  }
+};
+
+// Update button label based on premium status
+if (localStorage.getItem("premium") === "true") {
+  document.getElementById("nextBtn").innerText = "Go to Dashboard 📊";
+}
+
 Chart.defaults.color       = "#888";
 Chart.defaults.borderColor = "rgba(255,255,255,0.05)";
 
@@ -223,7 +238,8 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) { location.href = "login.html"; return; }
 
   const snap = await getDocs(collection(db, "users", user.uid, "daily"));
-  if (snap.empty) { location.href = "dashboard.html"; return; }
+  // ✅ FIXED — no longer redirects to deleted dashboard.html
+  if (snap.empty) { location.href = "bmi.html"; return; }
 
   let history = [];
   snap.forEach(d => history.push(d.data()));
@@ -267,13 +283,13 @@ onAuthStateChanged(auth, async (user) => {
     Math.abs(target - latest.weight).toFixed(1) + " kg to go";
 
   // MILESTONES
- const milestoneData=[
-  {days:1,   icon:"🌱", label:"First Check-In"},
-  {days:7,   icon:"⚡", label:"Contender (7 days)"},
-  {days:30,  icon:"🔥", label:"Warrior (30 days)"},
-  {days:90,  icon:"💎", label:"Beast (90 days)"},
-  {days:180, icon:"👑", label:"Elite (180 days)"},
-];
+  const milestoneData = [
+    {days:1,   icon:"🌱", label:"First Check-In"},
+    {days:7,   icon:"⚡", label:"Contender (7 days)"},
+    {days:30,  icon:"🔥", label:"Warrior (30 days)"},
+    {days:90,  icon:"💎", label:"Beast (90 days)"},
+    {days:180, icon:"👑", label:"Elite (180 days)"},
+  ];
   document.getElementById("milestones").innerHTML = milestoneData.map(m => {
     const done = streak >= m.days;
     return `<div class="milestone-item ${done ? 'achieved' : ''}">
