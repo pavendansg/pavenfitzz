@@ -216,9 +216,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// STEP GUARDS
+// ✅ FIXED STEP GUARDS — enforces full flow: workout → diet → meal → dashboard
 if (localStorage.getItem("premium") !== "true") { location.href = "payment.html"; }
-if (!localStorage.getItem("macros_done")) { location.href = "macros.html"; }
+if (!localStorage.getItem("workoutLockStart"))  { location.href = "workout.html"; }
+if (!localStorage.getItem("dietDate"))           { location.href = "diet.html"; }
+if (!localStorage.getItem("mealDate"))           { location.href = "meal.html"; }
 
 const firebaseConfig = {
   apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
@@ -231,7 +233,6 @@ const auth = getAuth(app);
 const db   = getFirestore(app);
 
 const CALORIE_TARGETS = {bulk:"3000",cut:"1800",maintain:"2400",athletic:"2600"};
-const PROTEIN_TARGETS = {bulk:"140g",cut:"160g",maintain:"120g",athletic:"150g"};
 
 // PROFILE PIC
 const pic = document.getElementById("profilePic");
@@ -298,8 +299,7 @@ function loadWorkout() {
 }
 
 window.completeWorkout = function() {
-  // Don't rely on localStorage streak anymore - just show message
-  alert("🔥 Great job completing your workout! Check-in tomorrow to maintain streak.");
+  alert("🔥 Great job completing your workout!");
 };
 
 // AI STATUS
@@ -360,7 +360,6 @@ window.toggleMission=function(id){
 onAuthStateChanged(auth, async(user)=>{
   if(!user){location.href="login.html";return;}
 
-  // Verify premium in Firestore
   const premSnap = await getDoc(doc(db,"premium",user.uid));
   if(!premSnap.exists()||premSnap.data().active!==true){
     localStorage.removeItem("premium");
@@ -376,63 +375,48 @@ onAuthStateChanged(auth, async(user)=>{
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
 
   const latest=history[history.length-1];
-  
-  // ✅ FIX: Calculate REAL consecutive days streak from history
+
+  // Real consecutive streak
   let streak = 0;
   let lastDate = null;
-  // history is already sorted ascending (oldest to newest)
   for (let i = history.length - 1; i >= 0; i--) {
     const currentDate = new Date(history[i].date);
-    if (!lastDate) {
-      streak = 1;
-      lastDate = currentDate;
-      continue;
-    }
+    if (!lastDate) { streak = 1; lastDate = currentDate; continue; }
     const diffDays = (lastDate - currentDate) / (1000 * 60 * 60 * 24);
-    if (diffDays === 1) {
-      streak++;
-      lastDate = currentDate;
-    } else {
-      break; // gap found, stop counting
-    }
+    if (diffDays === 1) { streak++; lastDate = currentDate; } else break;
   }
 
-  // Save streak to localStorage for other features (optional)
   localStorage.setItem("streak", streak);
   document.getElementById("streakNum").innerText = streak;
 
-  // RANK based on real streak
   const rankTitle =
     streak >= 180 ? "👑 ELITE" :
-    streak >= 90 ? "💎 BEAST" :
-    streak >= 30 ? "🔥 WARRIOR" :
-    streak >= 7 ? "⚡ CONTENDER" :
-    "🌱 BEGINNER";
+    streak >= 90  ? "💎 BEAST" :
+    streak >= 30  ? "🔥 WARRIOR" :
+    streak >= 7   ? "⚡ CONTENDER" : "🌱 BEGINNER";
 
   const daysLeft =
     streak >= 180 ? "👑 MAX RANK — You're Elite" :
-    streak >= 90 ? "🔥 " + (180 - streak) + " days to Elite" :
-    streak >= 30 ? "💎 " + (90 - streak) + " days to Beast" :
-    streak >= 7 ? "🔥 " + (30 - streak) + " days to Warrior" :
-    "⚡ " + (7 - streak) + " days to Contender";
-    
-  document.getElementById("rankTitle").innerText = rankTitle;
-  document.getElementById("rankSub").innerText = daysLeft;
+    streak >= 90  ? "🔥 " + (180-streak) + " days to Elite" :
+    streak >= 30  ? "💎 " + (90-streak)  + " days to Beast" :
+    streak >= 7   ? "🔥 " + (30-streak)  + " days to Warrior" :
+                    "⚡ " + (7-streak)   + " days to Contender";
 
-  // STATS
+  document.getElementById("rankTitle").innerText = rankTitle;
+  document.getElementById("rankSub").innerText   = daysLeft;
+
   document.getElementById("bmiVal").innerText    = latest.bmi      ||"—";
   document.getElementById("weightVal").innerText = (latest.weight  ||"—")+"kg";
   document.getElementById("calVal").innerText    = (latest.calories||"—");
   document.getElementById("goalVal").innerText   = (latest.goal    ||"—").toUpperCase();
 
   const goal = latest.goal || "bulk";
-  localStorage.setItem("goal",goal);
+  localStorage.setItem("goal", goal);
 
-  // NUTRITION TARGETS
-  const calories  = parseInt(localStorage.getItem("calories") || CALORIE_TARGETS[goal] || 2500);
-  const protein   = parseInt(localStorage.getItem("protein")  || 140);
-  const carbs     = parseInt(localStorage.getItem("carbs")    || 200);
-  const fats      = parseInt(localStorage.getItem("fats")     || 60);
+  const calories = parseInt(localStorage.getItem("calories") || CALORIE_TARGETS[goal] || 2500);
+  const protein  = parseInt(localStorage.getItem("protein")  || 140);
+  const carbs    = parseInt(localStorage.getItem("carbs")    || 200);
+  const fats     = parseInt(localStorage.getItem("fats")     || 60);
 
   document.getElementById("calTarget").innerText  = calories+"kcal";
   document.getElementById("protTarget").innerText = protein+"g";
@@ -448,25 +432,21 @@ onAuthStateChanged(auth, async(user)=>{
   document.getElementById("cPct").innerText=cPct+"%";
   document.getElementById("fPct").innerText=fPct+"%";
 
-  // XP based on streak (consecutive days)
-  const xp = streak * 10;
-  const level = Math.floor(xp / 100) + 1;
-  const curXP = xp % 100;
-  document.getElementById("levelBadge").innerText = "Lvl " + level;
-  document.getElementById("xpText").innerText = curXP + " / 100 XP";
-  document.getElementById("xpPct").innerText = curXP + "%";
-  document.getElementById("xpBar").style.width = curXP + "%";
+  const xp=streak*10, level=Math.floor(xp/100)+1, curXP=xp%100;
+  document.getElementById("levelBadge").innerText="Lvl "+level;
+  document.getElementById("xpText").innerText=curXP+" / 100 XP";
+  document.getElementById("xpPct").innerText=curXP+"%";
+  document.getElementById("xpBar").style.width=curXP+"%";
 
-  // BADGES based on real streak
-  const badgeData = [
-    {label:"🌱 First Check-In", show: true},
-    {label:"⚡ Contender",      show: streak >= 7},
-    {label:"🔥 Warrior",        show: streak >= 30},
-    {label:"💎 Beast",          show: streak >= 90},
-    {label:"👑 Elite",          show: streak >= 180},
-    {label:"⚡ Premium",        show: true},
+  const badgeData=[
+    {label:"🌱 First Check-In", show:true},
+    {label:"⚡ Contender",      show:streak>=7},
+    {label:"🔥 Warrior",        show:streak>=30},
+    {label:"💎 Beast",          show:streak>=90},
+    {label:"👑 Elite",          show:streak>=180},
+    {label:"⚡ Premium",        show:true},
   ];
-  document.getElementById("badges").innerHTML =
+  document.getElementById("badges").innerHTML=
     badgeData.filter(b=>b.show).map(b=>
       `<span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;">${b.label}</span>`
     ).join("");
@@ -477,11 +457,7 @@ loadWorkout();
 checkAI();
 renderMissions();
 
-window.logout = () => {
-  // Clear only session data, keep premium? Better to clear all for safety
-  localStorage.clear();
-  location.href = "login.html";
-};
+window.logout = () => { localStorage.clear(); location.href = "login.html"; };
 </script>
 </body>
 </html>
