@@ -11,10 +11,7 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-  // ✅ STEP GUARD — fixed: no longer goes to deleted dashboard.html
-  if (!localStorage.getItem("macros_done")) {
-    location.href = "graph.html";
-  }
+  if (!localStorage.getItem("macros_done")) { location.href = "graph.html"; }
 
   const firebaseConfig = {
     apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
@@ -25,39 +22,26 @@
   const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db   = getFirestore(app);
-
   let currentUser = null;
 
   onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      location.href = "login.html";
-      return;
-    }
-
+    if (!user) { location.href = "login.html"; return; }
     currentUser = user;
     document.getElementById("userEmail").innerText = user.email;
 
-    // ✅ FIXED — already premium users go to workout first, not dashboard
-    // They still need to go through workout → diet → meal → dashboard-premium
     const snap = await getDoc(doc(db, "premium", user.uid));
     if (snap.exists() && snap.data().active === true) {
       localStorage.setItem("premium", "true");
-      // Check if they've already done workout/diet/meal
-      if (localStorage.getItem("workoutLockStart") && localStorage.getItem("dietDate") && localStorage.getItem("mealDate")) {
-        // All AI pages done — go straight to dashboard
+      if (localStorage.getItem("ai_setup_done") === "true") {
         location.href = "dashboard-premium.html";
       } else {
-        // Premium but haven't done AI pages yet — start from workout
         location.href = "workout.html";
       }
     }
   });
 
   window.startPayment = function() {
-    if (!currentUser) {
-      alert("Please login first ⚠️");
-      return;
-    }
+    if (!currentUser) { alert("Please login first ⚠️"); return; }
 
     const btn = document.getElementById("payBtn");
     btn.disabled = true;
@@ -65,7 +49,7 @@
 
     const options = {
       key: "rzp_live_Sk2vCTkvCbTlpv",
-      amount: 8900,
+      amount: 500,
       currency: "INR",
       name: "PavenFitzz AI Coach",
       description: "Lifetime Premium Access",
@@ -83,29 +67,28 @@
             email:     currentUser.email,
             name:      currentUser.displayName || "User",
             paidAt:    new Date().toISOString(),
-            amount:    89
+            amount:    5
           });
 
           localStorage.setItem("premium",   "true");
           localStorage.setItem("paymentId", response.razorpay_payment_id);
+          localStorage.removeItem("ai_setup_done");
 
           document.getElementById("paymentBox").style.display = "none";
           document.getElementById("successBox").style.display = "block";
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
-          // ✅ After payment — always go to workout first
           setTimeout(() => { location.href = "workout.html"; }, 2000);
 
         } catch(err) {
-          alert("Payment done but save failed. Contact support with ID: "
-            + response.razorpay_payment_id);
+          alert("Payment done but save failed. Contact support with ID: " + response.razorpay_payment_id);
         }
       },
 
       modal: {
         ondismiss: function() {
           btn.disabled = false;
-          btn.innerText = "🔓 Unlock Premium Now — ₹89";
+          btn.innerText = "🔓 Unlock Premium Now — ₹5";
         }
       }
     };
@@ -114,7 +97,7 @@
     rzp.on("payment.failed", function(response) {
       alert("Payment failed ❌ " + response.error.description);
       btn.disabled = false;
-      btn.innerText = "🔓 Unlock Premium Now — ₹89";
+      btn.innerText = "🔓 Unlock Premium Now — ₹5";
     });
     rzp.open();
   };
@@ -214,7 +197,7 @@ body {
 
     <div class="price-box">
       <div class="price-label">One Time Payment</div>
-      <div class="price-val">₹89</div>
+      <div class="price-val">₹5</div>
       <div class="price-sub">Lifetime Access · Unlimited Use</div>
     </div>
 
@@ -240,7 +223,7 @@ body {
     <div class="user-pill">👤 <span id="userEmail">Loading...</span></div>
 
     <button class="pay-btn" id="payBtn" onclick="startPayment()">
-      🔓 Unlock Premium Now — ₹89
+      🔓 Unlock Premium Now — ₹5
     </button>
     <div class="secure-note">🔒 Secured by Razorpay · UPI · Cards · NetBanking</div>
   </div>
