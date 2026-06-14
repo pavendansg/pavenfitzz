@@ -38,7 +38,6 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
   width:100%;height:100%;
   display:block;
 }
-/* Fallback gradient if video doesn't load */
 .video-fallback{
   position:absolute;inset:0;
   background:linear-gradient(135deg,#0a0a08 0%,#151510 40%,#0d1208 100%);
@@ -145,8 +144,6 @@ nav.solid{
 }
 .nav-cta:hover{opacity:.88;transform:scale(0.97)}
 
-
-
 /* ── TICKER ── */
 .ticker{background:var(--accent);padding:12px 0;overflow:hidden}
 .ticker-track{display:flex;width:max-content;animation:scroll 30s linear infinite}
@@ -217,7 +214,6 @@ section{padding:100px 6%}
   text-transform:uppercase;padding:4px 12px;border-radius:50px;
   border:1px solid rgba(200,245,66,0.2);
 }
-/* mini chart in wide card */
 .mini-chart{
   margin-top:20px;height:56px;
   display:flex;align-items:flex-end;gap:4px;
@@ -251,7 +247,6 @@ section{padding:100px 6%}
 }
 .step-body p{font-size:14px;color:var(--muted);line-height:1.65}
 
-/* phone mockup */
 .phone{
   background:var(--card);border:1px solid var(--border);
   border-radius:28px;padding:20px;
@@ -326,8 +321,6 @@ section{padding:100px 6%}
   border:1px solid rgba(200,245,66,0.2);
 }
 
-
-
 /* ── CTA / GOAL QUIZ ── */
 .quiz-wrap{
   max-width:660px;margin:0 auto;text-align:center;
@@ -374,7 +367,6 @@ section{padding:100px 6%}
 }
 .quiz-fine{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:0.02em}
 
-/* ── FOOTER ── */
 footer{
   padding:52px 6%;
   border-top:1px solid var(--border);
@@ -391,13 +383,11 @@ footer{
 .foot-links a:hover{color:var(--white)}
 .foot-copy{font-size:12px;color:rgba(107,107,90,0.5)}
 
-/* ── REVEAL ANIMATION ── */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}
 .d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
-/* ── RESPONSIVE ── */
 @media(max-width:900px){
   nav{padding:16px 24px}
   .nav-links{display:none}
@@ -406,8 +396,6 @@ footer{
   .bento-card.wide,.bento-card.tall{grid-column:span 1;grid-row:span 1}
   .how-grid{grid-template-columns:1fr;gap:40px}
   .ranks-grid{flex-direction:column}
-  .testi-grid{grid-template-columns:1fr}
-  .testi-card.big{grid-column:span 1}
   .quiz-cards{grid-template-columns:1fr}
   .hero-content{padding:0 24px 56px}
 }
@@ -426,11 +414,9 @@ footer{
   <a href="login.html" class="nav-cta" id="navCta">Start Free →</a>
 </nav>
 
-<!-- HERO with video -->
 <section class="hero" id="home">
   <div class="video-fallback"></div>
   <div class="video-wrap" id="videoWrap">
-    <!-- Cinematic animated background — no external dependency -->
     <canvas id="heroBg"></canvas>
   </div>
   <div class="hero-overlay"></div>
@@ -452,9 +438,6 @@ footer{
   </div>
 </section>
 
-
-
-<!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
     <span class="ticker-item">BMI Tracking</span>
@@ -482,7 +465,6 @@ footer{
   </div>
 </div>
 
-<!-- FEATURES -->
 <section id="features">
   <div class="reveal">
     <div class="section-tag">Everything you need</div>
@@ -527,7 +509,6 @@ footer{
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <section id="how" style="background:#0d0d0b">
   <div class="how-grid">
     <div>
@@ -578,7 +559,6 @@ footer{
   </div>
 </section>
 
-<!-- RANKS -->
 <section id="ranks">
   <div class="reveal">
     <div class="section-tag">Progression system</div>
@@ -594,9 +574,6 @@ footer{
   </div>
 </section>
 
-
-
-<!-- CTA -->
 <section id="cta" style="text-align:center">
   <div class="quiz-wrap">
     <div class="reveal">
@@ -654,21 +631,17 @@ onAuthStateChanged(auth,u=>{
 });
 </script>
 <script>
-// ── CINEMATIC HERO CANVAS ──
 (function(){
   const canvas = document.getElementById('heroBg');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
   let W, H, particles=[], bars=[], t=0;
-
   function resize(){
-    W = canvas.width  = window.innerWidth;
+    W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
   }
   resize();
   window.addEventListener('resize', resize);
-
-  // Floating dust particles
   for(let i=0;i<110;i++){
     particles.push({
       x: Math.random()*2000,
@@ -679,8 +652,6 @@ onAuthStateChanged(auth,u=>{
       o: Math.random()*0.6+0.15
     });
   }
-
-  // Vertical light bars (like gym light rays)
   for(let i=0;i<7;i++){
     bars.push({
       x: Math.random(),
@@ -690,45 +661,32 @@ onAuthStateChanged(auth,u=>{
       phase: Math.random()*Math.PI*2
     });
   }
-
   function draw(){
     ctx.clearRect(0,0,W,H);
-
-    // Deep dark base
     const bg = ctx.createLinearGradient(0,0,W,H);
     bg.addColorStop(0,'#080808');
     bg.addColorStop(0.4,'#0c0f08');
     bg.addColorStop(1,'#060808');
     ctx.fillStyle = bg;
     ctx.fillRect(0,0,W,H);
-
-    // Ambient glow — bottom left green
     const g1 = ctx.createRadialGradient(W*0.15, H*0.85, 0, W*0.15, H*0.85, W*0.55);
     g1.addColorStop(0,'rgba(200,245,66,0.13)');
     g1.addColorStop(1,'transparent');
     ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
-
-    // Ambient glow — top right dim
     const g2 = ctx.createRadialGradient(W*0.85, H*0.2, 0, W*0.85, H*0.2, W*0.45);
     g2.addColorStop(0,'rgba(120,160,80,0.09)');
     g2.addColorStop(1,'transparent');
     ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
-
-    // Center glow — subtle
     const g3 = ctx.createRadialGradient(W*0.5, H*0.45, 0, W*0.5, H*0.45, W*0.6);
     g3.addColorStop(0,'rgba(200,245,66,0.04)');
     g3.addColorStop(1,'transparent');
     ctx.fillStyle=g3; ctx.fillRect(0,0,W,H);
-
-    // Horizontal scan line (subtle, slow)
     const scanY = (H * 0.3) + Math.sin(t*0.0004)*H*0.08;
     const scan = ctx.createLinearGradient(0, scanY-60, 0, scanY+60);
     scan.addColorStop(0,'transparent');
     scan.addColorStop(0.5,'rgba(200,245,66,0.025)');
     scan.addColorStop(1,'transparent');
     ctx.fillStyle=scan; ctx.fillRect(0,scanY-60,W,120);
-
-    // Light bars
     bars.forEach(b=>{
       b.x += b.speed;
       if(b.x<-b.w) b.x=1+b.w;
@@ -743,8 +701,6 @@ onAuthStateChanged(auth,u=>{
       ctx.fillStyle=bar;
       ctx.fillRect(bx, 0, b.w*W, H);
     });
-
-    // Dust particles
     particles.forEach(p=>{
       p.x += p.vx; p.y += p.vy;
       if(p.y < -10) { p.y=H+10; p.x=Math.random()*W; }
@@ -756,8 +712,6 @@ onAuthStateChanged(auth,u=>{
       ctx.fillStyle=`rgba(200,245,66,${p.o*pulse})`;
       ctx.fill();
     });
-
-    // Grid lines
     ctx.strokeStyle='rgba(200,245,66,0.045)';
     ctx.lineWidth=1;
     const gridH=80;
@@ -771,23 +725,19 @@ onAuthStateChanged(auth,u=>{
       ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
     }
     ctx.globalAlpha=1;
-
     t++;
     requestAnimationFrame(draw);
   }
   draw();
 })();
 
-// Nav scroll
 window.addEventListener('scroll',()=>{
   document.getElementById('nav').classList.toggle('solid',scrollY>60);
 });
 
-// Reveal observer
 const obs=new IntersectionObserver(els=>{els.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// Mini chart bars
 const heights=[45,58,52,70,64,82,90];
 const mc=document.getElementById('miniChart');
 heights.forEach((h,i)=>{
@@ -796,7 +746,6 @@ heights.forEach((h,i)=>{
   b.style.height=h+'%';mc.appendChild(b);
 });
 
-// Phone bars
 const ph=[55,62,58,70,65,80,88];
 const pb=document.getElementById('phoneBars');
 ph.forEach((h,i)=>{
@@ -805,7 +754,6 @@ ph.forEach((h,i)=>{
   b.style.height=h+'%';pb.appendChild(b);
 });
 
-// Quiz
 let picked=null;
 function pick(el){
   document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('on'));
