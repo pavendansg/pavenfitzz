@@ -218,8 +218,13 @@ function renderMealHTML(data) {
   html+=`
     <div class="day-note">Today's plan · Resets tomorrow <span>📅 ${new Date().toDateString()}</span></div>
     <div class="locked-note"><strong>✅ One plan per day.</strong> Stay consistent with your goal: ${goal}. Prep meals in advance for best results.</div>
-    <button class="btn-home" onclick="window.location.href='dashboard.html'">← Back to Dashboard</button>`;
+    <button class="btn-home" onclick="goToPremiumDashboard()">Go to Dashboard 🏠</button>`;
   return html;
+}
+
+// ✅ FIXED: Redirect to premium dashboard after meal plan is done
+function goToPremiumDashboard() {
+  location.href = "dashboard-premium.html";
 }
 </script>
 </body>
