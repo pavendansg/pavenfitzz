@@ -76,7 +76,7 @@ select:focus{border-color:var(--orange);}
     <a href="workout.html">💪 Workout</a>
     <a href="diet.html">🧬 Diet</a>
     <a href="meal.html" class="active">🍗 Meal</a>
-    <a href="dashboard.html">🏠 Dashboard</a>
+    <a href="dashboard-premium.html">🏠 Dashboard</a>
   </div>
 
   <div id="mainContent">
@@ -99,9 +99,9 @@ select:focus{border-color:var(--orange);}
 </div>
 
 <script>
-  // ✅ STEP GUARD
 if (localStorage.getItem("premium") !== "true") { location.href = "payment.html"; }
 if (!localStorage.getItem("dietDate")) { location.href = "diet.html"; }
+
 const WORKER = "https://pavenfitzz-ai.pavendansg.workers.dev/";
 const goal   = localStorage.getItem("goal") || "Bulk";
 const CALORIE_TARGETS = {Bulk:3000,Cut:1800,Maintain:2400,Athletic:2600};
@@ -162,6 +162,8 @@ No extra text. Only meals and totals.`;
     const parsed = parseMeal(text);
     localStorage.setItem("mealData", JSON.stringify(parsed));
     localStorage.setItem("mealDate", new Date().toDateString());
+    // ✅ KEY FIX — set ai_setup_done so dashboard-premium unlocks
+    localStorage.setItem("ai_setup_done", "true");
     document.getElementById("mealResult").innerHTML = renderMealHTML(parsed);
   } catch(err) {
     document.getElementById("mealResult").innerHTML = `<div class="error-box">⚠️ ${err.message}</div>`;
@@ -218,13 +220,8 @@ function renderMealHTML(data) {
   html+=`
     <div class="day-note">Today's plan · Resets tomorrow <span>📅 ${new Date().toDateString()}</span></div>
     <div class="locked-note"><strong>✅ One plan per day.</strong> Stay consistent with your goal: ${goal}. Prep meals in advance for best results.</div>
-    <button class="btn-home" onclick="goToPremiumDashboard()">Go to Dashboard 🏠</button>`;
+    <button class="btn-home" onclick="window.location.href='dashboard-premium.html'">Go to Dashboard 🏠</button>`;
   return html;
-}
-
-// ✅ FIXED: Redirect to premium dashboard after meal plan is done
-function goToPremiumDashboard() {
-  location.href = "dashboard-premium.html";
 }
 </script>
 </body>
