@@ -319,7 +319,6 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
 </div>
 
 <script type="module">
-// 🚀 IMMEDIATE PREMIUM VERIFICATION (BEFORE ANYTHING ELSE)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
@@ -334,8 +333,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Function to verify premium from Firestore and redirect if not
-async function verifyPremiumAndRedirect() {
+// ✅ FIRST CHECK LOCALSTORAGE – if premium flag exists, skip Firestore check
+if (localStorage.getItem("premium") === "true") {
+  console.log("Premium flag found in localStorage – loading dashboard");
+} else {
+  // No premium flag in localStorage, verify with Firestore
   await new Promise((resolve) => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       unsubscribe();
@@ -345,28 +347,24 @@ async function verifyPremiumAndRedirect() {
   const user = auth.currentUser;
   if (!user) {
     location.href = "login.html";
-    return false;
-  }
-  try {
-    const premSnap = await getDoc(doc(db, "premium", user.uid));
-    const isPremium = premSnap.exists() && premSnap.data().active === true;
-    localStorage.setItem("premium", isPremium ? "true" : "false");
-    if (!isPremium) {
+  } else {
+    try {
+      const premSnap = await getDoc(doc(db, "premium", user.uid));
+      const isPremium = premSnap.exists() && premSnap.data().active === true;
+      localStorage.setItem("premium", isPremium ? "true" : "false");
+      if (!isPremium) {
+        location.href = "payment.html";
+        return;
+      }
+    } catch (err) {
+      console.error("Premium verification error", err);
       location.href = "payment.html";
-      return false;
+      return;
     }
-    return true;
-  } catch (err) {
-    console.error("Premium verification error", err);
-    location.href = "payment.html";
-    return false;
   }
 }
 
-// Run the verification immediately. If it returns false, the redirect will happen and the rest of the script will not execute.
-await verifyPremiumAndRedirect();
-
-// --- Rest of your existing code (no changes below) ---
+// --- Rest of the code (unchanged) ---
 const CALORIE_TARGETS = {bulk:"3000",cut:"1800",maintain:"2400",athletic:"2600"};
 
 const pic = document.getElementById("profilePic");
@@ -404,13 +402,8 @@ function loadWorkout() {
 }
 window.completeWorkout=function(){alert("🔥 Great job completing your workout!");};
 
-// Streak modal open/close
-window.openStreakModal = function() {
-  document.getElementById("streakModalOverlay").classList.add("show");
-};
-window.closeStreakModal = function() {
-  document.getElementById("streakModalOverlay").classList.remove("show");
-};
+window.openStreakModal = function() { document.getElementById("streakModalOverlay").classList.add("show"); };
+window.closeStreakModal = function() { document.getElementById("streakModalOverlay").classList.remove("show"); };
 
 function checkAI(){
   const today=new Date().toDateString();
@@ -436,8 +429,6 @@ window.toggleMission=function(id){if(id==="checkin")return;localStorage.setItem(
 
 onAuthStateChanged(auth,async(user)=>{
   if(!user){location.href="login.html";return;}
-  const premSnap=await getDoc(doc(db,"premium",user.uid));
-  if(!premSnap.exists()||premSnap.data().active!==true){localStorage.removeItem("premium");location.href="payment.html";return;}
   const snap=await getDocs(collection(db,"users",user.uid,"daily"));
   if(snap.empty){
     location.href="result-bmi.html";
@@ -447,7 +438,6 @@ onAuthStateChanged(auth,async(user)=>{
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
   const latest=history[history.length-1];
 
-  // Real consecutive streak
   let streak=0,lastDate=null;
   for(let i=history.length-1;i>=0;i--){
     const cur=new Date(history[i].date);
@@ -457,8 +447,6 @@ onAuthStateChanged(auth,async(user)=>{
   }
   localStorage.setItem("streak",streak);
   document.getElementById("streakNum").innerText=streak;
-
-  // Populate streak modal
   document.getElementById("modalStreakNum").innerText = streak;
   const checkinDates = new Set(history.map(h=>h.date));
   const dayLabels = ["S","M","T","W","T","F","S"];
