@@ -74,10 +74,12 @@
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import{getAuth,signInWithPopup,GoogleAuthProvider,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
 const app=initializeApp(cfg);
 const auth=getAuth(app);
 const provider=new GoogleAuthProvider();
+  const db=getFirestore(app);
 
 function goNext(){
   // If setup done → dashboard, else → setup
