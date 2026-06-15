@@ -324,9 +324,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 // ✅ THE ONLY GUARD THAT MATTERS — ai_setup_done is set only after meal.html completes
-if (localStorage.getItem("premium") !== "true") {
-    location.href = "payment.html";
-}
+
 
 const firebaseConfig = {apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
 const app = initializeApp(firebaseConfig);
