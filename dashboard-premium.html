@@ -54,111 +54,39 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
 .btn-row .btn{flex:1;}
 .btn-outline{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.08);font-size:13px;padding:12px;}
 .btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,68,85,0.2);margin-top:16px;font-size:13px;padding:12px;width:100%;border-radius:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
-
-/* ====== STREAK HERO CARD ====== */
-.streak-hero{
-  position:relative;
-  background:linear-gradient(150deg,#161616,#1a1006 80%);
-  border:1.5px solid rgba(255,208,0,0.35);
-  border-radius:22px;
-  padding:20px;
-  margin-bottom:14px;
-  box-shadow:0 0 30px rgba(255,119,0,0.08);
-  overflow:hidden;
-}
-.premium-tag{
-  position:absolute;top:14px;right:14px;
-  background:linear-gradient(90deg,var(--gold),var(--orange));
-  color:#000;font-size:10px;font-weight:800;
-  padding:4px 11px;border-radius:99px;
-  font-family:'DM Mono',monospace;letter-spacing:0.5px;
-}
+.streak-hero{position:relative;background:linear-gradient(150deg,#161616,#1a1006 80%);border:1.5px solid rgba(255,208,0,0.35);border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 0 30px rgba(255,119,0,0.08);overflow:hidden;}
+.premium-tag{position:absolute;top:14px;right:14px;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;font-size:10px;font-weight:800;padding:4px 11px;border-radius:99px;font-family:'DM Mono',monospace;letter-spacing:0.5px;}
 .streak-hero-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
-.streak-avatar{
-  width:58px;height:58px;border-radius:50%;
-  border:2.5px solid var(--green);background:#111;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;overflow:hidden;flex-shrink:0;
-}
+.streak-avatar{width:58px;height:58px;border-radius:50%;border:2.5px solid var(--green);background:#111;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0;}
 .streak-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .streak-user-info{flex:1;min-width:0;}
 .streak-username{font-size:17px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .streak-rank{font-size:12px;font-weight:700;color:var(--gold);margin-top:3px;letter-spacing:0.5px;}
-.flame-icon{
-  font-size:26px;line-height:1;
-  filter:drop-shadow(0 0 10px rgba(255,119,0,0.55));
-  animation:flamePulse 1.7s ease-in-out infinite;
-}
+.flame-icon{font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,119,0,0.55));animation:flamePulse 1.7s ease-in-out infinite;}
 .flame-text{display:flex;flex-direction:column;align-items:flex-start;}
 .flame-num{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);line-height:1.2;}
 .flame-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1.5px;}
 @keyframes flamePulse{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.12) rotate(-3deg)}}
-
-.streak-flame-badge{
-  cursor:pointer;transition:transform .15s;
-  border-radius:14px;padding:8px 14px;
-  background:rgba(255,119,0,0.06);
-  border:1px solid rgba(255,119,0,0.15);
-  display:flex;align-items:center;gap:10px;
-  flex-shrink:0;
-}
+.streak-flame-badge{cursor:pointer;transition:transform .15s;border-radius:14px;padding:8px 14px;background:rgba(255,119,0,0.06);border:1px solid rgba(255,119,0,0.15);display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .streak-flame-badge:hover{transform:translateY(-2px);background:rgba(255,119,0,0.1);}
 .streak-flame-badge:active{transform:scale(0.96);}
-
-.streak-footer{
-  font-size:12px;color:var(--gold);font-weight:700;
-  text-align:center;padding-top:12px;
-  border-top:1px solid rgba(255,255,255,0.06);
-}
-
-/* ====== STREAK MODAL ====== */
-.streak-modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.8);
-  backdrop-filter:blur(8px);z-index:300;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-}
+.streak-footer{font-size:12px;color:var(--gold);font-weight:700;text-align:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+.streak-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
 .streak-modal-overlay.show{opacity:1;pointer-events:all;}
-.streak-modal{
-  background:linear-gradient(150deg,#161616,#1a1006 85%);
-  border:1.5px solid rgba(255,208,0,0.3);
-  border-radius:24px;padding:32px 28px;
-  max-width:380px;width:100%;text-align:center;
-  box-shadow:0 0 50px rgba(255,119,0,0.15);
-  transform:scale(0.9);transition:transform .25s;
-}
+.streak-modal{background:linear-gradient(150deg,#161616,#1a1006 85%);border:1.5px solid rgba(255,208,0,0.3);border-radius:24px;padding:32px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 0 50px rgba(255,119,0,0.15);transform:scale(0.9);transition:transform .25s;}
 .streak-modal-overlay.show .streak-modal{transform:scale(1);}
-.modal-flame-wrap{
-  width:84px;height:84px;border-radius:50%;
-  background:rgba(255,119,0,0.08);
-  border:2px solid rgba(255,119,0,0.2);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 16px;
-}
+.modal-flame-wrap{width:84px;height:84px;border-radius:50%;background:rgba(255,119,0,0.08);border:2px solid rgba(255,119,0,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
 .modal-flame{font-size:46px;filter:drop-shadow(0 0 14px rgba(255,119,0,0.6));}
 .modal-streak-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:18px;}
 .modal-week-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:18px;}
 .modal-week-day{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
 .modal-week-day-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;}
-.modal-week-day-circle{
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:800;
-  border:2px solid #2a2a2a;background:#0d0d0d;color:#444;
-}
-.modal-week-day-circle.done{
-  background:linear-gradient(135deg,var(--green),#00cc6e);
-  border-color:var(--green);color:#000;
-  box-shadow:0 0 10px rgba(0,255,136,0.35);
-}
+.modal-week-day-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:2px solid #2a2a2a;background:#0d0d0d;color:#444;}
+.modal-week-day-circle.done{background:linear-gradient(135deg,var(--green),#00cc6e);border-color:var(--green);color:#000;box-shadow:0 0 10px rgba(0,255,136,0.35);}
 .modal-week-day-circle.today{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,208,0,0.15);}
 .modal-week-day-circle.today.done{background:linear-gradient(135deg,var(--green),var(--gold));box-shadow:0 0 12px rgba(255,208,0,0.4);}
 .modal-message{font-size:13px;color:#aaa;line-height:1.7;margin-bottom:20px;}
-.modal-close-btn{
-  width:100%;padding:13px;border:none;border-radius:12px;
-  background:var(--green);color:#000;font-size:14px;font-weight:800;
-  cursor:pointer;font-family:'Syne',sans-serif;
-}
+.modal-close-btn{width:100%;padding:13px;border:none;border-radius:12px;background:var(--green);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;}
 </style>
 </head>
 <body>
@@ -166,7 +94,6 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
 
   <div class="brand">PavenFitzz Dashboard</div>
 
-  <!-- STREAK HERO CARD -->
   <div class="streak-hero">
     <span class="premium-tag">⚡ PREMIUM</span>
     <div class="streak-hero-top">
@@ -189,7 +116,6 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
     <div class="streak-footer" id="rankSub">Keep going!</div>
   </div>
 
-  <!-- STREAK DETAIL MODAL -->
   <div class="streak-modal-overlay" id="streakModalOverlay" onclick="if(event.target===this)closeStreakModal()">
     <div class="streak-modal">
       <div class="modal-flame-wrap"><div class="modal-flame">🔥</div></div>
@@ -208,24 +134,13 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">⚡</span>
-      <span class="card-title">Level Progress</span>
-      <span class="card-badge" id="levelBadge">Lvl 1</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;">
-      <span id="xpText">0 / 100 XP</span>
-      <span id="xpPct">0%</span>
-    </div>
+    <div class="card-header"><span class="card-icon">⚡</span><span class="card-title">Level Progress</span><span class="card-badge" id="levelBadge">Lvl 1</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;"><span id="xpText">0 / 100 XP</span><span id="xpPct">0%</span></div>
     <div class="prog-wrap"><div class="prog-fill" id="xpBar" style="width:0%"></div></div>
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">💪</span>
-      <span class="card-title">Today's Workout</span>
-      <span class="card-badge green" id="workoutBadge">—</span>
-    </div>
+    <div class="card-header"><span class="card-icon">💪</span><span class="card-title">Today's Workout</span><span class="card-badge green" id="workoutBadge">—</span></div>
     <div class="workout-box" id="workoutBox">No workout generated yet.</div>
     <div class="btn-row">
       <button class="btn btn-green" onclick="completeWorkout()">Done ✅</button>
@@ -234,10 +149,7 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🍽️</span>
-      <span class="card-title">Daily Targets</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🍽️</span><span class="card-title">Daily Targets</span></div>
     <div class="stats-3">
       <div class="stat-box"><div class="stat-val orange" id="calTarget">—</div><div class="stat-lbl">Calories</div></div>
       <div class="stat-box"><div class="stat-val green" id="protTarget">—</div><div class="stat-lbl">Protein</div></div>
@@ -258,60 +170,33 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">💧</span>
-      <span class="card-title">Water Intake</span>
-      <span class="card-badge green" id="waterBadge">0 / 4L</span>
-    </div>
+    <div class="card-header"><span class="card-icon">💧</span><span class="card-title">Water Intake</span><span class="card-badge green" id="waterBadge">0 / 4L</span></div>
     <div class="drops" id="drops"></div>
     <button class="btn btn-green" style="margin-top:12px;font-size:13px;padding:10px;" onclick="addWater()">+ Add Water 💧</button>
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🤖</span>
-      <span class="card-title">AI Tools</span>
-      <span class="card-badge green">Premium</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🤖</span><span class="card-title">AI Tools</span><span class="card-badge green">Premium</span></div>
     <div class="ai-grid">
-      <div class="ai-card" onclick="location.href='workout.html'">
-        <div class="ai-card-icon">💪</div>
-        <div class="ai-card-name">Workout</div>
-        <div class="ai-card-status" id="wStatus">—</div>
-      </div>
-      <div class="ai-card" onclick="location.href='diet.html'">
-        <div class="ai-card-icon">🧬</div>
-        <div class="ai-card-name">Diet</div>
-        <div class="ai-card-status" id="dStatus">—</div>
-      </div>
-      <div class="ai-card" onclick="location.href='meal.html'">
-        <div class="ai-card-icon">🍗</div>
-        <div class="ai-card-name">Meal</div>
-        <div class="ai-card-status" id="mStatus">—</div>
-      </div>
+      <div class="ai-card" onclick="location.href='workout.html'"><div class="ai-card-icon">💪</div><div class="ai-card-name">Workout</div><div class="ai-card-status" id="wStatus">—</div></div>
+      <div class="ai-card" onclick="location.href='diet.html'"><div class="ai-card-icon">🧬</div><div class="ai-card-name">Diet</div><div class="ai-card-status" id="dStatus">—</div></div>
+      <div class="ai-card" onclick="location.href='meal.html'"><div class="ai-card-icon">🍗</div><div class="ai-card-name">Meal</div><div class="ai-card-status" id="mStatus">—</div></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">📋</span>
-      <span class="card-title">Daily Missions</span>
-      <span class="card-badge" id="missionCount">0/4</span>
-    </div>
+    <div class="card-header"><span class="card-icon">📋</span><span class="card-title">Daily Missions</span><span class="card-badge" id="missionCount">0/4</span></div>
     <p style="font-size:11px;color:#444;margin-bottom:10px;">Tap to complete · Resets daily</p>
     <div class="mission-list" id="missions"></div>
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🏅</span>
-      <span class="card-title">Achievements</span>
-    </div>
+    <div class="card-header"><span class="card-icon">🏅</span><span class="card-title">Achievements</span></div>
     <div id="badges" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
   </div>
 
   <div class="btn-row">
-    <button class="btn btn-green" onclick="location.href='bmi.html'">Check-In ✅</button>
+    <button class="btn btn-green" onclick="location.href='result-bmi.html'">Check-In ✅</button>
     <button class="btn btn-outline" onclick="location.href='graph.html'">Progress 📈</button>
   </div>
   <button class="btn-red" onclick="logout()">Logout</button>
@@ -333,18 +218,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ✅ LOGOUT — signs out from Firebase properly, then clears localStorage
+// ✅ LOGOUT — keep setup_done and premium so returning users skip setup & repayment
 window.logout = async function() {
-  try {
-    await signOut(auth);
-  } catch(e) {
-    console.error("Sign out error:", e);
-  }
+  try { await signOut(auth); } catch(e) { console.error(e); }
+  const setupDone = localStorage.getItem("setup_done");
   localStorage.clear();
+  if (setupDone) localStorage.setItem("setup_done", setupDone);
+  // premium is re-checked from Firestore on every login, no need to keep it
   location.href = "login.html";
 };
 
-// ✅ PREMIUM GUARD — verify from Firestore directly, don't rely on localStorage alone
+// ✅ PREMIUM GUARD — verify from Firestore
 const waitForUser = () => new Promise((resolve) => {
   const unsub = auth.onAuthStateChanged((user) => { unsub(); resolve(user); });
 });
@@ -357,16 +241,13 @@ if (!user) {
     const premSnap = await getDoc(doc(db, "premium", user.uid));
     const isPremium = premSnap.exists() && premSnap.data().active === true;
     localStorage.setItem("premium", isPremium ? "true" : "false");
-    if (!isPremium) {
-      location.href = "payment.html";
-    }
+    if (!isPremium) { location.href = "payment.html"; }
   } catch (err) {
     console.error("Premium check failed:", err);
     location.href = "payment.html";
   }
 }
 
-// --- Rest of dashboard code ---
 const CALORIE_TARGETS = {bulk:"3000",cut:"1800",maintain:"2400",athletic:"2600"};
 
 const pic = document.getElementById("profilePic");
@@ -432,10 +313,7 @@ window.toggleMission=function(id){if(id==="checkin")return;localStorage.setItem(
 onAuthStateChanged(auth,async(user)=>{
   if(!user){location.href="login.html";return;}
   const snap=await getDocs(collection(db,"users",user.uid,"daily"));
-  if(snap.empty){
-    location.href="result-bmi.html";
-    return;
-  }
+  if(snap.empty){ location.href="result-bmi.html"; return; }
   let history=[];snap.forEach(d=>history.push(d.data()));
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
   const latest=history[history.length-1];
@@ -449,23 +327,19 @@ onAuthStateChanged(auth,async(user)=>{
   }
   localStorage.setItem("streak",streak);
   document.getElementById("streakNum").innerText=streak;
-  document.getElementById("modalStreakNum").innerText = streak;
-  const checkinDates = new Set(history.map(h=>h.date));
-  const dayLabels = ["S","M","T","W","T","F","S"];
-  let weekHTML = "";
+  document.getElementById("modalStreakNum").innerText=streak;
+
+  const checkinDates=new Set(history.map(h=>h.date));
+  const dayLabels=["S","M","T","W","T","F","S"];
+  let weekHTML="";
   for(let i=6;i>=0;i--){
-    const d = new Date();
-    d.setDate(d.getDate()-i);
-    const dStr = d.toISOString().split("T")[0];
-    const isToday = i===0;
-    const done = checkinDates.has(dStr);
-    weekHTML += `<div class="modal-week-day">
-      <div class="modal-week-day-label">${dayLabels[d.getDay()]}</div>
-      <div class="modal-week-day-circle ${done?'done':''} ${isToday?'today':''}">${done?'✓':''}</div>
-    </div>`;
+    const d=new Date();d.setDate(d.getDate()-i);
+    const dStr=d.toISOString().split("T")[0];
+    const isToday=i===0;const done=checkinDates.has(dStr);
+    weekHTML+=`<div class="modal-week-day"><div class="modal-week-day-label">${dayLabels[d.getDay()]}</div><div class="modal-week-day-circle ${done?'done':''} ${isToday?'today':''}">${done?'✓':''}</div></div>`;
   }
-  document.getElementById("modalWeekRow").innerHTML = weekHTML;
-  document.getElementById("modalMessage").innerText = streak > 0 ? "You're on a roll! Come back tomorrow to keep your streak going." : "Check in today to start your streak! 🔥";
+  document.getElementById("modalWeekRow").innerHTML=weekHTML;
+  document.getElementById("modalMessage").innerText=streak>0?"You're on a roll! Come back tomorrow to keep your streak going.":"Check in today to start your streak! 🔥";
 
   const rankTitle=streak>=180?"👑 ELITE":streak>=90?"💎 BEAST":streak>=30?"🔥 WARRIOR":streak>=7?"⚡ CONTENDER":"🌱 BEGINNER";
   const daysLeft=streak>=180?"👑 MAX RANK — You're Elite":streak>=90?"🔥 "+(180-streak)+" days to Elite":streak>=30?"💎 "+(90-streak)+" days to Beast":streak>=7?"🔥 "+(30-streak)+" days to Warrior":"⚡ "+(7-streak)+" days to Contender";
