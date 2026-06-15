@@ -81,16 +81,34 @@ const auth=getAuth(app);
 const provider=new GoogleAuthProvider();
   const db=getFirestore(app);
 
-function goNext(){
-  // If setup done → dashboard, else → setup
-  if(localStorage.getItem("setup_done")==="true"){
-    if(localStorage.getItem("premium")==="true"){
-      location.href="dashboard-premium.html";
-    } else {
-      location.href="graph.html";
-    }
-  } else {
+async function goNext(uid){
+
+  if(localStorage.getItem("setup_done")!=="true"){
     location.href="setup.html";
+    return;
+  }
+
+  try{
+
+    const snap = await getDoc(doc(db,"premium",uid));
+
+    if(snap.exists() && snap.data().active===true){
+
+      localStorage.setItem("premium","true");
+      location.href="dashboard-premium.html";
+
+    }else{
+
+      localStorage.removeItem("premium");
+      location.href="graph.html";
+
+    }
+
+  }catch(err){
+
+    console.error(err);
+    location.href="graph.html";
+
   }
 }
 
@@ -99,7 +117,7 @@ onAuthStateChanged(auth,u=>{
     localStorage.setItem("username",u.displayName||"User");
     localStorage.setItem("photo",u.photoURL||"");
     localStorage.setItem("uid",u.uid);
-    goNext();
+   goNext(u.uid);
   }
 });
 
@@ -111,7 +129,7 @@ window.googleLogin=function(){
     localStorage.setItem("username",r.user.displayName||"User");
     localStorage.setItem("photo",r.user.photoURL||"");
     localStorage.setItem("uid",r.user.uid);
-    goNext();
+    goNext(r.user.uid);
   }).catch(e=>{
     document.getElementById("msg").innerText="Login failed. Try again.";
     btn.disabled=false;
