@@ -239,11 +239,12 @@ function saveSetup(){
   localStorage.setItem("bmr",Math.round(bmr));
   localStorage.setItem("tdee",tdee);
   localStorage.setItem("setup_done","true");
-  localStorage.setItem("bmi_done","true");
-  localStorage.setItem("calorie_done","true");
-  localStorage.setItem("macros_done","true");
 
-  location.href="result-bmi.html";
+localStorage.removeItem("calorie_done");
+localStorage.removeItem("bmi_done");
+localStorage.removeItem("macros_done");
+
+location.href="result-calories.html";
 }
 </script>
 </body>
