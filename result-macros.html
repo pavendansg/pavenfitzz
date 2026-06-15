@@ -40,6 +40,7 @@
 .diet-icon{font-size:16px;flex-shrink:0}
 .next-btn{width:100%;padding:14px;border:none;border-radius:12px;background:#c8f542;color:#080808;font-size:15px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;margin-bottom:8px}
 .next-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(200,245,66,0.28)}
+.next-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none}
 .back-btn{width:100%;padding:12px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;background:transparent;color:#6b6b5a;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
 .back-btn:hover{color:#f0ede6;border-color:rgba(255,255,255,0.15)}
 </style>
@@ -100,6 +101,7 @@
     <button class="back-btn" onclick="location.href='result-calories.html'">← Back to Calories</button>
   </div>
 </div>
+
 <script>
 if(!localStorage.getItem("setup_done")){location.href="setup.html";}
 const goal=localStorage.getItem("goal")||"maintain";
@@ -131,32 +133,55 @@ const plans={
   cut:[{icon:"🌅",t:"Breakfast: Egg whites + Oats"},{icon:"🍱",t:"Lunch: Chicken + Salad (no rice)"},{icon:"🥗",t:"Snack: Cucumber + Greek Yogurt"},{icon:"🌙",t:"Dinner: Lean protein + Veggies"}]
 };
 document.getElementById("dietItems").innerHTML=(plans[goal]||plans.maintain).map(i=>`<div class="diet-item"><span class="diet-icon">${i.icon}</span><span>${i.t}</span></div>`).join("");
-
-function goNext(){
-  // save daily entry to firebase
-  location.href="graph.html";
-}
 </script>
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
 const cfg={apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
 const app=initializeApp(cfg);
 const auth=getAuth(app);
 const db=getFirestore(app);
-onAuthStateChanged(auth,async u=>{
-  if(!u){location.href="login.html";return;}
-  // save today's check-in
-  const today=new Date().toISOString().split("T")[0];
-  await setDoc(doc(db,"users",u.uid,"daily",today),{
-    bmi:+localStorage.getItem("bmi"),
-    weight:+localStorage.getItem("weight"),
-    calories:+localStorage.getItem("calories"),
-    goal:localStorage.getItem("goal"),
-    date:today
-  });
+
+let currentUser=null;
+
+onAuthStateChanged(auth, u => {
+  if(!u){ location.href="login.html"; return; }
+  currentUser = u;
 });
+
+// ✅ Save to Firestore ONLY when user clicks Next, then go to graph
+window.goNext = async function() {
+  const btn = document.getElementById("nextBtn");
+  btn.disabled = true;
+  btn.innerText = "Saving...";
+
+  if(!currentUser){
+    location.href = "graph.html";
+    return;
+  }
+
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    await setDoc(doc(db, "users", currentUser.uid, "daily", today), {
+      bmi:      +localStorage.getItem("bmi"),
+      weight:   +localStorage.getItem("weight"),
+      calories: +localStorage.getItem("calories"),
+      protein:  +localStorage.getItem("protein"),
+      carbs:    +localStorage.getItem("carbs"),
+      fats:     +localStorage.getItem("fats"),
+      goal:     localStorage.getItem("goal"),
+      date:     today
+    });
+    console.log("✅ Saved to Firestore");
+  } catch(e) {
+    console.error("Save failed:", e);
+  }
+
+  location.href = "graph.html";
+};
 </script>
 </body>
 </html>
