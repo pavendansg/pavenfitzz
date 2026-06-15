@@ -97,7 +97,7 @@
 
   <!-- FIXED BUTTONS — smart routing based on premium status -->
   <div class="btns" style="margin-top:16px;">
-    <button class="secondary-btn" onclick="location.href='bmi.html'">← Back</button>
+  <button class="secondary-btn" onclick="location.href='result-bmi.html'">← Back</button>
     <button class="primary-btn" id="nextBtn" onclick="goNext()">Unlock AI Coach 🔥</button>
   </div>
 
@@ -212,11 +212,7 @@ const db   = getFirestore(app);
 
 // ✅ SMART NEXT BUTTON — new users go to payment, premium users go to dashboard
 window.goNext = function() {
-  if (localStorage.getItem("premium") === "true") {
-    location.href = "dashboard-premium.html";
-  } else {
-    location.href = "payment.html";
-  }
+  window.location.href = "payment.html";
 };
 
 // Update button label based on premium status
@@ -239,7 +235,10 @@ onAuthStateChanged(auth, async (user) => {
 
   const snap = await getDocs(collection(db, "users", user.uid, "daily"));
   // ✅ FIXED — no longer redirects to deleted dashboard.html
-  if (snap.empty) { location.href = "bmi.html"; return; }
+  if (snap.empty) {
+  location.href = "result-bmi.html";
+  return;
+}
 
   let history = [];
   snap.forEach(d => history.push(d.data()));
