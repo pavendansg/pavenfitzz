@@ -31,13 +31,9 @@
 
     const snap = await getDoc(doc(db, "premium", user.uid));
     if (snap.exists() && snap.data().active === true) {
-      localStorage.setItem("premium", "true");
-      if (localStorage.getItem("ai_setup_done") === "true") {
-        location.href = "dashboard-premium.html";
-      } else {
-        location.href = "workout.html";
-      }
-    }
+  localStorage.setItem("premium", "true");
+  location.href = "dashboard-premium.html";
+}
   });
 
   window.startPayment = function() {
@@ -78,7 +74,9 @@
           document.getElementById("successBox").style.display = "block";
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
-          setTimeout(() => { location.href = "workout.html"; }, 2000);
+          setTimeout(() => {
+  location.href = "dashboard-premium.html";
+}, 2000);
 
         } catch(err) {
           alert("Payment done but save failed. Contact support with ID: " + response.razorpay_payment_id);
@@ -234,7 +232,7 @@ body {
     <div class="success-sub">Welcome to PavenFitzz Premium 🔥</div>
     <div class="payment-id-box">Payment ID: <span id="paymentId"></span></div>
     <div class="redirect-note">
-      Redirecting to your workout plan
+  Redirecting to Premium Dashboard
       <div class="dots"><span></span><span></span><span></span></div>
     </div>
   </div>
