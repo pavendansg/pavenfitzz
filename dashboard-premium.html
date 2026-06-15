@@ -319,17 +319,54 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
 </div>
 
 <script type="module">
+// 🚀 IMMEDIATE PREMIUM VERIFICATION (BEFORE ANYTHING ELSE)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// ✅ THE ONLY GUARD THAT MATTERS — ai_setup_done is set only after meal.html completes
+const firebaseConfig = {
+  apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
+  authDomain: "evolvefit-07.firebaseapp.com",
+  projectId: "evolvefit-07"
+};
 
-
-const firebaseConfig = {apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db   = getFirestore(app);
+const db = getFirestore(app);
+
+// Function to verify premium from Firestore and redirect if not
+async function verifyPremiumAndRedirect() {
+  await new Promise((resolve) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+  const user = auth.currentUser;
+  if (!user) {
+    location.href = "login.html";
+    return false;
+  }
+  try {
+    const premSnap = await getDoc(doc(db, "premium", user.uid));
+    const isPremium = premSnap.exists() && premSnap.data().active === true;
+    localStorage.setItem("premium", isPremium ? "true" : "false");
+    if (!isPremium) {
+      location.href = "payment.html";
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Premium verification error", err);
+    location.href = "payment.html";
+    return false;
+  }
+}
+
+// Run the verification immediately. If it returns false, the redirect will happen and the rest of the script will not execute.
+await verifyPremiumAndRedirect();
+
+// --- Rest of your existing code (no changes below) ---
 const CALORIE_TARGETS = {bulk:"3000",cut:"1800",maintain:"2400",athletic:"2600"};
 
 const pic = document.getElementById("profilePic");
@@ -367,7 +404,7 @@ function loadWorkout() {
 }
 window.completeWorkout=function(){alert("🔥 Great job completing your workout!");};
 
-// ✅ Streak modal open/close
+// Streak modal open/close
 window.openStreakModal = function() {
   document.getElementById("streakModalOverlay").classList.add("show");
 };
@@ -405,7 +442,7 @@ onAuthStateChanged(auth,async(user)=>{
   if(snap.empty){
     location.href="result-bmi.html";
     return;
-}
+  }
   let history=[];snap.forEach(d=>history.push(d.data()));
   history.sort((a,b)=>new Date(a.date)-new Date(b.date));
   const latest=history[history.length-1];
@@ -421,7 +458,7 @@ onAuthStateChanged(auth,async(user)=>{
   localStorage.setItem("streak",streak);
   document.getElementById("streakNum").innerText=streak;
 
-  // ✅ Populate streak modal (opens on tap of streak badge)
+  // Populate streak modal
   document.getElementById("modalStreakNum").innerText = streak;
   const checkinDates = new Set(history.map(h=>h.date));
   const dayLabels = ["S","M","T","W","T","F","S"];
@@ -438,9 +475,7 @@ onAuthStateChanged(auth,async(user)=>{
     </div>`;
   }
   document.getElementById("modalWeekRow").innerHTML = weekHTML;
-  document.getElementById("modalMessage").innerText = streak > 0
-    ? "You're on a roll! Come back tomorrow to keep your streak going."
-    : "Check in today to start your streak! 🔥";
+  document.getElementById("modalMessage").innerText = streak > 0 ? "You're on a roll! Come back tomorrow to keep your streak going." : "Check in today to start your streak! 🔥";
 
   const rankTitle=streak>=180?"👑 ELITE":streak>=90?"💎 BEAST":streak>=30?"🔥 WARRIOR":streak>=7?"⚡ CONTENDER":"🌱 BEGINNER";
   const daysLeft=streak>=180?"👑 MAX RANK — You're Elite":streak>=90?"🔥 "+(180-streak)+" days to Elite":streak>=30?"💎 "+(90-streak)+" days to Beast":streak>=7?"🔥 "+(30-streak)+" days to Warrior":"⚡ "+(7-streak)+" days to Contender";
