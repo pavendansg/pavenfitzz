@@ -112,13 +112,14 @@ async function goNext(uid){
   }
 }
 
-onAuthStateChanged(auth,u=>{
-  if(u){
-    localStorage.setItem("username",u.displayName||"User");
-    localStorage.setItem("photo",u.photoURL||"");
-    localStorage.setItem("uid",u.uid);
-   goNext(u.uid);
-  }
+onAuthStateChanged(auth, async (u) => {
+  if(!u) return;
+
+  localStorage.setItem("username",u.displayName||"User");
+  localStorage.setItem("photo",u.photoURL||"");
+  localStorage.setItem("uid",u.uid);
+
+  await goNext(u.uid);
 });
 
 window.googleLogin=function(){
