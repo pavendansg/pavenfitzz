@@ -55,12 +55,11 @@ const provider = new GoogleAuthProvider();
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Store basic info
     localStorage.setItem("username", user.displayName || "User");
     localStorage.setItem("photo", user.photoURL || "");
     localStorage.setItem("uid", user.uid);
 
-    // ✅ ALWAYS check Firestore for premium status (localStorage may be cleared after logout)
+    // Always check Firestore for premium status
     let isPremium = false;
     try {
       const premiumDoc = await getDoc(doc(db, "premium", user.uid));
@@ -70,18 +69,16 @@ onAuthStateChanged(auth, async (user) => {
       console.error("Premium check failed:", e);
     }
 
-    // ✅ PREMIUM CHECK FIRST — skip everything else if already paid
-    if (isPremium) {
-      location.href = "dashboard-premium.html";
-      return;
-    }
-
-    // Not premium — check if setup is done
     const setupDone = localStorage.getItem("setup_done") === "true";
+
+    // FLOW:
+    // First time ever → setup.html
+    // Returning user (setup done) → result-bmi.html every time
+    // After bmi/calories/macros/graph → payment (if not premium) OR workout/diet/meal → dashboard
     if (!setupDone) {
       location.href = "setup.html";
     } else {
-      location.href = "graph.html";
+      location.href = "result-bmi.html";
     }
   }
 });
