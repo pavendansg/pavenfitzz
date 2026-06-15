@@ -59,22 +59,27 @@ onAuthStateChanged(auth, async (user) => {
     localStorage.setItem("username", user.displayName || "User");
     localStorage.setItem("photo", user.photoURL || "");
     localStorage.setItem("uid", user.uid);
-    
-    // Check premium from Firestore
+
+    // ✅ ALWAYS check Firestore for premium status (localStorage may be cleared after logout)
     let isPremium = false;
     try {
       const premiumDoc = await getDoc(doc(db, "premium", user.uid));
       isPremium = premiumDoc.exists() && premiumDoc.data().active === true;
       localStorage.setItem("premium", isPremium ? "true" : "false");
     } catch (e) {
-      console.error(e);
+      console.error("Premium check failed:", e);
     }
-    
+
+    // ✅ PREMIUM CHECK FIRST — skip everything else if already paid
+    if (isPremium) {
+      location.href = "dashboard-premium.html";
+      return;
+    }
+
+    // Not premium — check if setup is done
     const setupDone = localStorage.getItem("setup_done") === "true";
     if (!setupDone) {
       location.href = "setup.html";
-    } else if (isPremium) {
-      location.href = "dashboard-premium.html";
     } else {
       location.href = "graph.html";
     }
