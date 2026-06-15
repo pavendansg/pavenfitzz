@@ -17,57 +17,31 @@
     <p style="opacity:.6;font-size:13px;">Your body transformation analytics</p>
   </div>
 
-  <!-- STAT CARDS -->
   <div class="stat-cards">
-    <div class="stat-card">
-      <div class="stat-card-label">Start Weight</div>
-      <div class="stat-card-val" id="startWeight">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Current</div>
-      <div class="stat-card-val gold" id="currentWeight">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Target</div>
-      <div class="stat-card-val" id="goalWeight">—</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-label">Change</div>
-      <div class="stat-card-val" id="changeText">—</div>
-    </div>
+    <div class="stat-card"><div class="stat-card-label">Start Weight</div><div class="stat-card-val" id="startWeight">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Current</div><div class="stat-card-val gold" id="currentWeight">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Target</div><div class="stat-card-val" id="goalWeight">—</div></div>
+    <div class="stat-card"><div class="stat-card-label">Change</div><div class="stat-card-val" id="changeText">—</div></div>
   </div>
 
-  <!-- BMI STATUS -->
   <div class="bmi-status-bar" id="bmiStatusBar">
     <div class="bmi-status-label">Current BMI</div>
     <div class="bmi-status-val" id="bmiStatusVal">—</div>
     <div class="bmi-status-tag" id="bmiStatusTag">—</div>
-    <div class="bmi-range-bar">
-      <div class="bmi-range-fill" id="bmiRangeFill"></div>
-    </div>
-    <div class="bmi-range-labels">
-      <span>Under</span>
-      <span>Normal</span>
-      <span>Over</span>
-      <span>Obese</span>
-    </div>
+    <div class="bmi-range-bar"><div class="bmi-range-fill" id="bmiRangeFill"></div></div>
+    <div class="bmi-range-labels"><span>Under</span><span>Normal</span><span>Over</span><span>Obese</span></div>
   </div>
 
-  <!-- GOAL PROGRESS -->
   <div class="box" style="margin-top:4px;">
     <h3>🎯 Goal Progress</h3>
     <div style="display:flex;justify-content:space-between;font-size:12px;opacity:.6;margin-bottom:6px;">
-      <span id="progressLabel">0%</span>
-      <span id="progressDetail"></span>
+      <span id="progressLabel">0%</span><span id="progressDetail"></span>
     </div>
     <div class="progress">
-      <div id="goalBar" style="width:0%;height:100%;border-radius:99px;
-        background:linear-gradient(90deg,#00ff88,#ffd700);
-        transition:width 1.2s ease;"></div>
+      <div id="goalBar" style="width:0%;height:100%;border-radius:99px;background:linear-gradient(90deg,#00ff88,#ffd700);transition:width 1.2s ease;"></div>
     </div>
   </div>
 
-  <!-- STREAK MILESTONES -->
   <div class="box">
     <div class="box-header" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
       <span style="font-size:16px;">🏆</span>
@@ -76,129 +50,58 @@
     <div class="milestones" id="milestones"></div>
   </div>
 
-  <!-- WEIGHT CHART -->
   <div class="box">
     <h3>⚖️ Weight Trend</h3>
     <canvas id="weightChart" style="max-height:200px;"></canvas>
   </div>
 
-  <!-- BMI CHART -->
   <div class="box">
     <h3>🔥 BMI Trend</h3>
     <canvas id="bmiChart" style="max-height:200px;"></canvas>
   </div>
 
-  <!-- MOTIVATION -->
   <div class="motivation-box">
     <div style="font-size:32px;margin-bottom:8px;">💪</div>
     <p id="summary" style="color:#ffd700;font-weight:800;font-size:15px;margin-bottom:6px;"></p>
     <p id="checkins" style="opacity:.5;font-size:12px;"></p>
   </div>
 
-  <!-- FIXED BUTTONS — smart routing based on premium status -->
   <div class="btns" style="margin-top:16px;">
-  <button class="secondary-btn" onclick="location.href='result-bmi.html'">← Back</button>
-    <button class="primary-btn" id="nextBtn" onclick="goNext()">Unlock AI Coach 🔥</button>
+    <button class="secondary-btn" onclick="location.href='result-bmi.html'">← Back</button>
+    <button class="primary-btn" id="nextBtn" onclick="goNext()">Loading...</button>
   </div>
 
 </div>
 </div>
 
 <style>
-.stat-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.stat-card {
-  background: #111;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 14px;
-  text-align: center;
-}
-.stat-card-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; opacity:.45; margin-bottom:6px; }
-.stat-card-val   { font-size:20px; font-weight:900; color:#fff; }
-
-/* BMI STATUS */
-.bmi-status-bar {
-  background: linear-gradient(135deg, #0d0d0d, #111);
-  border: 1px solid rgba(255,215,0,0.15);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
-  text-align: center;
-}
-.bmi-status-label { font-size:10px; text-transform:uppercase; letter-spacing:2px; color:#555; margin-bottom:6px; }
-.bmi-status-val   { font-size:36px; font-weight:900; color:#ffd700; line-height:1; margin-bottom:6px; }
-.bmi-status-tag   {
-  display: inline-block;
-  font-size: 12px; font-weight: 700;
-  padding: 4px 14px; border-radius: 99px;
-  margin-bottom: 12px;
-}
-.bmi-range-bar {
-  height: 8px; border-radius: 99px;
-  background: linear-gradient(90deg, #00c3ff 0%, #00ff88 25%, #ffd700 60%, #ff4455 100%);
-  position: relative; margin-bottom: 6px; overflow: visible;
-}
-.bmi-range-fill {
-  position: absolute; top: -3px;
-  width: 14px; height: 14px;
-  background: #fff; border-radius: 50%;
-  border: 2px solid #000;
-  box-shadow: 0 0 8px rgba(255,255,255,0.4);
-  transform: translateX(-50%);
-  transition: left 1s ease;
-}
-.bmi-range-labels {
-  display: flex; justify-content: space-between;
-  font-size: 10px; color: #444;
-  font-family: monospace; letter-spacing: 0.5px;
-}
-
-/* MILESTONES */
-.milestones { display:flex; flex-direction:column; gap:8px; }
-.milestone-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px;
-  background: #0d0d0d;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.04);
-  font-size: 13px;
-}
-.milestone-item.achieved {
-  border-color: rgba(255,215,0,0.2);
-  background: rgba(255,215,0,0.04);
-}
-.milestone-icon { font-size:18px; flex-shrink:0; }
-.milestone-text { flex:1; color:#aaa; }
-.milestone-text.achieved { color:#ffd700; font-weight:700; }
-.milestone-check {
-  font-size:12px; font-weight:700;
-  color:#333;
-}
-.milestone-check.achieved { color:#ffd700; }
-
-/* MOTIVATION */
-.motivation-box {
-  background: linear-gradient(135deg, #0f0f0f, #1a1400);
-  border: 1px solid rgba(255,215,0,0.15);
-  border-radius: 16px;
-  padding: 24px;
-  text-align: center;
-  margin-top: 4px;
-}
-
-/* BOX HEADER */
-.box-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.stat-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.stat-card{background:#111;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px;text-align:center;}
+.stat-card-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.45;margin-bottom:6px;}
+.stat-card-val{font-size:20px;font-weight:900;color:#fff;}
+.bmi-status-bar{background:linear-gradient(135deg,#0d0d0d,#111);border:1px solid rgba(255,215,0,0.15);border-radius:16px;padding:16px;margin-bottom:14px;text-align:center;}
+.bmi-status-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#555;margin-bottom:6px;}
+.bmi-status-val{font-size:36px;font-weight:900;color:#ffd700;line-height:1;margin-bottom:6px;}
+.bmi-status-tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 14px;border-radius:99px;margin-bottom:12px;}
+.bmi-range-bar{height:8px;border-radius:99px;background:linear-gradient(90deg,#00c3ff 0%,#00ff88 25%,#ffd700 60%,#ff4455 100%);position:relative;margin-bottom:6px;overflow:visible;}
+.bmi-range-fill{position:absolute;top:-3px;width:14px;height:14px;background:#fff;border-radius:50%;border:2px solid #000;box-shadow:0 0 8px rgba(255,255,255,0.4);transform:translateX(-50%);transition:left 1s ease;}
+.bmi-range-labels{display:flex;justify-content:space-between;font-size:10px;color:#444;font-family:monospace;letter-spacing:0.5px;}
+.milestones{display:flex;flex-direction:column;gap:8px;}
+.milestone-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#0d0d0d;border-radius:12px;border:1px solid rgba(255,255,255,0.04);font-size:13px;}
+.milestone-item.achieved{border-color:rgba(255,215,0,0.2);background:rgba(255,215,0,0.04);}
+.milestone-icon{font-size:18px;flex-shrink:0;}
+.milestone-text{flex:1;color:#aaa;}
+.milestone-text.achieved{color:#ffd700;font-weight:700;}
+.milestone-check{font-size:12px;font-weight:700;color:#333;}
+.milestone-check.achieved{color:#ffd700;}
+.motivation-box{background:linear-gradient(135deg,#0f0f0f,#1a1400);border:1px solid rgba(255,215,0,0.15);border-radius:16px;padding:24px;text-align:center;margin-top:4px;}
+.box-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 </style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
@@ -210,16 +113,6 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-// ✅ SMART NEXT BUTTON — new users go to payment, premium users go to dashboard
-window.goNext = function() {
-  window.location.href = "payment.html";
-};
-
-// Update button label based on premium status
-if (localStorage.getItem("premium") === "true") {
-  document.getElementById("nextBtn").innerText = "Go to Dashboard 📊";
-}
-
 Chart.defaults.color       = "#888";
 Chart.defaults.borderColor = "rgba(255,255,255,0.05)";
 
@@ -230,15 +123,59 @@ function getBMIInfo(bmi) {
   return              { label:"Obese",           color:"#ff4455", pct: 88 };
 }
 
+// ✅ SMART NEXT BUTTON
+// - Not premium → payment.html
+// - Premium but no workout generated → workout.html
+// - Premium + workout done but no diet → diet.html
+// - Premium + workout + diet but no meal → meal.html
+// - Premium + all done → dashboard-premium.html
+window.goNext = function() {
+  const isPremium = localStorage.getItem("premium") === "true";
+  if (!isPremium) {
+    location.href = "payment.html";
+    return;
+  }
+  const workoutDone = !!localStorage.getItem("workoutLockStart");
+  const dietDone    = !!localStorage.getItem("dietDate");
+  const mealDone    = !!localStorage.getItem("mealDate");
+
+  if (!workoutDone) { location.href = "workout.html"; return; }
+  if (!dietDone)    { location.href = "diet.html"; return; }
+  if (!mealDone)    { location.href = "meal.html"; return; }
+  location.href = "dashboard-premium.html";
+};
+
 onAuthStateChanged(auth, async (user) => {
   if (!user) { location.href = "login.html"; return; }
 
+  // Check premium from Firestore fresh
+  try {
+    const premSnap = await getDoc(doc(db, "premium", user.uid));
+    const isPremium = premSnap.exists() && premSnap.data().active === true;
+    localStorage.setItem("premium", isPremium ? "true" : "false");
+  } catch(e) { console.error(e); }
+
+  // Update button label
+  const isPremium   = localStorage.getItem("premium") === "true";
+  const workoutDone = !!localStorage.getItem("workoutLockStart");
+  const dietDone    = !!localStorage.getItem("dietDate");
+  const mealDone    = !!localStorage.getItem("mealDate");
+  const btn = document.getElementById("nextBtn");
+
+  if (!isPremium) {
+    btn.innerText = "Unlock AI Coach 🔥";
+  } else if (!workoutDone) {
+    btn.innerText = "Generate Workout 💪";
+  } else if (!dietDone) {
+    btn.innerText = "Generate Diet 🧬";
+  } else if (!mealDone) {
+    btn.innerText = "Generate Meal 🍗";
+  } else {
+    btn.innerText = "Go to Dashboard 📊";
+  }
+
   const snap = await getDocs(collection(db, "users", user.uid, "daily"));
-  // ✅ FIXED — no longer redirects to deleted dashboard.html
-  if (snap.empty) {
-  location.href = "result-bmi.html";
-  return;
-}
+  if (snap.empty) { location.href = "result-bmi.html"; return; }
 
   let history = [];
   snap.forEach(d => history.push(d.data()));
@@ -253,7 +190,6 @@ onAuthStateChanged(auth, async (user) => {
   const total   = +(latest.weight - first.weight).toFixed(1);
   const streak  = history.length;
 
-  // STAT CARDS
   document.getElementById("startWeight").innerText   = first.weight + " kg";
   document.getElementById("currentWeight").innerText = latest.weight + " kg";
   document.getElementById("goalWeight").innerText    = target + " kg";
@@ -263,25 +199,21 @@ onAuthStateChanged(auth, async (user) => {
   else if (total < 0) { changeEl.innerText = total + " kg";       changeEl.style.color = "#ff6b6b"; }
   else                { changeEl.innerText = "0 kg";              changeEl.style.color = "#aaa"; }
 
-  // BMI STATUS
   const bmiInfo = getBMIInfo(latest.bmi);
-  document.getElementById("bmiStatusVal").innerText      = latest.bmi;
-  document.getElementById("bmiStatusTag").innerText      = bmiInfo.label;
-  document.getElementById("bmiStatusTag").style.background = bmiInfo.color + "18";
-  document.getElementById("bmiStatusTag").style.color      = bmiInfo.color;
-  document.getElementById("bmiStatusTag").style.border     = "1px solid " + bmiInfo.color + "40";
-  document.getElementById("bmiRangeFill").style.left       = bmiInfo.pct + "%";
+  document.getElementById("bmiStatusVal").innerText                = latest.bmi;
+  document.getElementById("bmiStatusTag").innerText                = bmiInfo.label;
+  document.getElementById("bmiStatusTag").style.background         = bmiInfo.color + "18";
+  document.getElementById("bmiStatusTag").style.color              = bmiInfo.color;
+  document.getElementById("bmiStatusTag").style.border             = "1px solid " + bmiInfo.color + "40";
+  document.getElementById("bmiRangeFill").style.left               = bmiInfo.pct + "%";
 
-  // GOAL PROGRESS
   const range = Math.abs(target - first.weight);
   const moved = Math.abs(latest.weight - first.weight);
   const pct   = range > 0 ? Math.min(100, Math.round((moved / range) * 100)) : 0;
-  document.getElementById("goalBar").style.width     = pct + "%";
-  document.getElementById("progressLabel").innerText = pct + "% complete";
-  document.getElementById("progressDetail").innerText =
-    Math.abs(target - latest.weight).toFixed(1) + " kg to go";
+  document.getElementById("goalBar").style.width      = pct + "%";
+  document.getElementById("progressLabel").innerText  = pct + "% complete";
+  document.getElementById("progressDetail").innerText = Math.abs(target - latest.weight).toFixed(1) + " kg to go";
 
-  // MILESTONES
   const milestoneData = [
     {days:1,   icon:"🌱", label:"First Check-In"},
     {days:7,   icon:"⚡", label:"Contender (7 days)"},
@@ -298,7 +230,6 @@ onAuthStateChanged(auth, async (user) => {
     </div>`;
   }).join("");
 
-  // MOTIVATION
   const msgs = {
     gain: ["🔥 Building that mass!", "💪 Gains incoming!", "🏋️ Keep lifting heavy!"],
     loss: ["🔥 Fat loss in progress!", "✂️ Shredding up!", "🏃 Keep the deficit!"],
@@ -308,19 +239,12 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("summary").innerText  = pool[Math.floor(Math.random() * pool.length)];
   document.getElementById("checkins").innerText = streak + " total check-ins 🗓️";
 
-  // CHART OPTIONS
   function chartOptions() {
     return {
       responsive: true,
       plugins: {
         legend: { labels: { color:"#aaa", font:{ size:12 } } },
-        tooltip: {
-          backgroundColor: "#1a1a1a",
-          borderColor: "rgba(255,215,0,0.2)",
-          borderWidth: 1,
-          titleColor: "#ffd700",
-          bodyColor: "#fff"
-        }
+        tooltip: { backgroundColor:"#1a1a1a", borderColor:"rgba(255,215,0,0.2)", borderWidth:1, titleColor:"#ffd700", bodyColor:"#fff" }
       },
       scales: {
         x: { ticks:{ color:"#666", font:{ size:11 } }, grid:{ color:"rgba(255,255,255,0.04)" } },
@@ -329,53 +253,35 @@ onAuthStateChanged(auth, async (user) => {
     };
   }
 
-  // WEIGHT CHART
   new Chart(document.getElementById("weightChart"), {
     type: "line",
     data: {
       labels,
       datasets: [{
-        label: "Weight (kg)",
-        data: weights,
-        borderColor: "#ffd700",
-        backgroundColor: "rgba(255,215,0,0.08)",
-        fill: true,
-        pointRadius: 5,
-        pointBackgroundColor: "#ffd700",
-        pointBorderColor: "#000",
-        pointBorderWidth: 2,
-        tension: 0.4
+        label: "Weight (kg)", data: weights,
+        borderColor: "#ffd700", backgroundColor: "rgba(255,215,0,0.08)",
+        fill: true, pointRadius: 5, pointBackgroundColor: "#ffd700",
+        pointBorderColor: "#000", pointBorderWidth: 2, tension: 0.4
       }]
     },
     options: chartOptions()
   });
 
-  // BMI CHART
   new Chart(document.getElementById("bmiChart"), {
     type: "line",
     data: {
       labels,
       datasets: [
         {
-          label: "BMI",
-          data: bmis,
-          borderColor: "#00ff99",
-          backgroundColor: "rgba(0,255,153,0.08)",
-          fill: true,
-          pointRadius: 5,
-          pointBackgroundColor: "#00ff99",
-          pointBorderColor: "#000",
-          pointBorderWidth: 2,
-          tension: 0.4
+          label: "BMI", data: bmis,
+          borderColor: "#00ff99", backgroundColor: "rgba(0,255,153,0.08)",
+          fill: true, pointRadius: 5, pointBackgroundColor: "#00ff99",
+          pointBorderColor: "#000", pointBorderWidth: 2, tension: 0.4
         },
         {
-          label: "Healthy Max (24.9)",
-          data: Array(labels.length).fill(24.9),
-          borderColor: "rgba(255,100,100,0.4)",
-          borderDash: [6,4],
-          borderWidth: 1.5,
-          pointRadius: 0,
-          fill: false
+          label: "Healthy Max (24.9)", data: Array(labels.length).fill(24.9),
+          borderColor: "rgba(255,100,100,0.4)", borderDash: [6,4],
+          borderWidth: 1.5, pointRadius: 0, fill: false
         }
       ]
     },
