@@ -11,8 +11,7 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-  if (!localStorage.getItem("macros_done")) { location.href = "graph.html"; }
-
+  console.log("Payment page loaded");
   const firebaseConfig = {
     apiKey: "AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",
     authDomain: "evolvefit-07.firebaseapp.com",
@@ -24,17 +23,21 @@
   const db   = getFirestore(app);
   let currentUser = null;
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) { location.href = "login.html"; return; }
-    currentUser = user;
-    document.getElementById("userEmail").innerText = user.email;
+ onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    console.log("User not logged in");
+    return;
+  }
 
-    const snap = await getDoc(doc(db, "premium", user.uid));
-    if (snap.exists() && snap.data().active === true) {
-  localStorage.setItem("premium", "true");
-  location.href = "dashboard-premium.html";
-}
-  });
+  currentUser = user;
+
+  const emailEl = document.getElementById("userEmail");
+  if (emailEl) {
+    emailEl.innerText = user.email;
+  }
+
+  console.log("Payment page loaded successfully");
+});
 
   window.startPayment = function() {
     if (!currentUser) { alert("Please login first ⚠️"); return; }
