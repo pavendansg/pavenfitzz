@@ -7,57 +7,243 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 <style>
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(200,245,66,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(200,245,66,0.04) 0%,transparent 55%),#080808;}
-.login-card{width:100%;max-width:400px;background:#111110;border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:40px 32px;text-align:center;animation:fadeUp .45s ease both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.login-logo{width:64px;height:64px;border-radius:50%;background:rgba(200,245,66,0.1);border:1.5px solid rgba(200,245,66,0.25);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
-.login-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#f0ede6;letter-spacing:-0.5px;margin-bottom:6px;}
-.login-title em{color:#c8f542;font-style:normal}
-.login-sub{font-size:14px;color:#6b6b5a;margin-bottom:28px;font-family:'DM Sans',sans-serif}
+/* ── BACKGROUND ── */
+.login-wrap{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;position:relative;overflow:hidden;
+  background:#080808;
+}
+/* Animated radial orbs */
+.login-wrap::before,.login-wrap::after{
+  content:'';position:absolute;border-radius:50%;filter:blur(80px);
+  animation:orbFloat 6s ease-in-out infinite;pointer-events:none;
+}
+.login-wrap::before{
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(200,245,66,0.08),transparent 70%);
+  top:-100px;left:-100px;animation-delay:0s;
+}
+.login-wrap::after{
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(200,245,66,0.05),transparent 70%);
+  bottom:-80px;right:-80px;animation-delay:-3s;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(30px,20px) scale(1.08);}
+}
 
-/* TABS */
-.auth-tabs{display:flex;gap:0;background:#0d0d0b;border-radius:12px;padding:4px;margin-bottom:24px;}
-.auth-tab{flex:1;padding:9px;border:none;border-radius:9px;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;background:transparent;color:#6b6b5a;transition:all .2s;}
-.auth-tab.active{background:#c8f542;color:#080808;}
+/* Particle dots */
+.particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:rgba(200,245,66,0.4);pointer-events:none;
+  animation:particleFloat linear infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0;}
+  10%{opacity:1;}
+  90%{opacity:1;}
+  100%{transform:translateY(-20px) scale(1);opacity:0;}
+}
 
-/* PANELS */
+/* ── CARD ── */
+.login-card{
+  width:100%;max-width:420px;
+  background:rgba(17,17,16,0.85);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:28px;padding:44px 36px;
+  text-align:center;
+  position:relative;z-index:2;
+  animation:cardSpring .8s cubic-bezier(.34,1.56,.64,1) both;
+  box-shadow:0 0 60px rgba(200,245,66,0.04),0 40px 80px rgba(0,0,0,0.5);
+}
+@keyframes cardSpring{
+  0%{opacity:0;transform:translateY(60px) scale(0.88);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
+}
+
+/* ── LOGO ── */
+.login-logo{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(200,245,66,0.1);
+  border:2px solid rgba(200,245,66,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin:0 auto 20px;
+  animation:logoBounce 1s cubic-bezier(.34,1.56,.64,1) .3s both;
+  box-shadow:0 0 30px rgba(200,245,66,0.12);
+}
+@keyframes logoBounce{
+  0%{opacity:0;transform:scale(0.3) rotate(-20deg);}
+  70%{transform:scale(1.15) rotate(5deg);}
+  100%{opacity:1;transform:scale(1) rotate(0deg);}
+}
+/* Pulse ring on logo */
+.login-logo::after{
+  content:'';position:absolute;
+  width:72px;height:72px;border-radius:50%;
+  border:2px solid rgba(200,245,66,0.2);
+  animation:logoPulse 2.5s ease-out infinite;
+}
+@keyframes logoPulse{
+  0%{transform:scale(1);opacity:0.6;}
+  100%{transform:scale(1.7);opacity:0;}
+}
+
+/* ── TITLE ── */
+.login-title{
+  font-family:'Syne',sans-serif;font-size:30px;font-weight:800;
+  color:#f0ede6;letter-spacing:-0.5px;margin-bottom:6px;
+  animation:slideUp .7s cubic-bezier(.34,1.56,.64,1) .4s both;
+}
+.login-title em{color:#c8f542;font-style:normal;}
+.login-sub{
+  font-size:14px;color:#6b6b5a;margin-bottom:28px;font-family:'DM Sans',sans-serif;
+  animation:slideUp .7s cubic-bezier(.34,1.56,.64,1) .5s both;
+}
+@keyframes slideUp{
+  0%{opacity:0;transform:translateY(20px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+
+/* ── TABS ── */
+.auth-tabs{
+  display:flex;gap:0;background:#0d0d0b;
+  border-radius:14px;padding:4px;margin-bottom:24px;
+  animation:slideUp .7s cubic-bezier(.34,1.56,.64,1) .55s both;
+  border:1px solid rgba(255,255,255,0.05);
+}
+.auth-tab{
+  flex:1;padding:10px;border:none;border-radius:11px;
+  font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;
+  cursor:pointer;background:transparent;color:#6b6b5a;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.auth-tab.active{
+  background:#c8f542;color:#080808;
+  box-shadow:0 4px 16px rgba(200,245,66,0.3);
+  transform:scale(1.02);
+}
+.auth-tab:not(.active):hover{color:#f0ede6;}
+
+/* ── PANEL ANIMATION ── */
 .auth-panel{display:none;}
-.auth-panel.active{display:block;}
+.auth-panel.active{
+  display:block;
+  animation:panelIn .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes panelIn{
+  0%{opacity:0;transform:translateY(16px) scale(0.97);}
+  100%{opacity:1;transform:translateY(0) scale(1);}
+}
 
-/* INPUT */
+/* ── FIELDS ── */
 .field{text-align:left;margin-bottom:14px;}
-.field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#6b6b5a;font-family:'DM Sans',sans-serif;margin-bottom:5px;}
-.field input{width:100%;padding:12px 14px;background:#161615;border:1px solid rgba(255,255,255,0.07);border-radius:12px;color:#f0ede6;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
-.field input:focus{border-color:rgba(200,245,66,0.35);}
+.field label{
+  display:block;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.1em;
+  color:#6b6b5a;font-family:'DM Sans',sans-serif;margin-bottom:5px;
+}
+.field input{
+  width:100%;padding:13px 16px;
+  background:#161615;border:1.5px solid rgba(255,255,255,0.07);
+  border-radius:12px;color:#f0ede6;font-size:14px;
+  font-family:'DM Sans',sans-serif;outline:none;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+}
+.field input:focus{
+  border-color:rgba(200,245,66,0.45);
+  background:#1a1a18;
+  box-shadow:0 0 0 3px rgba(200,245,66,0.08);
+  transform:scale(1.01);
+}
 .field input::placeholder{color:#3a3a30;}
 
-/* BUTTONS */
-.action-btn{width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:800;font-family:'Syne',sans-serif;cursor:pointer;background:#c8f542;color:#080808;margin-top:4px;transition:all .2s;}
-.action-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(200,245,66,0.25);}
-.action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+/* ── BUTTONS ── */
+.action-btn{
+  width:100%;padding:15px;border:none;border-radius:14px;
+  font-size:15px;font-weight:800;font-family:'Syne',sans-serif;
+  cursor:pointer;background:#c8f542;color:#080808;margin-top:4px;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 4px 20px rgba(200,245,66,0.2);
+}
+.action-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 12px 36px rgba(200,245,66,0.35);
+}
+.action-btn:active{transform:scale(0.97);}
+.action-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
 
-.divider{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:12px;color:#3a3a30;font-family:'DM Sans',sans-serif;}
+.divider{
+  display:flex;align-items:center;gap:10px;margin:18px 0;
+  font-size:12px;color:#3a3a30;font-family:'DM Sans',sans-serif;
+}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06);}
 
-.google-btn{width:100%;padding:13px 20px;background:#1a1a18;color:#f0ede6;border:1px solid rgba(255,255,255,0.1);border-radius:14px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:all .2s;}
-.google-btn:hover{border-color:rgba(200,245,66,0.3);background:#1e1e1c;}
-.google-btn:disabled{opacity:.5;cursor:not-allowed;}
+.google-btn{
+  width:100%;padding:14px 20px;background:#1a1a18;color:#f0ede6;
+  border:1.5px solid rgba(255,255,255,0.1);border-radius:14px;
+  font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+}
+.google-btn:hover{
+  border-color:rgba(200,245,66,0.35);background:#1e1e1c;
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+}
+.google-btn:active{transform:scale(0.97);}
+.google-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 .google-icon{width:18px;height:18px;flex-shrink:0;}
 
-#msg{font-size:13px;margin-top:12px;min-height:18px;font-family:'DM Sans',sans-serif;}
+/* ── MSG ── */
+#msg{
+  font-size:13px;margin-top:12px;min-height:18px;
+  font-family:'DM Sans',sans-serif;
+  animation:msgPop .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes msgPop{0%{transform:scale(0.9);opacity:0;}100%{transform:scale(1);opacity:1;}}
 #msg.err{color:#f04545;}
 #msg.ok{color:#c8f542;}
+
 .login-fine{font-size:11px;color:#3a3a30;margin-top:20px;font-family:'DM Sans',sans-serif;}
+
+/* ── SUCCESS OVERLAY ── */
+.success-overlay{
+  position:fixed;inset:0;background:rgba(8,8,8,0.95);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:999;opacity:0;pointer-events:none;
+  transition:opacity .4s;
+}
+.success-overlay.show{opacity:1;pointer-events:all;}
+.success-checkmark{
+  font-size:72px;
+  animation:checkBounce .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes checkBounce{
+  0%{transform:scale(0) rotate(-20deg);opacity:0;}
+  70%{transform:scale(1.2) rotate(5deg);}
+  100%{transform:scale(1) rotate(0deg);opacity:1;}
+}
+.success-text{
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:800;
+  color:#c8f542;margin-top:16px;
+  animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) .3s both;
+}
+.success-sub{
+  font-size:14px;color:#6b6b5a;margin-top:8px;
+  animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) .45s both;
+}
 </style>
 </head>
 <body>
-<div class="login-wrap">
+
+<div class="login-wrap" id="loginWrap">
   <div class="login-card">
-    <div class="login-logo">⚡</div>
+    <div class="login-logo" style="position:relative;">⚡</div>
     <div class="login-title">Evolve<em>Fit</em></div>
     <p class="login-sub">Your elite fitness journey starts here</p>
 
-    <!-- TABS -->
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Login</button>
       <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
@@ -108,6 +294,27 @@
   </div>
 </div>
 
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-checkmark">⚡</div>
+  <div class="success-text">Welcome to EvolveFit!</div>
+  <div class="success-sub" id="successSubText">Loading your dashboard...</div>
+</div>
+
+<!-- Floating particles -->
+<script>
+for(let i=0;i<18;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.style.left=Math.random()*100+'vw';
+  p.style.width=p.style.height=(Math.random()*3+1)+'px';
+  p.style.animationDuration=(Math.random()*12+8)+'s';
+  p.style.animationDelay=-(Math.random()*12)+'s';
+  p.style.opacity=Math.random()*0.5+0.1;
+  document.getElementById('loginWrap').appendChild(p);
+}
+</script>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import {
@@ -122,113 +329,102 @@ const firebaseConfig = {
   authDomain: "evolvefit-07.firebaseapp.com",
   projectId: "evolvefit-07"
 };
-
 const app      = initializeApp(firebaseConfig);
 const auth     = getAuth(app);
 const db       = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// ── TAB SWITCHER ──
 window.switchTab = function(tab) {
-  document.querySelectorAll(".auth-tab").forEach((t,i)=>t.classList.toggle("active", (tab==="login"?i===0:i===1)));
-  document.getElementById("panel-login").classList.toggle("active", tab==="login");
-  document.getElementById("panel-signup").classList.toggle("active", tab==="signup");
-  document.getElementById("msg").innerText = "";
+  document.querySelectorAll(".auth-tab").forEach((t,i)=>t.classList.toggle("active",(tab==="login"?i===0:i===1)));
+  document.getElementById("panel-login").classList.toggle("active",tab==="login");
+  document.getElementById("panel-signup").classList.toggle("active",tab==="signup");
+  document.getElementById("msg").innerText="";
 };
 
-function showMsg(text, type="err") {
-  const el = document.getElementById("msg");
-  el.innerText = text;
-  el.className = type;
+function showMsg(text,type="err"){
+  const el=document.getElementById("msg");
+  el.innerText=text;el.className=type;
+  // Re-trigger animation
+  el.style.animation='none';el.offsetHeight;el.style.animation='';
 }
 
-// ── AFTER LOGIN: check premium + redirect ──
-async function afterLogin(user) {
-  localStorage.setItem("username", user.displayName || user.email.split("@")[0]);
-  localStorage.setItem("photo", user.photoURL || "");
-  localStorage.setItem("uid", user.uid);
+function showSuccess(subText){
+  document.getElementById("successSubText").innerText=subText||"Loading your dashboard...";
+  document.getElementById("successOverlay").classList.add("show");
+}
 
-  // ✅ Always restore premium from Firestore
-  try {
-    const premSnap = await getDoc(doc(db, "premium", user.uid));
-    if (premSnap.exists() && premSnap.data().active === true) {
-      localStorage.setItem("premium", "true");
-      // ✅ Also restore ai_setup_done if they already paid & completed setup
-      localStorage.setItem("ai_setup_done", "true");
-    } else {
-      localStorage.setItem("premium", "false");
+async function afterLogin(user){
+  localStorage.setItem("username",user.displayName||user.email.split("@")[0]);
+  localStorage.setItem("photo",user.photoURL||"");
+  localStorage.setItem("uid",user.uid);
+  try{
+    const premSnap=await getDoc(doc(db,"premium",user.uid));
+    if(premSnap.exists()&&premSnap.data().active===true){
+      localStorage.setItem("premium","true");
+      localStorage.setItem("ai_setup_done","true");
+    }else{
+      localStorage.setItem("premium","false");
     }
-  } catch(e) { console.error("Premium check failed:", e); }
+  }catch(e){console.error("Premium check failed:",e);}
 
-  const setupDone = localStorage.getItem("setup_done") === "true";
-  if (!setupDone) {
-    location.href = "setup.html";
-  } else if (localStorage.getItem("premium") === "true") {
-    location.href = "dashboard-premium.html";
-  } else {
-    location.href = "bmi.html";
-  }
+  const setupDone=localStorage.getItem("setup_done")==="true";
+  let dest,sub;
+  if(!setupDone){dest="setup.html";sub="Setting up your profile...";}
+  else if(localStorage.getItem("premium")==="true"){dest="dashboard-premium.html";sub="Opening your dashboard...";}
+  else{dest="bmi.html";sub="Let's check in...";}
+
+  showSuccess(sub);
+  setTimeout(()=>location.href=dest,1200);
 }
 
-// ── GOOGLE LOGIN ──
-window.googleLogin = function() {
-  const btns = document.querySelectorAll(".google-btn");
-  btns.forEach(b=>{b.disabled=true;});
-  signInWithPopup(auth, provider)
-    .then(result => afterLogin(result.user))
-    .catch(err => {
+window.googleLogin=function(){
+  document.querySelectorAll(".google-btn").forEach(b=>b.disabled=true);
+  signInWithPopup(auth,provider)
+    .then(r=>afterLogin(r.user))
+    .catch(()=>{
       showMsg("Google login failed. Try again.");
-      btns.forEach(b=>{b.disabled=false;});
+      document.querySelectorAll(".google-btn").forEach(b=>b.disabled=false);
     });
 };
 
-// ── EMAIL SIGN UP ──
-window.emailSignup = function() {
-  const name  = document.getElementById("signup-name").value.trim();
-  const email = document.getElementById("signup-email").value.trim();
-  const pass  = document.getElementById("signup-password").value;
-  if (!name)  { showMsg("Please enter your name."); return; }
-  if (!email) { showMsg("Please enter your email."); return; }
-  if (pass.length < 6) { showMsg("Password must be at least 6 characters."); return; }
-
-  const btn = document.getElementById("signupBtn");
-  btn.disabled = true; btn.innerText = "Creating account...";
-
-  createUserWithEmailAndPassword(auth, email, pass)
-    .then(result => updateProfile(result.user, { displayName: name }).then(() => afterLogin(result.user)))
-    .catch(err => {
-      if (err.code === "auth/email-already-in-use") showMsg("Email already in use. Try logging in.");
-      else if (err.code === "auth/invalid-email") showMsg("Invalid email address.");
-      else showMsg("Signup failed: " + err.message);
-      btn.disabled = false; btn.innerText = "Create Account →";
+window.emailSignup=function(){
+  const name=document.getElementById("signup-name").value.trim();
+  const email=document.getElementById("signup-email").value.trim();
+  const pass=document.getElementById("signup-password").value;
+  if(!name){showMsg("Please enter your name.");return;}
+  if(!email){showMsg("Please enter your email.");return;}
+  if(pass.length<6){showMsg("Password must be at least 6 characters.");return;}
+  const btn=document.getElementById("signupBtn");
+  btn.disabled=true;btn.innerText="Creating account...";
+  createUserWithEmailAndPassword(auth,email,pass)
+    .then(r=>updateProfile(r.user,{displayName:name}).then(()=>afterLogin(r.user)))
+    .catch(err=>{
+      if(err.code==="auth/email-already-in-use")showMsg("Email already in use. Try logging in.");
+      else if(err.code==="auth/invalid-email")showMsg("Invalid email address.");
+      else showMsg("Signup failed: "+err.message);
+      btn.disabled=false;btn.innerText="Create Account →";
     });
 };
 
-// ── EMAIL LOGIN ──
-window.emailLogin = function() {
-  const email = document.getElementById("login-email").value.trim();
-  const pass  = document.getElementById("login-password").value;
-  if (!email) { showMsg("Please enter your email."); return; }
-  if (!pass)  { showMsg("Please enter your password."); return; }
-
-  const btn = document.getElementById("loginBtn");
-  btn.disabled = true; btn.innerText = "Logging in...";
-
-  signInWithEmailAndPassword(auth, email, pass)
-    .then(result => afterLogin(result.user))
-    .catch(err => {
-      if (err.code === "auth/user-not-found") showMsg("No account found. Create one first.");
-      else if (err.code === "auth/wrong-password") showMsg("Wrong password. Try again.");
-      else if (err.code === "auth/invalid-email") showMsg("Invalid email address.");
-      else showMsg("Login failed: " + err.message);
-      btn.disabled = false; btn.innerText = "Login →";
+window.emailLogin=function(){
+  const email=document.getElementById("login-email").value.trim();
+  const pass=document.getElementById("login-password").value;
+  if(!email){showMsg("Please enter your email.");return;}
+  if(!pass){showMsg("Please enter your password.");return;}
+  const btn=document.getElementById("loginBtn");
+  btn.disabled=true;btn.innerText="Logging in...";
+  signInWithEmailAndPassword(auth,email,pass)
+    .then(r=>afterLogin(r.user))
+    .catch(err=>{
+      if(err.code==="auth/user-not-found")showMsg("No account found. Create one first.");
+      else if(err.code==="auth/wrong-password")showMsg("Wrong password. Try again.");
+      else if(err.code==="auth/invalid-email")showMsg("Invalid email address.");
+      else showMsg("Login failed: "+err.message);
+      btn.disabled=false;btn.innerText="Login →";
     });
 };
 
-// ── AUTO REDIRECT if already logged in ──
-onAuthStateChanged(auth, async (user) => {
-  if (user) await afterLogin(user);
-});
+onAuthStateChanged(auth,async(user)=>{if(user)await afterLogin(user);});
 </script>
 </body>
 </html>
