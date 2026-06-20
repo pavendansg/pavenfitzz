@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unlock Premium - PavenFitzz</title>
+<link rel="stylesheet" href="style.css">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
@@ -56,7 +57,7 @@
         email: currentUser.email,
         name:  currentUser.displayName || "User",
       },
-      theme: { color: "#ffd700" },
+      theme: { color: "#c8f542" },
 
       handler: async function(response) {
         try {
@@ -105,96 +106,107 @@
 </script>
 
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: #0a0a0a; color: #fff;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  display: flex; justify-content: center; align-items: center;
-  padding: 24px;
-}
-.box {
-  width: 100%; max-width: 420px;
-  background: linear-gradient(180deg,#111,#0d0d0d);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 24px; padding: 32px 28px;
+body{ display:flex; justify-content:center; align-items:center; }
+.box{
+  width:100%; max-width:420px;
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  padding: 32px 28px;
   text-align: center;
-  box-shadow: 0 0 40px rgba(255,215,0,0.08);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset, 0 20px 60px rgba(0,0,0,0.5), 0 0 100px rgba(240,192,64,0.05);
+  animation: cardIn .7s var(--spring) both;
 }
-.logo-wrap {
+.logo-wrap{
   width:64px; height:64px; border-radius:50%;
-  background:rgba(255,215,0,0.08);
-  border:2px solid rgba(255,215,0,0.2);
+  background: rgba(240,192,64,0.08);
+  backdrop-filter: var(--glass-blur-sm);
+  border:2px solid rgba(240,192,64,0.25);
   display:flex; align-items:center; justify-content:center;
   font-size:28px; margin:0 auto 16px;
+  box-shadow: 0 0 30px rgba(240,192,64,0.1);
+  animation: logoBounce .9s var(--spring) .1s both;
 }
-.title { font-size:24px; font-weight:900; color:#ffd700; margin-bottom:4px; }
-.price-box {
-  background:#0a0f0a;
-  border:2px solid rgba(0,255,136,0.2);
-  border-radius:16px; padding:20px; margin:20px 0;
+.title{ font-size:24px; font-weight:900; color:var(--gold); margin-bottom:4px; font-family:var(--font-display); }
+.price-box{
+  background: rgba(0,255,136,0.04);
+  backdrop-filter: var(--glass-blur);
+  border:1.5px solid rgba(0,255,136,0.2);
+  border-radius:var(--r-lg); padding:20px; margin:20px 0;
+  box-shadow: 0 0 40px rgba(0,255,136,0.06);
 }
-.price-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#444; margin-bottom:6px; }
-.price-val { font-size:40px; font-weight:900; color:#00ff88; line-height:1; margin-bottom:6px; }
-.price-sub { font-size:12px; color:#555; }
-.features { display:flex; flex-direction:column; gap:10px; margin:20px 0; text-align:left; }
-.feature-item {
+.price-label{ font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--dim); margin-bottom:6px; }
+.price-val{ font-size:40px; font-weight:900; color:var(--green); line-height:1; margin-bottom:6px; font-family:var(--font-display); text-shadow:0 0 30px rgba(0,255,136,0.4); }
+.price-sub{ font-size:12px; color:var(--muted); }
+
+.features{ display:flex; flex-direction:column; gap:10px; margin:20px 0; text-align:left; }
+.feature-item{
   display:flex; align-items:center; gap:12px;
-  background:#0d0d0d;
-  border:1px solid rgba(255,255,255,0.04);
-  border-radius:12px; padding:12px 14px;
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur-sm);
+  border:1px solid var(--glass-border);
+  border-radius:var(--r-md); padding:12px 14px;
   font-size:14px; color:#ccc;
+  transition: all .25s var(--spring);
 }
-.feature-icon { font-size:18px; flex-shrink:0; }
-.feature-item strong { display:block; font-size:13px; font-weight:800; color:#fff; margin-bottom:2px; }
-.feature-item span { font-size:12px; color:#555; }
-.user-pill {
-  background:rgba(255,215,0,0.06);
-  border:1px solid rgba(255,215,0,0.15);
-  color:#ffd700; font-size:12px; font-weight:700;
-  padding:6px 14px; border-radius:99px;
+.feature-item:hover{ background:var(--glass-hover); transform:translateX(3px); }
+.feature-icon{ font-size:18px; flex-shrink:0; }
+.feature-item strong{ display:block; font-size:13px; font-weight:800; color:#fff; margin-bottom:2px; }
+.feature-item span{ font-size:12px; color:var(--muted); }
+
+.user-pill{
+  background: rgba(240,192,64,0.06);
+  backdrop-filter: var(--glass-blur-sm);
+  border:1px solid rgba(240,192,64,0.18);
+  color:var(--gold); font-size:12px; font-weight:700;
+  padding:6px 14px; border-radius:var(--r-full);
   margin-bottom:16px; display:inline-block;
 }
-.pay-btn {
-  width:100%; padding:16px; border:none; border-radius:14px;
-  background:linear-gradient(90deg,#ffd700,#ffb300);
-  color:#000; font-weight:900; font-size:17px;
-  cursor:pointer; transition:0.2s;
+
+.pay-btn{
+  width:100%; padding:16px; border:none; border-radius:var(--r-md);
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color:#080808; font-weight:900; font-size:17px;
+  cursor:pointer; transition: all .3s var(--spring);
+  box-shadow: 0 4px 20px rgba(240,192,64,0.25);
 }
-.pay-btn:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(255,215,0,0.25); }
-.pay-btn:active { transform:scale(0.98); }
-.pay-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-.secure-note { font-size:12px; color:#444; margin-top:12px; }
-#successBox { display:none; }
-.success-icon { font-size:56px; margin-bottom:16px; }
-.success-title { font-size:24px; font-weight:900; color:#00ff88; margin-bottom:8px; }
-.success-sub { font-size:14px; color:#555; margin-bottom:20px; }
-.payment-id-box {
-  background:#0d0d0d;
-  border:1px solid rgba(0,255,136,0.15);
-  border-radius:12px; padding:12px;
-  font-size:12px; color:#00ff88;
+.pay-btn:hover{ transform:translateY(-3px); box-shadow:0 16px 40px rgba(240,192,64,0.4); }
+.pay-btn:active{ transform:scale(0.98); }
+.pay-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+.secure-note{ font-size:12px; color:var(--dim); margin-top:12px; }
+
+#successBox{ display:none; }
+.success-icon{ font-size:56px; margin-bottom:16px; animation:logoBounce .9s var(--spring) both; }
+.success-title{ font-size:24px; font-weight:900; color:var(--green); margin-bottom:8px; font-family:var(--font-display); text-shadow:0 0 30px rgba(0,255,136,0.4); }
+.success-sub{ font-size:14px; color:var(--muted); margin-bottom:20px; }
+.payment-id-box{
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur-sm);
+  border:1px solid rgba(0,255,136,0.18);
+  border-radius:var(--r-md); padding:12px;
+  font-size:12px; color:var(--green);
   word-break:break-all; margin-bottom:16px;
 }
-.redirect-note { font-size:13px; color:#555; }
-.dots { display:inline-flex; gap:4px; margin-left:6px; }
-.dots span {
-  width:6px; height:6px; border-radius:50%;
-  background:#00ff88;
-  animation:blink 0.8s infinite alternate;
-}
-.dots span:nth-child(2) { animation-delay:0.2s; }
-.dots span:nth-child(3) { animation-delay:0.4s; }
-@keyframes blink { from{opacity:0.2;} to{opacity:1;} }
+.redirect-note{ font-size:13px; color:var(--muted); }
+.dots{ display:inline-flex; gap:4px; margin-left:6px; }
+.dots span{ width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 0.8s infinite alternate; }
+.dots span:nth-child(2){ animation-delay:0.2s; }
+.dots span:nth-child(3){ animation-delay:0.4s; }
+@keyframes blink{ from{opacity:0.2;} to{opacity:1;} }
 </style>
 </head>
 <body>
+
+<div id="pageTransition" class="enter"></div>
+
 <div class="box">
 
   <div id="paymentBox">
     <div class="logo-wrap">🔥</div>
     <div class="title">PavenFitzz AI Coach</div>
-    <p style="font-size:13px;color:#555;margin-top:4px;">Your Personal Workout + Diet AI</p>
+    <p style="font-size:13px;color:var(--muted);margin-top:4px;">Your Personal Workout + Diet AI</p>
 
     <div class="price-box">
       <div class="price-label">One Time Payment</div>
