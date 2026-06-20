@@ -84,6 +84,7 @@
 </head>
 <body>
 
+<div id="pageTransition" class="enter"></div>
 
 <div class="wrap">
   <div class="header slide-up">
@@ -99,6 +100,9 @@
   </div>
 
   <div id="mainContent">
+    <div class="hint-box slide-up stagger-2" id="prefillBanner" style="display:none;">
+      ✅ <strong>Using your saved details.</strong> Update any value below if it's changed (e.g. new weight after check-in).
+    </div>
     <div class="card slide-up stagger-2">
       <div class="two-col">
         <div><label class="input-label">Height (cm)</label><input type="number" id="height" placeholder="e.g. 175"></div>
@@ -145,6 +149,31 @@ window.onload = function() {
       `<div class="locked-banner"><div style="font-size:24px;">🔒</div>
       <div><strong>Today's Diet Plan Ready</strong><p>Generated once per day. Come back tomorrow for a fresh plan.</p></div></div>`
       + renderDietHTML(JSON.parse(saved));
+    return;
+  }
+
+  // ✅ PREFILL from setup data — user doesn't have to retype everything
+  const savedHeight   = localStorage.getItem("height");
+  const savedWeight   = localStorage.getItem("weight");
+  const savedAge      = localStorage.getItem("age");
+  const savedGender   = localStorage.getItem("gender");
+  const savedActivity = localStorage.getItem("activity");
+  const savedGoal     = localStorage.getItem("goal"); // bulk/cut/maintain (lowercase from setup.html)
+
+  if (savedHeight)   document.getElementById("height").value = savedHeight;
+  if (savedWeight)   document.getElementById("weight").value = savedWeight;
+  if (savedAge)      document.getElementById("age").value = savedAge;
+  if (savedGender)   document.getElementById("gender").value = savedGender;
+  if (savedActivity) document.getElementById("activity").value = savedActivity;
+
+  // Map setup.html's lowercase goal to this page's dropdown values
+  const goalMap = { bulk: "Bulk", cut: "Cut", maintain: "Maintain" };
+  if (savedGoal && goalMap[savedGoal]) {
+    document.getElementById("userGoal").value = goalMap[savedGoal];
+  }
+
+  if (savedHeight && savedWeight && savedAge) {
+    document.getElementById("prefillBanner").style.display = "block";
   }
 };
 
@@ -234,7 +263,22 @@ Keep it short, practical, Indian foods. No extra text.`;
     const fullData = {bmi,bodyType,tdee,calTarget,macros,bmiPct,goal,parsed,weight,height,age,gender};
     localStorage.setItem("dietData", JSON.stringify(fullData));
     localStorage.setItem("dietDate", new Date().toDateString());
-    localStorage.setItem("goal", goal);
+
+    // ✅ SYNC BACK — keep the main profile keys updated so every other page
+    // (dashboard, meal, future visits) reflects the latest values too
+    localStorage.setItem("height", height);
+    localStorage.setItem("weight", weight);
+    localStorage.setItem("age", age);
+    localStorage.setItem("gender", gender);
+    localStorage.setItem("activity", activity);
+    localStorage.setItem("bmi", bmi);
+    localStorage.setItem("calories", calTarget);
+    localStorage.setItem("protein", macros.protein);
+    localStorage.setItem("carbs", macros.carbs);
+    localStorage.setItem("fats", macros.fat);
+    const goalMapBack = { Bulk: "bulk", Cut: "cut", Maintain: "maintain", Recomp: "cut" };
+    localStorage.setItem("goal", goalMapBack[goal] || goal.toLowerCase());
+
     document.getElementById("dietResult").innerHTML = renderDietHTML(fullData);
   } catch(err) {
     document.getElementById("dietResult").innerHTML = `<div class="error-box">⚠️ ${err.message}</div>`;
@@ -353,9 +397,44 @@ function renderDietHTML(data) {
 
   html+=`
     <div class="lock-note"><strong>🔒 One analysis per day.</strong> Your diet plan resets tomorrow. Stay consistent with your ${goal} goal!</div>
-    <button class="btn-next" onclick="window.location.href='meal.html'">Continue to Meal Planner →</button>`;
+    <button class="btn-next" onclick="goTo('meal.html')">Continue to Meal Planner →</button>`;
   return html;
 }
+</script>
+
+<script>
+// ✅ PAGE TRANSITION
+window.addEventListener("DOMContentLoaded", () => {
+  const pt = document.getElementById("pageTransition");
+  if (pt) requestAnimationFrame(() => pt.classList.remove("enter"));
+});
+
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("javascript:")) return;
+  e.preventDefault();
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+});
+
+window.goTo = function(href) {
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+};
 </script>
 </body>
 </html>
