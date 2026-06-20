@@ -55,6 +55,7 @@
 </head>
 <body>
 
+<div id="pageTransition" class="enter"></div>
 
 <div class="wrap">
   <div class="header slide-up">
@@ -210,9 +211,44 @@ function renderMealHTML(data) {
   html+=`
     <div class="day-note">Today's plan · Resets tomorrow <span>📅 ${new Date().toDateString()}</span></div>
     <div class="locked-note"><strong>✅ One plan per day.</strong> Stay consistent with your goal: ${goal}. Prep meals in advance for best results.</div>
-    <button class="btn-home" onclick="window.location.href='dashboard-premium.html'">Go to Dashboard 🏠</button>`;
+    <button class="btn-home" onclick="goTo('dashboard-premium.html')">Go to Dashboard 🏠</button>`;
   return html;
 }
+</script>
+
+<script>
+// ✅ PAGE TRANSITION
+window.addEventListener("DOMContentLoaded", () => {
+  const pt = document.getElementById("pageTransition");
+  if (pt) requestAnimationFrame(() => pt.classList.remove("enter"));
+});
+
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("javascript:")) return;
+  e.preventDefault();
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+});
+
+window.goTo = function(href) {
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+};
 </script>
 </body>
 </html>
