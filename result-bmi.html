@@ -7,93 +7,60 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 <style>
-.result-wrap{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-  background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(200,245,66,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(200,245,66,0.04) 0%,transparent 55%),#080808;
-}
-.result-card{
-  width:100%;max-width:480px;background:#111110;
-  border:1px solid rgba(255,255,255,0.06);border-radius:24px;
-  padding:36px 28px;animation:fadeUp .45s ease both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .step-top{text-align:center;margin-bottom:24px}
-.step-icon{font-size:32px;margin-bottom:10px}
-.step-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#f0ede6;margin-bottom:4px}
-.step-sub{font-size:12px;color:#6b6b5a;font-family:'DM Sans',sans-serif}
-.prog-dots{display:flex;justify-content:center;gap:6px;margin-bottom:24px}
-.prog-dot{width:32px;height:4px;border-radius:2px;background:rgba(255,255,255,0.08)}
-.prog-dot.active{background:#c8f542}
-
-/* BMI big number */
-.bmi-card{
-  background:rgba(200,245,66,0.06);border:1.5px solid rgba(200,245,66,0.2);
-  border-radius:18px;padding:24px;text-align:center;margin-bottom:16px;
-}
-.bmi-label{font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#6b6b5a;margin-bottom:8px;font-family:'DM Sans',sans-serif}
-.bmi-val{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:#c8f542;line-height:1;margin-bottom:10px}
-.bmi-tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 16px;border-radius:50px;font-family:'DM Sans',sans-serif}
-
-/* BMI bar */
+.step-sub{font-size:12px;color:var(--muted);margin-top:4px}
 .bmi-bar-wrap{margin:16px 0}
-.bmi-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:#6b6b5a;margin-bottom:6px;font-family:'DM Sans',sans-serif}
-.bmi-bar{height:8px;border-radius:99px;background:linear-gradient(90deg,#4592f0,#c8f542,#f0c040,#f04545);position:relative}
-.bmi-marker{position:absolute;top:-4px;width:16px;height:16px;background:#f0ede6;border-radius:50%;border:2.5px solid #080808;transform:translateX(-50%);transition:left 1s ease}
-.bmi-range-nums{display:flex;justify-content:space-between;font-size:9px;color:#3a3a30;margin-top:4px;font-family:'DM Sans',sans-serif}
-
-/* info grid */
+.bmi-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:6px}
+.bmi-bar{height:8px;border-radius:var(--r-full);background:linear-gradient(90deg,var(--blue),var(--accent),var(--gold),var(--red));position:relative;box-shadow:0 0 16px rgba(0,0,0,.3)}
+.bmi-marker{position:absolute;top:-4px;width:16px;height:16px;background:var(--white);border-radius:50%;border:2.5px solid var(--bg);transform:translateX(-50%);transition:left 1s var(--spring);box-shadow:0 0 12px rgba(255,255,255,0.6);left:0%}
+.bmi-range-nums{display:flex;justify-content:space-between;font-size:9px;color:var(--dim);margin-top:4px}
 .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
-.info-box{background:#161615;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;text-align:center}
-.info-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#6b6b5a;margin-bottom:5px;font-family:'DM Sans',sans-serif}
-.info-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#f0ede6}
-
-/* tip */
-.tip-box{background:rgba(240,192,64,0.06);border:1px solid rgba(240,192,64,0.15);border-radius:12px;padding:13px 15px;font-size:12px;color:#a0a080;line-height:1.9;font-family:'DM Sans',sans-serif;white-space:pre-line;margin-bottom:16px}
-
-.next-btn{width:100%;padding:14px;border:none;border-radius:12px;background:#c8f542;color:#080808;font-size:15px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
-.next-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(200,245,66,0.28)}
-.back-btn{width:100%;padding:12px;border:1px solid rgba(255,255,255,0.06);border-radius:12px;background:transparent;color:#6b6b5a;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:8px;transition:all .2s}
-.back-btn:hover{color:#f0ede6;border-color:rgba(255,255,255,0.15)}
+.tip-box{background:rgba(240,192,64,0.06);backdrop-filter:var(--glass-blur-sm);border:1px solid rgba(240,192,64,0.15);border-radius:var(--r-md);padding:13px 15px;font-size:12px;color:#bcae84;line-height:1.9;white-space:pre-line;margin-bottom:16px}
 </style>
 </head>
-<body>
-<div class="result-wrap">
-  <div class="result-card">
+<body class="fade-in">
+<div id="pageTransition" class="exit"></div>
+
+<div class="container">
+  <div class="card">
     <div class="step-top">
-      <div class="step-icon">📊</div>
-      <div class="step-title">Your BMI Result</div>
-      <div class="step-sub">Step 1 of 3 — Body Mass Index</div>
-    </div>
-    <div class="prog-dots">
-      <div class="prog-dot active"></div>
-      <div class="prog-dot"></div>
-      <div class="prog-dot"></div>
+      <div class="logo-wrap"><span style="font-size:24px">📊</span></div>
+      <h1 class="slide-up stagger-1">Your BMI Result</h1>
+      <p class="step-sub slide-up stagger-1">Step 1 of 3 — Body Mass Index</p>
+      <div class="step-indicator slide-up stagger-2">
+        <div class="step-dot done"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
     </div>
 
-    <div class="bmi-card">
-      <div class="bmi-label">Your BMI</div>
-      <div class="bmi-val" id="bmiVal">—</div>
-      <div class="bmi-tag" id="bmiTag">—</div>
+    <div class="bmi-result-card slide-up stagger-2">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px">Your BMI</div>
+      <div class="bmi-result-val" id="bmiVal">—</div>
+      <div class="bmi-result-tag" id="bmiTag">—</div>
       <div class="bmi-bar-wrap">
         <div class="bmi-bar-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
-        <div class="bmi-bar"><div class="bmi-marker" id="bmiMarker" style="left:0%"></div></div>
+        <div class="bmi-bar"><div class="bmi-marker" id="bmiMarker"></div></div>
         <div class="bmi-range-nums"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
       </div>
     </div>
 
-    <div class="info-grid">
-      <div class="info-box"><div class="info-lbl">Healthy Range</div><div class="info-val">18.5 — 24.9</div></div>
-      <div class="info-box"><div class="info-lbl">Ideal Weight</div><div class="info-val" id="idealVal">—</div></div>
-      <div class="info-box"><div class="info-lbl">Your Weight</div><div class="info-val" id="weightVal">—</div></div>
-      <div class="info-box"><div class="info-lbl">Goal</div><div class="info-val" id="goalVal">—</div></div>
+    <div class="info-grid slide-up stagger-3">
+      <div class="stat-box"><div class="stat-tile-label">Healthy Range</div><div class="stat-tile-val" style="font-size:14px">18.5–24.9</div></div>
+      <div class="stat-box"><div class="stat-tile-label">Ideal Weight</div><div class="stat-tile-val" style="font-size:14px" id="idealVal">—</div></div>
+      <div class="stat-box"><div class="stat-tile-label">Your Weight</div><div class="stat-tile-val" style="font-size:14px" id="weightVal">—</div></div>
+      <div class="stat-box"><div class="stat-tile-label">Goal</div><div class="stat-tile-val" style="font-size:14px" id="goalVal">—</div></div>
     </div>
 
-    <div class="tip-box" id="tipBox"></div>
+    <div class="tip-box slide-up stagger-4" id="tipBox"></div>
 
-    <button class="next-btn" onclick="location.href='result-calories.html'">Next → Calorie Target ⚡</button>
-    <button class="back-btn" onclick="location.href='setup.html'">← Edit Details</button>
+    <div class="slide-up stagger-5">
+      <button class="primary-btn" onclick="goNext()">Next → Calorie Target ⚡</button>
+      <button class="secondary-btn" style="margin-top:8px" onclick="goBack()">← Edit Details</button>
+    </div>
   </div>
 </div>
+
 <script>
 if(!localStorage.getItem("setup_done")){location.href="setup.html";}
 const bmi=parseFloat(localStorage.getItem("bmi")||0);
@@ -104,7 +71,7 @@ const goal=localStorage.getItem("goal")||"maintain";
 
 document.getElementById("bmiVal").innerText=bmi;
 document.getElementById("weightVal").innerText=weight+"kg";
-document.getElementById("idealVal").innerText=idealMin+" – "+idealMax+"kg";
+document.getElementById("idealVal").innerText=idealMin+"–"+idealMax+"kg";
 document.getElementById("goalVal").innerText=goal.toUpperCase();
 
 let tag,color,tip;
@@ -120,9 +87,24 @@ tagEl.style.color=color;
 tagEl.style.border="1px solid "+color+"40";
 document.getElementById("tipBox").innerText=tip;
 
-// marker position
 const pct=Math.min(100,Math.max(0,((bmi-15)/(40-15))*100));
-setTimeout(()=>{document.getElementById("bmiMarker").style.left=pct+"%";},300);
+setTimeout(()=>{document.getElementById("bmiMarker").style.left=pct+"%";},800);
+
+localStorage.setItem("bmi_done","true");
+
+window.addEventListener("DOMContentLoaded",()=>{
+  setTimeout(()=>{document.getElementById("pageTransition").classList.add("exit");},50);
+});
+function goNext(){
+  const t=document.getElementById("pageTransition");
+  t.classList.remove("exit");t.classList.add("enter");
+  setTimeout(()=>{location.href="result-calories.html";},480);
+}
+function goBack(){
+  const t=document.getElementById("pageTransition");
+  t.classList.remove("exit");t.classList.add("enter");
+  setTimeout(()=>{location.href="setup.html";},480);
+}
 </script>
 </body>
 </html>
