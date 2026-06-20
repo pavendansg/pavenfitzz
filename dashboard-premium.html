@@ -1,99 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PavenFitzz — Premium Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-:root{--bg:#080808;--card:#101010;--green:#00ff88;--blue:#00c3ff;--gold:#ffd000;--red:#ff4455;--orange:#ff7700;--border:rgba(255,255,255,0.07);--muted:#666;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height:100vh;}
-.wrap{max-width:860px;margin:auto;padding:24px 16px 60px;}
 .brand{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:12px;}
-.card-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.card-icon{font-size:18px;}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1.5px;color:var(--green);flex:1;}
-.card-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.2);}
-.card-badge.green{background:rgba(0,255,136,0.08);color:var(--green);border-color:rgba(0,255,136,0.2);}
-.card-badge.red{background:rgba(255,68,85,0.08);color:var(--red);border-color:rgba(255,68,85,0.2);}
-.stats-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
-.stats-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.stat-box{background:#0d0d0d;border-radius:12px;padding:12px;text-align:center;}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;}
-.stat-val.green{color:var(--green);}
-.stat-val.gold{color:var(--gold);}
-.stat-val.blue{color:var(--blue);}
-.stat-val.orange{color:var(--orange);}
-.stat-lbl{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-.prog-wrap{height:6px;background:#1a1a1a;border-radius:99px;overflow:hidden;margin:8px 0;}
-.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .5s ease;}
-.workout-box{background:#0d0d0d;border-radius:12px;padding:12px;font-size:12px;line-height:1.9;color:#aaa;font-family:'DM Mono',monospace;max-height:140px;overflow-y:auto;}
-.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
-.ai-card{background:linear-gradient(135deg,#0d150d,#0a0f0a);border:1px solid rgba(0,255,136,0.15);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .2s;}
-.ai-card:hover{transform:translateY(-3px);border-color:rgba(0,255,136,0.4);}
-.ai-card:active{transform:scale(0.97);}
-.ai-card-icon{font-size:22px;margin-bottom:6px;}
-.ai-card-name{font-size:11px;font-weight:800;color:#fff;margin-bottom:3px;}
-.ai-card-status{font-size:10px;color:var(--muted);}
-.ai-card-status.done{color:var(--green);}
-.drops{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
-.drop{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#1a1a1a;border:1px solid #333;transition:all .3s;}
-.drop.filled{background:var(--blue);border-color:var(--blue);}
-.mission-list{display:flex;flex-direction:column;gap:6px;}
-.mission-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#555;padding:9px 12px;background:#0d0d0d;border-radius:10px;border:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:.2s;user-select:none;}
-.mission-item.done{color:var(--green);border-color:rgba(0,255,136,0.12);background:rgba(0,255,136,0.03);}
-.mission-dot{width:18px;height:18px;border-radius:50%;border:2px solid #2a2a2a;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
-.mission-dot.done{background:var(--green);border-color:var(--green);color:#000;}
-.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif;}
-.btn-green{background:var(--green);color:#000;}
-.btn-green:hover{background:#00ffaa;}
-.btn-row{display:flex;gap:8px;margin-top:10px;}
-.btn-row .btn{flex:1;}
-.btn-outline{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.08);font-size:13px;padding:12px;}
-.btn-red{background:transparent;color:var(--red);border:1px solid rgba(255,68,85,0.2);margin-top:16px;font-size:13px;padding:12px;width:100%;border-radius:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
-.streak-hero{position:relative;background:linear-gradient(150deg,#161616,#1a1006 80%);border:1.5px solid rgba(255,208,0,0.35);border-radius:22px;padding:20px;margin-bottom:14px;box-shadow:0 0 30px rgba(255,119,0,0.08);overflow:hidden;}
-.premium-tag{position:absolute;top:14px;right:14px;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;font-size:10px;font-weight:800;padding:4px 11px;border-radius:99px;font-family:'DM Mono',monospace;letter-spacing:0.5px;}
+
+/* ====== STREAK HERO CARD (Chess.com style) ====== */
+.streak-hero{
+  position:relative;
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border:1.5px solid rgba(240,192,64,0.25);
+  border-radius:var(--r-xl);
+  padding:20px;
+  margin-bottom:14px;
+  box-shadow:0 0 40px rgba(240,192,64,0.08), 0 20px 60px rgba(0,0,0,0.3);
+  animation: rankPulse 4s ease-in-out infinite, cardIn .7s var(--spring) both;
+}
+.premium-tag{
+  position:absolute;top:14px;right:14px;
+  background:linear-gradient(135deg,var(--gold),var(--orange));
+  color:#080808;font-size:10px;font-weight:800;
+  padding:4px 11px;border-radius:var(--r-full);
+  font-family:var(--font-mono);letter-spacing:0.5px;
+}
 .streak-hero-top{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
-.streak-avatar{width:58px;height:58px;border-radius:50%;border:2.5px solid var(--green);background:#111;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0;}
+.streak-avatar{
+  width:58px;height:58px;border-radius:50%;
+  border:2.5px solid var(--green);background:#111;
+  backdrop-filter: var(--glass-blur-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;overflow:hidden;flex-shrink:0;
+  box-shadow: 0 0 20px rgba(0,255,136,0.15);
+}
 .streak-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .streak-user-info{flex:1;min-width:0;}
 .streak-username{font-size:17px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .streak-rank{font-size:12px;font-weight:700;color:var(--gold);margin-top:3px;letter-spacing:0.5px;}
-.flame-icon{font-size:26px;line-height:1;filter:drop-shadow(0 0 10px rgba(255,119,0,0.55));animation:flamePulse 1.7s ease-in-out infinite;}
+
+.flame-icon{
+  font-size:26px;line-height:1;
+  filter:drop-shadow(0 0 10px rgba(240,112,64,0.55));
+  animation:flamePulse 1.7s ease-in-out infinite;
+}
 .flame-text{display:flex;flex-direction:column;align-items:flex-start;}
 .flame-num{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);line-height:1.2;}
-.flame-label{font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1.5px;}
+.flame-label{font-size:9px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1.5px;}
 @keyframes flamePulse{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.12) rotate(-3deg)}}
-.streak-flame-badge{cursor:pointer;transition:transform .15s;border-radius:14px;padding:8px 14px;background:rgba(255,119,0,0.06);border:1px solid rgba(255,119,0,0.15);display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.streak-flame-badge:hover{transform:translateY(-2px);background:rgba(255,119,0,0.1);}
+
+.streak-flame-badge{
+  cursor:pointer;transition:transform .2s var(--spring);
+  border-radius:var(--r-md);padding:8px 14px;
+  background: rgba(240,112,64,0.06);
+  backdrop-filter: var(--glass-blur-sm);
+  border:1px solid rgba(240,112,64,0.18);
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+}
+.streak-flame-badge:hover{transform:translateY(-2px);background:rgba(240,112,64,0.1);}
 .streak-flame-badge:active{transform:scale(0.96);}
-.streak-footer{font-size:12px;color:var(--gold);font-weight:700;text-align:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
-.streak-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+
+.streak-footer{
+  font-size:12px;color:var(--gold);font-weight:700;
+  text-align:center;padding-top:12px;
+  border-top:1px solid var(--glass-border);
+}
+
+/* ====== STREAK MODAL (matches Chess.com reference) ====== */
+.streak-modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  backdrop-filter:blur(14px);z-index:300;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
 .streak-modal-overlay.show{opacity:1;pointer-events:all;}
-.streak-modal{background:linear-gradient(150deg,#161616,#1a1006 85%);border:1.5px solid rgba(255,208,0,0.3);border-radius:24px;padding:32px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 0 50px rgba(255,119,0,0.15);transform:scale(0.9);transition:transform .25s;}
+.streak-modal{
+  background: var(--glass);
+  backdrop-filter: var(--glass-blur);
+  border:1.5px solid rgba(240,192,64,0.25);
+  border-radius:var(--r-xl);padding:32px 28px;
+  max-width:380px;width:100%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 80px rgba(240,112,64,0.08);
+  transform:scale(0.9);transition:transform .3s var(--spring);
+}
 .streak-modal-overlay.show .streak-modal{transform:scale(1);}
-.modal-flame-wrap{width:84px;height:84px;border-radius:50%;background:rgba(255,119,0,0.08);border:2px solid rgba(255,119,0,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-.modal-flame{font-size:46px;filter:drop-shadow(0 0 14px rgba(255,119,0,0.6));}
+.modal-flame-wrap{
+  width:84px;height:84px;border-radius:50%;
+  background: rgba(240,112,64,0.08);
+  backdrop-filter: var(--glass-blur-sm);
+  border:2px solid rgba(240,112,64,0.2);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+.modal-flame{font-size:46px;filter:drop-shadow(0 0 14px rgba(240,112,64,0.6));}
 .modal-streak-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#fff;margin-bottom:18px;}
 .modal-week-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:18px;}
 .modal-week-day{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
-.modal-week-day-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px;}
-.modal-week-day-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;border:2px solid #2a2a2a;background:#0d0d0d;color:#444;}
-.modal-week-day-circle.done{background:linear-gradient(135deg,var(--green),#00cc6e);border-color:var(--green);color:#000;box-shadow:0 0 10px rgba(0,255,136,0.35);}
-.modal-week-day-circle.today{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,208,0,0.15);}
-.modal-week-day-circle.today.done{background:linear-gradient(135deg,var(--green),var(--gold));box-shadow:0 0 12px rgba(255,208,0,0.4);}
+.modal-week-day-label{font-size:10px;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px;}
+.modal-week-day-circle{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;
+  border:2px solid var(--glass-border);background:var(--glass);
+  backdrop-filter: var(--glass-blur-sm);
+  color:#444;transition: all .25s var(--spring);
+}
+.modal-week-day-circle.done{
+  background:linear-gradient(135deg,var(--green),#00cc6e);
+  border-color:var(--green);color:#080808;
+  box-shadow:0 0 14px rgba(0,255,136,0.4);
+}
+.modal-week-day-circle.today{border-color:var(--gold);box-shadow:0 0 0 3px rgba(240,192,64,0.15);}
+.modal-week-day-circle.today.done{background:linear-gradient(135deg,var(--green),var(--gold));box-shadow:0 0 16px rgba(240,192,64,0.45);}
 .modal-message{font-size:13px;color:#aaa;line-height:1.7;margin-bottom:20px;}
-.modal-close-btn{width:100%;padding:13px;border:none;border-radius:12px;background:var(--green);color:#000;font-size:14px;font-weight:800;cursor:pointer;font-family:'Syne',sans-serif;}
+.modal-close-btn{
+  width:100%;padding:13px;border:none;border-radius:var(--r-md);
+  background: linear-gradient(135deg,var(--green),var(--blue));
+  color:#080808;font-size:14px;font-weight:800;
+  cursor:pointer;font-family:var(--font-body);
+  transition: all .25s var(--spring);
+}
+.modal-close-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,255,136,0.3);}
+
+/* ====== DASHBOARD CARDS ====== */
+.workout-box{
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: var(--glass-blur-sm);
+  border-radius:var(--r-sm);padding:12px;
+  font-size:12px;line-height:1.9;color:var(--muted);
+  font-family:var(--font-mono);max-height:130px;overflow-y:auto;
+  border:1px solid var(--glass-border);
+}
+.btn-row{display:flex;gap:8px;margin-top:10px;}
+.btn-row button{flex:1;margin:0;}
+.btn-red{
+  background: transparent;color:var(--red);
+  border:1px solid rgba(240,69,69,0.25);
+  margin-top:16px;font-size:13px;padding:12px;width:100%;
+  border-radius:var(--r-md);cursor:pointer;
+  font-family:var(--font-body);font-weight:700;
+  transition: all .25s var(--spring);
+}
+.btn-red:hover{background:rgba(240,69,69,0.06);transform:translateY(-2px);}
 </style>
 </head>
 <body>
+
+<div id="pageTransition" class="enter"></div>
+
 <div class="wrap">
 
-  <div class="brand">PavenFitzz Dashboard</div>
+  <div class="brand fade-in">PavenFitzz Dashboard</div>
 
+  <!-- STREAK HERO CARD -->
   <div class="streak-hero">
     <span class="premium-tag">⚡ PREMIUM</span>
     <div class="streak-hero-top">
@@ -116,6 +181,7 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
     <div class="streak-footer" id="rankSub">Keep going!</div>
   </div>
 
+  <!-- STREAK DETAIL MODAL -->
   <div class="streak-modal-overlay" id="streakModalOverlay" onclick="if(event.target===this)closeStreakModal()">
     <div class="streak-modal">
       <div class="modal-flame-wrap"><div class="modal-flame">🔥</div></div>
@@ -126,30 +192,44 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
     </div>
   </div>
 
-  <div class="stats-4" style="margin-bottom:12px;">
+  <div class="stats-4 slide-up stagger-1">
     <div class="stat-box"><div class="stat-val green" id="bmiVal">—</div><div class="stat-lbl">BMI</div></div>
     <div class="stat-box"><div class="stat-val gold" id="weightVal">—</div><div class="stat-lbl">Weight</div></div>
     <div class="stat-box"><div class="stat-val blue" id="calVal">—</div><div class="stat-lbl">Calories</div></div>
     <div class="stat-box"><div class="stat-val orange" id="goalVal">—</div><div class="stat-lbl">Goal</div></div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">⚡</span><span class="card-title">Level Progress</span><span class="card-badge" id="levelBadge">Lvl 1</span></div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;"><span id="xpText">0 / 100 XP</span><span id="xpPct">0%</span></div>
+  <div class="card slide-up stagger-2">
+    <div class="card-header">
+      <span class="card-icon">⚡</span>
+      <span class="card-title">Level Progress</span>
+      <span class="card-badge" id="levelBadge">Lvl 1</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;">
+      <span id="xpText">0 / 100 XP</span>
+      <span id="xpPct">0%</span>
+    </div>
     <div class="prog-wrap"><div class="prog-fill" id="xpBar" style="width:0%"></div></div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">💪</span><span class="card-title">Today's Workout</span><span class="card-badge green" id="workoutBadge">—</span></div>
+  <div class="card slide-up stagger-3">
+    <div class="card-header">
+      <span class="card-icon">💪</span>
+      <span class="card-title">Today's Workout</span>
+      <span class="card-badge green" id="workoutBadge">—</span>
+    </div>
     <div class="workout-box" id="workoutBox">No workout generated yet.</div>
     <div class="btn-row">
-      <button class="btn btn-green" onclick="completeWorkout()">Done ✅</button>
-      <button class="btn btn-outline" onclick="location.href='workout.html'">Full Plan →</button>
+      <button class="primary-btn" onclick="completeWorkout()">Done ✅</button>
+      <button class="secondary-btn" onclick="goTo('workout.html')">Full Plan →</button>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🍽️</span><span class="card-title">Daily Targets</span></div>
+  <div class="card slide-up stagger-4">
+    <div class="card-header">
+      <span class="card-icon">🍽️</span>
+      <span class="card-title">Daily Targets</span>
+    </div>
     <div class="stats-3">
       <div class="stat-box"><div class="stat-val orange" id="calTarget">—</div><div class="stat-lbl">Calories</div></div>
       <div class="stat-box"><div class="stat-val green" id="protTarget">—</div><div class="stat-lbl">Protein</div></div>
@@ -157,47 +237,56 @@ body{background:var(--bg);color:#f0f0f0;font-family:'Syne',sans-serif;min-height
     </div>
     <div style="margin-top:12px;">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;">
-        <span>Protein <span style="color:#ff6b6b;" id="pPct">0%</span></span>
+        <span>Protein <span style="color:#f06464;" id="pPct">0%</span></span>
         <span>Carbs <span style="color:var(--gold);" id="cPct">0%</span></span>
         <span>Fats <span style="color:var(--green);" id="fPct">0%</span></span>
       </div>
-      <div style="display:flex;height:6px;border-radius:99px;overflow:hidden;background:#1a1a1a;">
-        <div id="pBar" style="background:#ff6b6b;transition:width .5s;"></div>
-        <div id="cBar" style="background:var(--gold);transition:width .5s;"></div>
-        <div id="fBar" style="background:var(--green);transition:width .5s;"></div>
+      <div style="display:flex;height:6px;border-radius:var(--r-full);overflow:hidden;background:rgba(255,255,255,0.05);">
+        <div id="pBar" style="background:#f06464;transition:width .5s var(--ease);"></div>
+        <div id="cBar" style="background:var(--gold);transition:width .5s var(--ease);"></div>
+        <div id="fBar" style="background:var(--green);transition:width .5s var(--ease);"></div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">💧</span><span class="card-title">Water Intake</span><span class="card-badge green" id="waterBadge">0 / 4L</span></div>
+  <div class="card slide-up stagger-5">
+    <div class="card-header">
+      <span class="card-icon">💧</span>
+      <span class="card-title">Water Intake</span>
+      <span class="card-badge green" id="waterBadge">0 / 4L</span>
+    </div>
     <div class="drops" id="drops"></div>
-    <button class="btn btn-green" style="margin-top:12px;font-size:13px;padding:10px;" onclick="addWater()">+ Add Water 💧</button>
+    <button class="primary-btn" style="margin-top:12px;font-size:13px;padding:10px;" onclick="addWater()">+ Add Water 💧</button>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🤖</span><span class="card-title">AI Tools</span><span class="card-badge green">Premium</span></div>
+  <div class="card slide-up">
+    <div class="card-header">
+      <span class="card-icon">🤖</span>
+      <span class="card-title">AI Tools</span>
+      <span class="card-badge green">Premium</span>
+    </div>
     <div class="ai-grid">
-      <div class="ai-card" onclick="location.href='workout.html'"><div class="ai-card-icon">💪</div><div class="ai-card-name">Workout</div><div class="ai-card-status" id="wStatus">—</div></div>
-      <div class="ai-card" onclick="location.href='diet.html'"><div class="ai-card-icon">🧬</div><div class="ai-card-name">Diet</div><div class="ai-card-status" id="dStatus">—</div></div>
-      <div class="ai-card" onclick="location.href='meal.html'"><div class="ai-card-icon">🍗</div><div class="ai-card-name">Meal</div><div class="ai-card-status" id="mStatus">—</div></div>
+      <div class="ai-card" onclick="goTo('workout.html')">
+        <div class="ai-card-icon">💪</div>
+        <div class="ai-card-name">Workout</div>
+        <div class="ai-card-status" id="wStatus">—</div>
+      </div>
+      <div class="ai-card" onclick="goTo('diet.html')">
+        <div class="ai-card-icon">🧬</div>
+        <div class="ai-card-name">Diet</div>
+        <div class="ai-card-status" id="dStatus">—</div>
+      </div>
+      <div class="ai-card" onclick="goTo('meal.html')">
+        <div class="ai-card-icon">🍗</div>
+        <div class="ai-card-name">Meal</div>
+        <div class="ai-card-status" id="mStatus">—</div>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header"><span class="card-icon">📋</span><span class="card-title">Daily Missions</span><span class="card-badge" id="missionCount">0/4</span></div>
-    <p style="font-size:11px;color:#444;margin-bottom:10px;">Tap to complete · Resets daily</p>
-    <div class="mission-list" id="missions"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><span class="card-icon">🏅</span><span class="card-title">Achievements</span></div>
-    <div id="badges" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
-  </div>
-
-  <div class="btn-row">
-    <button class="btn btn-green" onclick="location.href='bmi.html'">Check-In ✅</button>
-    <button class="btn btn-outline" onclick="location.href='graph.html'">Progress 📈</button>
+  <div class="btns slide-up">
+    <button class="primary-btn" onclick="goTo('result-bmi.html')">Check-In ✅</button>
+    <button class="secondary-btn" onclick="goTo('graph.html')">Progress 📈</button>
   </div>
   <button class="btn-red" onclick="logout()">Logout</button>
 
@@ -218,13 +307,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ✅ LOGOUT — keep setup_done and premium so returning users skip setup & repayment
+// ✅ LOGOUT — keep setup_done so returning users skip setup
 window.logout = async function() {
   try { await signOut(auth); } catch(e) { console.error(e); }
   const setupDone = localStorage.getItem("setup_done");
   localStorage.clear();
   if (setupDone) localStorage.setItem("setup_done", setupDone);
-  // premium is re-checked from Firestore on every login, no need to keep it
   location.href = "login.html";
 };
 
@@ -299,17 +387,6 @@ function checkAI(){
   if(m===today){ms.innerText="✓ Today";ms.className="ai-card-status done";}else ms.innerText="Not done";
 }
 
-const todayStr=new Date().toISOString().split("T")[0];
-if(localStorage.getItem("missionDay")!==todayStr){["workout","sleep","water","checkin"].forEach(id=>localStorage.removeItem("mission_"+id));localStorage.setItem("missionDay",todayStr);}
-localStorage.setItem("mission_checkin","true");
-const missionDefs=[{id:"workout",text:"Workout today 💪"},{id:"sleep",text:"Sleep 8 hours 😴"},{id:"water",text:"Drink 8 glasses 💧"},{id:"checkin",text:"Daily check-in ✅"}];
-function renderMissions(){
-  const done=missionDefs.filter(m=>localStorage.getItem("mission_"+m.id)==="true").length;
-  document.getElementById("missionCount").innerText=done+"/"+missionDefs.length;
-  document.getElementById("missions").innerHTML=missionDefs.map(m=>{const d=localStorage.getItem("mission_"+m.id)==="true";return`<div class="mission-item ${d?"done":""}" onclick="toggleMission('${m.id}')"><div class="mission-dot ${d?"done":""}">${d?"✓":""}</div><span>${m.text}</span></div>`;}).join("");
-}
-window.toggleMission=function(id){if(id==="checkin")return;localStorage.setItem("mission_"+id,String(localStorage.getItem("mission_"+id)!=="true"));renderMissions();};
-
 onAuthStateChanged(auth,async(user)=>{
   if(!user){location.href="login.html";return;}
   const snap=await getDocs(collection(db,"users",user.uid,"daily"));
@@ -365,11 +442,43 @@ onAuthStateChanged(auth,async(user)=>{
 
   const xp=streak*10,level=Math.floor(xp/100)+1,curXP=xp%100;
   document.getElementById("levelBadge").innerText="Lvl "+level;document.getElementById("xpText").innerText=curXP+" / 100 XP";document.getElementById("xpPct").innerText=curXP+"%";document.getElementById("xpBar").style.width=curXP+"%";
-
-  const badgeData=[{label:"🌱 First Check-In",show:true},{label:"⚡ Contender",show:streak>=7},{label:"🔥 Warrior",show:streak>=30},{label:"💎 Beast",show:streak>=90},{label:"👑 Elite",show:streak>=180},{label:"⚡ Premium",show:true}];
-  document.getElementById("badges").innerHTML=badgeData.filter(b=>b.show).map(b=>`<span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.15);color:#00ff88;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px;">${b.label}</span>`).join("");
 });
-loadWater();loadWorkout();checkAI();renderMissions();
+loadWater();loadWorkout();checkAI();
+</script>
+
+<script>
+// ✅ PAGE TRANSITION — slides cover away on load, slides back in before navigating away
+window.addEventListener("DOMContentLoaded", () => {
+  const pt = document.getElementById("pageTransition");
+  if (pt) requestAnimationFrame(() => pt.classList.remove("enter"));
+});
+
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("javascript:")) return;
+  e.preventDefault();
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+});
+
+window.goTo = function(href) {
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+};
 </script>
 </body>
 </html>
