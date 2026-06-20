@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EvolveFit — Daily Check-In</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.ci-top{text-align:center;margin-bottom:24px}
+.ci-user{font-size:13px;color:var(--muted);margin-bottom:6px}
+.ci-sub{font-size:12px;color:var(--muted);margin-bottom:8px}
+input#weightInput{
+  text-align:center;font-size:20px;font-weight:800;
+  font-family:var(--font-display);color:var(--accent);
+  padding:18px;
+}
+.success-state{display:none;text-align:center}
+.success-icon{font-size:48px;margin-bottom:12px}
+.success-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.bmi-mini{
+  font-family:var(--font-display);font-size:42px;font-weight:800;
+  color:var(--accent);margin-bottom:8px;text-shadow:0 0 40px rgba(200,245,66,0.4);
+}
+</style>
+</head>
+<body class="fade-in">
+<div id="pageTransition" class="exit"></div>
+
+<div class="container">
+  <div class="card">
+    <div id="inputState">
+      <div class="ci-top">
+        <div class="logo-wrap"><span style="font-size:24px">📝</span></div>
+        <div class="ci-user slide-up stagger-1" id="ciUser"></div>
+        <h1 class="slide-up stagger-1">Daily Check-In</h1>
+        <p class="ci-sub slide-up stagger-1">Log today's weight and track your progress</p>
+      </div>
+
+      <div class="slide-up stagger-2">
+        <label class="input-label">Today's Weight (kg)</label>
+        <input type="number" id="weightInput" placeholder="e.g. 72" step="0.1"/>
+      </div>
+
+      <div class="slide-up stagger-3">
+        <button class="primary-btn" onclick="doCheckin()" style="margin-top:16px">Save Check-In ✅</button>
+        <div class="btns">
+          <button class="secondary-btn" onclick="goHome()">← Home</button>
+          <button class="secondary-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="successState" class="success-state">
+      <div class="success-icon">✅</div>
+      <h1>Check-In Saved!</h1>
+      <div class="success-sub" id="successSub"></div>
+      <div class="bmi-mini" id="newBmi">—</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Your BMI</div>
+      <button class="primary-btn" onclick="goHome()">Go to Progress →</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const cfg = {apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
+const app = initializeApp(cfg);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let currentUser = null;
+
+document.getElementById("ciUser").innerText = "Hey, " + (localStorage.getItem("username") || "there") + " 👋";
+const savedW = localStorage.getItem("weight");
+if (savedW) document.getElementById("weightInput").value = savedW;
+
+onAuthStateChanged(auth, u => {
+  if (!u) { location.href = "login.html"; return; }
+  currentUser = u;
+  if (!localStorage.getItem("setup_done")) { location.href = "setup.html"; }
+});
+
+window.doCheckin = async function() {
+  const w = +document.getElementById("weightInput").value;
+  if (!w) { alert("Enter your weight ⚠️"); return; }
+  const h = +localStorage.getItem("height") / 100;
+  const bmi = +(w / (h * h)).toFixed(1);
+  const cal = +localStorage.getItem("calories");
+  const goal = localStorage.getItem("goal");
+
+  localStorage.setItem("weight", w);
+  localStorage.setItem("bmi", bmi);
+
+  if (currentUser) {
+    const today = new Date().toISOString().split("T")[0];
+    await setDoc(doc(db, "users", currentUser.uid, "daily", today), { bmi, weight: w, calories: cal, goal, date: today });
+  }
+
+  document.getElementById("inputState").style.display = "none";
+  document.getElementById("successState").style.display = "block";
+  document.getElementById("successState").classList.add("slide-up");
+  document.getElementById("newBmi").innerText = bmi;
+  document.getElementById("successSub").innerText = "Weight: " + w + "kg · BMI: " + bmi;
+
+  setTimeout(() => goHome(), 2000);
+};
+
+window.goHome = function() {
+  const t = document.getElementById("pageTransition");
+  t.classList.remove("exit"); t.classList.add("enter");
+  setTimeout(() => {
+    if (localStorage.getItem("premium") === "true") {
+      location.href = "dashboard-premium.html";
+    } else {
+      location.href = "graph.html";
+    }
+  }, 480);
+};
+window.logout = function() { localStorage.clear(); location.href = "login.html"; };
+
+window.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => { document.getElementById("pageTransition").classList.add("exit"); }, 50);
+});
+</script>
+</body>
+</html>
