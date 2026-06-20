@@ -145,6 +145,14 @@ section{padding:100px 6%}
 .mini-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(200,245,66,0.18);min-height:8px;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
 .mini-bar.hi{background:var(--accent)}
 
+/* ── STATS BAR ── */
+.stats-section{padding:64px 6%;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:#0a0a09;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1100px;margin:0 auto;}
+.stat-item{text-align:center;padding:0 20px;position:relative;}
+.stat-item:not(:last-child)::after{content:'';position:absolute;right:0;top:10%;height:80%;width:1px;background:var(--border);}
+.stat-num{font-family:var(--font-display);font-size:clamp(32px,4vw,48px);font-weight:800;color:var(--accent);letter-spacing:-1px;line-height:1;}
+.stat-label{font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:0.02em;}
+
 /* ── HOW IT WORKS ── */
 .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .steps{margin-top:40px}
@@ -185,6 +193,62 @@ section{padding:100px 6%}
 .rank-req{font-size:12px;color:var(--muted);line-height:1.5}
 .rank-days{display:inline-block;margin-top:10px;background:rgba(255,255,255,0.05);font-size:11px;color:var(--muted);font-weight:600;padding:3px 10px;border-radius:50px;letter-spacing:0.06em;}
 .rank-card.crown .rank-days{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(200,245,66,0.2);}
+
+/* ── PRICING ── */
+.pricing-wrap{max-width:420px;margin:0 auto;}
+.price-card{
+  background:linear-gradient(160deg,#121710,#0e0e0c);
+  border:1.5px solid rgba(200,245,66,0.25);
+  border-radius:24px;padding:44px 36px;text-align:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(200,245,66,0.06);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.price-card:hover{transform:translateY(-6px);}
+.price-badge{
+  display:inline-block;background:var(--accent);color:#080808;
+  font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  padding:5px 14px;border-radius:50px;margin-bottom:20px;
+}
+.price-amount{font-family:var(--font-display);font-size:64px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-2px;}
+.price-amount sup{font-size:24px;top:-28px;}
+.price-period{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:28px;}
+.price-features{list-style:none;text-align:left;margin-bottom:32px;}
+.price-features li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(240,237,230,0.8);padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.price-features li:last-child{border-bottom:none;}
+.price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;}
+.price-fine{font-size:12px;color:var(--muted);margin-top:16px;}
+
+/* ── TESTIMONIALS ── */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.testi-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:28px 26px;transition:all .3s cubic-bezier(.34,1.56,.64,1);
+}
+.testi-card:hover{transform:translateY(-5px);border-color:rgba(200,245,66,0.2);background:#141413;}
+.testi-stars{color:var(--accent);font-size:14px;margin-bottom:14px;letter-spacing:2px;}
+.testi-text{font-size:14px;color:rgba(240,237,230,0.8);line-height:1.7;margin-bottom:20px;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(200,245,66,0.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--accent);font-family:var(--font-display);flex-shrink:0;}
+.testi-name{font-size:13px;font-weight:700;color:var(--white);}
+.testi-tag{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* ── FAQ ── */
+.faq-list{max-width:720px;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-item:first-child{border-top:1px solid var(--border);}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 4px;cursor:pointer;gap:20px;
+  transition:padding-left .25s;
+}
+.faq-q:hover{padding-left:10px;}
+.faq-q h3{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.2px;}
+.faq-icon{font-size:18px;color:var(--accent);flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1);font-weight:300;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+.faq-item.open .faq-a{max-height:200px;}
+.faq-a p{font-size:14px;color:var(--muted);line-height:1.7;padding:0 4px 22px;max-width:600px;}
 
 /* ── QUIZ / CTA ── */
 .quiz-wrap{max-width:660px;margin:0 auto;text-align:center;}
@@ -241,6 +305,9 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   .ranks-grid{flex-direction:column}
   .quiz-cards{grid-template-columns:1fr}
   .hero-content{padding:0 24px 56px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px 2px;}
+  .stat-item:nth-child(2)::after{display:none;}
+  .testi-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -255,6 +322,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#ranks">Ranks</a></li>
+    <li><a href="#pricing">Pricing</a></li>
     <li><a href="#cta">Get started</a></li>
   </ul>
   <a href="login.html" class="nav-cta" id="navCta">Dashboard →</a>
@@ -283,6 +351,16 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   <div class="ticker-track">
     <span class="ticker-item">BMI Tracking</span><span class="ticker-item">Calorie Precision</span><span class="ticker-item">Macro Planner</span><span class="ticker-item">Rank System</span><span class="ticker-item">AI Coach</span><span class="ticker-item">Daily Streak</span><span class="ticker-item">Progress Charts</span><span class="ticker-item">Daily Missions</span><span class="ticker-item">Premium Workouts</span><span class="ticker-item">Body Type Diet</span><span class="ticker-item">Meal Planner</span>
     <span class="ticker-item">BMI Tracking</span><span class="ticker-item">Calorie Precision</span><span class="ticker-item">Macro Planner</span><span class="ticker-item">Rank System</span><span class="ticker-item">AI Coach</span><span class="ticker-item">Daily Streak</span><span class="ticker-item">Progress Charts</span><span class="ticker-item">Daily Missions</span><span class="ticker-item">Premium Workouts</span><span class="ticker-item">Body Type Diet</span><span class="ticker-item">Meal Planner</span>
+  </div>
+</div>
+
+<!-- ═══════════ STATS BAR ═══════════ -->
+<div class="stats-section">
+  <div class="stats-grid reveal">
+    <div class="stat-item"><div class="stat-num" data-target="12400" data-suffix="+">0</div><div class="stat-label">Check-ins logged</div></div>
+    <div class="stat-item"><div class="stat-num" data-target="3200" data-suffix="+">0</div><div class="stat-label">Active members</div></div>
+    <div class="stat-item"><div class="stat-num" data-target="180" data-suffix="d">0</div><div class="stat-label">Longest streak</div></div>
+    <div class="stat-item"><div class="stat-num" data-target="98" data-suffix="%">0</div><div class="stat-label">Would recommend</div></div>
   </div>
 </div>
 
@@ -374,6 +452,98 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
+<!-- ═══════════ PRICING ═══════════ -->
+<section id="pricing" style="background:#0d0d0b">
+  <div class="reveal" style="text-align:center">
+    <div class="section-tag" style="text-align:center">Simple pricing</div>
+    <h2 class="section-h">One price.<br><span class="ghost">Lifetime access.</span></h2>
+    <p class="section-sub" style="margin:0 auto 56px;text-align:center">No subscriptions. No hidden fees. Pay once, train forever.</p>
+  </div>
+  <div class="pricing-wrap reveal d1">
+    <div class="price-card">
+      <span class="price-badge">⚡ Lifetime Premium</span>
+      <div class="price-amount">₹5</div>
+      <div class="price-period">One-time payment · Unlimited use</div>
+      <ul class="price-features">
+        <li>AI Workout Planner — PPL, Bro Split, Upper/Lower, Full Body</li>
+        <li>Body Type Diet Analysis — Ecto / Meso / Endo specific plans</li>
+        <li>AI Meal Generator — built from what's already in your kitchen</li>
+        <li>Goal-specific plans — Bulk, Cut, Maintain, Athletic</li>
+        <li>Full rank progression + streak tracking</li>
+        <li>Daily check-ins with live BMI &amp; progress charts</li>
+      </ul>
+      <a href="login.html" class="btn-main" style="width:100%;justify-content:center;" id="pricingBtn">Unlock Premium →</a>
+      <p class="price-fine">🔒 Secured by Razorpay · UPI, Cards, NetBanking</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section id="testimonials">
+  <div class="reveal">
+    <div class="section-tag">Real members</div>
+    <h2 class="section-h">They didn't quit.<br><span class="ghost">Neither will you.</span></h2>
+    <p class="section-sub">Real check-ins. Real streaks. Real transformation.</p>
+  </div>
+  <div class="testi-grid reveal d1">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The streak system is what actually got me consistent. 67 days in and I haven't missed a single check-in. The AI workout plans hit different too."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">R</div>
+        <div><div class="testi-name">Rahul S.</div><div class="testi-tag">🔥 Warrior · 67 day streak</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Paid ₹5 expecting basically nothing and got a full AI coach. The body-type diet plan was scary accurate for an ectomorph trying to bulk."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div><div class="testi-name">Ananya K.</div><div class="testi-tag">⚡ Contender · 19 day streak</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Tried four other tracking apps before this. None of them made me care about not breaking a streak. This one did. 134 days and counting."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">V</div>
+        <div><div class="testi-name">Vikram M.</div><div class="testi-tag">💎 Beast · 134 day streak</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section id="faq" style="background:#0d0d0b">
+  <div class="reveal">
+    <div class="section-tag">Questions</div>
+    <h2 class="section-h">Need to know<br><span class="ghost">before you start?</span></h2>
+    <p class="section-sub">Everything you'd want to ask, answered.</p>
+  </div>
+  <div class="faq-list reveal d1" id="faqList">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><h3>Is EvolveFit really free to start?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes. Sign up, complete setup, and use BMI tracking, calorie targets, macros, and your progress graph completely free. Premium (₹5, one-time) unlocks the AI Workout, Diet, and Meal tools plus the full premium dashboard.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><h3>What exactly does the ₹5 premium unlock?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Lifetime access to the AI Workout Planner, Body Type Diet Analysis, AI Meal Generator, and the full Premium Dashboard with streak rank tracking. It's a one-time payment — no subscription, no renewal.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><h3>How does the streak and rank system work?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Every consecutive daily check-in adds to your streak. Hit milestones — 7, 30, 90, 180 days — to rank up from Beginner to Elite. Miss a day and your streak resets, so consistency is everything.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><h3>Do I need to re-enter my height, weight, and goals every time?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>No. Setup only happens once. Your details are saved and reused automatically across the app — you'll only update your weight during check-ins, and that updates everywhere instantly.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><h3>Can I use EvolveFit on my phone?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-a"><p>Yes, EvolveFit is fully responsive and built mobile-first. No app download needed — just sign in from any browser.</p></div>
+    </div>
+  </div>
+</section>
+
 <section id="cta" style="text-align:center">
   <div class="quiz-wrap">
     <div class="reveal">
@@ -395,7 +565,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
 
 <footer>
   <div class="foot-logo">Evolve<em>Fit</em></div>
-  <ul class="foot-links"><li><a href="#features">Features</a></li><li><a href="#ranks">Ranks</a></li><li><a href="login.html">Login</a></li></ul>
+  <ul class="foot-links"><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#ranks">Ranks</a></li><li><a href="#faq">FAQ</a></li><li><a href="login.html">Login</a></li></ul>
   <p class="foot-copy">© 2026 EvolveFit · Built for the ones who don't quit</p>
 </footer>
 
@@ -426,20 +596,32 @@ onAuthStateChanged(auth,async u=>{
     const navCta=document.getElementById("navCta");
     navCta.innerText="Dashboard →";
     // ✅ Smart redirect — premium goes to dashboard, free goes to bmi
+    let dest;
     if(localStorage.getItem("premium")==="true"){
-      navCta.href="dashboard-premium.html";
+      dest="dashboard-premium.html";
     } else {
-      navCta.href=localStorage.getItem("setup_done")==="true"?"bmi.html":"setup.html";
+      dest=localStorage.getItem("setup_done")==="true"?"bmi.html":"setup.html";
     }
+    navCta.href=dest;
 
     // ✅ Fix Start For Free button — same smart logic
     const startBtn=document.getElementById("startBtn");
     if(startBtn){
       startBtn.onclick=function(e){
         e.preventDefault();
-        flashAndGo(navCta.href);
+        flashAndGo(dest);
       };
       startBtn.innerText="Go to Dashboard →";
+    }
+
+    // ✅ Pricing button — premium users skip straight to dashboard
+    const pricingBtn=document.getElementById("pricingBtn");
+    if(pricingBtn){
+      pricingBtn.onclick=function(e){
+        e.preventDefault();
+        flashAndGo(localStorage.getItem("premium")==="true" ? "dashboard-premium.html" : "payment.html");
+      };
+      if(localStorage.getItem("premium")==="true") pricingBtn.innerText="Go to Dashboard →";
     }
   }
 });
@@ -486,6 +668,39 @@ heights.forEach((h,i)=>{const b=document.createElement('div');b.className='mini-
 const ph=[55,62,58,70,65,80,88];
 const pb=document.getElementById('phoneBars');
 ph.forEach((h,i)=>{const b=document.createElement('div');b.className='pbar'+(i===ph.length-1?' lit':'');b.style.height=h+'%';pb.appendChild(b);});
+
+// ── STAT COUNTERS (count up when scrolled into view) ──
+const statEls=document.querySelectorAll('.stat-num');
+const statObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el=entry.target;
+      const target=parseInt(el.dataset.target,10);
+      const suffix=el.dataset.suffix||'';
+      const duration=1400;
+      const start=performance.now();
+      function tick(now){
+        const progress=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-progress,3);
+        const val=Math.floor(eased*target);
+        el.textContent=val.toLocaleString()+suffix;
+        if(progress<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      statObs.unobserve(el);
+    }
+  });
+},{threshold:0.4});
+statEls.forEach(el=>statObs.observe(el));
+
+// ── FAQ TOGGLE ──
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+window.toggleFaq=toggleFaq;
 
 // ── PAGE FLASH TRANSITION ──
 function flashAndGo(href){
