@@ -7,166 +7,75 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 <style>
-.setup-wrap{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:24px;
-  background:
-    radial-gradient(ellipse 70% 60% at 20% 30%,rgba(200,245,66,0.06) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(200,245,66,0.04) 0%,transparent 55%),
-    #080808;
-}
-.setup-card{
-  width:100%;max-width:480px;
-  background:#111110;border:1px solid rgba(255,255,255,0.06);
-  border-radius:24px;padding:36px 32px;
-  animation:fadeUp .45s ease both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.setup-top{text-align:center;margin-bottom:28px}
-.setup-logo{
-  width:56px;height:56px;border-radius:50%;
-  background:rgba(200,245,66,0.1);border:1.5px solid rgba(200,245,66,0.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;margin:0 auto 14px;
-}
-.setup-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f0ede6;margin-bottom:4px;letter-spacing:-0.3px}
-.setup-sub{font-size:13px;color:#6b6b5a;font-family:'DM Sans',sans-serif}
-.setup-username{font-size:14px;color:#c8f542;font-weight:600;margin-bottom:4px;font-family:'DM Sans',sans-serif}
-
-/* progress dots */
-.prog-dots{display:flex;justify-content:center;gap:6px;margin-bottom:28px}
-.prog-dot{width:32px;height:4px;border-radius:2px;background:rgba(255,255,255,0.08);transition:background .3s}
-.prog-dot.active{background:#c8f542}
-
-/* two col */
+.setup-top{text-align:center;margin-bottom:24px}
+.setup-username{font-size:14px;color:var(--accent);font-weight:600;margin-bottom:4px}
+.setup-sub{font-size:13px;color:var(--muted);margin-top:4px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-.input-label{
-  display:block;font-size:11px;font-weight:600;
-  text-transform:uppercase;letter-spacing:0.1em;
-  color:#6b6b5a;margin:14px 0 5px;
-  font-family:'DM Sans',sans-serif;
-}
-input,select{
-  width:100%;padding:13px 15px;
-  border:1px solid rgba(255,255,255,0.07);border-radius:12px;
-  background:#161615;color:#f0ede6;font-size:14px;
-  font-family:'DM Sans',sans-serif;outline:none;
-  transition:border-color .2s,background .2s;
-}
-input:focus,select:focus{
-  border-color:rgba(200,245,66,0.35);background:#1a1a18;
-  box-shadow:0 0 0 3px rgba(200,245,66,0.07);
-}
-select{
-  appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;
-}
-select option{background:#1a1a18}
-
-/* goal cards */
 .goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
 .goal-card{
-  background:#161615;border:1.5px solid rgba(255,255,255,0.07);
-  border-radius:12px;padding:14px 8px;text-align:center;
-  cursor:pointer;transition:all .2s;
+  background:var(--glass);backdrop-filter:var(--glass-blur-sm);
+  border:1.5px solid var(--glass-border);border-radius:var(--r-md);
+  padding:14px 8px;text-align:center;cursor:pointer;transition:all .25s var(--spring);
 }
-.goal-card:hover{border-color:rgba(200,245,66,0.3)}
-.goal-card.selected{border-color:#c8f542;background:rgba(200,245,66,0.06)}
+.goal-card:hover{border-color:rgba(200,245,66,0.3);transform:translateY(-2px)}
+.goal-card.selected{border-color:var(--accent);background:rgba(200,245,66,0.06);box-shadow:0 0 20px rgba(200,245,66,0.1)}
 .goal-icon{font-size:22px;margin-bottom:6px}
-.goal-name{font-size:12px;font-weight:700;color:#f0ede6;font-family:'Syne',sans-serif}
-.goal-sub{font-size:10px;color:#6b6b5a;margin-top:2px;font-family:'DM Sans',sans-serif}
-
-.main-btn{
-  width:100%;padding:14px;margin-top:24px;border:none;border-radius:12px;
-  background:#c8f542;color:#080808;font-size:15px;font-weight:800;
-  font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;
-}
-.main-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(200,245,66,0.28)}
-.main-btn:active{transform:scale(0.98)}
-.main-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
-#errMsg{color:#f04545;font-size:12px;margin-top:10px;text-align:center;font-family:'DM Sans',sans-serif}
+.goal-name{font-size:12px;font-weight:700;color:var(--white);font-family:var(--font-display)}
+.goal-sub{font-size:10px;color:var(--muted);margin-top:2px}
+#errMsg{color:var(--red);font-size:12px;margin-top:10px;text-align:center;min-height:18px}
 </style>
 </head>
-<body>
-<div class="setup-wrap">
-  <div class="setup-card">
+<body class="fade-in">
+<div id="pageTransition" class="exit"></div>
+
+<div class="container">
+  <div class="card">
     <div class="setup-top">
-      <div class="setup-logo">💪</div>
+      <div class="logo-wrap"><span style="font-size:24px">💪</span></div>
       <div class="setup-username" id="setupUser"></div>
-      <div class="setup-title">Tell us about you</div>
-      <div class="setup-sub">We'll build your exact plan from this</div>
-    </div>
-    <div class="prog-dots">
-      <div class="prog-dot active"></div>
-      <div class="prog-dot"></div>
-      <div class="prog-dot"></div>
-    </div>
-
-    <div class="two-col">
-      <div>
-        <label class="input-label">Age</label>
-        <input type="number" id="age" placeholder="e.g. 22" min="10" max="80"/>
-      </div>
-      <div>
-        <label class="input-label">Gender</label>
-        <select id="gender">
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
+      <h1>Tell us about you</h1>
+      <p class="setup-sub">We'll build your exact plan from this</p>
+      <div class="step-indicator">
+        <div class="step-dot done"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
       </div>
     </div>
 
-    <div class="two-col">
-      <div>
-        <label class="input-label">Height (cm)</label>
-        <input type="number" id="height" placeholder="e.g. 175" min="100" max="250"/>
+    <div class="slide-up stagger-1">
+      <div class="two-col">
+        <div><label class="input-label">Age</label><input type="number" id="age" placeholder="e.g. 22" min="10" max="80"/></div>
+        <div><label class="input-label">Gender</label>
+          <select id="gender"><option value="male">Male</option><option value="female">Female</option></select>
+        </div>
       </div>
-      <div>
-        <label class="input-label">Weight (kg)</label>
-        <input type="number" id="weight" placeholder="e.g. 70" min="30" max="250"/>
+      <div class="two-col">
+        <div><label class="input-label">Height (cm)</label><input type="number" id="height" placeholder="e.g. 175" min="100" max="250"/></div>
+        <div><label class="input-label">Weight (kg)</label><input type="number" id="weight" placeholder="e.g. 70" min="30" max="250"/></div>
       </div>
-    </div>
+      <div class="two-col">
+        <div><label class="input-label">Target Weight (kg)</label><input type="number" id="target" placeholder="e.g. 80" min="30" max="250"/></div>
+        <div><label class="input-label">Activity Level</label>
+          <select id="activity">
+            <option value="1.2">Sedentary</option>
+            <option value="1.375">Light</option>
+            <option value="1.55" selected>Moderate</option>
+            <option value="1.725">Active</option>
+            <option value="1.9">Very Active</option>
+          </select>
+        </div>
+      </div>
 
-    <div class="two-col">
-      <div>
-        <label class="input-label">Target Weight (kg)</label>
-        <input type="number" id="target" placeholder="e.g. 80" min="30" max="250"/>
+      <label class="input-label">Your Goal</label>
+      <div class="goal-grid">
+        <div class="goal-card" onclick="selectGoal('bulk',this)"><div class="goal-icon">💪</div><div class="goal-name">Bulk</div><div class="goal-sub">Build muscle</div></div>
+        <div class="goal-card" onclick="selectGoal('cut',this)"><div class="goal-icon">🔥</div><div class="goal-name">Cut</div><div class="goal-sub">Lose fat</div></div>
+        <div class="goal-card" onclick="selectGoal('maintain',this)"><div class="goal-icon">⚖️</div><div class="goal-name">Maintain</div><div class="goal-sub">Stay lean</div></div>
       </div>
-      <div>
-        <label class="input-label">Activity Level</label>
-        <select id="activity">
-          <option value="1.2">Sedentary</option>
-          <option value="1.375">Light</option>
-          <option value="1.55" selected>Moderate</option>
-          <option value="1.725">Active</option>
-          <option value="1.9">Very Active</option>
-        </select>
-      </div>
-    </div>
 
-    <label class="input-label">Your Goal</label>
-    <div class="goal-grid">
-      <div class="goal-card" onclick="selectGoal('bulk',this)">
-        <div class="goal-icon">💪</div>
-        <div class="goal-name">Bulk</div>
-        <div class="goal-sub">Build muscle</div>
-      </div>
-      <div class="goal-card" onclick="selectGoal('cut',this)">
-        <div class="goal-icon">🔥</div>
-        <div class="goal-name">Cut</div>
-        <div class="goal-sub">Lose fat</div>
-      </div>
-      <div class="goal-card" onclick="selectGoal('maintain',this)">
-        <div class="goal-icon">⚖️</div>
-        <div class="goal-name">Maintain</div>
-        <div class="goal-sub">Stay lean</div>
-      </div>
+      <button class="primary-btn" id="mainBtn" onclick="saveSetup()" style="margin-top:20px">Calculate My Plan →</button>
+      <div id="errMsg"></div>
     </div>
-
-    <button class="main-btn" id="mainBtn" onclick="saveSetup()">Calculate My Plan →</button>
-    <div id="errMsg"></div>
   </div>
 </div>
 
@@ -201,27 +110,17 @@ function saveSetup(){
   if(!selectedGoal){err.innerText="Pick your goal ⚠️";return;}
   err.innerText="";
 
-  // Calculate BMI
   const h=height/100;
   const bmi=+(weight/(h*h)).toFixed(1);
-
-  // Calculate calories — Mifflin-St Jeor
-  const bmr=gender==="male"
-    ?(10*weight)+(6.25*height)-(5*age)+5
-    :(10*weight)+(6.25*height)-(5*age)-161;
+  const bmr=gender==="male"?(10*weight)+(6.25*height)-(5*age)+5:(10*weight)+(6.25*height)-(5*age)-161;
   const tdee=Math.round(bmr*activity);
   let calories=selectedGoal==="bulk"?tdee+300:selectedGoal==="cut"?tdee-300:tdee;
-
-  // Macros
   const protein=Math.round(selectedGoal==="bulk"?weight*2:selectedGoal==="cut"?weight*2.2:weight*1.8);
   const fats=Math.round(selectedGoal==="bulk"?weight*0.8:selectedGoal==="cut"?weight*0.6:weight*0.7);
   const carbs=Math.max(0,Math.round((calories-(protein*4)-(fats*9))/4));
-
-  // Ideal weight range
   const idealMin=+(18.5*h*h).toFixed(1);
   const idealMax=+(24.9*h*h).toFixed(1);
 
-  // Store everything
   localStorage.setItem("age",age);
   localStorage.setItem("gender",gender);
   localStorage.setItem("height",height);
@@ -239,12 +138,13 @@ function saveSetup(){
   localStorage.setItem("bmr",Math.round(bmr));
   localStorage.setItem("tdee",tdee);
   localStorage.setItem("setup_done","true");
+  localStorage.removeItem("calorie_done");
+  localStorage.removeItem("bmi_done");
+  localStorage.removeItem("macros_done");
 
-localStorage.removeItem("calorie_done");
-localStorage.removeItem("bmi_done");
-localStorage.removeItem("macros_done");
-
-location.href="result-calories.html";
+  const t=document.getElementById("pageTransition");
+  t.classList.add("enter");
+  setTimeout(()=>{ location.href="result-bmi.html"; },480);
 }
 </script>
 </body>
