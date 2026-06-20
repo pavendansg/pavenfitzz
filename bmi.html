@@ -86,7 +86,13 @@ onAuthStateChanged(auth, u => {
 window.doCheckin = async function() {
   const w = +document.getElementById("weightInput").value;
   if (!w) { alert("Enter your weight ⚠️"); return; }
-  const h = +localStorage.getItem("height") / 100;
+  const heightRaw = +localStorage.getItem("height");
+  if (!heightRaw) {
+    alert("Missing your height data — let's redo your setup ⚠️");
+    location.href = "setup.html";
+    return;
+  }
+  const h = heightRaw / 100;
   const bmi = +(w / (h * h)).toFixed(1);
   const cal = +localStorage.getItem("calories");
   const goal = localStorage.getItem("goal");
