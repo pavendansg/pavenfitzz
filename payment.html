@@ -79,7 +79,14 @@
           document.getElementById("paymentId").innerText = response.razorpay_payment_id;
 
           setTimeout(() => {
-  location.href = "dashboard-premium.html";
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { location.href = "dashboard-premium.html"; }, 450);
+  } else {
+    location.href = "dashboard-premium.html";
+  }
 }, 2000);
 
         } catch(err) {
@@ -199,6 +206,7 @@ body{ display:flex; justify-content:center; align-items:center; }
 </head>
 <body>
 
+<div id="pageTransition" class="enter"></div>
 
 <div class="box">
 
@@ -252,5 +260,42 @@ body{ display:flex; justify-content:center; align-items:center; }
   </div>
 
 </div>
+
+<script>
+// ✅ PAGE TRANSITION — slides cover away on load, slides back in before navigating away
+window.addEventListener("DOMContentLoaded", () => {
+  const pt = document.getElementById("pageTransition");
+  if (pt) requestAnimationFrame(() => pt.classList.remove("enter"));
+});
+
+// Intercept same-site link clicks to play exit transition before navigating
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("javascript:")) return;
+  e.preventDefault();
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+});
+
+// Helper so onclick="goTo('next.html')" can also trigger the transition
+window.goTo = function(href) {
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+};
+</script>
 </body>
 </html>
