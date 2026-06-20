@@ -70,6 +70,7 @@
 </head>
 <body>
 
+<div id="pageTransition" class="enter"></div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
@@ -139,7 +140,7 @@
       <span class="lock-info-text">Split resets after all days done</span>
       <span class="lock-info-val" id="resetDate"></span>
     </div>
-    <button class="btn-next" onclick="window.location.href='diet.html'">Next: Diet Plan →</button>
+    <button class="btn-next" onclick="goTo('diet.html')">Next: Diet Plan →</button>
   </div>
 </div>
 
@@ -323,6 +324,41 @@ function switchTab(index) {
   document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active",i===index));
   document.querySelectorAll(".day-panel").forEach((p,i)=>p.classList.toggle("active",i===index));
 }
+</script>
+
+<script>
+// ✅ PAGE TRANSITION
+window.addEventListener("DOMContentLoaded", () => {
+  const pt = document.getElementById("pageTransition");
+  if (pt) requestAnimationFrame(() => pt.classList.remove("enter"));
+});
+
+document.addEventListener("click", (e) => {
+  const link = e.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (!href || href.startsWith("#") || href.startsWith("http") || href.startsWith("javascript:")) return;
+  e.preventDefault();
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+});
+
+window.goTo = function(href) {
+  const pt = document.getElementById("pageTransition");
+  if (pt) {
+    pt.classList.remove("exit");
+    pt.classList.add("enter");
+    setTimeout(() => { window.location.href = href; }, 450);
+  } else {
+    window.location.href = href;
+  }
+};
 </script>
 </body>
 </html>
