@@ -13,6 +13,8 @@
 .bmr-row{background:rgba(255,255,255,0.03);backdrop-filter:var(--glass-blur-sm);border:1px solid var(--glass-border);border-radius:var(--r-sm);padding:12px 14px;font-size:11px;color:var(--muted);line-height:1.9;margin-bottom:14px;font-family:var(--font-mono)}
 .bmr-row span{color:var(--accent);font-weight:700}
 .section-label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.tip-box{background:rgba(240,192,64,0.06);backdrop-filter:var(--glass-blur-sm);border:1px solid rgba(240,192,64,0.15);border-radius:var(--r-md);padding:13px 15px;font-size:12px;color:#bcae84;line-height:1.9;margin-bottom:16px}
+.tip-box strong{color:var(--accent);}
 </style>
 </head>
 <body class="fade-in">
@@ -45,13 +47,12 @@
 
     <div class="bmr-row slide-up stagger-3" id="bmrRow"></div>
 
-    <div class="slide-up stagger-4">
-      <div class="section-label">Daily Macros</div>
-      <div class="macro-grid">
-        <div class="macro-card protein-card"><div class="macro-icon">🍗</div><div class="macro-val" style="color:#f06464" id="protVal">—</div><div class="macro-label">Protein</div></div>
-        <div class="macro-card carbs-card"><div class="macro-icon">🍚</div><div class="macro-val" style="color:#4592f0" id="carbVal">—</div><div class="macro-label">Carbs</div></div>
-        <div class="macro-card fats-card"><div class="macro-icon">🥑</div><div class="macro-val" style="color:#c8f542" id="fatVal">—</div><div class="macro-label">Fats</div></div>
-      </div>
+    <div class="tip-box slide-up stagger-4">
+      <strong>🍗 BMR</strong> — Calories your body burns just existing (breathing, organs working) if you stayed in bed all day.
+      <br><br>
+      <strong>🔥 TDEE</strong> — Your BMR plus calories burned from daily activity and exercise. This is what you actually burn in a normal day.
+      <br><br>
+      <strong>🎯 Your Target</strong> — TDEE adjusted for your goal: a surplus to bulk, a deficit to cut, or matched exactly to maintain.
     </div>
 
     <div class="slide-up stagger-5">
@@ -67,17 +68,11 @@ const cal=localStorage.getItem("calories")||"—";
 const bmr=localStorage.getItem("bmr")||"—";
 const tdee=localStorage.getItem("tdee")||"—";
 const goal=localStorage.getItem("goal")||"maintain";
-const protein=localStorage.getItem("protein")||"—";
-const carbs=localStorage.getItem("carbs")||"—";
-const fats=localStorage.getItem("fats")||"—";
 
 document.getElementById("calVal").innerHTML=cal+`<span class="cal-unit"> kcal</span>`;
 document.getElementById("bmrVal").innerText=bmr+" kcal";
 document.getElementById("tdeeVal").innerText=tdee+" kcal";
 document.getElementById("goalVal").innerText=goal.toUpperCase();
-document.getElementById("protVal").innerText=protein+"g";
-document.getElementById("carbVal").innerText=carbs+"g";
-document.getElementById("fatVal").innerText=fats+"g";
 
 const badges={bulk:{label:"+300 kcal surplus 💪",color:"#c8f542"},maintain:{label:"Maintenance ⚖️",color:"#f0c040"},cut:{label:"-300 kcal deficit 🔥",color:"#f06464"}};
 const b=badges[goal]||badges.maintain;
