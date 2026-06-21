@@ -176,6 +176,19 @@ window.onload = function() {
       localStorage.removeItem("lockedSplit");
     }
   }
+
+  // ✅ PREFILL — use saved goal from setup/diet instead of asking again.
+  // Level and Split are workout-specific (no equivalent saved elsewhere),
+  // but we still restore the user's last choice if they've generated before.
+  const savedGoal = localStorage.getItem("goal"); // bulk/cut/maintain (lowercase)
+  const goalMap = { bulk: "Bulk", cut: "Cut", maintain: "Maintain", athletic: "Athletic" };
+  if (savedGoal && goalMap[savedGoal]) {
+    document.getElementById("goal").value = goalMap[savedGoal];
+  }
+  const savedLevel = localStorage.getItem("level");
+  if (savedLevel) document.getElementById("level").value = savedLevel;
+  const savedSplit = localStorage.getItem("split");
+  if (savedSplit) document.getElementById("split").value = savedSplit;
 };
 
 function openModal() {
