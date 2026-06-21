@@ -311,9 +311,14 @@ const db = getFirestore(app);
 // ✅ LOGOUT — keep setup_done so returning users skip setup
 window.logout = async function() {
   try { await signOut(auth); } catch(e) { console.error(e); }
-  const setupDone = localStorage.getItem("setup_done");
+  // ✅ Preserve core profile data through logout — see bmi.html for rationale
+  const keep = ["setup_done","height","weight","age","gender","activity",
+                "goal","bmi","calories","protein","carbs","fats",
+                "idealMin","idealMax","bmr","tdee"];
+  const saved = {};
+  keep.forEach(k => { const v = localStorage.getItem(k); if (v !== null) saved[k] = v; });
   localStorage.clear();
-  if (setupDone) localStorage.setItem("setup_done", setupDone);
+  Object.entries(saved).forEach(([k,v]) => localStorage.setItem(k,v));
   location.href = "login.html";
 };
 
