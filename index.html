@@ -25,79 +25,29 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 .video-fallback{position:absolute;inset:0;background:linear-gradient(135deg,#0a0a08 0%,#151510 40%,#0d1208 100%);z-index:0;}
 .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(8,8,8,0.55) 0%,rgba(8,8,8,0.3) 40%,rgba(8,8,8,0.65) 75%,rgba(8,8,8,0.97) 100%);}
 .hero-content{position:relative;z-index:2;padding:80px 6% 48px;max-width:700px;}
-
-/* ── HERO ANIMATIONS ── */
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(200,245,66,0.1);border:1px solid rgba(200,245,66,0.25);
-  color:var(--accent);font-size:11px;font-weight:600;
-  letter-spacing:0.14em;text-transform:uppercase;
-  padding:6px 14px;border-radius:50px;margin-bottom:28px;
-  opacity:0;animation:springUp .7s cubic-bezier(.34,1.56,.64,1) .2s forwards;
-}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(200,245,66,0.1);border:1px solid rgba(200,245,66,0.25);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;padding:6px 14px;border-radius:50px;margin-bottom:28px;opacity:0;animation:springUp .7s cubic-bezier(.34,1.56,.64,1) .2s forwards;}
 .hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-
-.hero-headline{
-  font-family:var(--font-display);
-  font-size:clamp(36px,6vw,80px);
-  font-weight:800;line-height:0.95;letter-spacing:-2px;margin-bottom:20px;
-}
+.hero-headline{font-family:var(--font-display);font-size:clamp(36px,6vw,80px);font-weight:800;line-height:0.95;letter-spacing:-2px;margin-bottom:20px;}
 .hero-headline .line1{display:block;opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) .4s forwards;}
 .hero-headline .line2{display:block;opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) .55s forwards;}
 .hero-headline .line3{display:block;opacity:0;animation:springUp .9s cubic-bezier(.34,1.56,.64,1) .7s forwards;}
 .hero-headline .stroke{-webkit-text-stroke:1px rgba(240,237,230,0.3);color:transparent;}
 .hero-headline .lit{color:var(--accent);}
-
-.hero-sub{
-  font-size:clamp(14px,1.5vw,17px);font-weight:300;
-  color:rgba(240,237,230,0.6);max-width:440px;line-height:1.7;margin-bottom:32px;
-  font-style:italic;
-  opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) .85s forwards;
-}
+.hero-sub{font-size:clamp(14px,1.5vw,17px);font-weight:300;color:rgba(240,237,230,0.6);max-width:440px;line-height:1.7;margin-bottom:32px;font-style:italic;opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) .85s forwards;}
 .hero-sub b{color:var(--white);font-style:normal;font-weight:500}
-
-.hero-actions{
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) 1s forwards;
-}
-
-@keyframes springUp{
-  0%{opacity:0;transform:translateY(40px) scale(0.95)}
-  100%{opacity:1;transform:translateY(0) scale(1)}
-}
+.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;opacity:0;animation:springUp .8s cubic-bezier(.34,1.56,.64,1) 1s forwards;}
+@keyframes springUp{0%{opacity:0;transform:translateY(40px) scale(0.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
 
 /* ── BUTTONS ── */
-.btn-main{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--accent);color:#080808;
-  border:none;padding:15px 32px;border-radius:50px;
-  font-size:15px;font-weight:700;font-family:var(--font-body);
-  cursor:pointer;text-decoration:none;
-  transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;
-}
+.btn-main{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#080808;border:none;padding:15px 32px;border-radius:50px;font-size:15px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;}
 .btn-main:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 18px 50px rgba(200,245,66,0.4);}
 .btn-main:active{transform:scale(0.96);}
-
-.btn-ghost{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(255,255,255,0.06);color:var(--white);
-  border:1px solid rgba(255,255,255,0.12);
-  padding:14px 28px;border-radius:50px;
-  font-size:15px;font-weight:400;font-family:var(--font-body);
-  cursor:pointer;text-decoration:none;
-  transition:all .2s cubic-bezier(.34,1.56,.64,1);
-}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);color:var(--white);border:1px solid rgba(255,255,255,0.12);padding:14px 28px;border-radius:50px;font-size:15px;font-weight:400;font-family:var(--font-body);cursor:pointer;text-decoration:none;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
 .btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);transform:translateY(-2px);}
 
 /* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 6%;
-  transition:background .3s,backdrop-filter .3s;
-  opacity:0;animation:fadeDown .6s ease .1s forwards;
-}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 6%;transition:background .3s,backdrop-filter .3s;opacity:0;animation:fadeDown .6s ease .1s forwards;}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
 nav.solid{background:rgba(8,8,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-logo{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--white);text-decoration:none;letter-spacing:-0.3px;}
@@ -105,13 +55,7 @@ nav.solid{background:rgba(8,8,8,0.92);backdrop-filter:blur(20px);border-bottom:1
 .nav-links{display:flex;gap:28px;list-style:none}
 .nav-links a{color:var(--muted);font-size:14px;text-decoration:none;letter-spacing:0.02em;transition:color .2s;}
 .nav-links a:hover{color:var(--white)}
-.nav-cta{
-  background:var(--accent);color:#080808;border:none;
-  padding:9px 20px;border-radius:50px;
-  font-size:13px;font-weight:700;font-family:var(--font-body);
-  cursor:pointer;text-decoration:none;
-  transition:all .2s cubic-bezier(.34,1.56,.64,1);
-}
+.nav-cta{background:var(--accent);color:#080808;border:none;padding:9px 20px;border-radius:50px;font-size:13px;font-weight:700;font-family:var(--font-body);cursor:pointer;text-decoration:none;transition:all .2s cubic-bezier(.34,1.56,.64,1);}
 .nav-cta:hover{transform:scale(1.06) translateY(-1px);box-shadow:0 8px 24px rgba(200,245,66,0.3);}
 
 /* ── TICKER ── */
@@ -135,14 +79,13 @@ section{padding:100px 6%}
 .bento-card:hover{background:#161615;transform:scale(1.01);}
 .bento-card:hover::after{opacity:1;}
 .bento-card.wide{grid-column:span 2}
-.bento-card.tall{grid-row:span 2}
 .b-icon{font-size:22px;width:50px;height:50px;border-radius:12px;background:var(--accent-dim);border:1px solid rgba(200,245,66,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
 .bento-card:hover .b-icon{transform:scale(1.15) rotate(-5deg);}
 .b-name{font-family:var(--font-display);font-size:19px;font-weight:700;margin-bottom:10px;letter-spacing:-0.3px;}
 .b-desc{font-size:14px;color:var(--muted);line-height:1.7}
 .b-pill{display:inline-block;margin-top:14px;background:var(--accent-dim);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:4px 12px;border-radius:50px;border:1px solid rgba(200,245,66,0.2);}
 .mini-chart{margin-top:20px;height:56px;display:flex;align-items:flex-end;gap:4px;}
-.mini-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(200,245,66,0.18);min-height:8px;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
+.mini-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(200,245,66,0.18);min-height:8px;}
 .mini-bar.hi{background:var(--accent)}
 
 /* ── STATS BAR ── */
@@ -153,7 +96,59 @@ section{padding:100px 6%}
 .stat-num{font-family:var(--font-display);font-size:clamp(32px,4vw,48px);font-weight:800;color:var(--accent);letter-spacing:-1px;line-height:1;}
 .stat-label{font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:0.02em;}
 
-/* ── HOW IT WORKS ── */
+/* ── HOW TO USE — FULL GUIDE ── */
+.guide-section{background:#0a0a09;}
+.guide-flow{display:flex;flex-direction:column;gap:0;max-width:800px;margin:0 auto;}
+.guide-step{
+  display:grid;grid-template-columns:80px 1fr;gap:0;
+  position:relative;
+}
+.guide-step:not(:last-child) .guide-line{
+  position:absolute;left:39px;top:72px;bottom:0;
+  width:2px;background:linear-gradient(180deg,var(--accent),rgba(200,245,66,0.1));
+  z-index:0;
+}
+.guide-num-col{display:flex;flex-direction:column;align-items:center;padding-top:4px;position:relative;z-index:1;}
+.guide-num{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:16px;font-weight:800;
+  border:2px solid rgba(200,245,66,0.3);
+  background:rgba(200,245,66,0.08);
+  color:var(--accent);
+  flex-shrink:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 20px rgba(200,245,66,0.06);
+}
+.guide-step:hover .guide-num{background:var(--accent);color:#080808;border-color:var(--accent);box-shadow:0 0 30px rgba(200,245,66,0.3);transform:scale(1.1);}
+.guide-body{padding:0 0 52px 24px;}
+.guide-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:8px;
+}
+.guide-tag.free{color:var(--accent);}
+.guide-tag.premium{color:#f0c040;}
+.guide-title{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--white);margin-bottom:8px;letter-spacing:-0.3px;}
+.guide-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px;max-width:560px;}
+.guide-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.guide-chip{
+  font-size:11px;font-weight:600;padding:4px 12px;border-radius:50px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  color:rgba(240,237,230,0.6);
+  transition:all .2s;
+}
+.guide-chip.accent{background:rgba(200,245,66,0.08);border-color:rgba(200,245,66,0.2);color:var(--accent);}
+.guide-chip.gold{background:rgba(240,192,64,0.08);border-color:rgba(240,192,64,0.2);color:#f0c040;}
+.guide-step:hover .guide-chip{border-color:rgba(255,255,255,0.14);}
+.guide-lock{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+  background:rgba(240,192,64,0.08);border:1px solid rgba(240,192,64,0.2);
+  color:#f0c040;padding:4px 12px;border-radius:50px;margin-top:4px;
+}
+
+/* ── HOW IT WORKS (3 steps) ── */
 .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .steps{margin-top:40px}
 .step{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);transition:all .3s;}
@@ -164,8 +159,7 @@ section{padding:100px 6%}
 .step:hover .step-n{color:rgba(200,245,66,0.5);}
 .step-body h3{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:6px;letter-spacing:-0.2px;}
 .step-body p{font-size:14px;color:var(--muted);line-height:1.65}
-
-.phone{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:20px;max-width:260px;margin:0 auto;transition:transform .4s cubic-bezier(.34,1.56,.64,1);animation:phoneFloat 3s ease-in-out infinite;}
+.phone{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:20px;max-width:260px;margin:0 auto;animation:phoneFloat 3s ease-in-out infinite;}
 @keyframes phoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .phone-pill{width:60px;height:5px;background:#1e1e1c;border-radius:3px;margin:0 auto 20px;}
 .phone-rank{background:var(--accent-dim);border:1px solid rgba(200,245,66,0.2);border-radius:14px;padding:16px;text-align:center;margin-bottom:12px;}
@@ -178,7 +172,7 @@ section{padding:100px 6%}
 .phone-bars{background:#161615;border-radius:12px;padding:12px}
 .phone-bars-label{font-size:10px;color:var(--muted);letter-spacing:0.05em;margin-bottom:8px;text-transform:uppercase}
 .bars-row{display:flex;align-items:flex-end;gap:3px;height:40px}
-.pbar{flex:1;border-radius:2px 2px 0 0;background:rgba(200,245,66,0.15);transition:height .6s cubic-bezier(.34,1.56,.64,1);}
+.pbar{flex:1;border-radius:2px 2px 0 0;background:rgba(200,245,66,0.15);}
 .pbar.lit{background:var(--accent)}
 
 /* ── RANKS ── */
@@ -196,22 +190,10 @@ section{padding:100px 6%}
 
 /* ── PRICING ── */
 .pricing-wrap{max-width:420px;margin:0 auto;}
-.price-card{
-  background:linear-gradient(160deg,#121710,#0e0e0c);
-  border:1.5px solid rgba(200,245,66,0.25);
-  border-radius:24px;padding:44px 36px;text-align:center;
-  position:relative;overflow:hidden;
-  box-shadow:0 0 60px rgba(200,245,66,0.06);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-}
+.price-card{background:linear-gradient(160deg,#121710,#0e0e0c);border:1.5px solid rgba(200,245,66,0.25);border-radius:24px;padding:44px 36px;text-align:center;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(200,245,66,0.06);transition:transform .3s cubic-bezier(.34,1.56,.64,1);}
 .price-card:hover{transform:translateY(-6px);}
-.price-badge{
-  display:inline-block;background:var(--accent);color:#080808;
-  font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
-  padding:5px 14px;border-radius:50px;margin-bottom:20px;
-}
+.price-badge{display:inline-block;background:var(--accent);color:#080808;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:5px 14px;border-radius:50px;margin-bottom:20px;}
 .price-amount{font-family:var(--font-display);font-size:64px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-2px;}
-.price-amount sup{font-size:24px;top:-28px;}
 .price-period{font-size:13px;color:var(--muted);margin-top:6px;margin-bottom:28px;}
 .price-features{list-style:none;text-align:left;margin-bottom:32px;}
 .price-features li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(240,237,230,0.8);padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
@@ -219,29 +201,11 @@ section{padding:100px 6%}
 .price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;}
 .price-fine{font-size:12px;color:var(--muted);margin-top:16px;}
 
-/* ── TESTIMONIALS ── */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.testi-card{
-  background:var(--card);border:1px solid var(--border);border-radius:18px;
-  padding:28px 26px;transition:all .3s cubic-bezier(.34,1.56,.64,1);
-}
-.testi-card:hover{transform:translateY(-5px);border-color:rgba(200,245,66,0.2);background:#141413;}
-.testi-stars{color:var(--accent);font-size:14px;margin-bottom:14px;letter-spacing:2px;}
-.testi-text{font-size:14px;color:rgba(240,237,230,0.8);line-height:1.7;margin-bottom:20px;}
-.testi-author{display:flex;align-items:center;gap:12px;}
-.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(200,245,66,0.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--accent);font-family:var(--font-display);flex-shrink:0;}
-.testi-name{font-size:13px;font-weight:700;color:var(--white);}
-.testi-tag{font-size:11px;color:var(--muted);margin-top:1px;}
-
 /* ── FAQ ── */
 .faq-list{max-width:720px;}
 .faq-item{border-bottom:1px solid var(--border);}
 .faq-item:first-child{border-top:1px solid var(--border);}
-.faq-q{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px 4px;cursor:pointer;gap:20px;
-  transition:padding-left .25s;
-}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 4px;cursor:pointer;gap:20px;transition:padding-left .25s;}
 .faq-q:hover{padding-left:10px;}
 .faq-q h3{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.2px;}
 .faq-icon{font-size:18px;color:var(--accent);flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1);font-weight:300;}
@@ -253,28 +217,16 @@ section{padding:100px 6%}
 /* ── QUIZ / CTA ── */
 .quiz-wrap{max-width:660px;margin:0 auto;text-align:center;}
 .quiz-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;}
-.qcard{
-  background:var(--card);border:2px solid var(--border);
-  border-radius:16px;padding:26px 18px;
-  cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);text-align:left;
-}
+.qcard{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:26px 18px;cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);text-align:left;}
 .qcard:hover{border-color:rgba(200,245,66,0.4);background:rgba(200,245,66,0.03);transform:translateY(-4px) scale(1.02);}
 .qcard.on{border-color:var(--accent);background:rgba(200,245,66,0.06);transform:translateY(-6px) scale(1.04);box-shadow:0 16px 40px rgba(200,245,66,0.15);}
 .qcard-ico{font-size:22px;width:44px;height:44px;background:rgba(255,255,255,0.04);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
 .qcard:hover .qcard-ico,.qcard.on .qcard-ico{background:var(--accent-dim);transform:scale(1.15) rotate(-5deg);}
 .qcard-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px;letter-spacing:-0.2px;}
 .qcard-sub{font-size:12px;color:var(--muted);line-height:1.5}
-
-.quiz-main-btn{
-  background:var(--accent);color:#080808;border:none;
-  padding:17px 52px;border-radius:50px;
-  font-size:15px;font-weight:700;font-family:var(--font-body);
-  cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);
-  opacity:.35;pointer-events:none;letter-spacing:0.01em;
-}
+.quiz-main-btn{background:var(--accent);color:#080808;border:none;padding:17px 52px;border-radius:50px;font-size:15px;font-weight:700;font-family:var(--font-body);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);opacity:.35;pointer-events:none;letter-spacing:0.01em;}
 .quiz-main-btn.go{opacity:1;pointer-events:all;}
 .quiz-main-btn.go:hover{transform:translateY(-4px) scale(1.06);box-shadow:0 20px 56px rgba(200,245,66,0.45);}
-.quiz-main-btn.go:active{transform:scale(0.96);}
 .quiz-fine{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:0.02em}
 
 /* ── FOOTER ── */
@@ -291,46 +243,44 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
 .reveal.in{opacity:1;transform:translateY(0) scale(1);}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
-/* ── PAGE TRANSITION ── */
 .page-flash{position:fixed;inset:0;background:var(--accent);z-index:9999;pointer-events:none;opacity:0;transition:opacity .15s;}
 .page-flash.go{opacity:1;}
 
 @media(max-width:900px){
-  nav{padding:16px 24px}
-  .nav-links{display:none}
+  nav{padding:16px 24px}.nav-links{display:none}
   section{padding:64px 24px}
-  .bento{grid-template-columns:1fr}
-  .bento-card.wide,.bento-card.tall{grid-column:span 1;grid-row:span 1}
+  .bento{grid-template-columns:1fr}.bento-card.wide{grid-column:span 1}
   .how-grid{grid-template-columns:1fr;gap:40px}
   .ranks-grid{flex-direction:column}
   .quiz-cards{grid-template-columns:1fr}
   .hero-content{padding:0 24px 56px}
   .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px 2px;}
   .stat-item:nth-child(2)::after{display:none;}
-  .testi-grid{grid-template-columns:1fr;}
+  .guide-step{grid-template-columns:60px 1fr;}
+  .guide-num{width:40px;height:40px;font-size:13px;}
+  .guide-step:not(:last-child) .guide-line{left:29px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Page flash for transitions -->
 <div class="page-flash" id="pageFlash"></div>
 
 <nav id="nav">
   <a href="#" class="nav-logo">Evolve<em>Fit</em></a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
-    <li><a href="#how">How it works</a></li>
+    <li><a href="#guide">How to Use</a></li>
     <li><a href="#ranks">Ranks</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#cta">Get started</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
   <a href="login.html" class="nav-cta" id="navCta">Dashboard →</a>
 </nav>
 
 <section class="hero" id="home">
   <div class="video-fallback"></div>
-  <div class="video-wrap" id="videoWrap"><canvas id="heroBg"></canvas></div>
+  <div class="video-wrap"><canvas id="heroBg"></canvas></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Elite Fitness OS</div>
@@ -342,7 +292,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
     <p class="hero-sub">EvolveFit is built for the obsessed.<br><b>Track smarter. Rank up. Become Elite.</b></p>
     <div class="hero-actions">
       <a href="login.html" class="btn-main" id="startBtn">Start For Free →</a>
-      <a href="#how" class="btn-ghost">See how it works</a>
+      <a href="#guide" class="btn-ghost">See how it works</a>
     </div>
   </div>
 </section>
@@ -354,7 +304,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </div>
 
-<!-- ═══════════ STATS BAR ═══════════ -->
+<!-- STATS -->
 <div class="stats-section">
   <div class="stats-grid reveal">
     <div class="stat-item"><div class="stat-num" data-target="12400" data-suffix="+">0</div><div class="stat-label">Check-ins logged</div></div>
@@ -364,6 +314,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </div>
 
+<!-- FEATURES -->
 <section id="features">
   <div class="reveal">
     <div class="section-tag">Everything you need</div>
@@ -378,43 +329,226 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
       <span class="b-pill">Most used feature</span>
       <div class="mini-chart" id="miniChart"></div>
     </div>
-    <div class="bento-card">
-      <div class="b-icon">🔥</div>
-      <div class="b-name">Calorie Intelligence</div>
-      <p class="b-desc">Precise targets based on your goal — bulk, cut, or maintain. Adapts as you evolve.</p>
+    <div class="bento-card"><div class="b-icon">🔥</div><div class="b-name">Calorie Intelligence</div><p class="b-desc">Precise targets based on your goal — bulk, cut, or maintain. Adapts as you evolve.</p></div>
+    <div class="bento-card"><div class="b-icon">🥗</div><div class="b-name">Macro Architect</div><p class="b-desc">Protein. Carbs. Fat. Dialled to your body — not a template. Elite fuel.</p></div>
+    <div class="bento-card"><div class="b-icon">🏆</div><div class="b-name">Rank System</div><p class="b-desc">Rise from Beginner to Elite. Streak earns rank. Consistency is the currency.</p><span class="b-pill">Fan favourite</span></div>
+    <div class="bento-card"><div class="b-icon">🤖</div><div class="b-name">AI Coach</div><p class="b-desc">Workout plans, body-type diet analysis, meal planning — all AI-generated, goal-specific.</p><span class="b-pill">Premium</span></div>
+    <div class="bento-card"><div class="b-icon">🎯</div><div class="b-name">Daily Missions</div><p class="b-desc">Challenges, spins, achievements. Every day is a new chance to level up.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ COMPLETE HOW TO USE GUIDE ═══════════ -->
+<section id="guide" class="guide-section">
+  <div class="reveal" style="text-align:center;margin-bottom:64px;">
+    <div class="section-tag" style="text-align:center">Complete guide</div>
+    <h2 class="section-h" style="text-align:center">How to use EvolveFit<br><span class="ghost">from start to finish.</span></h2>
+    <p class="section-sub" style="margin:0 auto;text-align:center;">Every step explained. Follow this once and you'll know exactly what to do every day after.</p>
+  </div>
+
+  <div class="guide-flow reveal d1">
+
+    <!-- STEP 1 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">1</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free</div>
+        <div class="guide-title">Create your account</div>
+        <p class="guide-desc">Sign in with Google in one tap, or create a new account with your name, email and a password of your choice. No OTP, no verification delays — you're in immediately.</p>
+        <div class="guide-chips">
+          <span class="guide-chip accent">Google Sign In</span>
+          <span class="guide-chip accent">Email + Password</span>
+          <span class="guide-chip">Takes 10 seconds</span>
+        </div>
+      </div>
     </div>
-    <div class="bento-card">
-      <div class="b-icon">🥗</div>
-      <div class="b-name">Macro Architect</div>
-      <p class="b-desc">Protein. Carbs. Fat. Dialled to your body — not a template. Elite fuel.</p>
+
+    <!-- STEP 2 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">2</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free · One time only</div>
+        <div class="guide-title">Set up your profile</div>
+        <p class="guide-desc">Enter your age, height, weight, gender, and fitness goal (Bulk / Cut / Maintain / Athletic). This is a one-time setup — your details are saved permanently so you never have to re-enter them.</p>
+        <div class="guide-chips">
+          <span class="guide-chip">Age · Height · Weight</span>
+          <span class="guide-chip">Fitness goal</span>
+          <span class="guide-chip accent">Saved forever</span>
+        </div>
+      </div>
     </div>
-    <div class="bento-card">
-      <div class="b-icon">🏆</div>
-      <div class="b-name">Rank System</div>
-      <p class="b-desc">Rise from Beginner to Elite. Streak earns rank. Consistency is the currency.</p>
-      <span class="b-pill">Fan favourite</span>
+
+    <!-- STEP 3 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">3</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free · Every login</div>
+        <div class="guide-title">Daily check-in — BMI</div>
+        <p class="guide-desc">Every time you log in, enter your current weight. The app instantly calculates your BMI, shows your category (Underweight / Healthy / Overweight), ideal weight range, and gives you specific tips for your situation.</p>
+        <div class="guide-chips">
+          <span class="guide-chip accent">Live BMI calculation</span>
+          <span class="guide-chip">Category + tips</span>
+          <span class="guide-chip">Ideal weight range</span>
+        </div>
+      </div>
     </div>
-    <div class="bento-card">
-      <div class="b-icon">🤖</div>
-      <div class="b-name">AI Coach</div>
-      <p class="b-desc">Workout plans, body-type diet analysis, meal planning — all AI-generated, goal-specific.</p>
-      <span class="b-pill">Premium</span>
+
+    <!-- STEP 4 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">4</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free · Every login</div>
+        <div class="guide-title">Calorie target</div>
+        <p class="guide-desc">Based on your weight, height, age and goal, the app calculates your exact daily calorie target using the Mifflin-St Jeor formula. Bulk, cut, or maintain — your number is always precise, never a rough estimate.</p>
+        <div class="guide-chips">
+          <span class="guide-chip accent">Goal-specific calories</span>
+          <span class="guide-chip">BMR breakdown</span>
+          <span class="guide-chip">Deficit / surplus shown</span>
+        </div>
+      </div>
     </div>
-    <div class="bento-card">
-      <div class="b-icon">🎯</div>
-      <div class="b-name">Daily Missions</div>
-      <p class="b-desc">Challenges, spins, achievements. Every day is a new chance to level up.</p>
+
+    <!-- STEP 5 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">5</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free · Every login</div>
+        <div class="guide-title">Macro breakdown</div>
+        <p class="guide-desc">See your exact protein, carbs, and fat targets in grams — calculated for your body and goal. A sample diet plan is shown so you know exactly what to eat. This data is saved to Firestore so your progress chart updates live.</p>
+        <div class="guide-chips">
+          <span class="guide-chip accent">Protein · Carbs · Fats</span>
+          <span class="guide-chip">Sample meal plan</span>
+          <span class="guide-chip">Saved to Firestore</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">6</div></div>
+      <div class="guide-body">
+        <div class="guide-tag free">● Free · Every login</div>
+        <div class="guide-title">Progress chart</div>
+        <p class="guide-desc">View your weight and BMI trends over time as live line charts. See your streak milestones, goal completion percentage, and motivational messages. The more you check in, the richer this gets.</p>
+        <div class="guide-chips">
+          <span class="guide-chip accent">Weight trend chart</span>
+          <span class="guide-chip accent">BMI trend chart</span>
+          <span class="guide-chip">Streak milestones</span>
+          <span class="guide-chip">Goal % complete</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">7</div></div>
+      <div class="guide-body">
+        <div class="guide-tag gold">⚡ Premium unlock</div>
+        <div class="guide-title">Pay ₹5 — one time</div>
+        <p class="guide-desc">A single one-time payment of ₹5 unlocks lifetime access to all AI tools. Pay via UPI, card, or NetBanking through Razorpay. Your premium status is saved to Firestore — you'll never be asked to pay again on any device.</p>
+        <div class="guide-chips">
+          <span class="guide-chip gold">₹5 one-time</span>
+          <span class="guide-chip">UPI · Cards · NetBanking</span>
+          <span class="guide-chip accent">Lifetime access</span>
+          <span class="guide-chip">Works on all devices</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">8</div></div>
+      <div class="guide-body">
+        <div class="guide-tag gold">⚡ Premium</div>
+        <div class="guide-title">AI Workout Planner</div>
+        <p class="guide-desc">Choose your split (PPL, Bro Split, Upper/Lower, Full Body) and the AI generates a complete multi-week workout plan with exercises, sets, reps, and form tips. The plan locks in for the duration — come back daily for each day's session.</p>
+        <div class="guide-chips">
+          <span class="guide-chip gold">PPL · Bro Split · Upper/Lower · Full Body</span>
+          <span class="guide-chip">Sets · Reps · Form tips</span>
+          <span class="guide-chip accent">AI-generated</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">9</div></div>
+      <div class="guide-body">
+        <div class="guide-tag gold">⚡ Premium</div>
+        <div class="guide-title">Body Type Diet Analysis</div>
+        <p class="guide-desc">The AI analyses your body type (Ectomorph / Mesomorph / Endomorph) and your goal, then generates a complete diet plan — foods to eat, foods to avoid, macro distribution, and meal timing. Tailored, not generic.</p>
+        <div class="guide-chips">
+          <span class="guide-chip gold">Ecto · Meso · Endo</span>
+          <span class="guide-chip">Foods to eat + avoid</span>
+          <span class="guide-chip accent">Goal-specific diet</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 10 -->
+    <div class="guide-step">
+      <div class="guide-line"></div>
+      <div class="guide-num-col"><div class="guide-num">10</div></div>
+      <div class="guide-body">
+        <div class="guide-tag gold">⚡ Premium</div>
+        <div class="guide-title">AI Meal Generator</div>
+        <p class="guide-desc">Tell the AI what foods you have at home. It generates a complete day's meal plan — Breakfast, Lunch, Snack, Dinner (and more) — using only what's in your kitchen, hitting your exact calorie and protein targets.</p>
+        <div class="guide-chips">
+          <span class="guide-chip gold">Uses your ingredients</span>
+          <span class="guide-chip">Hits your calorie target</span>
+          <span class="guide-chip accent">Resets daily</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 11 -->
+    <div class="guide-step">
+      <div class="guide-num-col"><div class="guide-num">11</div></div>
+      <div class="guide-body">
+        <div class="guide-tag gold">⚡ Premium Dashboard</div>
+        <div class="guide-title">Your command centre</div>
+        <p class="guide-desc">After completing all AI tools, the premium dashboard unlocks. Here you see your streak (tap it for the weekly check-in calendar), rank, level progress, today's workout preview, daily water intake, macro targets, AI tool statuses, and daily missions — all in one place. Check in tomorrow to keep your streak alive.</p>
+        <div class="guide-chips">
+          <span class="guide-chip gold">Streak + rank card</span>
+          <span class="guide-chip">Weekly check-in calendar</span>
+          <span class="guide-chip accent">Today's workout preview</span>
+          <span class="guide-chip">Water tracker</span>
+          <span class="guide-chip">Daily missions</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Daily loop note -->
+  <div class="reveal d2" style="max-width:800px;margin:40px auto 0;text-align:center;">
+    <div style="background:rgba(200,245,66,0.04);border:1px solid rgba(200,245,66,0.15);border-radius:16px;padding:28px 32px;">
+      <div style="font-size:24px;margin-bottom:10px;">🔁</div>
+      <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#f0ede6;margin-bottom:8px;">The Daily Loop (after first setup)</div>
+      <p style="font-size:14px;color:#6b6b5a;line-height:1.8;max-width:500px;margin:0 auto;">
+        Login → Enter today's weight → BMI → Calories → Macros → Progress chart → Dashboard.<br>
+        Takes less than 2 minutes. Do it every day. That's how streaks are built.
+      </p>
     </div>
   </div>
 </section>
 
-<section id="how" style="background:#0d0d0b">
+<!-- HOW IT WORKS (quick 3-step) -->
+<section id="how">
   <div class="how-grid">
     <div>
-      <div class="reveal"><div class="section-tag">The method</div></div>
+      <div class="reveal"><div class="section-tag">Quick start</div></div>
       <h2 class="section-h reveal d1">Three steps.<br><span class="ghost">Zero excuses.</span></h2>
       <div class="steps">
-        <div class="step on reveal d1"><div class="step-n">01</div><div class="step-body"><h3>Sign up in one tap</h3><p>Google login or create your account. No forms. No friction. You're in before you can talk yourself out of it.</p></div></div>
+        <div class="step on reveal d1"><div class="step-n">01</div><div class="step-body"><h3>Sign up in one tap</h3><p>Google login or create an account with email. No friction. You're in before you can talk yourself out of it.</p></div></div>
         <div class="step reveal d2"><div class="step-n">02</div><div class="step-body"><h3>Set your goal, own it</h3><p>Enter your stats. The engine sets your exact calorie and macro targets. You focus on execution.</p></div></div>
         <div class="step reveal d3"><div class="step-n">03</div><div class="step-body"><h3>Check in. Rank up. Repeat.</h3><p>Daily check-ins build your streak. Streak builds rank. Rank builds identity. This is the loop.</p></div></div>
       </div>
@@ -422,26 +556,20 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
     <div class="reveal d2">
       <div class="phone">
         <div class="phone-pill"></div>
-        <div class="phone-rank">
-          <div class="phone-rank-label">Current Rank</div>
-          <div class="phone-rank-val">ELITE</div>
-          <div class="phone-rank-sub">Top 4% · 🔥 127 day streak</div>
-        </div>
+        <div class="phone-rank"><div class="phone-rank-label">Current Rank</div><div class="phone-rank-val">ELITE</div><div class="phone-rank-sub">Top 4% · 🔥 127 day streak</div></div>
         <div class="phone-row"><span class="phone-row-label">Today's streak</span><span class="phone-row-val" style="color:var(--accent)">127d 🔥</span></div>
-        <div class="phone-bars">
-          <div class="phone-bars-label">Weight trend — 7 days</div>
-          <div class="bars-row" id="phoneBars"></div>
-        </div>
+        <div class="phone-bars"><div class="phone-bars-label">Weight trend — 7 days</div><div class="bars-row" id="phoneBars"></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="ranks">
+<!-- RANKS -->
+<section id="ranks" style="background:#0d0d0b">
   <div class="reveal">
     <div class="section-tag">Progression system</div>
     <h2 class="section-h">Your rank.<br><span class="ghost">Earned, not given.</span></h2>
-    <p class="section-sub">Stay consistent, rise through the ranks. The top 4% earn Elite — proof that they never quit.</p>
+    <p class="section-sub">Stay consistent, rise through the ranks. The top 4% earn Elite — proof they never quit.</p>
   </div>
   <div class="ranks-grid reveal d1">
     <div class="rank-card"><span class="rank-ico">🌱</span><div class="rank-name">BEGINNER</div><div class="rank-req">Start logging.<br>Build the habit.</div><div class="rank-days">0–6 days</div></div>
@@ -452,8 +580,8 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
-<!-- ═══════════ PRICING ═══════════ -->
-<section id="pricing" style="background:#0d0d0b">
+<!-- PRICING -->
+<section id="pricing">
   <div class="reveal" style="text-align:center">
     <div class="section-tag" style="text-align:center">Simple pricing</div>
     <h2 class="section-h">One price.<br><span class="ghost">Lifetime access.</span></h2>
@@ -467,7 +595,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
       <ul class="price-features">
         <li>AI Workout Planner — PPL, Bro Split, Upper/Lower, Full Body</li>
         <li>Body Type Diet Analysis — Ecto / Meso / Endo specific plans</li>
-        <li>AI Meal Generator — built from what's already in your kitchen</li>
+        <li>AI Meal Generator — built from what's in your kitchen</li>
         <li>Goal-specific plans — Bulk, Cut, Maintain, Athletic</li>
         <li>Full rank progression + streak tracking</li>
         <li>Daily check-ins with live BMI &amp; progress charts</li>
@@ -478,72 +606,24 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
-<!-- ═══════════ TESTIMONIALS ═══════════ -->
-<section id="testimonials">
-  <div class="reveal">
-    <div class="section-tag">Real members</div>
-    <h2 class="section-h">They didn't quit.<br><span class="ghost">Neither will you.</span></h2>
-    <p class="section-sub">Real check-ins. Real streaks. Real transformation.</p>
-  </div>
-  <div class="testi-grid reveal d1">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"The streak system is what actually got me consistent. 67 days in and I haven't missed a single check-in. The AI workout plans hit different too."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">R</div>
-        <div><div class="testi-name">Rahul S.</div><div class="testi-tag">🔥 Warrior · 67 day streak</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Paid ₹5 expecting basically nothing and got a full AI coach. The body-type diet plan was scary accurate for an ectomorph trying to bulk."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">A</div>
-        <div><div class="testi-name">Ananya K.</div><div class="testi-tag">⚡ Contender · 19 day streak</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Tried four other tracking apps before this. None of them made me care about not breaking a streak. This one did. 134 days and counting."</p>
-      <div class="testi-author">
-        <div class="testi-avatar">V</div>
-        <div><div class="testi-name">Vikram M.</div><div class="testi-tag">💎 Beast · 134 day streak</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ FAQ ═══════════ -->
+<!-- FAQ -->
 <section id="faq" style="background:#0d0d0b">
   <div class="reveal">
     <div class="section-tag">Questions</div>
     <h2 class="section-h">Need to know<br><span class="ghost">before you start?</span></h2>
     <p class="section-sub">Everything you'd want to ask, answered.</p>
   </div>
-  <div class="faq-list reveal d1" id="faqList">
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><h3>Is EvolveFit really free to start?</h3><span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Yes. Sign up, complete setup, and use BMI tracking, calorie targets, macros, and your progress graph completely free. Premium (₹5, one-time) unlocks the AI Workout, Diet, and Meal tools plus the full premium dashboard.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><h3>What exactly does the ₹5 premium unlock?</h3><span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Lifetime access to the AI Workout Planner, Body Type Diet Analysis, AI Meal Generator, and the full Premium Dashboard with streak rank tracking. It's a one-time payment — no subscription, no renewal.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><h3>How does the streak and rank system work?</h3><span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Every consecutive daily check-in adds to your streak. Hit milestones — 7, 30, 90, 180 days — to rank up from Beginner to Elite. Miss a day and your streak resets, so consistency is everything.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><h3>Do I need to re-enter my height, weight, and goals every time?</h3><span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>No. Setup only happens once. Your details are saved and reused automatically across the app — you'll only update your weight during check-ins, and that updates everywhere instantly.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFaq(this)"><h3>Can I use EvolveFit on my phone?</h3><span class="faq-icon">+</span></div>
-      <div class="faq-a"><p>Yes, EvolveFit is fully responsive and built mobile-first. No app download needed — just sign in from any browser.</p></div>
-    </div>
+  <div class="faq-list reveal d1">
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>Is EvolveFit really free to start?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>Yes. Sign up, complete setup, and use BMI tracking, calorie targets, macros, and your progress graph completely free. Premium (₹5, one-time) unlocks the AI Workout, Diet, and Meal tools plus the full premium dashboard.</p></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>What exactly does the ₹5 premium unlock?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>Lifetime access to the AI Workout Planner, Body Type Diet Analysis, AI Meal Generator, and the full Premium Dashboard with streak rank tracking. It's a one-time payment — no subscription, no renewal.</p></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>How does the streak and rank system work?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>Every consecutive daily check-in adds to your streak. Hit milestones — 7, 30, 90, 180 days — to rank up from Beginner to Elite. Miss a day and your streak resets, so consistency is everything.</p></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>Do I need to re-enter my details every time?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>No. Setup only happens once. Your details are saved permanently — you only update your weight during daily check-ins, and that updates everywhere instantly.</p></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>Can I use EvolveFit on my phone?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>Yes, EvolveFit is fully responsive and mobile-first. No app download needed — just open it in any browser.</p></div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><h3>I already paid — why is it asking me to pay again?</h3><span class="faq-icon">+</span></div><div class="faq-a"><p>This can happen if you cleared your browser cache or switched devices. Simply log in again and your premium status is automatically restored from our database — no need to pay twice.</p></div></div>
   </div>
 </section>
 
+<!-- CTA -->
 <section id="cta" style="text-align:center">
   <div class="quiz-wrap">
     <div class="reveal">
@@ -565,7 +645,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
 
 <footer>
   <div class="foot-logo">Evolve<em>Fit</em></div>
-  <ul class="foot-links"><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#ranks">Ranks</a></li><li><a href="#faq">FAQ</a></li><li><a href="login.html">Login</a></li></ul>
+  <ul class="foot-links"><li><a href="#features">Features</a></li><li><a href="#guide">Guide</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#ranks">Ranks</a></li><li><a href="#faq">FAQ</a></li><li><a href="login.html">Login</a></li></ul>
   <p class="foot-copy">© 2026 EvolveFit · Built for the ones who don't quit</p>
 </footer>
 
@@ -574,74 +654,35 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-ap
 import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 import{getFirestore,doc,getDoc}from"https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
-const app=initializeApp(cfg);
-const auth=getAuth(app);
-const db=getFirestore(app);
-
+const app=initializeApp(cfg);const auth=getAuth(app);const db=getFirestore(app);
 onAuthStateChanged(auth,async u=>{
   if(u){
     localStorage.setItem("username",u.displayName||u.email.split("@")[0]);
-    localStorage.setItem("photo",u.photoURL||"");
-    localStorage.setItem("uid",u.uid);
-
-    // ✅ Restore premium from Firestore on every visit
-    try{
-      const premSnap=await getDoc(doc(db,"premium",u.uid));
-      if(premSnap.exists()&&premSnap.data().active===true){
-        localStorage.setItem("premium","true");
-        localStorage.setItem("ai_setup_done","true");
-      }
-    }catch(e){}
-
+    localStorage.setItem("photo",u.photoURL||"");localStorage.setItem("uid",u.uid);
+    try{const premSnap=await getDoc(doc(db,"premium",u.uid));if(premSnap.exists()&&premSnap.data().active===true){localStorage.setItem("premium","true");localStorage.setItem("ai_setup_done","true");}}catch(e){}
     const navCta=document.getElementById("navCta");
     navCta.innerText="Dashboard →";
-    // ✅ Smart redirect — premium goes to dashboard, free goes to bmi
-    let dest;
-    if(localStorage.getItem("premium")==="true"){
-      dest="dashboard-premium.html";
-    } else {
-      dest=localStorage.getItem("setup_done")==="true"?"bmi.html":"setup.html";
-    }
+    let dest=localStorage.getItem("premium")==="true"?"dashboard-premium.html":localStorage.getItem("setup_done")==="true"?"bmi.html":"setup.html";
     navCta.href=dest;
-
-    // ✅ Fix Start For Free button — same smart logic
     const startBtn=document.getElementById("startBtn");
-    if(startBtn){
-      startBtn.onclick=function(e){
-        e.preventDefault();
-        flashAndGo(dest);
-      };
-      startBtn.innerText="Go to Dashboard →";
-    }
-
-    // ✅ Pricing button — premium users skip straight to dashboard
+    if(startBtn){startBtn.onclick=function(e){e.preventDefault();flashAndGo(dest);};startBtn.innerText="Go to Dashboard →";}
     const pricingBtn=document.getElementById("pricingBtn");
-    if(pricingBtn){
-      pricingBtn.onclick=function(e){
-        e.preventDefault();
-        flashAndGo(localStorage.getItem("premium")==="true" ? "dashboard-premium.html" : "payment.html");
-      };
-      if(localStorage.getItem("premium")==="true") pricingBtn.innerText="Go to Dashboard →";
-    }
+    if(pricingBtn){pricingBtn.onclick=function(e){e.preventDefault();flashAndGo(localStorage.getItem("premium")==="true"?"dashboard-premium.html":"payment.html");};if(localStorage.getItem("premium")==="true")pricingBtn.innerText="Go to Dashboard →";}
   }
 });
 </script>
 
 <script>
-// ── CANVAS BACKGROUND ──
 (function(){
-  const canvas=document.getElementById('heroBg');
-  if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  let W,H,particles=[],bars=[],t=0;
+  const canvas=document.getElementById('heroBg');if(!canvas)return;
+  const ctx=canvas.getContext('2d');let W,H,particles=[],bars=[],t=0;
   function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
   for(let i=0;i<110;i++)particles.push({x:Math.random()*2000,y:Math.random()*1000,r:Math.random()*1.8+0.4,vx:(Math.random()-.5)*0.18,vy:-Math.random()*0.22-0.06,o:Math.random()*0.6+0.15});
   for(let i=0;i<7;i++)bars.push({x:Math.random(),w:Math.random()*0.04+0.008,speed:(Math.random()-.5)*0.0003,o:Math.random()*0.06+0.01,phase:Math.random()*Math.PI*2});
   function draw(){
     ctx.clearRect(0,0,W,H);
-    const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#080808');bg.addColorStop(0.4,'#0c0f08');bg.addColorStop(1,'#060808');
-    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    const bg=ctx.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#080808');bg.addColorStop(0.4,'#0c0f08');bg.addColorStop(1,'#060808');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
     const g1=ctx.createRadialGradient(W*0.15,H*0.85,0,W*0.15,H*0.85,W*0.55);g1.addColorStop(0,'rgba(200,245,66,0.13)');g1.addColorStop(1,'transparent');ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
     const g2=ctx.createRadialGradient(W*0.85,H*0.2,0,W*0.85,H*0.2,W*0.45);g2.addColorStop(0,'rgba(120,160,80,0.09)');g2.addColorStop(1,'transparent');ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
     bars.forEach(b=>{b.x+=b.speed;if(b.x<-b.w)b.x=1+b.w;if(b.x>1+b.w)b.x=-b.w;const pulse=0.5+0.5*Math.sin(t*0.0008+b.phase);const bx=b.x*W;const bar=ctx.createLinearGradient(bx,0,bx+b.w*W,H);bar.addColorStop(0,'transparent');bar.addColorStop(0.5,`rgba(200,245,66,${b.o*pulse})`);bar.addColorStop(1,'transparent');ctx.fillStyle=bar;ctx.fillRect(bx,0,b.w*W,H);});
@@ -654,14 +695,9 @@ onAuthStateChanged(auth,async u=>{
   draw();
 })();
 
-// ── NAV SCROLL ──
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>60));
-
-// ── SCROLL REVEAL ──
 const obs=new IntersectionObserver(els=>{els.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});},{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-// ── MINI CHARTS ──
 const heights=[45,58,52,70,64,82,90];
 const mc=document.getElementById('miniChart');
 heights.forEach((h,i)=>{const b=document.createElement('div');b.className='mini-bar'+(i===heights.length-1?' hi':'');b.style.height=h+'%';mc.appendChild(b);});
@@ -669,65 +705,20 @@ const ph=[55,62,58,70,65,80,88];
 const pb=document.getElementById('phoneBars');
 ph.forEach((h,i)=>{const b=document.createElement('div');b.className='pbar'+(i===ph.length-1?' lit':'');b.style.height=h+'%';pb.appendChild(b);});
 
-// ── STAT COUNTERS (count up when scrolled into view) ──
+// Stat counters
 const statEls=document.querySelectorAll('.stat-num');
-const statObs=new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      const el=entry.target;
-      const target=parseInt(el.dataset.target,10);
-      const suffix=el.dataset.suffix||'';
-      const duration=1400;
-      const start=performance.now();
-      function tick(now){
-        const progress=Math.min((now-start)/duration,1);
-        const eased=1-Math.pow(1-progress,3);
-        const val=Math.floor(eased*target);
-        el.textContent=val.toLocaleString()+suffix;
-        if(progress<1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-      statObs.unobserve(el);
-    }
-  });
-},{threshold:0.4});
+const statObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const el=entry.target;const target=parseInt(el.dataset.target,10);const suffix=el.dataset.suffix||'';const duration=1400;const start=performance.now();function tick(now){const progress=Math.min((now-start)/duration,1);const eased=1-Math.pow(1-progress,3);const val=Math.floor(eased*target);el.textContent=val.toLocaleString()+suffix;if(progress<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);statObs.unobserve(el);}});},{threshold:0.4});
 statEls.forEach(el=>statObs.observe(el));
 
-// ── FAQ TOGGLE ──
-function toggleFaq(el){
-  const item=el.parentElement;
-  const wasOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!wasOpen) item.classList.add('open');
-}
+function toggleFaq(el){const item=el.parentElement;const wasOpen=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!wasOpen)item.classList.add('open');}
 window.toggleFaq=toggleFaq;
 
-// ── PAGE FLASH TRANSITION ──
-function flashAndGo(href){
-  const flash=document.getElementById('pageFlash');
-  flash.classList.add('go');
-  setTimeout(()=>location.href=href,150);
-}
-
-// ── QUIZ ──
+function flashAndGo(href){const flash=document.getElementById('pageFlash');flash.classList.add('go');setTimeout(()=>location.href=href,150);}
 let picked=null;
-function pick(el,goal){
-  document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('on'));
-  el.classList.add('on');picked=goal;
-  localStorage.setItem("goal",goal);
-  document.getElementById('quizBtn').classList.add('go');
-}
-function goLogin(){
-  if(picked) flashAndGo('login.html');
-}
+function pick(el,goal){document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('on'));el.classList.add('on');picked=goal;localStorage.setItem("goal",goal);document.getElementById('quizBtn').classList.add('go');}
+function goLogin(){if(picked)flashAndGo('login.html');}
 window.pick=pick;window.goLogin=goLogin;
-
-// ── LINK FLASH for nav links ──
-document.querySelectorAll('a[href="login.html"]').forEach(a=>{
-  a.addEventListener('click',function(e){
-    e.preventDefault();flashAndGo('login.html');
-  });
-});
+document.querySelectorAll('a[href="login.html"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();flashAndGo('login.html');});});
 </script>
 </body>
 </html>
