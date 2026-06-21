@@ -26,6 +26,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(160deg,rgba(8,8,8,0.55) 0%,rgba(8,8,8,0.3) 40%,rgba(8,8,8,0.65) 75%,rgba(8,8,8,0.97) 100%);}
 .hero-content{position:relative;z-index:2;padding:80px 6% 48px;max-width:700px;}
 
+/* ── HERO ANIMATIONS ── */
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:8px;
   background:rgba(200,245,66,0.1);border:1px solid rgba(200,245,66,0.25);
@@ -66,6 +67,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
   100%{opacity:1;transform:translateY(0) scale(1)}
 }
 
+/* ── BUTTONS ── */
 .btn-main{
   display:inline-flex;align-items:center;gap:8px;
   background:var(--accent);color:#080808;
@@ -88,6 +90,7 @@ body{background:var(--black);color:var(--white);font-family:var(--font-body);ove
 }
 .btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);transform:translateY(-2px);}
 
+/* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
@@ -111,18 +114,21 @@ nav.solid{background:rgba(8,8,8,0.92);backdrop-filter:blur(20px);border-bottom:1
 }
 .nav-cta:hover{transform:scale(1.06) translateY(-1px);box-shadow:0 8px 24px rgba(200,245,66,0.3);}
 
+/* ── TICKER ── */
 .ticker{background:var(--accent);padding:12px 0;overflow:hidden;}
 .ticker-track{display:flex;width:max-content;animation:scroll 30s linear infinite}
 .ticker-item{font-family:var(--font-display);font-size:12px;font-weight:700;color:#080808;letter-spacing:0.1em;text-transform:uppercase;padding:0 28px;white-space:nowrap;}
 .ticker-item::after{content:' ✦ '}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+/* ── SECTIONS ── */
 section{padding:100px 6%}
 .section-tag{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px;}
 .section-h{font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:0.97;margin-bottom:14px;}
 .section-h .ghost{-webkit-text-stroke:1px rgba(240,237,230,0.18);color:transparent;}
 .section-sub{font-size:16px;color:var(--muted);font-weight:300;max-width:480px;line-height:1.7;margin-bottom:56px;}
 
+/* ── BENTO ── */
 .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:2px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
 .bento-card{background:var(--card);padding:36px 32px;transition:all .3s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
 .bento-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(200,245,66,0.06),transparent 70%);opacity:0;transition:opacity .3s;}
@@ -139,6 +145,7 @@ section{padding:100px 6%}
 .mini-bar{flex:1;border-radius:4px 4px 0 0;background:rgba(200,245,66,0.18);min-height:8px;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
 .mini-bar.hi{background:var(--accent)}
 
+/* ── HOW IT WORKS ── */
 .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .steps{margin-top:40px}
 .step{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);transition:all .3s;}
@@ -166,6 +173,7 @@ section{padding:100px 6%}
 .pbar{flex:1;border-radius:2px 2px 0 0;background:rgba(200,245,66,0.15);transition:height .6s cubic-bezier(.34,1.56,.64,1);}
 .pbar.lit{background:var(--accent)}
 
+/* ── RANKS ── */
 .ranks-grid{display:flex;gap:2px;background:var(--border);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
 .rank-card{flex:1;padding:28px 20px;background:var(--card);text-align:center;transition:all .3s cubic-bezier(.34,1.56,.64,1);cursor:default;}
 .rank-card:hover{background:#161615;transform:translateY(-6px) scale(1.03);z-index:2;box-shadow:0 20px 50px rgba(0,0,0,0.4);}
@@ -178,6 +186,7 @@ section{padding:100px 6%}
 .rank-days{display:inline-block;margin-top:10px;background:rgba(255,255,255,0.05);font-size:11px;color:var(--muted);font-weight:600;padding:3px 10px;border-radius:50px;letter-spacing:0.06em;}
 .rank-card.crown .rank-days{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(200,245,66,0.2);}
 
+/* ── PRICING ── */
 .pricing-wrap{max-width:420px;margin:0 auto;}
 .price-card{
   background:linear-gradient(160deg,#121710,#0e0e0c);
@@ -202,6 +211,7 @@ section{padding:100px 6%}
 .price-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0;}
 .price-fine{font-size:12px;color:var(--muted);margin-top:16px;}
 
+/* ── FAQ ── */
 .faq-list{max-width:720px;}
 .faq-item{border-bottom:1px solid var(--border);}
 .faq-item:first-child{border-top:1px solid var(--border);}
@@ -218,6 +228,7 @@ section{padding:100px 6%}
 .faq-item.open .faq-a{max-height:200px;}
 .faq-a p{font-size:14px;color:var(--muted);line-height:1.7;padding:0 4px 22px;max-width:600px;}
 
+/* ── QUIZ / CTA ── */
 .quiz-wrap{max-width:660px;margin:0 auto;text-align:center;}
 .quiz-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;}
 .qcard{
@@ -244,6 +255,7 @@ section{padding:100px 6%}
 .quiz-main-btn.go:active{transform:scale(0.96);}
 .quiz-fine{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:0.02em}
 
+/* ── FOOTER ── */
 footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
 .foot-logo{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--white);}
 .foot-logo em{color:var(--accent);font-style:normal}
@@ -252,10 +264,12 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
 .foot-links a:hover{color:var(--white)}
 .foot-copy{font-size:12px;color:rgba(107,107,90,0.5)}
 
+/* ── SCROLL REVEAL ── */
 .reveal{opacity:0;transform:translateY(30px) scale(0.97);transition:opacity .7s cubic-bezier(.34,1.56,.64,1),transform .7s cubic-bezier(.34,1.56,.64,1);}
 .reveal.in{opacity:1;transform:translateY(0) scale(1);}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
+/* ── PAGE TRANSITION ── */
 .page-flash{position:fixed;inset:0;background:var(--accent);z-index:9999;pointer-events:none;opacity:0;transition:opacity .15s;}
 .page-flash.go{opacity:1;}
 
@@ -274,6 +288,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
 </head>
 <body>
 
+<!-- Page flash for transitions -->
 <div class="page-flash" id="pageFlash"></div>
 
 <nav id="nav">
@@ -402,6 +417,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
+<!-- ═══════════ PRICING ═══════════ -->
 <section id="pricing" style="background:#0d0d0b">
   <div class="reveal" style="text-align:center">
     <div class="section-tag" style="text-align:center">Simple pricing</div>
@@ -427,25 +443,7 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
-<section id="cta" style="text-align:center">
-  <div class="quiz-wrap">
-    <div class="reveal">
-      <div class="section-tag" style="text-align:center">Your transformation starts here</div>
-      <h2 class="section-h">What's your goal?</h2>
-      <p class="section-sub" style="margin:0 auto 40px;text-align:center">Pick one. We build your exact plan in seconds.</p>
-    </div>
-    <div class="quiz-cards reveal d1">
-      <div class="qcard" onclick="pick(this,'cut')"><div class="qcard-ico">🔥</div><div class="qcard-title">Burn Fat</div><p class="qcard-sub">Precision deficit. Lean out without losing muscle.</p></div>
-      <div class="qcard" onclick="pick(this,'bulk')"><div class="qcard-ico">💪</div><div class="qcard-title">Build Muscle</div><p class="qcard-sub">Smart bulk. Macro-tuned for maximum gains.</p></div>
-      <div class="qcard" onclick="pick(this,'maintain')"><div class="qcard-ico">⚖️</div><div class="qcard-title">Stay Fit</div><p class="qcard-sub">Maintain your weight. Lock in your lifestyle.</p></div>
-    </div>
-    <div class="reveal d2">
-      <button class="quiz-main-btn" id="quizBtn" onclick="goLogin()">Build My Plan →</button>
-      <p class="quiz-fine">Free forever · No credit card · Google sign-in</p>
-    </div>
-  </div>
-</section>
-
+<!-- ═══════════ FAQ ═══════════ -->
 <section id="faq" style="background:#0d0d0b">
   <div class="reveal">
     <div class="section-tag">Questions</div>
@@ -476,6 +474,25 @@ footer{padding:52px 6%;border-top:1px solid var(--border);display:flex;align-ite
   </div>
 </section>
 
+<section id="cta" style="text-align:center">
+  <div class="quiz-wrap">
+    <div class="reveal">
+      <div class="section-tag" style="text-align:center">Your transformation starts here</div>
+      <h2 class="section-h">What's your goal?</h2>
+      <p class="section-sub" style="margin:0 auto 40px;text-align:center">Pick one. We build your exact plan in seconds.</p>
+    </div>
+    <div class="quiz-cards reveal d1">
+      <div class="qcard" onclick="pick(this,'cut')"><div class="qcard-ico">🔥</div><div class="qcard-title">Burn Fat</div><p class="qcard-sub">Precision deficit. Lean out without losing muscle.</p></div>
+      <div class="qcard" onclick="pick(this,'bulk')"><div class="qcard-ico">💪</div><div class="qcard-title">Build Muscle</div><p class="qcard-sub">Smart bulk. Macro-tuned for maximum gains.</p></div>
+      <div class="qcard" onclick="pick(this,'maintain')"><div class="qcard-ico">⚖️</div><div class="qcard-title">Stay Fit</div><p class="qcard-sub">Maintain your weight. Lock in your lifestyle.</p></div>
+    </div>
+    <div class="reveal d2">
+      <button class="quiz-main-btn" id="quizBtn" onclick="goLogin()">Build My Plan →</button>
+      <p class="quiz-fine">Free forever · No credit card · Google sign-in</p>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="foot-logo">Evolve<em>Fit</em></div>
   <ul class="foot-links"><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#ranks">Ranks</a></li><li><a href="#faq">FAQ</a></li><li><a href="login.html">Login</a></li></ul>
@@ -497,6 +514,7 @@ onAuthStateChanged(auth,async u=>{
     localStorage.setItem("photo",u.photoURL||"");
     localStorage.setItem("uid",u.uid);
 
+    // ✅ Restore premium from Firestore on every visit
     try{
       const premSnap=await getDoc(doc(db,"premium",u.uid));
       if(premSnap.exists()&&premSnap.data().active===true){
@@ -507,6 +525,7 @@ onAuthStateChanged(auth,async u=>{
 
     const navCta=document.getElementById("navCta");
     navCta.innerText="Dashboard →";
+    // ✅ Smart redirect — premium goes to dashboard, free goes to bmi
     let dest;
     if(localStorage.getItem("premium")==="true"){
       dest="dashboard-premium.html";
@@ -515,6 +534,7 @@ onAuthStateChanged(auth,async u=>{
     }
     navCta.href=dest;
 
+    // ✅ Fix Start For Free button — same smart logic
     const startBtn=document.getElementById("startBtn");
     if(startBtn){
       startBtn.onclick=function(e){
@@ -524,6 +544,7 @@ onAuthStateChanged(auth,async u=>{
       startBtn.innerText="Go to Dashboard →";
     }
 
+    // ✅ Pricing button — premium users skip straight to dashboard
     const pricingBtn=document.getElementById("pricingBtn");
     if(pricingBtn){
       pricingBtn.onclick=function(e){
@@ -537,6 +558,7 @@ onAuthStateChanged(auth,async u=>{
 </script>
 
 <script>
+// ── CANVAS BACKGROUND ──
 (function(){
   const canvas=document.getElementById('heroBg');
   if(!canvas)return;
@@ -562,11 +584,14 @@ onAuthStateChanged(auth,async u=>{
   draw();
 })();
 
+// ── NAV SCROLL ──
 window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',scrollY>60));
 
+// ── SCROLL REVEAL ──
 const obs=new IntersectionObserver(els=>{els.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});},{threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
+// ── MINI CHARTS ──
 const heights=[45,58,52,70,64,82,90];
 const mc=document.getElementById('miniChart');
 heights.forEach((h,i)=>{const b=document.createElement('div');b.className='mini-bar'+(i===heights.length-1?' hi':'');b.style.height=h+'%';mc.appendChild(b);});
@@ -574,6 +599,7 @@ const ph=[55,62,58,70,65,80,88];
 const pb=document.getElementById('phoneBars');
 ph.forEach((h,i)=>{const b=document.createElement('div');b.className='pbar'+(i===ph.length-1?' lit':'');b.style.height=h+'%';pb.appendChild(b);});
 
+// ── FAQ TOGGLE ──
 function toggleFaq(el){
   const item=el.parentElement;
   const wasOpen=item.classList.contains('open');
@@ -582,12 +608,14 @@ function toggleFaq(el){
 }
 window.toggleFaq=toggleFaq;
 
+// ── PAGE FLASH TRANSITION ──
 function flashAndGo(href){
   const flash=document.getElementById('pageFlash');
   flash.classList.add('go');
   setTimeout(()=>location.href=href,150);
 }
 
+// ── QUIZ ──
 let picked=null;
 function pick(el,goal){
   document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('on'));
@@ -600,6 +628,7 @@ function goLogin(){
 }
 window.pick=pick;window.goLogin=goLogin;
 
+// ── LINK FLASH for nav links ──
 document.querySelectorAll('a[href="login.html"]').forEach(a=>{
   a.addEventListener('click',function(e){
     e.preventDefault();flashAndGo('login.html');
