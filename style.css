@@ -82,7 +82,7 @@ body::before {
   z-index: -1;
   border-radius: 50%;
   filter: blur(70px);
-  opacity: 0.55;
+  opacity: 0.75;
   pointer-events: none;
   will-change: transform;
 }
