@@ -344,15 +344,17 @@ window.switchTab = function(tab) {
 function showMsg(text,type="err"){
   const el=document.getElementById("msg");
   el.innerText=text;el.className=type;
-  // Re-trigger animation
   el.style.animation='none';el.offsetHeight;el.style.animation='';
 }
 
 function showSuccess(subText){
-  document.getElementById("successSubText").innerText=subText||"Loading your dashboard...";
+  document.getElementById("successSubText").innerText=subText||"Loading...";
   document.getElementById("successOverlay").classList.add("show");
 }
 
+// ✅ FIXED — returning users ALWAYS go through the daily check-in flow
+// (result-bmi → calories → macros → graph) first. Premium status decides
+// what happens AFTER graph.html, not before the flow even starts.
 async function afterLogin(user){
   localStorage.setItem("username",user.displayName||user.email.split("@")[0]);
   localStorage.setItem("photo",user.photoURL||"");
@@ -369,9 +371,11 @@ async function afterLogin(user){
 
   const setupDone=localStorage.getItem("setup_done")==="true";
   let dest,sub;
-  if(!setupDone){dest="setup.html";sub="Setting up your profile...";}
-  else if(localStorage.getItem("premium")==="true"){dest="dashboard-premium.html";sub="Opening your dashboard...";}
-  else{dest="bmi.html";sub="Let's check in...";}
+  if(!setupDone){
+    dest="setup.html";sub="Setting up your profile...";
+  } else {
+    dest="result-bmi.html";sub="Let's check in...";
+  }
 
   showSuccess(sub);
   setTimeout(()=>location.href=dest,1200);
