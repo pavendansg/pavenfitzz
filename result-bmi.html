@@ -16,6 +16,7 @@
 .bmi-range-nums{display:flex;justify-content:space-between;font-size:9px;color:var(--dim);margin-top:4px}
 .info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
 .tip-box{background:rgba(240,192,64,0.06);backdrop-filter:var(--glass-blur-sm);border:1px solid rgba(240,192,64,0.15);border-radius:var(--r-md);padding:13px 15px;font-size:12px;color:#bcae84;line-height:1.9;white-space:pre-line;margin-bottom:16px}
+.loading-state{text-align:center;padding:40px 0;color:var(--muted);font-size:13px;}
 </style>
 </head>
 <body class="fade-in">
@@ -34,77 +35,147 @@
       </div>
     </div>
 
-    <div class="bmi-result-card slide-up stagger-2">
-      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px">Your BMI</div>
-      <div class="bmi-result-val" id="bmiVal">—</div>
-      <div class="bmi-result-tag" id="bmiTag">—</div>
-      <div class="bmi-bar-wrap">
-        <div class="bmi-bar-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
-        <div class="bmi-bar"><div class="bmi-marker" id="bmiMarker"></div></div>
-        <div class="bmi-range-nums"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
+    <div id="loadingState" class="loading-state">Loading your data...</div>
+
+    <div id="bmiContent" style="display:none;">
+      <div class="bmi-result-card slide-up stagger-2">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px">Your BMI</div>
+        <div class="bmi-result-val" id="bmiVal">—</div>
+        <div class="bmi-result-tag" id="bmiTag">—</div>
+        <div class="bmi-bar-wrap">
+          <div class="bmi-bar-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+          <div class="bmi-bar"><div class="bmi-marker" id="bmiMarker"></div></div>
+          <div class="bmi-range-nums"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="info-grid slide-up stagger-3">
-      <div class="stat-box"><div class="stat-tile-label">Healthy Range</div><div class="stat-tile-val" style="font-size:14px">18.5–24.9</div></div>
-      <div class="stat-box"><div class="stat-tile-label">Ideal Weight</div><div class="stat-tile-val" style="font-size:14px" id="idealVal">—</div></div>
-      <div class="stat-box"><div class="stat-tile-label">Your Weight</div><div class="stat-tile-val" style="font-size:14px" id="weightVal">—</div></div>
-      <div class="stat-box"><div class="stat-tile-label">Goal</div><div class="stat-tile-val" style="font-size:14px" id="goalVal">—</div></div>
-    </div>
+      <div class="info-grid slide-up stagger-3">
+        <div class="stat-box"><div class="stat-tile-label">Healthy Range</div><div class="stat-tile-val" style="font-size:14px">18.5–24.9</div></div>
+        <div class="stat-box"><div class="stat-tile-label">Ideal Weight</div><div class="stat-tile-val" style="font-size:14px" id="idealVal">—</div></div>
+        <div class="stat-box"><div class="stat-tile-label">Your Weight</div><div class="stat-tile-val" style="font-size:14px" id="weightVal">—</div></div>
+        <div class="stat-box"><div class="stat-tile-label">Goal</div><div class="stat-tile-val" style="font-size:14px" id="goalVal">—</div></div>
+      </div>
 
-    <div class="tip-box slide-up stagger-4" id="tipBox"></div>
+      <div class="tip-box slide-up stagger-4" id="tipBox"></div>
 
-    <div class="slide-up stagger-5">
-      <button class="primary-btn" onclick="goNext()">Next → Calorie Target ⚡</button>
-      <button class="secondary-btn" style="margin-top:8px" onclick="goBack()">← Edit Details</button>
+      <div class="slide-up stagger-5">
+        <button class="primary-btn" onclick="goNext()">Next → Calorie Target ⚡</button>
+        <button class="secondary-btn" style="margin-top:8px" onclick="goBack()">← Edit Details</button>
+      </div>
     </div>
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const cfg = {apiKey:"AIzaSyDJ4_lODgzP-ZUxupjxRevtac2AN3Xm2MA",authDomain:"evolvefit-07.firebaseapp.com",projectId:"evolvefit-07"};
+const app = initializeApp(cfg);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 if(!localStorage.getItem("setup_done")){location.href="setup.html";}
-const bmi=parseFloat(localStorage.getItem("bmi")||0);
-const weight=localStorage.getItem("weight")||"—";
-const idealMin=localStorage.getItem("idealMin")||"—";
-const idealMax=localStorage.getItem("idealMax")||"—";
-const goal=localStorage.getItem("goal")||"maintain";
 
-document.getElementById("bmiVal").innerText=bmi;
-document.getElementById("weightVal").innerText=weight+"kg";
-document.getElementById("idealVal").innerText=idealMin+"–"+idealMax+"kg";
-document.getElementById("goalVal").innerText=goal.toUpperCase();
+// ✅ FIRESTORE FALLBACK — if localStorage was wiped (logout, cleared data,
+// new device), pull the most recent check-in from Firestore and restore it
+// to localStorage before rendering. This makes Firestore the real source of
+// truth instead of relying on fragile browser storage alone.
+async function ensureDataLoaded() {
+  const hasLocalData = localStorage.getItem("bmi") && localStorage.getItem("weight");
+  if (hasLocalData) return true;
 
-let tag,color,tip;
-if(bmi<18.5){tag="Underweight";color="#4592f0";tip="🍗 Focus on calorie surplus\n🏋️ Heavy compound lifts\n🥚 High protein diet";}
-else if(bmi<25){tag="Healthy ✅";color="#c8f542";tip="⚖️ Balanced diet\n🏃 Mixed cardio & weights\n💧 Stay hydrated";}
-else if(bmi<30){tag="Overweight";color="#f0c040";tip="🥗 Calorie deficit diet\n🔥 HIIT cardio\n🚫 Limit processed food";}
-else{tag="Obese";color="#f04545";tip="🥗 Strict calorie deficit\n🔥 Daily cardio\n👨‍⚕️ Consider a professional";}
+  return new Promise((resolve) => {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { resolve(false); return; }
+      try {
+        const snap = await getDocs(collection(db, "users", user.uid, "daily"));
+        if (snap.empty) { resolve(false); return; }
+        let history = [];
+        snap.forEach(d => history.push(d.data()));
+        history.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const latest = history[history.length - 1];
 
-const tagEl=document.getElementById("bmiTag");
-tagEl.innerText=tag;
-tagEl.style.background=color+"18";
-tagEl.style.color=color;
-tagEl.style.border="1px solid "+color+"40";
-document.getElementById("tipBox").innerText=tip;
+        // Restore the essentials so this page (and every other page) works again
+        if (latest.weight) localStorage.setItem("weight", latest.weight);
+        if (latest.bmi) localStorage.setItem("bmi", latest.bmi);
+        if (latest.calories) localStorage.setItem("calories", latest.calories);
+        if (latest.goal) localStorage.setItem("goal", latest.goal);
+        if (latest.protein) localStorage.setItem("protein", latest.protein);
+        if (latest.carbs) localStorage.setItem("carbs", latest.carbs);
+        if (latest.fats) localStorage.setItem("fats", latest.fats);
 
-const pct=Math.min(100,Math.max(0,((bmi-15)/(40-15))*100));
-setTimeout(()=>{document.getElementById("bmiMarker").style.left=pct+"%";},800);
+        // Recompute ideal weight range / BMR / TDEE if we at least have height
+        const height = +localStorage.getItem("height");
+        if (height && latest.weight) {
+          const h = height / 100;
+          localStorage.setItem("idealMin", (18.5 * h * h).toFixed(1));
+          localStorage.setItem("idealMax", (24.9 * h * h).toFixed(1));
+        }
+        resolve(true);
+      } catch (e) {
+        console.error("Firestore restore failed:", e);
+        resolve(false);
+      }
+    });
+  });
+}
 
-localStorage.setItem("bmi_done","true");
+ensureDataLoaded().then((restored) => {
+  document.getElementById("loadingState").style.display = "none";
+  document.getElementById("bmiContent").style.display = "block";
+  renderBMI();
+  if (!localStorage.getItem("bmi")) {
+    // Truly no data anywhere (new user edge case) — send back to setup
+    location.href = "setup.html";
+  }
+});
+
+function renderBMI() {
+  const bmi=parseFloat(localStorage.getItem("bmi")||0);
+  const weight=localStorage.getItem("weight")||"—";
+  const idealMin=localStorage.getItem("idealMin")||"—";
+  const idealMax=localStorage.getItem("idealMax")||"—";
+  const goal=localStorage.getItem("goal")||"maintain";
+
+  document.getElementById("bmiVal").innerText=bmi;
+  document.getElementById("weightVal").innerText=weight+"kg";
+  document.getElementById("idealVal").innerText=idealMin+"–"+idealMax+"kg";
+  document.getElementById("goalVal").innerText=goal.toUpperCase();
+
+  let tag,color,tip;
+  if(bmi<18.5){tag="Underweight";color="#4592f0";tip="🍗 Focus on calorie surplus\n🏋️ Heavy compound lifts\n🥚 High protein diet";}
+  else if(bmi<25){tag="Healthy ✅";color="#c8f542";tip="⚖️ Balanced diet\n🏃 Mixed cardio & weights\n💧 Stay hydrated";}
+  else if(bmi<30){tag="Overweight";color="#f0c040";tip="🥗 Calorie deficit diet\n🔥 HIIT cardio\n🚫 Limit processed food";}
+  else{tag="Obese";color="#f04545";tip="🥗 Strict calorie deficit\n🔥 Daily cardio\n👨‍⚕️ Consider a professional";}
+
+  const tagEl=document.getElementById("bmiTag");
+  tagEl.innerText=tag;
+  tagEl.style.background=color+"18";
+  tagEl.style.color=color;
+  tagEl.style.border="1px solid "+color+"40";
+  document.getElementById("tipBox").innerText=tip;
+
+  const pct=Math.min(100,Math.max(0,((bmi-15)/(40-15))*100));
+  setTimeout(()=>{document.getElementById("bmiMarker").style.left=pct+"%";},800);
+
+  localStorage.setItem("bmi_done","true");
+}
 
 window.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{document.getElementById("pageTransition").classList.add("exit");},50);
 });
-function goNext(){
+window.goNext=function(){
   const t=document.getElementById("pageTransition");
   t.classList.remove("exit");t.classList.add("enter");
   setTimeout(()=>{location.href="result-calories.html";},480);
-}
-function goBack(){
+};
+window.goBack=function(){
   const t=document.getElementById("pageTransition");
   t.classList.remove("exit");t.classList.add("enter");
   setTimeout(()=>{location.href="setup.html";},480);
-}
+};
 </script>
 </body>
 </html>
