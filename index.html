@@ -525,16 +525,13 @@ onAuthStateChanged(auth,async u=>{
 
     const navCta=document.getElementById("navCta");
     navCta.innerText="Dashboard →";
-    // ✅ Smart redirect — premium goes to dashboard, free goes to bmi
-    let dest;
-    if(localStorage.getItem("premium")==="true"){
-      dest="dashboard-premium.html";
-    } else {
-      dest=localStorage.getItem("setup_done")==="true"?"bmi.html":"setup.html";
-    }
+    // ✅ Returning users ALWAYS go through the daily check-in flow first
+    // (result-bmi → calories → macros → graph). Premium status decides what
+    // happens AFTER that flow completes on graph.html, not before it starts.
+    let dest=localStorage.getItem("setup_done")==="true"?"result-bmi.html":"setup.html";
     navCta.href=dest;
 
-    // ✅ Fix Start For Free button — same smart logic
+    // ✅ Start For Free button — same logic
     const startBtn=document.getElementById("startBtn");
     if(startBtn){
       startBtn.onclick=function(e){
@@ -544,12 +541,13 @@ onAuthStateChanged(auth,async u=>{
       startBtn.innerText="Go to Dashboard →";
     }
 
-    // ✅ Pricing button — premium users skip straight to dashboard
+    // ✅ Pricing button — premium users still go through the daily flow,
+    // non-premium goes to payment to unlock first
     const pricingBtn=document.getElementById("pricingBtn");
     if(pricingBtn){
       pricingBtn.onclick=function(e){
         e.preventDefault();
-        flashAndGo(localStorage.getItem("premium")==="true" ? "dashboard-premium.html" : "payment.html");
+        flashAndGo(localStorage.getItem("premium")==="true" ? dest : "payment.html");
       };
       if(localStorage.getItem("premium")==="true") pricingBtn.innerText="Go to Dashboard →";
     }
