@@ -140,9 +140,17 @@ window.goHome = function() {
 // and properly sign out of Firebase instead of just clearing localStorage
 window.logout = async function() {
   try { await signOut(auth); } catch(e) { console.error(e); }
-  const setupDone = localStorage.getItem("setup_done");
+  // ✅ Preserve core profile data through logout — these are facts about
+  // the user (height, latest weight, goal, etc.), not session state.
+  // Firestore is still the real source of truth; this just avoids an
+  // unnecessary blank-page flash on next login if localStorage survives.
+  const keep = ["setup_done","height","weight","age","gender","activity",
+                "goal","bmi","calories","protein","carbs","fats",
+                "idealMin","idealMax","bmr","tdee"];
+  const saved = {};
+  keep.forEach(k => { const v = localStorage.getItem(k); if (v !== null) saved[k] = v; });
   localStorage.clear();
-  if (setupDone) localStorage.setItem("setup_done", setupDone);
+  Object.entries(saved).forEach(([k,v]) => localStorage.setItem(k,v));
   location.href = "login.html";
 };
 
